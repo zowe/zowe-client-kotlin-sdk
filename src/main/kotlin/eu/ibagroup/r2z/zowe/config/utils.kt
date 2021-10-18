@@ -10,7 +10,9 @@
 
 package eu.ibagroup.r2z.zowe.config
 
+import com.google.gson.Gson
 import org.yaml.snakeyaml.Yaml
+import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
 import java.util.*
@@ -22,9 +24,14 @@ fun ZoweConnection.getAuthEncoding (): String {
   return Base64.getEncoder().encodeToString("$user:$password".toByteArray(StandardCharsets.UTF_8))
 }
 
-fun String.toBasicAuthToken (): String {
-  return "Basic $this"
+fun ZoweConfig.getAuthEncoding (): String {
+  if (host?.isEmpty() != false || port == null || username?.isEmpty() != false || password?.isEmpty() != false) {
+    throw IllegalStateException("Connection data not setup properly")
+  }
+  return Base64.getEncoder().encodeToString("$username:$password".toByteArray(StandardCharsets.UTF_8))
 }
+
+fun String.toBasicAuthToken () = "Basic $this"
 
 fun parseConfigYaml (inputStream: InputStream): ZoweConnection {
   val loaded: Map<String, Any> = Yaml().load(inputStream)
@@ -40,3 +47,9 @@ fun parseConfigYaml (inputStream: InputStream): ZoweConnection {
     loaded["responseTiomeout"] as Int? ?: 600
   )
 }
+
+fun parseConfigYaml (configString: String): ZoweConnection = parseConfigYaml(ByteArrayInputStream(configString.toByteArray()))
+
+fun parseConfigJson(configString: String): ZoweConfig = Gson().fromJson(configString, ZoweConfig::class.java)
+
+fun parseConfigJson (inputStream: InputStream): ZoweConfig = parseConfigJson(String(inputStream.readAllBytes()))
