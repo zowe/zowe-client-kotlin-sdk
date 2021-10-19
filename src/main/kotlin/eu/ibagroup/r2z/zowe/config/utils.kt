@@ -32,16 +32,7 @@ fun ZoweConfig.getAuthEncoding (): String {
   return Base64.getEncoder().encodeToString("$username:$password".toByteArray(StandardCharsets.UTF_8))
 }
 
-fun ZoweConfig.toJson (): String = GsonBuilder()
-  .setPrettyPrinting()
-//  .registerTypeAdapter(Double::class.java, object : JsonSerializer<Double> {
-//    override fun serialize(src: Double?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
-//      if (src == src?.toLong()?.toDouble()) return JsonPrimitive(src?.toLong())
-//      return JsonPrimitive(src)
-//    }
-//
-//  })
-  .create().toJson(this, this.javaClass)
+fun ZoweConfig.toJson (): String = Gson().toJson(this, this.javaClass)
 
 fun String.toBasicAuthToken () = "Basic $this"
 
