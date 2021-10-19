@@ -47,7 +47,7 @@ fun parseConfigYaml (inputStream: InputStream): ZoweConnection {
     loaded["protocol"] as String? ?: "http",
     loaded["basePath"] as String? ?: "/",
     loaded["encoding"] as Int? ?: 1047,
-    loaded["responseTiomeout"] as Int? ?: 600
+    loaded["responseTimeout"] as Int? ?: 600
   )
 }
 
