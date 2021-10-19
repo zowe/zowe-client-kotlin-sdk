@@ -1,6 +1,10 @@
 package eu.ibagroup.r2z.zowe.config
 
+import com.google.gson.annotations.SerializedName
+
 class ZoweConfig(
+  @SerializedName("\$schema")
+  private val schema: String,
   val profiles: Map<String, ZoweConfigProfile>,
   val defaults: Map<String, String>
 ) {
@@ -23,8 +27,8 @@ class ZoweConfig(
     set(el) { profiles["base"]?.properties?.set("rejectUnauthorized", el ?: true) }
 
   @Suppress("UNCHECKED_CAST")
-  var port: Int?
-    get() = (profiles["zosmf"]?.properties?.get("port") as Double?)?.toInt()
+  var port: Long?
+    get() = profiles["zosmf"]?.properties?.get("port") as Long?
     set(el) { profiles["base"]?.properties?.set("port", el?.toDouble()) }
 
   @Suppress("UNCHECKED_CAST")
@@ -38,13 +42,13 @@ class ZoweConfig(
     set(el) { profiles["base"]?.properties?.set("basePath", el) }
 
   @Suppress("UNCHECKED_CAST")
-  var encoding: Int
-    get() = (profiles["zosmf"]?.properties?.get("encoding") as Double?)?.toInt() ?: 1047
+  var encoding: Long
+    get() = profiles["zosmf"]?.properties?.get("encoding") as Long? ?: 1047
     set(el) { profiles["base"]?.properties?.set("encoding", el.toDouble()) }
 
   @Suppress("UNCHECKED_CAST")
-  var responseTimeout: Int
-    get() = (profiles["zosmf"]?.properties?.get("responseTimeout") as Double?)?.toInt() ?: 600
+  var responseTimeout: Long
+    get() = profiles["zosmf"]?.properties?.get("responseTimeout") as Long? ?: 600
     set(el) { profiles["base"]?.properties?.set("responseTimeout", el.toDouble()) }
 }
 

@@ -10,10 +10,11 @@
 
 package eu.ibagroup.r2z.zowe.config
 
-import com.google.gson.Gson
+import com.google.gson.*
 import org.yaml.snakeyaml.Yaml
 import java.io.ByteArrayInputStream
 import java.io.InputStream
+import java.lang.reflect.Type
 import java.nio.charset.StandardCharsets
 import java.util.*
 
@@ -30,6 +31,17 @@ fun ZoweConfig.getAuthEncoding (): String {
   }
   return Base64.getEncoder().encodeToString("$username:$password".toByteArray(StandardCharsets.UTF_8))
 }
+
+fun ZoweConfig.toJson (): String = GsonBuilder()
+  .setPrettyPrinting()
+//  .registerTypeAdapter(Double::class.java, object : JsonSerializer<Double> {
+//    override fun serialize(src: Double?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
+//      if (src == src?.toLong()?.toDouble()) return JsonPrimitive(src?.toLong())
+//      return JsonPrimitive(src)
+//    }
+//
+//  })
+  .create().toJson(this, this.javaClass)
 
 fun String.toBasicAuthToken () = "Basic $this"
 
@@ -50,6 +62,13 @@ fun parseConfigYaml (inputStream: InputStream): ZoweConnection {
 
 fun parseConfigYaml (configString: String): ZoweConnection = parseConfigYaml(ByteArrayInputStream(configString.toByteArray()))
 
-fun parseConfigJson(configString: String): ZoweConfig = Gson().fromJson(configString, ZoweConfig::class.java)
-
+fun parseConfigJson(configString: String): ZoweConfig {
+  val zoweConfig = Gson().fromJson(configString, ZoweConfig::class.java)
+  zoweConfig.profiles.forEach { (_, v) -> v.properties.forEach{ (propKey, propValue) ->
+    if (propValue is Double? && propValue == propValue?.toLong()?.toDouble()) {
+      v.properties[propKey] = propValue?.toLong()
+    }
+  } }
+  return zoweConfig
+}
 fun parseConfigJson (inputStream: InputStream): ZoweConfig = parseConfigJson(String(inputStream.readAllBytes()))
