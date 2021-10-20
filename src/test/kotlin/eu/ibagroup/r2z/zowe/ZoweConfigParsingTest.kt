@@ -10,10 +10,7 @@
 
 package eu.ibagroup.r2z.zowe
 
-import eu.ibagroup.r2z.zowe.config.ZoweConfig
-import eu.ibagroup.r2z.zowe.config.ZoweConnection
-import eu.ibagroup.r2z.zowe.config.parseConfigJson
-import eu.ibagroup.r2z.zowe.config.parseConfigYaml
+import eu.ibagroup.r2z.zowe.config.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -62,6 +59,21 @@ class ZoweConfigParsingTest {
   fun testParsingYamlStream() {
     val zoweConnection = parseConfigYaml(streamConfigYaml)
     checkZoweConnection(zoweConnection)
+  }
+
+  @Test
+  fun testAuthTokenCreation() {
+    val zoweConfig = parseConfigJson(stringConfigJson)
+    zoweConfig.user = null
+    Assertions.assertThrows(IllegalStateException::class.java){ zoweConfig.getAuthEncoding() }
+    zoweConfig.user = "user"
+    zoweConfig.password = null
+    Assertions.assertThrows(IllegalStateException::class.java){ zoweConfig.getAuthEncoding() }
+    zoweConfig.password = "password"
+    zoweConfig.host = ""
+    Assertions.assertThrows(IllegalStateException::class.java){ zoweConfig.getAuthEncoding() }
+    zoweConfig.host = "example.host"
+    Assertions.assertDoesNotThrow { zoweConfig.getAuthEncoding() }
   }
 
   fun checkZoweConfig(zoweConfig: ZoweConfig) {
