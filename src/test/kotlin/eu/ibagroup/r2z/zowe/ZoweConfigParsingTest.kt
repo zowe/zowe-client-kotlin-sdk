@@ -75,7 +75,7 @@ class ZoweConfigParsingTest {
     zoweConfig.host = "example.host"
     zoweConfig.port = null
     Assertions.assertThrows(IllegalStateException::class.java){ zoweConfig.getAuthEncoding() }
-    zoweConfig.port = 10
+    zoweConfig.port = 443
     Assertions.assertDoesNotThrow { zoweConfig.getAuthEncoding() }
   }
 
