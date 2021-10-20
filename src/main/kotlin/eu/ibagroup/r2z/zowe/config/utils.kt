@@ -14,22 +14,21 @@ import com.google.gson.*
 import org.yaml.snakeyaml.Yaml
 import java.io.ByteArrayInputStream
 import java.io.InputStream
-import java.lang.reflect.Type
 import java.nio.charset.StandardCharsets
 import java.util.*
 
 fun ZoweConnection.getAuthEncoding (): String {
-  if (zosmfPort == null || host?.isEmpty() != false || password?.isEmpty() != false || user?.isEmpty() != false) {
+  if (port == null || host?.isEmpty() != false || password?.isEmpty() != false || user?.isEmpty() != false) {
     throw IllegalStateException("Connection data not setup properly")
   }
   return Base64.getEncoder().encodeToString("$user:$password".toByteArray(StandardCharsets.UTF_8))
 }
 
 fun ZoweConfig.getAuthEncoding (): String {
-  if (host?.isEmpty() != false || port == null || username?.isEmpty() != false || password?.isEmpty() != false) {
+  if (host?.isEmpty() != false || port == null || user?.isEmpty() != false || password?.isEmpty() != false) {
     throw IllegalStateException("Connection data not setup properly")
   }
-  return Base64.getEncoder().encodeToString("$username:$password".toByteArray(StandardCharsets.UTF_8))
+  return Base64.getEncoder().encodeToString("$user:$password".toByteArray(StandardCharsets.UTF_8))
 }
 
 fun ZoweConfig.toJson (): String = Gson().toJson(this, this.javaClass)
@@ -41,8 +40,8 @@ fun parseConfigYaml (inputStream: InputStream): ZoweConnection {
   return ZoweConnection(
     loaded["host"] as String?,
     loaded["port"] as Int?,
-    loaded["password"] as String?,
     loaded["user"] as String?,
+    loaded["password"] as String?,
     loaded["rejectUnauthorized"] as Boolean? ?: false,
     loaded["protocol"] as String? ?: "http",
     loaded["basePath"] as String? ?: "/",

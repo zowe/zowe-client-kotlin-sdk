@@ -12,7 +12,7 @@ package eu.ibagroup.r2z.zowe.config
 
 data class ZoweConnection(
   var host: String?,
-  var zosmfPort: Int?,
+  var port: Int?,
   var user: String?,
   var password: String?,
   var rejectUnauthorized: Boolean = true,

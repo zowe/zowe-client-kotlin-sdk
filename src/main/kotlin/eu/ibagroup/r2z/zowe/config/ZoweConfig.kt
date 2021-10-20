@@ -18,7 +18,7 @@ class ZoweConfig(
   val profiles: Map<String, ZoweConfigProfile>,
   val defaults: Map<String, String>
 ) {
-  var username: String?
+  var user: String?
     get() = profiles["base"]?.secure?.get(0)
     set(el) { profiles["base"]?.secure?.set(0, el ?: "") }
 

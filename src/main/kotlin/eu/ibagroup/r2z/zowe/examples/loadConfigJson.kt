@@ -18,7 +18,7 @@ fun main() {
   val inputStream = object {}.javaClass.classLoader.getResourceAsStream("zowe.config.json")
   if (inputStream != null) {
     val zoweConfig = parseConfigJson(inputStream)
-    println("url=\"${zoweConfig.protocol}://${zoweConfig.host}:${zoweConfig.port}\"; username=${zoweConfig.username}; password=${zoweConfig.password}")
+    println("url=\"${zoweConfig.protocol}://${zoweConfig.host}:${zoweConfig.port}\"; username=${zoweConfig.user}; password=${zoweConfig.password}")
     println(zoweConfig.getAuthEncoding().toBasicAuthToken())
   }
 }
