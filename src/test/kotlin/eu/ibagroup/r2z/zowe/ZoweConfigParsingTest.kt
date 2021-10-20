@@ -73,6 +73,9 @@ class ZoweConfigParsingTest {
     zoweConfig.host = ""
     Assertions.assertThrows(IllegalStateException::class.java){ zoweConfig.getAuthEncoding() }
     zoweConfig.host = "example.host"
+    zoweConfig.port = null
+    Assertions.assertThrows(IllegalStateException::class.java){ zoweConfig.getAuthEncoding() }
+    zoweConfig.port = 10
     Assertions.assertDoesNotThrow { zoweConfig.getAuthEncoding() }
   }
 

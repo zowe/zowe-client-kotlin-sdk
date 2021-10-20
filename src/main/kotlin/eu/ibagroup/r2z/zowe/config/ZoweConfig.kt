@@ -39,27 +39,27 @@ class ZoweConfig(
   @Suppress("UNCHECKED_CAST")
   var port: Long?
     get() = profiles["zosmf"]?.properties?.get("port") as Long?
-    set(el) { profiles["base"]?.properties?.set("port", el?.toDouble()) }
+    set(el) { profiles["zosmf"]?.properties?.set("port", el) }
 
   @Suppress("UNCHECKED_CAST")
   var protocol: String
     get() = profiles["zosmf"]?.properties?.get("protocol") as String? ?: "http"
-    set(el) { profiles["base"]?.properties?.set("protocol", el) }
+    set(el) { profiles["zosmf"]?.properties?.set("protocol", el) }
 
   @Suppress("UNCHECKED_CAST")
   var basePath: String
     get() = profiles["zosmf"]?.properties?.get("basePath") as String? ?: "/"
-    set(el) { profiles["base"]?.properties?.set("basePath", el) }
+    set(el) { profiles["zosmf"]?.properties?.set("basePath", el) }
 
   @Suppress("UNCHECKED_CAST")
   var encoding: Long
     get() = profiles["zosmf"]?.properties?.get("encoding") as Long? ?: 1047
-    set(el) { profiles["base"]?.properties?.set("encoding", el.toDouble()) }
+    set(el) { profiles["zosmf"]?.properties?.set("encoding", el) }
 
   @Suppress("UNCHECKED_CAST")
   var responseTimeout: Long
     get() = profiles["zosmf"]?.properties?.get("responseTimeout") as Long? ?: 600
-    set(el) { profiles["base"]?.properties?.set("responseTimeout", el.toDouble()) }
+    set(el) { profiles["zosmf"]?.properties?.set("responseTimeout", el) }
 }
 
 class ZoweConfigProfile(
