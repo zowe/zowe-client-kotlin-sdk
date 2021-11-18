@@ -10,12 +10,17 @@
 
 package eu.ibagroup.r2z.zowe
 
+import com.squareup.okhttp.mockwebserver.MockWebServer
+import eu.ibagroup.r2z.DataAPI
+import eu.ibagroup.r2z.buildGsonApi
 import eu.ibagroup.r2z.zowe.config.*
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
+import okhttp3.Credentials
+import okhttp3.OkHttpClient
+import org.junit.jupiter.api.*
 import java.io.InputStream
+import java.net.InetSocketAddress
+import java.net.Proxy
+import kotlin.concurrent.thread
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ZoweConfigParsingTest {
@@ -24,17 +29,44 @@ class ZoweConfigParsingTest {
   lateinit var stringConfigYaml: String
   lateinit var streamConfigJson: InputStream
   lateinit var streamConfigYaml: InputStream
+  lateinit var mockServer: MockWebServer
+  lateinit var proxyClient: OkHttpClient
+  val JSON_CONFIG = "zowe.config.json"
+  val YAML_CONFIG = "zowe.config.yaml"
+
+  @BeforeAll
+  fun createMockServer () {
+    mockServer = MockWebServer()
+    mockServer.setDispatcher(MockResponseDispatcher(JSON_CONFIG))
+    thread(start = true) {
+      mockServer.play()
+    }
+
+    val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(mockServer.hostName, mockServer.port))
+    proxyClient = OkHttpClient.Builder().proxy(proxy).build()
+  }
+
+  @AfterAll
+  fun stopMockServer () {
+    mockServer.shutdown()
+  }
+
+  private fun getResourceTextOrAssertError(resourceName: String): String {
+    return javaClass.classLoader.getResource(resourceName)?.readText()
+      ?: Assertions.fail("$resourceName cannot be empty.")
+  }
+
+  private fun getResourceStreamOrAssertError(resourceName: String): InputStream {
+    return javaClass.classLoader.getResourceAsStream(resourceName)
+      ?: Assertions.fail("$resourceName stream cannot be null.")
+  }
 
   @BeforeEach
   fun readConfigs() {
-    stringConfigJson = javaClass.classLoader.getResource("zowe.config.json")?.readText()
-      ?: Assertions.fail("zowe config json cannot be empty.")
-    stringConfigYaml = javaClass.classLoader.getResource("config.yaml")?.readText()
-      ?: Assertions.fail("zowe config yaml cannot be empty.")
-    streamConfigJson = javaClass.classLoader.getResourceAsStream("zowe.config.json")
-      ?: Assertions.fail("zowe config json stream cannot be null.")
-    streamConfigYaml = javaClass.classLoader.getResourceAsStream("config.yaml")
-      ?: Assertions.fail("zowe config yaml stream cannot be null.")
+    stringConfigJson = getResourceTextOrAssertError(JSON_CONFIG)
+    stringConfigYaml = getResourceTextOrAssertError(YAML_CONFIG)
+    streamConfigJson = getResourceStreamOrAssertError(JSON_CONFIG)
+    streamConfigYaml = getResourceStreamOrAssertError(YAML_CONFIG)
   }
 
   @Test
@@ -77,6 +109,25 @@ class ZoweConfigParsingTest {
     Assertions.assertThrows(IllegalStateException::class.java){ zoweConfig.getAuthEncoding() }
     zoweConfig.port = 443
     Assertions.assertDoesNotThrow { zoweConfig.getAuthEncoding() }
+  }
+
+
+  @Test
+  fun readConfigAndListDatasets() {
+    val zoweConfig = parseConfigJson(stringConfigJson)
+    val authToken = Credentials.basic(zoweConfig.user ?: "", zoweConfig.password ?: "")
+
+    val dataApi = buildGsonApi<DataAPI>("http://${zoweConfig.host}:${zoweConfig.port}", proxyClient)
+    val response = dataApi.listDataSets(
+      authorizationToken = authToken,
+      dsLevel = "TEST.*"
+    ).execute()
+    if (response.isSuccessful) {
+      val datasetLists = response.body()
+      Assertions.assertEquals(datasetLists?.items?.size, 4)
+    } else {
+      Assertions.fail("response must be successful.")
+    }
   }
 
   fun checkZoweConfig(zoweConfig: ZoweConfig) {
