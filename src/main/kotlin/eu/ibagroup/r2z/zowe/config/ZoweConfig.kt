@@ -19,48 +19,54 @@ class ZoweConfig(
   val defaults: Map<String, String>
 ) {
   var user: String?
-    get() = profiles["base"]?.secure?.get(0)
-    set(el) { profiles["base"]?.secure?.set(0, el ?: "") }
+    get() = baseProfile?.secure?.get(0)
+    set(el) { baseProfile?.secure?.set(0, el ?: "") }
 
   var password: String?
-    get() = profiles["base"]?.secure?.get(1)
-    set(el) { profiles["base"]?.secure?.set(1, el ?: "") }
+    get() = baseProfile?.secure?.get(1)
+    set(el) { baseProfile?.secure?.set(1, el ?: "") }
 
-  @Suppress("UNCHECKED_CAST")
   var host: String?
-    get() = profiles["base"]?.properties?.get("host") as String?
-    set(el) { profiles["base"]?.properties?.set("host", el) }
+    get() = baseProfile?.properties?.get("host") as String?
+    set(el) { baseProfile?.properties?.set("host", el) }
 
-  @Suppress("UNCHECKED_CAST")
   var rejectUnauthorized: Boolean?
-    get() = profiles["base"]?.properties?.get("rejectUnauthorized") as Boolean?
-    set(el) { profiles["base"]?.properties?.set("rejectUnauthorized", el ?: true) }
+    get() = baseProfile?.properties?.get("rejectUnauthorized") as Boolean?
+    set(el) { baseProfile?.properties?.set("rejectUnauthorized", el ?: true) }
 
-  @Suppress("UNCHECKED_CAST")
   var port: Long?
-    get() = profiles["zosmf"]?.properties?.get("port") as Long?
-    set(el) { profiles["zosmf"]?.properties?.set("port", el) }
+    get() = zosmfProfile?.properties?.get("port") as Long?
+    set(el) { zosmfProfile?.properties?.set("port", el) }
 
-  @Suppress("UNCHECKED_CAST")
   var protocol: String
-    get() = profiles["zosmf"]?.properties?.get("protocol") as String? ?: "http"
-    set(el) { profiles["zosmf"]?.properties?.set("protocol", el) }
+    get() = zosmfProfile?.properties?.get("protocol") as String? ?: "http"
+    set(el) { zosmfProfile?.properties?.set("protocol", el) }
 
-  @Suppress("UNCHECKED_CAST")
   var basePath: String
-    get() = profiles["zosmf"]?.properties?.get("basePath") as String? ?: "/"
-    set(el) { profiles["zosmf"]?.properties?.set("basePath", el) }
+    get() = zosmfProfile?.properties?.get("basePath") as String? ?: "/"
+    set(el) { zosmfProfile?.properties?.set("basePath", el) }
 
-  @Suppress("UNCHECKED_CAST")
   var encoding: Long
-    get() = profiles["zosmf"]?.properties?.get("encoding") as Long? ?: 1047
-    set(el) { profiles["zosmf"]?.properties?.set("encoding", el) }
+    get() = zosmfProfile?.properties?.get("encoding") as Long? ?: 1047
+    set(el) { zosmfProfile?.properties?.set("encoding", el) }
 
-  @Suppress("UNCHECKED_CAST")
   var responseTimeout: Long
-    get() = profiles["zosmf"]?.properties?.get("responseTimeout") as Long? ?: 600
-    set(el) { profiles["zosmf"]?.properties?.set("responseTimeout", el) }
+    get() = zosmfProfile?.properties?.get("responseTimeout") as Long? ?: 600
+    set(el) { zosmfProfile?.properties?.set("responseTimeout", el) }
+
+  val zosmfProfile: ZoweConfigProfile?
+    get() = profiles[defaults["zosmf"]]
+
+  val tsoProfile: ZoweConfigProfile?
+    get() = profiles[defaults["tso"]]
+
+  val sshProfile: ZoweConfigProfile?
+    get() = profiles[defaults["ssh"]]
+
+  val baseProfile: ZoweConfigProfile?
+    get() = profiles[defaults["base"]]
 }
+
 
 class ZoweConfigProfile(
   val type: String,

@@ -49,6 +49,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.4.21"
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testImplementation 'com.squareup.okhttp:mockwebserver:1.2.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     compile 'com.squareup.retrofit2:retrofit:2.9.0',
             'com.squareup.retrofit2:converter-gson:2.9.0',
