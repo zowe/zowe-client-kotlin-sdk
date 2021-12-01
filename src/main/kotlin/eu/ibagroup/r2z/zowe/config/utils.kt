@@ -31,7 +31,7 @@ fun ZoweConfig.getAuthEncoding (): String {
   return Base64.getEncoder().encodeToString("$user:$password".toByteArray(StandardCharsets.UTF_8))
 }
 
-fun ZoweConfig.toJson (): String = Gson().toJson(this, this.javaClass)
+fun ZoweConfig.toJson (): String = GsonBuilder().setPrettyPrinting().create().toJson(this, this.javaClass)
 
 fun String.toBasicAuthToken () = "Basic $this"
 
