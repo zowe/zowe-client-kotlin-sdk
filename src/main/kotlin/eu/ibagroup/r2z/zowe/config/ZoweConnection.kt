@@ -10,6 +10,7 @@
 
 package eu.ibagroup.r2z.zowe.config
 
+// TODO: doc or remove
 data class ZoweConnection(
   var host: String?,
   var port: Int?,

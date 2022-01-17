@@ -8,6 +8,20 @@
             },
             "secure": []
         },
+        "lpar1": {
+            "properties": {
+                "host": "example.host1"
+            },
+            "profiles": {
+              "zosmf": {
+                "type": "zosmf",
+                "properties": {
+                  "port": 10443
+                },
+                "secure": []
+              }
+            }
+        },
         "tso": {
             "type": "tso",
             "properties": {
@@ -37,7 +51,7 @@
         }
     },
     "defaults": {
-        "zosmf": "zosmf",
+        "zosmf": "lpar1.zosmf",
         "tso": "tso",
         "ssh": "ssh",
         "base": "base"

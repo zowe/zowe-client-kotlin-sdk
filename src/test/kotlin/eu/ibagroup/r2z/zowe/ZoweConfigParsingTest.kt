@@ -14,34 +14,28 @@ import com.squareup.okhttp.mockwebserver.MockWebServer
 import eu.ibagroup.r2z.DataAPI
 import eu.ibagroup.r2z.buildGsonApi
 import eu.ibagroup.r2z.zowe.config.*
-import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.*
-import java.io.InputStream
 import java.net.InetSocketAddress
 import java.net.Proxy
 import kotlin.concurrent.thread
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ZoweConfigParsingTest {
+class ZoweConfigParsingTest: ZoweConfigTestBase() {
 
-  lateinit var stringConfigJson: String
-  lateinit var stringConfigYaml: String
-  lateinit var streamConfigJson: InputStream
-  lateinit var streamConfigYaml: InputStream
   lateinit var mockServer: MockWebServer
   lateinit var proxyClient: OkHttpClient
-  val JSON_CONFIG = "zowe.config.json"
-  val YAML_CONFIG = "zowe.config.yaml"
+  lateinit var keytarWrapper: KeytarWrapper
+  lateinit var zoweConfig: ZoweConfig
 
   @BeforeAll
   fun createMockServer () {
+    keytarWrapper = DefaultMockKeytarWrapper()
     mockServer = MockWebServer()
-    mockServer.setDispatcher(MockResponseDispatcher(JSON_CONFIG))
+    mockServer.setDispatcher(MockResponseDispatcher())
     thread(start = true) {
       mockServer.play()
     }
-
     val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(mockServer.hostName, mockServer.port))
     proxyClient = OkHttpClient.Builder().proxy(proxy).build()
   }
@@ -51,33 +45,21 @@ class ZoweConfigParsingTest {
     mockServer.shutdown()
   }
 
-  private fun getResourceTextOrAssertError(resourceName: String): String {
-    return javaClass.classLoader.getResource(resourceName)?.readText()
-      ?: Assertions.fail("$resourceName cannot be empty.")
-  }
-
-  private fun getResourceStreamOrAssertError(resourceName: String): InputStream {
-    return javaClass.classLoader.getResourceAsStream(resourceName)
-      ?: Assertions.fail("$resourceName stream cannot be null.")
-  }
-
   @BeforeEach
-  fun readConfigs() {
-    stringConfigJson = getResourceTextOrAssertError(JSON_CONFIG)
-    stringConfigYaml = getResourceTextOrAssertError(YAML_CONFIG)
-    streamConfigJson = getResourceStreamOrAssertError(JSON_CONFIG)
-    streamConfigYaml = getResourceStreamOrAssertError(YAML_CONFIG)
+  fun uploadConfig () {
+    zoweConfig = parseConfigJson(stringConfigJson)
+    zoweConfig.extractSecureProperties(TEST_ZOWE_CONFIG_PATH, keytarWrapper)
   }
 
   @Test
   fun testParsingJsonString() {
-    val zoweConfig = parseConfigJson(stringConfigJson)
     checkZoweConfig(zoweConfig)
   }
 
   @Test
   fun testParsingJsonStream() {
     val zoweConfig = parseConfigJson(streamConfigJson)
+    zoweConfig.extractSecureProperties(TEST_ZOWE_CONFIG_PATH, keytarWrapper)
     checkZoweConfig(zoweConfig)
   }
 
@@ -95,7 +77,6 @@ class ZoweConfigParsingTest {
 
   @Test
   fun testAuthTokenCreation() {
-    val zoweConfig = parseConfigJson(stringConfigJson)
     zoweConfig.user = null
     Assertions.assertThrows(IllegalStateException::class.java){ zoweConfig.getAuthEncoding() }
     zoweConfig.user = "user"
@@ -114,8 +95,7 @@ class ZoweConfigParsingTest {
 
   @Test
   fun readConfigAndListDatasets() {
-    val zoweConfig = parseConfigJson(stringConfigJson)
-    val authToken = Credentials.basic(zoweConfig.user ?: "", zoweConfig.password ?: "")
+    val authToken = zoweConfig.getAuthEncoding().withBasicPrefix()
 
     val dataApi = buildGsonApi<DataAPI>("http://${zoweConfig.host}:${zoweConfig.port}", proxyClient)
     val response = dataApi.listDataSets(
@@ -131,11 +111,11 @@ class ZoweConfigParsingTest {
   }
 
   fun checkZoweConfig(zoweConfig: ZoweConfig) {
-    Assertions.assertEquals(zoweConfig.user, "user")
-    Assertions.assertEquals(zoweConfig.password, "password")
-    Assertions.assertEquals(zoweConfig.host, "example.host")
+    Assertions.assertEquals(zoweConfig.user, TEST_USER)
+    Assertions.assertEquals(zoweConfig.password, TEST_PASSWORD)
+    Assertions.assertEquals(zoweConfig.host, "example.host1")
     Assertions.assertEquals(zoweConfig.rejectUnauthorized, true)
-    Assertions.assertEquals(zoweConfig.port, 443)
+    Assertions.assertEquals(zoweConfig.port, 10443)
     Assertions.assertEquals(zoweConfig.protocol, "http")
     Assertions.assertEquals(zoweConfig.basePath, "/")
     Assertions.assertEquals(zoweConfig.encoding, 1047)
