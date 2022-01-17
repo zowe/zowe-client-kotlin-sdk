@@ -12,13 +12,13 @@ package eu.ibagroup.r2z.zowe.examples
 
 import eu.ibagroup.r2z.zowe.config.getAuthEncoding
 import eu.ibagroup.r2z.zowe.config.parseConfigYaml
-import eu.ibagroup.r2z.zowe.config.toBasicAuthToken
+import eu.ibagroup.r2z.zowe.config.withBasicPrefix
 
 fun main() {
   val inputStream = object {}.javaClass.classLoader.getResourceAsStream("config.yaml")
   if (inputStream != null) {
     val zoweConnection = parseConfigYaml(inputStream)
     println(zoweConnection)
-    println(zoweConnection.getAuthEncoding().toBasicAuthToken())
+    println(zoweConnection.getAuthEncoding().withBasicPrefix())
   }
 }
