@@ -335,5 +335,6 @@ class ZoweConfigProfile(
   val properties: MutableMap<String, Any?>?,
   val secure: ArrayList<String>?,
   val profiles: Map<String, ZoweConfigProfile>?,
+  @Transient
   var parentProfile: ZoweConfigProfile?
 )
