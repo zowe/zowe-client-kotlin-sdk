@@ -8,4 +8,14 @@
  * Copyright IBA Group 2020
  */
 
-rootProject.name = 'zowe-client-kotlin-sdk'
+package org.zowe.kotlinsdk
+
+import retrofit2.Call
+import retrofit2.http.GET
+
+interface InfoAPI {
+
+  @GET("zosmf/info")
+  fun getSystemInfo() : Call<InfoResponse>
+
+}

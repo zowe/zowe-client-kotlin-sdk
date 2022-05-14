@@ -8,4 +8,17 @@
  * Copyright IBA Group 2020
  */
 
-rootProject.name = 'zowe-client-kotlin-sdk'
+package org.zowe.kotlinsdk
+
+import retrofit2.Call
+import retrofit2.http.GET
+import retrofit2.http.Header
+
+interface SystemsApi {
+
+    @GET("zosmf/resttopology/systems")
+    fun getSystems(
+        @Header("Authorization") authToken: String,
+    ): Call<SystemsResponse>
+
+}

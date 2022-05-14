@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright © 2021 IBA Group, a.s.
+ * Copyright IBA Group 2020
  */
 
 plugins {
@@ -16,12 +16,11 @@ plugins {
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
-apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'maven-publish'
 
-archivesBaseName = 'r2z'
-group 'eu.ibagroup'
+archivesBaseName = 'kotlinsdk'
+group 'org.zowe'
 version projectVersion
 
 java {
@@ -49,11 +48,13 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.4.21"
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testImplementation 'com.squareup.okhttp:mockwebserver:1.2.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     compile 'com.squareup.retrofit2:retrofit:2.9.0',
             'com.squareup.retrofit2:converter-gson:2.9.0',
             'com.squareup.retrofit2:converter-scalars:2.4.0',
             'com.google.code.gson:gson:2.8.5',
+            'com.starxg:java-keytar:1.0.0',
             'org.yaml:snakeyaml:1.29',
             'org.junit.jupiter:junit-jupiter-api:5.0.2'
 
@@ -90,8 +91,8 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             customizePom(pom)
-            groupId 'eu.ibagroup'
-            artifactId 'r2z'
+            groupId 'org.zowe'
+            artifactId 'kotlinsdk'
             version projectVersion
 
             from components.java
@@ -130,30 +131,30 @@ def customizePom(pom) {
             resolveStrategy = Closure.DELEGATE_FIRST
 
             description 'Library that allows to perform http requests to IBM z/OSMF REST API with the help of Retorfit2.'
-            name 'Retrofit2-ZOSMF-Library'
-            url 'https://github.com/for-mainframe/Retrofit2-ZOSMF-Library'
+            name 'Zowe-client-Kotlin-SDK'
+            url 'https://github.com/zowe/zowe-client-kotlin-sdk'
 
             issueManagement {
                 system 'GitHub'
-                url 'https://github.com/for-mainframe/Retrofit2-ZOSMF-Library/issues'
+                url 'https://github.com/zowe/zowe-client-kotlin-sdk/issues'
             }
             licenses {
                 license {
                     name 'Apache License 2.0'
-                    url 'https://github.com/for-mainframe/Retrofit2-ZOSMF-Library/blob/main/License'
+                    url 'https://github.com/zowe/zowe-client-kotlin-sdk/blob/main/License'
                     distribution 'repo'
                 }
             }
             scm {
-                url 'https://github.com/for-mainframe/Retrofit2-ZOSMF-Library'
-                connection 'scm:git:git://github.com/for-mainframe/Retrofit2-ZOSMF-Library.git'
-                developerConnection 'scm:git:git@github.com:for-mainframe/Retrofit2-ZOSMF-Library.git'
+                url 'https://github.com/zowe/zowe-client-kotlin-sdk'
+                connection 'scm:git:git://github.com/zowe/zowe-client-kotlin-sdk.git'
+                developerConnection 'scm:git:git@github.com:zowe/zowe-client-kotlin-sdk.git'
             }
             developers {
                 developer {
-                    id 'formainframe'
-                    name 'For Mainframe'
-                    email 'formainframe@ibagroup.eu'
+                    id 'zowe-ijmp'
+                    name 'Zowe IntelliJ Plugin team'
+                    email 'zowe.robot@gmail.com'
                 }
             }
         }

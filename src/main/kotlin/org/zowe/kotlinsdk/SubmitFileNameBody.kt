@@ -8,4 +8,13 @@
  * Copyright IBA Group 2020
  */
 
-rootProject.name = 'zowe-client-kotlin-sdk'
+package org.zowe.kotlinsdk
+
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
+data class SubmitFileNameBody (
+    @SerializedName("file")
+    @Expose
+    var file: String
+)

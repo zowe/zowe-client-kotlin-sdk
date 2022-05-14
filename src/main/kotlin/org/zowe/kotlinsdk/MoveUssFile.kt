@@ -8,4 +8,17 @@
  * Copyright IBA Group 2020
  */
 
-rootProject.name = 'zowe-client-kotlin-sdk'
+package org.zowe.kotlinsdk
+
+import com.google.gson.annotations.SerializedName
+
+data class MoveUssFile(
+  @SerializedName("request")
+  var request: String = "move",
+
+  @SerializedName("from")
+  var from: String,
+
+  @SerializedName("overwrite")
+  var overwrite: Boolean? = null
+)

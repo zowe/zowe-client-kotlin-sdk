@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="kotlinsdk" pattern="src[zowe-client-kotlin-sdk.main]:org.zowe.kotlinsdk..*||src[zowe-client-kotlin-sdk.main]:org.zowe.kotlinsdk.annotations..*" />
+</component>
