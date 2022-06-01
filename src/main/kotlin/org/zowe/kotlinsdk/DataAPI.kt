@@ -144,8 +144,7 @@ interface DataAPI {
     @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
     @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
     @Header("X-IBM-Session-Ref") xIBMSessionRef: String? = null,
-    @Header("Content-Type") contentType: String? = "application/octet-stream",
-    @Body content: ByteArray,
+    @Body content: String,
     @Path("dataset-name") datasetName: String
   ): Call<Void>
 
@@ -158,8 +157,7 @@ interface DataAPI {
     @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
     @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
     @Header("X-IBM-Session-Ref") xIBMSessionRef: String? = null,
-    @Header("Content-Type") contentType: String? = "application/octet-stream",
-    @Body content: ByteArray,
+    @Body content: String,
     @Path("dataset-name") datasetName: String,
     @Path("member-name") memberName: String
   ): Call<Void>
@@ -173,8 +171,7 @@ interface DataAPI {
     @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
     @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
     @Header("X-IBM-Session-Ref") xIBMSessionRef: String? = null,
-    @Header("Content-Type") contentType: String? = "application/octet-stream",
-    @Body content: ByteArray,
+    @Body content: String,
     @Path("volser") volser: String,
     @Path("dataset-name") datasetName: String
   ): Call<Void>
@@ -188,8 +185,7 @@ interface DataAPI {
     @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
     @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
     @Header("X-IBM-Session-Ref") xIBMSessionRef: String? = null,
-    @Header("Content-Type") contentType: String? = "application/octet-stream",
-    @Body content: ByteArray,
+    @Body content: String,
     @Path("volser") volser: String,
     @Path("dataset-name") datasetName: String,
     @Path("member-name") memberName: String
@@ -378,9 +374,9 @@ interface DataAPI {
     @Header("If-Match") ifNoneMatch: String? = null,
     @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
     @Header("Accept-Encoding") acceptEncoding: String? = "gzip",
-    @Header("Content-Type") contentType: String? = "application/octet-stream",
+    @Header("Content-Type") contentType: String? = null,
     @Path("filepath-name") filePath: String,
-    @Body body: ByteArray
+    @Body body: String
   ): Call<Void>
 
   @POST("/zosmf/restfiles/fs/{filepath-name}")

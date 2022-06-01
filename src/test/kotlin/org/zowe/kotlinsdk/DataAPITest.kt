@@ -96,7 +96,7 @@ class DataAPITest {
     val request = dataAPI.writeToDataset(
       authorizationToken = basicCreds,
       datasetName = "KIRYL.IJMP.INPUT.ASM.FILEIN",
-      content = "Hello World 2!".toByteArray()
+      content = "Hello World 2!"
     )
     val response = request.execute()
     assert(response.code() == 204)
@@ -120,7 +120,7 @@ class DataAPITest {
       authorizationToken = basicCreds,
       datasetName = "KIRYL.IJMP.ASM",
       memberName = "ASAM228",
-      content = "Hi There 228".toByteArray()
+      content = "Hi There 228"
     )
     val response = request.execute()
     assert(response.code() == 204)
@@ -352,7 +352,7 @@ class DataAPITest {
     val request = dataAPI.writeToUssFile(
       authorizationToken = basicCreds,
       filePath = "u/KIRYL/ijmp/readme2.md",
-      body = "Nice really!".toByteArray()
+      body = "Nice really!"
     )
     val response = request.execute()
     assert(response.isSuccessful)
