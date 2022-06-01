@@ -10,6 +10,8 @@
 
 package org.zowe.kotlinsdk
 
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -24,6 +26,17 @@ class BytesConverterFactory : Converter.Factory() {
     if (getRawType(type) !== ByteArray::class.java) return null
 
     return Converter { it.byteStream().readBytes() }
+  }
+
+  override fun requestBodyConverter(
+    type: Type,
+    parameterAnnotations: Array<out Annotation>,
+    methodAnnotations: Array<out Annotation>,
+    retrofit: Retrofit
+  ): Converter<*, RequestBody>? {
+    if (getRawType(type) !== ByteArray::class.java) return null
+
+    return Converter<ByteArray, RequestBody> { RequestBody.create(MediaType.get("application/octet-stream"), it) }
   }
   companion object Factory {
     fun create(): BytesConverterFactory = BytesConverterFactory()
