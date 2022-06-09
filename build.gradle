@@ -43,7 +43,7 @@ dependencies {
                  'com.google.code.gson:gson:2.9.0',
                  'com.starxg:java-keytar:1.0.0',
                  'org.yaml:snakeyaml:1.30',
-                 'org.junit.jupiter:junit-jupiter-api:5.0.2'
+                 'org.junit.jupiter:junit-jupiter-api:5.8.2'
 }
 
 test {
@@ -78,7 +78,7 @@ signing {
   required {
     // signing is required if this is a release version and the artifacts are to be published
     !version.toString().endsWith('-SNAPSHOT') && tasks.withType(PublishToMavenRepository).find {
-        gradle.taskGraph.hasTask it
+      gradle.taskGraph.hasTask it
     }
   }
   sign publishing.publications

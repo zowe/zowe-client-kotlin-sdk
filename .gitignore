@@ -5,5 +5,5 @@
 build
 gradle
 .gradle
-.vscode
 bin
+.vscode

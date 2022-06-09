@@ -26,6 +26,10 @@ data class TsoResponse(
   @Expose
   var queueId: String? = null,
 
+  @SerializedName("remoteSys")
+  @Expose
+  var remoteSys: String? = null,
+
   @SerializedName("tsoData")
   @Expose
   var tsoData: List<TsoData> = emptyList(),
@@ -52,9 +56,17 @@ data class TsoResponse(
 )
 
 data class TsoData(
-  @SerializedName("message-type")
+  @SerializedName(value = "TSO MESSAGE")
   @Expose
-  var messageType: MessageType,
+  var tsoMessage: MessageType? = null,
+
+  @SerializedName(value = "TSO PROMPT")
+  @Expose
+  var tsoPrompt: MessageType? = null,
+
+  @SerializedName(value = "TSO RESPONSE")
+  @Expose
+  var tsoResponse: MessageType? = null,
 )
 
 data class MessageType(
@@ -62,9 +74,17 @@ data class MessageType(
   @Expose
   var version: String,
 
-  @SerializedName("data-type")
+  @SerializedName(value = "DATA")
   @Expose
-  var dataType: String,
+  var data: String? = null,
+
+  @SerializedName(value = "HIDDEN")
+  @Expose
+  var hidden: String? = null,
+
+  @SerializedName(value = "ACTION")
+  @Expose
+  var action: String? = null,
 )
 
 data class MessageData(
@@ -76,3 +96,12 @@ data class MessageData(
   @Expose
   var messageId: String? = null,
 )
+
+enum class TsoCodePage(val codePage: String) {
+  IBM_1025("1025"),
+  IBM_1047("1047");
+
+  override fun toString(): String {
+    return codePage
+  }
+}
