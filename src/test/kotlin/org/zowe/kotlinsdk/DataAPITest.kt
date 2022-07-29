@@ -10,7 +10,6 @@
 
 package org.zowe.kotlinsdk
 
-import okhttp3.OkHttpClient
 import org.junit.jupiter.api.Test
 
 
@@ -393,6 +392,38 @@ class DataAPITest {
     )
     val response = request.execute()
     assert(response.isSuccessful)
+  }
+
+  @Test
+  fun changeFileTag() {
+    val request = dataAPI.changeFileTag(
+      authorizationToken = basicCreds,
+      body = ChangeTag(
+        action = TagAction.SET,
+        type = UssFileDataType.TEXT,
+        codeSet = "IBM-1047"
+      ),
+      filePath = FilePath("u/DLIS/files/test")
+    )
+    val response = request.execute()
+    assert(response.isSuccessful)
+  }
+
+  @Test
+  fun listFileTag() {
+    val request = dataAPI.changeFileTag(
+      authorizationToken = basicCreds,
+      body = ChangeTag(
+        action = TagAction.LIST,
+      ),
+      filePath = FilePath("u/DLIS/files/test")
+    )
+    val response = request.execute()
+    val body = response.body()?.string()
+    val stdout = gson.fromJson(body, FileTagList::class.java).stdout
+    assert(response.isSuccessful)
+    assert(stdout[0].contains("IBM-1047"))
+    assert(stdout[0].contains("u/DLIS/files/test"))
   }
 
   @Test
