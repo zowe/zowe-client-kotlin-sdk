@@ -14,7 +14,9 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
 import org.zowe.kotlinsdk.CodePage
+import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
 import java.io.File
+import java.lang.IllegalStateException
 import kotlin.collections.ArrayList
 
 /**
@@ -262,6 +264,18 @@ class ZoweConfig(
     return GsonBuilder().setPrettyPrinting().create().toJson(zoweConfigCopy, zoweConfigCopy::class.java)
   }
 
+  /**
+   * Creates ZOSConnection based on zowe config or throws exception if data is not correct.
+   * @return ZOSConnection instance
+   * @see ZOSConnection
+   */
+  fun toZosConnection(): ZOSConnection {
+    if (host?.isEmpty() != false || port == null || user?.isEmpty() != false || password == null || protocol.isEmpty()){
+      throw IllegalStateException("Zowe config data is not valid for creating ZOSConnection")
+    }
+    return ZOSConnection(host ?: "", port.toString(), user ?: "", password ?: "", protocol)
+  }
+
   var user: String?
     get() = searchProperty("user") { zosmf(); base() } as String?
     set(el) { updateProperty("user", el ?: "") { zosmf(); base() } }
@@ -288,7 +302,7 @@ class ZoweConfig(
 
   var basePath: String
     get() = searchProperty("basePath") { zosmf(); base() } as String? ?: "/"
-    set(el) { updateProperty("protocol", el) { zosmf(); base() } }
+    set(el) { updateProperty("basePath", el) { zosmf(); base() } }
 
   var encoding: Long
     get() = searchProperty("encoding") { zosmf(); base() } as Long? ?: 1047
@@ -335,6 +349,5 @@ class ZoweConfigProfile(
   val properties: MutableMap<String, Any?>?,
   val secure: ArrayList<String>?,
   val profiles: Map<String, ZoweConfigProfile>?,
-  @Transient
   var parentProfile: ZoweConfigProfile?
 )

@@ -15,7 +15,7 @@ import com.google.gson.annotations.SerializedName
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 
-data class JobStatus(
+data class Job(
 
   @SerializedName("jobid")
   @Expose
