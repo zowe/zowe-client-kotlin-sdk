@@ -13,20 +13,18 @@ package org.zowe.kotlinsdk.zowe
 import com.squareup.okhttp.mockwebserver.Dispatcher
 import com.squareup.okhttp.mockwebserver.MockResponse
 import com.squareup.okhttp.mockwebserver.RecordedRequest
-import org.zowe.kotlinsdk.zowe.config.DefaultKeytarWrapper
 import org.zowe.kotlinsdk.zowe.config.decodeFromBase64
-import org.zowe.kotlinsdk.zowe.config.parseConfigJson
 import org.junit.jupiter.api.Assertions
-import java.nio.charset.StandardCharsets
-import java.util.*
 
-class MockResponseDispatcher() : Dispatcher() {
+class MockResponseDispatcher : Dispatcher() {
+
+  var validationList = mutableListOf<Pair<(RecordedRequest?)->Boolean, (RecordedRequest?)->MockResponse>>()
 
   private fun getResourceText(resourcePath: String): String? {
     return javaClass.classLoader.getResource(resourcePath)?.readText()
   }
 
-  private fun readMockJson(mockFilePath: String): String? {
+  fun readMockJson(mockFilePath: String): String? {
     return getResourceText("mock/${mockFilePath}.json")
   }
 
@@ -35,8 +33,15 @@ class MockResponseDispatcher() : Dispatcher() {
     return base64Credentials.decodeFromBase64()
   }
 
+  fun injectEndpoint (acceptable: (RecordedRequest?)->Boolean, handler: (RecordedRequest?)->MockResponse) {
+    validationList.add(Pair(acceptable, handler))
+  }
+
+  fun clearValidationList () {
+    validationList.clear()
+  }
+
   override fun dispatch(request: RecordedRequest?): MockResponse {
-    val path = request?.path
     val authTokenRequest = request?.getHeader("Authorization") ?: Assertions.fail("auth token must be presented.")
     val credentials = decodeBasicAuthToken(authTokenRequest).split(":")
     val usernameRequest = credentials[0]
@@ -44,10 +49,6 @@ class MockResponseDispatcher() : Dispatcher() {
     Assertions.assertEquals(usernameRequest, TEST_USER)
     Assertions.assertEquals(passwordRequest, TEST_PASSWORD)
 
-    val response = MockResponse().setResponseCode(200)
-    if (path?.matches(Regex("http://.*/zosmf/restfiles/ds.*")) == true){
-      return response.setBody(readMockJson("listDatasets"))
-    }
-    return MockResponse().setResponseCode(404)
+    return validationList.firstOrNull { it.first(request) }?.second?.let { it(request) } ?: return MockResponse().setResponseCode(404)
   }
 }

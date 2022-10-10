@@ -10,8 +10,8 @@
 
 package org.zowe.kotlinsdk
 
-import eu.ibagroup.r2z.annotations.AvailableSince
-import eu.ibagroup.r2z.annotations.ZVersion
+import org.zowe.kotlinsdk.annotations.AvailableSince
+import org.zowe.kotlinsdk.annotations.ZVersion
 import retrofit2.Call
 import retrofit2.http.*
 

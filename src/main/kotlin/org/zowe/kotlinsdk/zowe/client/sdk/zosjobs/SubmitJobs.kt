@@ -1,11 +1,11 @@
 // Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
 
-package eu.ibagroup.r2z.zowe.client.sdk.zosjobs
+package org.zowe.kotlinsdk.zowe.client.sdk.zosjobs
 
-import eu.ibagroup.r2z.*
-import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
-import eu.ibagroup.r2z.zowe.client.sdk.zosjobs.input.SubmitJclParams
-import eu.ibagroup.r2z.zowe.client.sdk.zosjobs.input.SubmitJobParams
+import org.zowe.kotlinsdk.*
+import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
+import org.zowe.kotlinsdk.zowe.client.sdk.zosjobs.input.SubmitJclParams
+import org.zowe.kotlinsdk.zowe.client.sdk.zosjobs.input.SubmitJobParams
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import retrofit2.Response

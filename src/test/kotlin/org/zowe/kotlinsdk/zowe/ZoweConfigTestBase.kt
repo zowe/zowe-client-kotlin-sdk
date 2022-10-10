@@ -19,6 +19,8 @@ import org.junit.jupiter.api.BeforeEach
 import java.io.InputStream
 import java.util.*
 
+val TEST_HOST = "example.host"
+val TEST_PORT = "443"
 val TEST_USER = "testUser"
 val TEST_PASSWORD = "testPassword"
 val TEST_ZOWE_CONFIG_PATH = "/test/zowe/config/path"

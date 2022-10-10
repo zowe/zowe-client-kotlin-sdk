@@ -1,10 +1,10 @@
 // Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
 
-package eu.ibagroup.r2z.zowe.client.sdk.zosfiles
+package org.zowe.kotlinsdk.zowe.client.sdk.zosfiles
 
-import eu.ibagroup.r2z.*
-import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
-import eu.ibagroup.r2z.zowe.client.sdk.zosfiles.input.ListParams
+import org.zowe.kotlinsdk.*
+import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
+import org.zowe.kotlinsdk.zowe.client.sdk.zosfiles.input.ListParams
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import retrofit2.Response

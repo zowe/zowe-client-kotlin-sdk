@@ -1,8 +1,8 @@
 // Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
 
-package eu.ibagroup.r2z.zowe.client.sdk.zosfiles.input
+package org.zowe.kotlinsdk.zowe.client.sdk.zosfiles.input
 
-import eu.ibagroup.r2z.XIBMAttr
+import org.zowe.kotlinsdk.XIBMAttr
 
 /**
  * This interface defines the options that can be sent into the list data set function

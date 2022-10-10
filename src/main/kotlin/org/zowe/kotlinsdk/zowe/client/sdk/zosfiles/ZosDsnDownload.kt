@@ -1,12 +1,12 @@
 // Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
 
-package eu.ibagroup.r2z.zowe.client.sdk.zosfiles
+package org.zowe.kotlinsdk.zowe.client.sdk.zosfiles
 
-import eu.ibagroup.r2z.DataAPI
-import eu.ibagroup.r2z.UnsafeOkHttpClient
-import eu.ibagroup.r2z.buildApi
-import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
-import eu.ibagroup.r2z.zowe.client.sdk.zosfiles.input.DownloadParams
+import org.zowe.kotlinsdk.DataAPI
+import org.zowe.kotlinsdk.UnsafeOkHttpClient
+import org.zowe.kotlinsdk.buildApi
+import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
+import org.zowe.kotlinsdk.zowe.client.sdk.zosfiles.input.DownloadParams
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody

@@ -1,12 +1,12 @@
 // Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
 
-package eu.ibagroup.r2z.zowe.client.sdk.zosjobs
+package org.zowe.kotlinsdk.zowe.client.sdk.zosjobs
 
-import eu.ibagroup.r2z.Job
-import eu.ibagroup.r2z.UnsafeOkHttpClient
-import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
-import eu.ibagroup.r2z.zowe.client.sdk.zosjobs.input.GetJobParams
-import eu.ibagroup.r2z.zowe.client.sdk.zosjobs.input.MonitorJobWaitForParams
+import org.zowe.kotlinsdk.Job
+import org.zowe.kotlinsdk.UnsafeOkHttpClient
+import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
+import org.zowe.kotlinsdk.zowe.client.sdk.zosjobs.input.GetJobParams
+import org.zowe.kotlinsdk.zowe.client.sdk.zosjobs.input.MonitorJobWaitForParams
 import okhttp3.OkHttpClient
 
 

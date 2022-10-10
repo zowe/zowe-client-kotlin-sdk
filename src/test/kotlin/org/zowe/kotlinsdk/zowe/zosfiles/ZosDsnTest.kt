@@ -1,17 +1,17 @@
 // Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
 
-package eu.ibagroup.r2z.zowe.zosfiles
+package org.zowe.kotlinsdk.zowe.zosfiles
 
 import com.google.gson.Gson
 import com.squareup.okhttp.mockwebserver.MockResponse
 import com.squareup.okhttp.mockwebserver.MockWebServer
-import eu.ibagroup.r2z.CreateDataset
-import eu.ibagroup.r2z.DatasetOrganization
-import eu.ibagroup.r2z.RecordFormat
-import eu.ibagroup.r2z.SpaceUnits
-import eu.ibagroup.r2z.zowe.*
-import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
-import eu.ibagroup.r2z.zowe.client.sdk.zosfiles.ZosDsn
+import org.zowe.kotlinsdk.CreateDataset
+import org.zowe.kotlinsdk.DatasetOrganization
+import org.zowe.kotlinsdk.RecordFormat
+import org.zowe.kotlinsdk.SpaceUnits
+import org.zowe.kotlinsdk.zowe.*
+import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
+import org.zowe.kotlinsdk.zowe.client.sdk.zosfiles.ZosDsn
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.*
 import java.net.InetSocketAddress
