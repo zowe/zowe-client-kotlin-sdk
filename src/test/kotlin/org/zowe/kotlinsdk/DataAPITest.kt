@@ -352,7 +352,10 @@ class DataAPITest {
   @Test
   fun testRetrieveUssFileContent() {
     val request =
-      dataAPI.retrieveUssFileContent(authorizationToken = basicCreds, filePath = "u/KIRYL/ijmp/nice.txt")
+      dataAPI.retrieveUssFileContent(
+        authorizationToken = basicCreds,
+        filePath = FilePath("u/KIRYL/ijmp/nice.txt")
+      )
     val response = request.execute()
     assert(response.isSuccessful)
     print(response.body())
@@ -362,7 +365,7 @@ class DataAPITest {
   fun testWriteToUssFile() {
     val request = dataAPI.writeToUssFile(
       authorizationToken = basicCreds,
-      filePath = "u/KIRYL/ijmp/readme2.md",
+      filePath = FilePath("u/KIRYL/ijmp/readme2.md"),
       body = "Nice really!".toByteArray()
     )
     val response = request.execute()
@@ -387,7 +390,7 @@ class DataAPITest {
   fun testDeleteUssFile() {
     val request = dataAPI.deleteUssFile(
       authorizationToken = basicCreds,
-      filePath = "u/KIRYL/ijmp/nice.txt",
+      filePath = FilePath("u/KIRYL/ijmp/nice.txt"),
     )
     val response = request.execute()
     assert(response.isSuccessful)

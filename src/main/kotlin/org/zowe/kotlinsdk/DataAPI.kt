@@ -390,8 +390,8 @@ interface DataAPI {
     @Header("Range") range: Int? = null,
     @Header("X-IBM-Record-Range") xIBMRecordRange: XIBMRecordRange? = null,
     @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
-    @Header("Accept-Encoding") acceptEncoding: String? = "gzip",
-    @Path("filepath-name") filePath: String,
+    @Header("Accept-Encoding") acceptEncoding: String? = null, //"gzip",
+    @Path("filepath-name", encoded = true) filePath: FilePath,
     @Query("search") search: String? = null,
     @Query("research") research: String? = null,
     @Query("insensitive") insensitive: Boolean? = null,
@@ -404,9 +404,9 @@ interface DataAPI {
     @Header("Authorization") authorizationToken: String,
     @Header("If-Match") ifNoneMatch: String? = null,
     @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
-    @Header("Accept-Encoding") acceptEncoding: String? = "gzip",
-    @Header("Content-Type") contentType: String? = "application/octet-stream",
-    @Path("filepath-name") filePath: String,
+    @Header("Accept-Encoding") acceptEncoding: String? = null, //"gzip",
+    @Header("Content-Type") contentType: String? = "text/plain", //"application/octet-stream",
+    @Path("filepath-name", encoded = true) filePath: FilePath,
     @Body body: ByteArray
   ): Call<Void>
 
@@ -415,7 +415,7 @@ interface DataAPI {
   fun createUssFile(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-Override-Umask") xIBMOverrideUmask: Boolean = true,
-    @Path("filepath-name") filePath: FilePath,
+    @Path("filepath-name", encoded = true) filePath: FilePath,
     @Body body: CreateUssFile
   ): Call<Void>
 
@@ -423,7 +423,7 @@ interface DataAPI {
   @DELETE("/zosmf/restfiles/fs/{filepath-name}")
   fun deleteUssFile(
     @Header("Authorization") authorizationToken: String,
-    @Path("filepath-name") filePath: String,
+    @Path("filepath-name", encoded = true) filePath: FilePath,
     @Header("X-IBM-Option") xIBMOption: XIBMOption? = null
   ): Call<Void>
 
