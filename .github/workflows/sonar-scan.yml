@@ -2,7 +2,7 @@ name: Sonar Scans
 
 on:
     push:
-        branches: [ main, user/markackert/sonar-scans ]
+        branches: [ main ]
     pull_request:
         branches: [ main ]
     workflow_dispatch:
