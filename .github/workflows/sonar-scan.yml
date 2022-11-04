@@ -1,4 +1,4 @@
-name: Containers - Build, Test
+name: Sonar Scans
 
 on:
     push:
