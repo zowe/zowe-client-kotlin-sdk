@@ -8,8 +8,10 @@
  * Copyright IBA Group 2020
  */
 
-package org.zowe.kotlinsdk
+package common
 
+import org.zowe.kotlinsdk.JESApi
+import org.zowe.kotlinsdk.SpoolFile
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -38,9 +40,9 @@ class ListSpoolFilesTest : BaseTest(){
   }
 
   fun executeCallAndCheckResult(call: Call<List<SpoolFile>>){
-    var response = call.execute()
-    if(response.isSuccessful == true){
-      var spoolFiles = response.body()
+    val response = call.execute()
+    if (response.isSuccessful){
+      val spoolFiles = response.body()
       spoolFiles?.forEach { el-> println(el) }
     } else{
       Assertions.assertTrue(false)

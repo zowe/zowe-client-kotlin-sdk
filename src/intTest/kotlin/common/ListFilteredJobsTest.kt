@@ -8,8 +8,10 @@
  * Copyright IBA Group 2020
  */
 
-package org.zowe.kotlinsdk
+package common
 
+import org.zowe.kotlinsdk.JESApi
+import org.zowe.kotlinsdk.Job
 import org.junit.jupiter.api.*
 import retrofit2.Call
 import java.util.concurrent.TimeUnit
