@@ -8,8 +8,9 @@
  * Copyright IBA Group 2020
  */
 
-package org.zowe.kotlinsdk
+package common
 
+import org.zowe.kotlinsdk.*
 import org.junit.jupiter.api.Test
 
 class TsoApiTest: BaseTest() {

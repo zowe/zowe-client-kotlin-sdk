@@ -8,13 +8,15 @@
  * Copyright IBA Group 2020
  */
 
-package org.zowe.kotlinsdk
+package common
 
+import org.zowe.kotlinsdk.BinaryMode
+import org.zowe.kotlinsdk.JESApi
+import org.zowe.kotlinsdk.RecordRange
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import retrofit2.Call
-
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SpoolFileRecordsTest : BaseTest() {
@@ -52,8 +54,8 @@ class SpoolFileRecordsTest : BaseTest() {
 
   fun executeCallAndCheckResult(call: Call<ByteArray>) {
     val response = call.execute()
-    if (response.isSuccessful == true) {
-      var arr = response.body() as ByteArray
+    if (response.isSuccessful) {
+      val arr = response.body() as ByteArray
       println(arr.toString(Charsets.UTF_8))
 
     } else {

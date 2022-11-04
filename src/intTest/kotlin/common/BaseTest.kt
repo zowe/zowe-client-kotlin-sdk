@@ -8,8 +8,9 @@
  * Copyright IBA Group 2020
  */
 
-package org.zowe.kotlinsdk
+package common
 
+import org.zowe.kotlinsdk.BytesConverterFactory
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -46,7 +47,7 @@ open class BaseTest {
     return try {
 
 
-      val trustAllCerts: Array<TrustManager> = arrayOf<TrustManager>(
+      val trustAllCerts: Array<TrustManager> = arrayOf(
         object : X509TrustManager {
           @Throws(CertificateException::class)
           override fun checkClientTrusted(
@@ -70,7 +71,7 @@ open class BaseTest {
       val sslContext: SSLContext = SSLContext.getInstance("TLSv1.2")
       sslContext.init(null, trustAllCerts, SecureRandom())
 
-      val sslSocketFactory: SSLSocketFactory = sslContext.getSocketFactory()
+      val sslSocketFactory: SSLSocketFactory = sslContext.socketFactory
       val builder = OkHttpClient.Builder()
       builder.sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
       builder.hostnameVerifier(object : HostnameVerifier {
