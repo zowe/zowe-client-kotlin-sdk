@@ -8,6 +8,13 @@
  * Copyright IBA Group 2020
  */
 
+ buildscript {
+  dependencies {
+    classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.1.1'
+  }
+}
+
+
 plugins {
   id 'java'
   id 'org.jetbrains.kotlin.jvm' version '1.6.21'
@@ -17,10 +24,13 @@ apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'signing'
 apply plugin: 'maven-publish'
+apply from: 'gradle/sonar.gradle'
 
 archivesBaseName = 'kotlinsdk'
 group 'org.zowe'
 version projectVersion
+
+
 
 java {
   sourceCompatibility = JavaVersion.VERSION_11
