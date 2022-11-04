@@ -7,5 +7,5 @@ build
 .gradle.properties
 bin
 .vscode
-gradle/wrapper
+gradle/wrapper/gradle-wrapper.jar
 gradle.properties.for-release
