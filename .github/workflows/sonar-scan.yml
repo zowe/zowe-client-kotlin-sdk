@@ -29,6 +29,7 @@ jobs:
             ./gradlew --info sonarqube -Dresults="build/reports/tests/test,build/test-results"
             -Psonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN
             -Partifactory_user=$ARTIFACTORY_USERNAME -Partifactory_password=$ARTIFACTORY_PASSWORD
+            -Dsonar.coverage.jacoco.xmlReportPaths="build/reports/jacoco.xml"
         env:
             ARTIFACTORY_USE RNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
             ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}

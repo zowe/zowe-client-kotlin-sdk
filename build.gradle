@@ -18,6 +18,7 @@
 plugins {
   id 'java'
   id 'org.jetbrains.kotlin.jvm' version '1.6.21'
+  id 'jacoco'
 }
 
 apply plugin: 'java'
@@ -58,6 +59,7 @@ dependencies {
 
 test {
   useJUnitPlatform()
+  finalizedBy(tasks.jacocoTestReport)
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
@@ -75,6 +77,14 @@ task sourceJar(type: Jar) {
 task javadocJar(type: Jar, dependsOn: javadoc) {
   classifier "javadoc"
   from javadoc.destinationDir
+}
+
+tasks.jacocoTestReport {
+  dependsOn(tasks.test)
+  reports {
+    xml.required = true
+    xml.outputLocation = file("${buildDir}/reports/jacoco.xml")
+  }
 }
 
 /**
