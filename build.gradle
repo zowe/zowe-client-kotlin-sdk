@@ -7,9 +7,37 @@
  *
  * Copyright IBA Group 2020
  */
+import java.util.regex.Matcher
 
- buildscript {
+buildscript {
+  ext.mavenRepositories = {
+    mavenCentral()
+    maven {
+      url artifactoryMavenSnapshotRepo
+      credentials {
+        username mavenUser
+        password mavenPassword
+      }
+    }
+    maven {
+      url artifactoryMavenRepo
+      credentials {
+        username mavenUser
+        password mavenPassword
+      }
+    }
+    maven {
+      url "https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceRelease/"
+    }
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+
+  repositories mavenRepositories
+
   dependencies {
+    classpath 'net.researchgate:gradle-release:3.0.2'
     classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.1.1'
   }
 }
@@ -36,10 +64,6 @@ version projectVersion
 java {
   sourceCompatibility = JavaVersion.VERSION_11
   targetCompatibility = JavaVersion.VERSION_11
-}
-
-repositories {
-  mavenCentral()
 }
 
 dependencies {
@@ -121,6 +145,14 @@ task intTest(type:Test) {
   }
   testLogging {
     events("passed", "skipped", "failed")
+  }
+}
+
+task publishAllVersions {
+  group 'Zowe Publishing'
+  description 'Publish ZIP file and SDK libraries to Zowe Artifactory'
+  doLast {
+    println 'Published ZIP file and libraries'
   }
 }
 
@@ -226,3 +258,52 @@ model {
     dependsOn project.tasks.signArchives
   }
 }
+
+//-----------Release part start
+apply plugin: 'net.researchgate.release'
+
+ext.releaseScope = project.hasProperty('release.scope') ? project.getProperty('release.scope') : 'patch'
+
+release {
+  failOnCommitNeeded = true
+  failOnPublishNeeded = true
+  failOnSnapshotDependencies = true
+  failOnUnversionedFiles = false
+  failOnUpdateNeeded = true
+  revertOnFail = true
+  preCommitText = '[Gradle Release plugin]'
+  preTagCommitMessage = '[skip ci] Before tag commit'
+  tagCommitMessage = 'Release:'
+  tagTemplate = 'v${version}'
+  newVersionCommitMessage = 'Create new version:'
+  versionPropertyFile = 'gradle.properties'
+
+  if (releaseScope == 'minor') {
+    versionPatterns = [
+      /[.]*\.(\d+)\.(\d+)[.]*/: { Matcher m, Project p -> m.replaceAll(".${(m[0][1] as int) + 1}.0") }
+    ]
+  } else if (releaseScope == 'major') {
+    versionPatterns = [
+      /(\d+)\.(\d+)\.(\d+)[.]*/: { Matcher m, Project p -> m.replaceAll("${(m[0][1] as int) + 1}.0.0") }
+    ]
+  } else {
+    versionPatterns = [
+      /(\d+)([^\d]*$)/: { Matcher m, Project p -> m.replaceAll("${(m[0][1] as int) + 1}${m[0][2]}") }
+    ]
+  }
+
+  scmAdapters = [
+    net.researchgate.release.GitAdapter
+  ]
+
+  git {
+    requireBranch.set('')
+    pushToRemote.set('origin')
+    pushToBranchPrefix.set('')
+    commitVersionFileOnly.set(true)
+    signTag.set(false)
+  }
+}
+
+afterReleaseBuild.dependsOn publishAllVersions
+//-----------Release part end
