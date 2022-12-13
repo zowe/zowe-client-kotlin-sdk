@@ -20,7 +20,7 @@ runs:
       run: chmod +x gradlew
       shell: bash
 
-    -   name: Cache Gradle packages
+    - name: Cache Gradle packages
       uses: actions/cache@v2
       with:
         path: |
