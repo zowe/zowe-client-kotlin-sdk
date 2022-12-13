@@ -42,10 +42,6 @@ buildscript {
   }
 }
 
-repositories {
-  mavenCentral()
-}
-
 plugins {
   id 'java'
   id 'org.jetbrains.kotlin.jvm' version '1.6.21'
@@ -62,11 +58,13 @@ archivesBaseName = 'kotlinsdk'
 group 'org.zowe'
 version projectVersion
 
-
-
 java {
   sourceCompatibility = JavaVersion.VERSION_11
   targetCompatibility = JavaVersion.VERSION_11
+}
+
+repositories {
+  mavenCentral()
 }
 
 dependencies {
