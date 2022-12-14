@@ -2,25 +2,25 @@
 name: Automated binary release
 
 on:
-    push:
-        branches: [ main ]
-    pull_request:
-        branches: [ main ]
-    workflow_dispatch:
-  # schedule:
-  #   # * is a special character in YAML so you have to quote this string
-  #   - cron:  '0 0 * * 5'
+  # push:
+  #     branches: [ main ]
+  # pull_request:
+  #     branches: [ main ]
   # workflow_dispatch:
-  #   inputs:
-  #     scope:
-  #       description: 'Specify scope that is to be used.'
-  #       required: true
-  #       type: choice
-  #       options:
-  #         - patch
-  #         - minor
-  #         - major
-  #       default: 'patch'
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '0 0 * * 5'
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: 'Specify scope that is to be used.'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+        default: 'patch'
 
 jobs:
   release:
