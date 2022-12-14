@@ -53,7 +53,7 @@ apply from: 'gradle/sonar.gradle'
 
 archivesBaseName = 'kotlinsdk'
 group 'org.zowe'
-version projectVersion
+version version
 
 java {
   sourceCompatibility = JavaVersion.VERSION_11
@@ -178,7 +178,7 @@ publishing {
       customizePom(pom)
       groupId 'org.zowe'
       artifactId 'kotlinsdk'
-      version projectVersion
+      version version
 
       from components.java
 
