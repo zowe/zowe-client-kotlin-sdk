@@ -176,8 +176,8 @@ publishing {
   publications {
     mavenJava(MavenPublication) {
       customizePom(pom)
-      groupId 'org.zowe.sdk'
-      artifactId 'zowe-kotlin-sdk'
+      groupId 'org.zowe'
+      artifactId 'kotlinsdk'
       version version
 
       from components.java
@@ -272,7 +272,7 @@ release {
   preCommitText = '[Gradle Release plugin]'
   preTagCommitMessage = '[skip ci] Before tag commit'
   tagCommitMessage = 'Release:'
-  tagTemplate = 'v${version}'
+  tagTemplate = '${version}'
   newVersionCommitMessage = 'Create new version:'
   versionPropertyFile = 'gradle.properties'
 
@@ -299,7 +299,7 @@ release {
     pushToRemote.set('origin')
     pushToBranchPrefix.set('')
     commitVersionFileOnly.set(true)
-    signTag.set(false)
+    signTag.set(true)
   }
 }
 
