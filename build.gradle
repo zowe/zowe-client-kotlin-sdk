@@ -299,7 +299,7 @@ release {
     pushToRemote.set('origin')
     pushToBranchPrefix.set('')
     commitVersionFileOnly.set(true)
-    signTag.set(true)
+    signTag.set(false)
   }
 }
 
