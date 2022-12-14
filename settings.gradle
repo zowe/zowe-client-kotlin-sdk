@@ -10,7 +10,6 @@
 
 rootProject.name = 'zowe-client-kotlin-sdk'
 
-ext.isPush = getProperty('gradle.cache.push')
 ext.artifactory_user = getProperty('artifactory_user')
 ext.artifactory_password = getProperty('artifactory_password')
 
@@ -21,6 +20,5 @@ buildCache {
       username = "${artifactory_user}"
       password = "${artifactory_password}"
     }
-    push = isPush
   }
 }
