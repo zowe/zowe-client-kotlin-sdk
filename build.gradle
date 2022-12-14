@@ -27,9 +27,6 @@ buildscript {
       }
     }
     maven {
-      url "https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceRelease/"
-    }
-    maven {
       url "https://plugins.gradle.org/m2/"
     }
   }
