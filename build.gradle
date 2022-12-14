@@ -176,8 +176,8 @@ publishing {
   publications {
     mavenJava(MavenPublication) {
       customizePom(pom)
-      groupId 'org.zowe'
-      artifactId 'kotlinsdk'
+      groupId 'org.zowe.sdk'
+      artifactId 'zowe-kotlin-sdk'
       version version
 
       from components.java
