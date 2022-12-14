@@ -10,15 +10,17 @@
 
 rootProject.name = 'zowe-client-kotlin-sdk'
 
-ext.artifactory_user = getProperty('artifactory_user')
-ext.artifactory_password = getProperty('artifactory_password')
+// ext.isPush = getProperty('gradle.cache.push')
+// ext.artifactory_user = getProperty('artifactory_user')
+// ext.artifactory_password = getProperty('artifactory_password')
 
-buildCache {
-  remote(HttpBuildCache) {
-    url = 'https://zowe.jfrog.io/zowe/cache/'
-    credentials {
-      username = "${artifactory_user}"
-      password = "${artifactory_password}"
-    }
-  }
-}
+// buildCache {
+//   remote(HttpBuildCache) {
+//     url = 'https://zowe.jfrog.io/zowe/cache/'
+//     credentials {
+//       username = "${artifactory_user}"
+//       password = "${artifactory_password}"
+//     }
+//     push = isPush
+//   }
+// }
