@@ -2,12 +2,10 @@
 This SDK covert zOSMF Rest API with Kotlin object oriented code using Retrofit. Zowe client Kotlin SDK will allow you to send http requests to your zOSMF.
 
 ## Installation
-To install this library in your project use one of build tools like Maven, Gradle or Ant. Use the link below to get the repo. You can clone it and build. Example: ```gradle build```.
-https://github.com/zowe/zowe-client-kotlin-sdk
-<!-- Not ready
-## Installation
 To install this library in your project use one of build tools like Maven, Gradle or Ant. Use the link below to get necessary artifacts.
-https://mvnrepository.com/artifact/org.zowe/kotlinsdk
+https://zowe.jfrog.io/artifactory/libs-release/org/zowe/sdk/zowe-kotlin-sdk/
+
+To set up the SDK as a dependency:
 ```xml
 <dependency>
   <groupId>org.zowe.sdk</groupId>
@@ -15,7 +13,6 @@ https://mvnrepository.com/artifact/org.zowe/kotlinsdk
   <version>{version}</version>
 </dependency>
 ```
--->
 
 ## Guide
 In Zowe client Kotlin SDK you can find API classes. They can be used to send requests to zOSMF. Besides API classes there located data classes like Dataset. Their purpose is to wrap a response from the server or a request into it using an object model. let's look at an example.
