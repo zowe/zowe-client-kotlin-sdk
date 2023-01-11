@@ -148,9 +148,9 @@ task intTest(type:Test) {
 
 task publishAllVersions {
   group 'Zowe Publishing'
-  description 'Publish ZIP file to Zowe Artifactory'
+  description 'Publish JAR files to Zowe Artifactory'
   doLast {
-    println 'Published ZIP file'
+    println 'Published JARs'
   }
   dependsOn publish
 }
