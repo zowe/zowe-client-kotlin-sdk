@@ -283,9 +283,9 @@ release {
 
   git {
     requireBranch.set('')
-    // pushToRemote.set('origin')
+    pushToRemote.set('origin')
     pushToBranchPrefix.set('')
-    commitVersionFileOnly.set(true)
+    commitVersionFileOnly.set(false)
     signTag.set(false)
   }
 }
