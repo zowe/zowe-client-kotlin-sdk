@@ -10,8 +10,8 @@ To install this library in your project use one of build tools like Maven, Gradl
 https://mvnrepository.com/artifact/org.zowe/kotlinsdk
 ```xml
 <dependency>
-  <groupId>org.zowe</groupId>
-  <artifactId>kotlinsdk</artifactId>
+  <groupId>org.zowe.sdk</groupId>
+  <artifactId>zowe-kotlin-sdk</artifactId>
   <version>{version}</version>
 </dependency>
 ```
