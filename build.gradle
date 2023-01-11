@@ -148,10 +148,11 @@ task intTest(type:Test) {
 
 task publishAllVersions {
   group 'Zowe Publishing'
-  description 'Publish ZIP file and SDK libraries to Zowe Artifactory'
+  description 'Publish ZIP file to Zowe Artifactory'
   doLast {
-    println 'Published ZIP file and libraries'
+    println 'Published ZIP file'
   }
+  dependsOn publish
 }
 
 artifacts {
