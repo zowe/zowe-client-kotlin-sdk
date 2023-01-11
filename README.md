@@ -52,7 +52,7 @@ Please note that in order to create API stub, you have to specify that the respo
 ### Unit tests
 To run unit tests:
 ```
-./gradlew test -x signArchives
+./gradlew test
 ```
 ### Integration tests
 **NOTE:** integration tests use a specific environment. To test their correctness, you need either create the compliant one, or change the tests
