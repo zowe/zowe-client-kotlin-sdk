@@ -1,12 +1,7 @@
 # This workflow will release project with Gradle
-name: Automated binary release
+name: Release new binary version manually
 
-on:
-  # Uncomment this in case automation is needed
-  # push:
-  #   branches: [ main ]
-  # pull_request:
-  #   branches: [ main ]
+on: workflow_dispatch
 
 jobs:
   release:
