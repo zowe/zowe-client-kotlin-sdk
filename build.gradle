@@ -291,4 +291,5 @@ release {
 }
 
 afterReleaseBuild.dependsOn publishAllVersions
+updateVersion.enabled false
 //-----------Release part end
