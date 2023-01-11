@@ -7,13 +7,37 @@
  *
  * Copyright IBA Group 2020
  */
+import java.util.regex.Matcher
 
- buildscript {
+buildscript {
+  ext.mavenRepositories = {
+    mavenCentral()
+    maven {
+      url artifactoryMavenSnapshotRepo
+      credentials {
+        username mavenUser
+        password mavenPassword
+      }
+    }
+    maven {
+      url artifactoryMavenRepo
+      credentials {
+        username mavenUser
+        password mavenPassword
+      }
+    }
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+
+  repositories mavenRepositories
+
   dependencies {
+    classpath 'net.researchgate:gradle-release:3.0.2'
     classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.1.1'
   }
 }
-
 
 plugins {
   id 'java'
@@ -23,15 +47,12 @@ plugins {
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
-apply plugin: 'signing'
 apply plugin: 'maven-publish'
 apply from: 'gradle/sonar.gradle'
 
 archivesBaseName = 'kotlinsdk'
 group 'org.zowe'
-version projectVersion
-
-
+version version
 
 java {
   sourceCompatibility = JavaVersion.VERSION_11
@@ -124,21 +145,19 @@ task intTest(type:Test) {
   }
 }
 
+task publishAllVersions {
+  group 'Zowe Publishing'
+  description 'Publish JAR files to Zowe Artifactory'
+  doLast {
+    println 'Published JARs'
+  }
+  dependsOn publish
+}
+
 artifacts {
   archives jar
   archives sourceJar
   archives javadocJar
-}
-
-signing {
-  sign configurations.archives
-  required {
-    // signing is required if this is a release version and the artifacts are to be published
-    !version.toString().endsWith('-SNAPSHOT') && tasks.withType(PublishToMavenRepository).find {
-      gradle.taskGraph.hasTask it
-    }
-  }
-  sign publishing.publications
 }
 
 
@@ -146,9 +165,9 @@ publishing {
   publications {
     mavenJava(MavenPublication) {
       customizePom(pom)
-      groupId 'org.zowe'
-      artifactId 'kotlinsdk'
-      version projectVersion
+      groupId 'org.zowe.sdk'
+      artifactId 'zowe-kotlin-sdk'
+      version version
 
       from components.java
 
@@ -162,10 +181,14 @@ publishing {
   }
   repositories {
     maven {
-      url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
       credentials {
-        username ossrhUsername
-        password ossrhPassword
+        username project.hasProperty("zowe.deploy.username") ? project.getProperty("zowe.deploy.username") : ""
+        password project.hasProperty("zowe.deploy.password") ? project.getProperty("zowe.deploy.password") : ""
+      }
+      if (rootProject.version.endsWith("-SNAPSHOT")) {
+        setUrl(artifactoryPublishingMavenSnapshotRepo)
+      } else {
+        setUrl(artifactoryPublishingMavenRepo)
       }
     }
   }
@@ -219,10 +242,53 @@ model {
   tasks.generatePomFileForMavenJavaPublication {
     destination = file("$buildDir/generated-pom.xml")
   }
-  tasks.publishMavenJavaPublicationToMavenLocal {
-    dependsOn project.tasks.signArchives
+}
+
+//-----------Release part start
+apply plugin: 'net.researchgate.release'
+
+ext.releaseScope = project.hasProperty('release.scope') ? project.getProperty('release.scope') : 'patch'
+
+release {
+  failOnCommitNeeded = true
+  failOnPublishNeeded = true
+  failOnSnapshotDependencies = true
+  failOnUnversionedFiles = false
+  failOnUpdateNeeded = true
+  revertOnFail = true
+  preCommitText = '[Gradle Release plugin]'
+  preTagCommitMessage = '[skip ci] Before tag commit'
+  tagCommitMessage = 'Release:'
+  tagTemplate = '${version}'
+  newVersionCommitMessage = 'Create new version:'
+  versionPropertyFile = 'gradle.properties'
+
+  if (releaseScope == 'minor') {
+    versionPatterns = [
+      /[.]*\.(\d+)\.(\d+)[.]*/: { Matcher m, Project p -> m.replaceAll(".${(m[0][1] as int) + 1}.0") }
+    ]
+  } else if (releaseScope == 'major') {
+    versionPatterns = [
+      /(\d+)\.(\d+)\.(\d+)[.]*/: { Matcher m, Project p -> m.replaceAll("${(m[0][1] as int) + 1}.0.0") }
+    ]
+  } else {
+    versionPatterns = [
+      /(\d+)([^\d]*$)/: { Matcher m, Project p -> m.replaceAll("${(m[0][1] as int) + 1}${m[0][2]}") }
+    ]
   }
-  tasks.publishMavenJavaPublicationToMavenRepository {
-    dependsOn project.tasks.signArchives
+
+  scmAdapters = [
+    net.researchgate.release.GitAdapter
+  ]
+
+  git {
+    requireBranch.set('')
+    pushToRemote.set('origin')
+    pushToBranchPrefix.set('')
+    commitVersionFileOnly.set(false)
+    signTag.set(false)
   }
 }
+
+afterReleaseBuild.dependsOn publishAllVersions
+//-----------Release part end

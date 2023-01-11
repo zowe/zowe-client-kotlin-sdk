@@ -52,7 +52,7 @@ Please note that in order to create API stub, you have to specify that the respo
 ### Unit tests
 To run unit tests:
 ```
-./gradlew test -x signArchives
+./gradlew test
 ```
 ### Integration tests
 **NOTE:** integration tests use a specific environment. To test their correctness, you need either create the compliant one, or change the tests
@@ -66,3 +66,37 @@ To run integration tests:
 ```
 ./gradlew intTest
 ```
+
+### Release SNAPSHOT artifacts
+
+```shell
+./gradlew publishAllVersions
+```
+
+### Release final artifacts
+
+```shell
+./gradlew release -Prelease.useAutomaticVersion=true # new patch
+./gradlew release -Prelease.useAutomaticVersion=true -Prelease.scope=patch # new patch
+./gradlew release -Prelease.useAutomaticVersion=true -Prelease.scope=minor # new minor
+./gradlew release -Prelease.useAutomaticVersion=true -Prelease.scope=major # new major
+```
+
+### Release artifacts with a custom version
+
+```shell
+./gradlew release -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=0.0.0 -Prelease.newVersion=1.1.0-SNAPSHOT
+```
+
+## Properties
+
+- `zowe.deploy.username` and `zowe.deploy.password` - credentials to [Zowe Artifactory](https://zowe.jfrog.io/)
+
+You can set properties in two ways:
+
+- on the command-line: `-Pzowe.deploy.username=$USERNAME -Pzowe.deploy.password=$PASSWORD`
+- in `~/.gradle/gradle.properties`
+
+**Warning!** Do not commit property changes to the Git repository. This is confidential information.
+
+Properties are stored in GitHub Secrets.
