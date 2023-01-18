@@ -2,20 +2,17 @@
 This SDK covert zOSMF Rest API with Kotlin object oriented code using Retrofit. Zowe client Kotlin SDK will allow you to send http requests to your zOSMF.
 
 ## Installation
-To install this library in your project use one of build tools like Maven, Gradle or Ant. Use the link below to get the repo. You can clone it and build. Example: ```gradle build```.
-https://github.com/zowe/zowe-client-kotlin-sdk
-<!-- Not ready
-## Installation
 To install this library in your project use one of build tools like Maven, Gradle or Ant. Use the link below to get necessary artifacts.
-https://mvnrepository.com/artifact/org.zowe/kotlinsdk
+https://zowe.jfrog.io/artifactory/libs-release/org/zowe/sdk/zowe-kotlin-sdk/
+
+To set up the SDK as a dependency:
 ```xml
 <dependency>
-  <groupId>org.zowe</groupId>
-  <artifactId>kotlinsdk</artifactId>
+  <groupId>org.zowe.sdk</groupId>
+  <artifactId>zowe-kotlin-sdk</artifactId>
   <version>{version}</version>
 </dependency>
 ```
--->
 
 ## Guide
 In Zowe client Kotlin SDK you can find API classes. They can be used to send requests to zOSMF. Besides API classes there located data classes like Dataset. Their purpose is to wrap a response from the server or a request into it using an object model. let's look at an example.
@@ -52,7 +49,7 @@ Please note that in order to create API stub, you have to specify that the respo
 ### Unit tests
 To run unit tests:
 ```
-./gradlew test -x signArchives
+./gradlew test
 ```
 ### Integration tests
 **NOTE:** integration tests use a specific environment. To test their correctness, you need either create the compliant one, or change the tests
@@ -66,3 +63,37 @@ To run integration tests:
 ```
 ./gradlew intTest
 ```
+
+### Release SNAPSHOT artifacts
+
+```shell
+./gradlew publishAllVersions
+```
+
+### Release final artifacts
+
+```shell
+./gradlew release -Prelease.useAutomaticVersion=true # new patch
+./gradlew release -Prelease.useAutomaticVersion=true -Prelease.scope=patch # new patch
+./gradlew release -Prelease.useAutomaticVersion=true -Prelease.scope=minor # new minor
+./gradlew release -Prelease.useAutomaticVersion=true -Prelease.scope=major # new major
+```
+
+### Release artifacts with a custom version
+
+```shell
+./gradlew release -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=0.0.0 -Prelease.newVersion=1.1.0-SNAPSHOT
+```
+
+## Properties
+
+- `zowe.deploy.username` and `zowe.deploy.password` - credentials to [Zowe Artifactory](https://zowe.jfrog.io/)
+
+You can set properties in two ways:
+
+- on the command-line: `-Pzowe.deploy.username=$USERNAME -Pzowe.deploy.password=$PASSWORD`
+- in `~/.gradle/gradle.properties`
+
+**Warning!** Do not commit property changes to the Git repository. This is confidential information.
+
+Properties are stored in GitHub Secrets.

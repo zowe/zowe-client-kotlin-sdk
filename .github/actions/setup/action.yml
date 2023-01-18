@@ -20,7 +20,14 @@ runs:
       run: chmod +x gradlew
       shell: bash
 
+    - name: Cache Gradle packages
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+
     - name: Bootstrap gradlew
       run: ./gradle/bootstrap/bootstrap_gradlew.sh
       shell: bash
-        
