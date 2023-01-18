@@ -1,12 +1,12 @@
 // Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
 
-package eu.ibagroup.r2z.zowe.zosfiles
+package org.zowe.kotlinsdk.zowe.zosfiles
 
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import eu.ibagroup.r2z.zowe.*
-import eu.ibagroup.r2z.zowe.client.sdk.core.ZOSConnection
-import eu.ibagroup.r2z.zowe.client.sdk.zosuss.ZosUssCopy
+import org.zowe.kotlinsdk.zowe.*
+import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
+import org.zowe.kotlinsdk.zowe.client.sdk.zosuss.ZosUssCopy
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.*
 import java.net.InetSocketAddress

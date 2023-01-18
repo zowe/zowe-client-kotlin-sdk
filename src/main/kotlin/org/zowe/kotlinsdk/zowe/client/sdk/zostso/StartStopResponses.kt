@@ -1,8 +1,8 @@
 // Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
 
-package eu.ibagroup.r2z.zowe.client.sdk.zostso
+package org.zowe.kotlinsdk.zowe.client.sdk.zostso
 
-import eu.ibagroup.r2z.TsoResponse
+import org.zowe.kotlinsdk.TsoResponse
 
 /**
  * The TsoStartStop API responses
