@@ -217,8 +217,8 @@ def customizePom(pom) {
       }
       licenses {
         license {
-          name 'Apache License 2.0'
-          url 'https://github.com/zowe/zowe-client-kotlin-sdk/blob/main/License'
+          name 'Eclipse Public License 2.0'
+          url 'https://github.com/zowe/zowe-client-kotlin-sdk/blob/main/LICENSE'
           distribution 'repo'
         }
       }
