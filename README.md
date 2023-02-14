@@ -14,6 +14,11 @@ To set up the SDK as a dependency:
 </dependency>
 ```
 
+To use:
+```kotlin
+import org.zowe.kotlinsdk
+```
+
 ## Guide
 In Zowe client Kotlin SDK you can find API classes. They can be used to send requests to zOSMF. Besides API classes there located data classes like Dataset. Their purpose is to wrap a response from the server or a request into it using an object model. let's look at an example.
 ```kotlin
