@@ -8,6 +8,9 @@
  * Copyright IBA Group 2020
  */
 import java.util.regex.Matcher
+import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.config.LanguageVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
   ext.mavenRepositories = {
@@ -83,11 +86,26 @@ test {
   finalizedBy(tasks.jacocoTestReport)
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+tasks.withType(KotlinCompile).all {
   kotlinOptions {
     jvmTarget = JavaVersion.VERSION_11.toString()
-    languageVersion = org.jetbrains.kotlin.config.LanguageVersion.LATEST_STABLE.versionString
+    languageVersion = LanguageVersion.LATEST_STABLE.versionString
   }
+}
+
+tasks.withType(DokkaTask.class) {
+  String dokkaBaseConfiguration = """
+    {
+      "footerMessage": "(c) 2022 IBA Group",
+      "templatesDir": "${file("dokka/templates").getAbsolutePath().replace('\\', '/')}",
+      "customAssets": ["${file("dokka/assets/zowe-icon.png").getAbsolutePath().replace('\\', '/')}"],
+      "customStyleSheets": ["${file("dokka/assets/logo-styles.css").getAbsolutePath().replace('\\', '/')}"]
+    }
+    """
+  pluginsMapConfiguration.set(
+          // fully qualified plugin name to json configuration
+          ["org.jetbrains.dokka.base.DokkaBase": dokkaBaseConfiguration]
+  )
 }
 
 task sourceJar(type: Jar) {
