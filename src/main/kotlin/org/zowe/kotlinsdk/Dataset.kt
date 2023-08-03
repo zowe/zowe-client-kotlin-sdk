@@ -122,7 +122,16 @@ enum class SpaceUnits {
   BLOCKS,
 
   @SerializedName("CYLINDERS")
-  CYLINDERS
+  CYLINDERS,
+
+  @SerializedName("BYTES")
+  BYTES,
+
+  @SerializedName("KILOBYTES")
+  KILOBYTES,
+
+  @SerializedName("MEGABYTES")
+  MEGABYTES
 }
 
 interface HasBooleanValue {
