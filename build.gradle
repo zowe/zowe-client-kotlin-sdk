@@ -54,8 +54,8 @@ apply plugin: 'kotlin'
 apply plugin: 'maven-publish'
 apply from: 'gradle/sonar.gradle'
 
-archivesBaseName = 'kotlinsdk'
-group 'org.zowe'
+archivesBaseName = 'zowe-kotlin-sdk'
+group 'org.zowe.sdk'
 version version
 
 java {
