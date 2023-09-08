@@ -1,17 +1,23 @@
-// Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
+//
+// This program and the accompanying materials are made available under the terms of the
+// Eclipse Public License v2.0 which accompanies this distribution, and is available at
+// https://www.eclipse.org/legal/epl-v20.html
+//
+// SPDX-License-Identifier: EPL-2.0
+//
+// Copyright IBA Group 2020
+//
 
-package org.zowe.kotlinsdk.zowe.client.sdk.zosfiles.input
+package org.zowe.kotlinsdk.impl.restfiles
 
-import org.zowe.kotlinsdk.XIBMAttr
+import org.zowe.kotlinsdk.core.restfiles.MigratedRecall
+import org.zowe.kotlinsdk.core.restfiles.XIBMAttr
+
 
 /**
  * This interface defines the options that can be sent into the list data set function
  */
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("DsListParams", "org.zowe.kotlinsdk.impl.restfiles")
-)
-class ListParams(
+class DsListParams(
 
   /**
    * The volume where the data set resides
@@ -36,7 +42,7 @@ class ListParams(
   /**
    * An optional parameter that specifies how to handle migrated data sets
    */
-  val recall: String? = null,
+  val recall: MigratedRecall = MigratedRecall.WAIT,
 
   /**
    * An optional pattern for restricting the response list

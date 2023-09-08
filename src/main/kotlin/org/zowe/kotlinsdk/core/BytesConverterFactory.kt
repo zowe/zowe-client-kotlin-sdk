@@ -8,7 +8,7 @@
  * Copyright IBA Group 2020
  */
 
-package org.zowe.kotlinsdk
+package org.zowe.kotlinsdk.core
 
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -17,11 +17,15 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import java.lang.reflect.Type
 
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("BytesConverterFactory", "org.zowe.kotlinsdk.core")
-)
+// TODO: doc
 class BytesConverterFactory : Converter.Factory() {
+
+  // TODO: doc
+  companion object Factory {
+    fun create(): BytesConverterFactory = BytesConverterFactory()
+  }
+
+  // TODO: doc
   override fun responseBodyConverter(
     type: Type,
     annotations: Array<Annotation>,
@@ -32,6 +36,7 @@ class BytesConverterFactory : Converter.Factory() {
     return Converter { it.byteStream().readBytes() }
   }
 
+  // TODO: doc
   override fun requestBodyConverter(
     type: Type,
     parameterAnnotations: Array<out Annotation>,
@@ -41,9 +46,5 @@ class BytesConverterFactory : Converter.Factory() {
     if (getRawType(type) !== ByteArray::class.java) return null
 
     return Converter<ByteArray, RequestBody> { RequestBody.create(MediaType.get("application/octet-stream"), it) }
-  }
-
-  companion object Factory {
-    fun create(): BytesConverterFactory = BytesConverterFactory()
   }
 }

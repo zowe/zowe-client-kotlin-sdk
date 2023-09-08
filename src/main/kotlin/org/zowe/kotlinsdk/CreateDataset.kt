@@ -15,6 +15,10 @@ import com.google.gson.annotations.SerializedName
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("CreateDatasetBody", "org.zowe.kotlinsdk.core.restfiles")
+)
 data class CreateDataset(
   @SerializedName("volser")
   @Expose
@@ -80,6 +84,10 @@ data class CreateDataset(
   var datasetModel: String? = null
 )
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("AllocationUnit", "org.zowe.kotlinsdk.core.restfiles")
+)
 enum class AllocationUnit(private val type : String) {
   @SerializedName("TRK")
   TRK("TRK"),
@@ -93,6 +101,10 @@ enum class AllocationUnit(private val type : String) {
 
 }
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("DatasetOrganization", "org.zowe.kotlinsdk.core.restfiles")
+)
 enum class DatasetOrganization(private val type: String) {
   @SerializedName("PO")
   PO("PO"),
@@ -111,6 +123,10 @@ enum class DatasetOrganization(private val type: String) {
 
 }
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("DsType", "org.zowe.kotlinsdk.core.restfiles")
+)
 enum class DsnameType {
   @SerializedName("LIBRARY")
   LIBRARY,
@@ -128,6 +144,10 @@ enum class DsnameType {
   EXTPREF
 }
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("RecordFormat", "org.zowe.kotlinsdk.core.restfiles")
+)
 enum class RecordFormat(private val type: String) {
   @SerializedName("F")
   F("F"),

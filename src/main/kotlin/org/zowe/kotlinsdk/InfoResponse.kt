@@ -19,6 +19,10 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import org.zowe.kotlinsdk.annotations.ZVersion
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("InfoResponse", "org.zowe.kotlinsdk.impl.info")
+)
 data class InfoResponse (
   @SerializedName("zos_version")
   @Expose
@@ -62,6 +66,7 @@ data class InfoResponse (
   }
 }
 
+@Deprecated("Scheduled for removal since v1.0.0")
 class PluginsAdapter : TypeAdapter<List<Plugin>>() {
   private val gson = Gson()
   override fun write(out: JsonWriter?, value: List<Plugin>?) {

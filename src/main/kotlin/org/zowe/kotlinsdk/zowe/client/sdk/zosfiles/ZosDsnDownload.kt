@@ -16,6 +16,10 @@ import java.io.InputStream
 /**
  * [ZosDsnDownload] class that provides download DataSet function
  */
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("RetrieveDatasetContent", "org.zowe.kotlinsdk.impl.restfiles")
+)
 class ZosDsnDownload (
   var connection: ZOSConnection,
   var httpClient: OkHttpClient = UnsafeOkHttpClient.unsafeOkHttpClient

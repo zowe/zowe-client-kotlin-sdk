@@ -1,27 +1,29 @@
-/*
- * This program and the accompanying materials are made available under the terms of the
- * Eclipse Public License v2.0 which accompanies this distribution, and is available at
- * https://www.eclipse.org/legal/epl-v20.html
- *
- * SPDX-License-Identifier: EPL-2.0
- *
- * Copyright IBA Group 2020
- */
+//
+// This program and the accompanying materials are made available under the terms of the
+// Eclipse Public License v2.0 which accompanies this distribution, and is available at
+// https://www.eclipse.org/legal/epl-v20.html
+//
+// SPDX-License-Identifier: EPL-2.0
+//
+// Copyright IBA Group 2020
+//
 
-package org.zowe.kotlinsdk
+package org.zowe.kotlinsdk.core.restfiles
 
 import org.zowe.kotlinsdk.annotations.AvailableSince
-import org.zowe.kotlinsdk.annotations.IsSupported
 import org.zowe.kotlinsdk.annotations.ZVersion
 import okhttp3.ResponseBody
+import org.zowe.kotlinsdk.impl.restfiles.ListDatasetMembersResponse
+import org.zowe.kotlinsdk.impl.restfiles.ListDatasetsResponse
 import retrofit2.Call
 import retrofit2.http.*
 
-interface DataAPI {
+// TODO: doc
+interface RestfilesAPI {
 
   @AvailableSince(ZVersion.ZOS_2_1)
   @GET("zosmf/restfiles/ds")
-  fun listDataSets(
+  fun listDatasets(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-Attributes") xIBMAttr: XIBMAttr = XIBMAttr(),
     @Header("X-IBM-Max-Items") xIBMMaxItems: Int = 0,
@@ -29,26 +31,7 @@ interface DataAPI {
     @Query("dslevel") dsLevel: String,
     @Query("volser") volser: String? = null,
     @Query("start") start: String? = null
-  ): Call<DataSetsList>
-
-  @AvailableSince(ZVersion.ZOS_2_1)
-  @GET("zosmf/restfiles/fs")
-  fun listUssPath(
-    @Header("Authorization") authorizationToken: String,
-    @Header("X-IBM-Max-Items") xIBMMaxItems: Int = 0,
-    @Header("X-IBM-Lstat") xIBMLstat: Boolean = false,
-    @Query("path") path: String,
-    @Query("depth") depth: Int = 1,
-    @Query("filesys") fileSystem: String? = null,
-    @Query("symlinks") followSymlinks: SymlinkMode? = null,
-    @Query("group") group: String? = null,
-    @Query("mtime") mtime: String? = null,
-    @Query("name") name: String? = null,
-    @Query("size") size: String? = null,
-    @Query("perm") perm: String? = null,
-    @Query("type") type: String? = null,
-    @Query("user") user: String? = null
-  ): Call<UssFilesList>
+  ): Call<ListDatasetsResponse>
 
   @AvailableSince(ZVersion.ZOS_2_1)
   @GET("zosmf/restfiles/ds/{dataset-name}/member")
@@ -60,7 +43,7 @@ interface DataAPI {
     @Path("dataset-name") datasetName: String,
     @Query("start") start: String? = null,
     @Query("pattern") pattern: String? = null
-  ): Call<MembersList>
+  ): Call<ListDatasetMembersResponse>
 
   @AvailableSince(ZVersion.ZOS_2_1)
   @GET("/zosmf/restfiles/ds/{dataset-name}")
@@ -74,6 +57,26 @@ interface DataAPI {
     @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
     @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
     @Header("X-IBM-Session-Ref") xIBMSessionRef: String? = null,
+    @Path("dataset-name") datasetName: String,
+    @Query("search") search: String? = null,
+    @Query("research") research: String? = null,
+    @Query("insensitive") insensitive: Boolean? = null,
+    @Query("maxreturnsize") maxReturnSize: Int? = null
+  ): Call<ResponseBody>
+
+  @AvailableSince(ZVersion.ZOS_2_1)
+  @GET("/zosmf/restfiles/ds/-({volser})/{dataset-name}")
+  fun retrieveDatasetContent(
+    @Header("Authorization") authorizationToken: String,
+    @Header("If-None-Match") ifNoneMatch: String? = null,
+    @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
+    @Header("X-IBM-Return-Etag") xIBMReturnEtag: Boolean? = null,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
+    @Header("X-IBM-Record-Range") xIBMRecordRange: XIBMRecordRange? = null,
+    @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
+    @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
+    @Header("X-IBM-Session-Ref") xIBMSessionRef: String? = null,
+    @Path("volser") volser: String,
     @Path("dataset-name") datasetName: String,
     @Query("search") search: String? = null,
     @Query("research") research: String? = null,
@@ -100,26 +103,6 @@ interface DataAPI {
     @Query("insensitive") insensitive: Boolean? = null,
     @Query("maxreturnsize") maxReturnSize: Int? = null
   ): Call<String>
-
-  @AvailableSince(ZVersion.ZOS_2_1)
-  @GET("/zosmf/restfiles/ds/-({volser})/{dataset-name}")
-  fun retrieveDatasetContent(
-    @Header("Authorization") authorizationToken: String,
-    @Header("If-None-Match") ifNoneMatch: String? = null,
-    @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
-    @Header("X-IBM-Return-Etag") xIBMReturnEtag: Boolean? = null,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
-    @Header("X-IBM-Record-Range") xIBMRecordRange: XIBMRecordRange? = null,
-    @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
-    @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
-    @Header("X-IBM-Session-Ref") xIBMSessionRef: String? = null,
-    @Path("volser") volser: String,
-    @Path("dataset-name") datasetName: String,
-    @Query("search") search: String? = null,
-    @Query("research") research: String? = null,
-    @Query("insensitive") insensitive: Boolean? = null,
-    @Query("maxreturnsize") maxReturnSize: Int? = null
-  ): Call<ResponseBody>
 
   @AvailableSince(ZVersion.ZOS_2_1)
   @GET("/zosmf/restfiles/ds/-({volser})/{dataset-name}({member-name})")
@@ -158,22 +141,6 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/ds/{dataset-name}({member-name})")
-  fun writeToDatasetMember(
-    @Header("Authorization") authorizationToken: String,
-    @Header("If-Match") ifMatch: String? = null,
-    @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
-    @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
-    @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
-    @Header("X-IBM-Session-Ref") xIBMSessionRef: String? = null,
-    @Header("Content-Type") contentType: String? = "application/octet-stream",
-    @Body content: ByteArray,
-    @Path("dataset-name") datasetName: String,
-    @Path("member-name") memberName: String
-  ): Call<Void>
-
-  @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restfiles/ds/-({volser})/{dataset-name}")
   fun writeToDataset(
     @Header("Authorization") authorizationToken: String,
@@ -187,6 +154,22 @@ interface DataAPI {
     @Body content: ByteArray,
     @Path("volser") volser: String,
     @Path("dataset-name") datasetName: String
+  ): Call<Void>
+
+  @AvailableSince(ZVersion.ZOS_2_1)
+  @PUT("/zosmf/restfiles/ds/{dataset-name}({member-name})")
+  fun writeToDatasetMember(
+    @Header("Authorization") authorizationToken: String,
+    @Header("If-Match") ifMatch: String? = null,
+    @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
+    @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
+    @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
+    @Header("X-IBM-Session-Ref") xIBMSessionRef: String? = null,
+    @Header("Content-Type") contentType: String? = "application/octet-stream",
+    @Body content: ByteArray,
+    @Path("dataset-name") datasetName: String,
+    @Path("member-name") memberName: String
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
@@ -211,7 +194,7 @@ interface DataAPI {
   fun createDataset(
     @Header("Authorization") authorizationToken: String,
     @Path("dataset-name") datasetName: String,
-    @Body body: CreateDataset
+    @Body body: CreateDatasetBody
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
@@ -245,6 +228,25 @@ interface DataAPI {
     @Path("dataset-name") datasetName: String,
     @Path("member-name") memberName: String,
   ): Call<Void>
+
+  @AvailableSince(ZVersion.ZOS_2_1)
+  @GET("zosmf/restfiles/fs")
+  fun listUssPath(
+    @Header("Authorization") authorizationToken: String,
+    @Header("X-IBM-Max-Items") xIBMMaxItems: Int = 0,
+    @Header("X-IBM-Lstat") xIBMLstat: Boolean = false,
+    @Query("path") path: String,
+    @Query("depth") depth: Int = 1,
+    @Query("filesys") fileSystem: String? = null,
+    @Query("symlinks") followSymlinks: SymlinkMode? = null,
+    @Query("group") group: String? = null,
+    @Query("mtime") mtime: String? = null,
+    @Query("name") name: String? = null,
+    @Query("size") size: String? = null,
+    @Query("perm") perm: String? = null,
+    @Query("type") type: String? = null,
+    @Query("user") user: String? = null
+  ): Call<ListDatasetMembersResponse>
 
   @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restfiles/ds/{to-data-set-name}")
@@ -497,154 +499,5 @@ interface DataAPI {
     @Body body: CopyDataUSS.CopyFromDataset,
     @Path("filepath-name") filePath: FilePath,
   ): Call<Void>
-
-}
-
-
-data class FilePath(private val path: String) {
-  override fun toString(): String {
-    return if (path.startsWith('/')) path.substring(1) else path
-  }
-}
-
-enum class XIBMOption(private val type: String = "recursive") {
-
-  RECURSIVE("recursive");
-
-  override fun toString(): String {
-    return type
-  }
-
-
-}
-
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("XIBMObtainENQ", "org.zowe.kotlinsdk.core.restfiles")
-)
-enum class XIBMObtainENQ(private val type: String) {
-
-  EXCL("excl"),
-  SHRW("shrw");
-
-  override fun toString(): String {
-    return type
-  }
-
-
-}
-
-enum class XIBMBpxkAutoCvt(private val type: String) {
-  ON("on"),
-  ALL("all"),
-  OFF("off");
-
-  override fun toString(): String {
-    return type
-  }
-
-
-}
-
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("XIBMDataType", "org.zowe.kotlinsdk.core.restfiles")
-)
-data class XIBMRecordRange(private val format: Format, private val sss: Int, private val nnn: Int) {
-
-  enum class Format {
-    DASHED,
-    COMA_SEPARATED
-  }
-
-  override fun toString(): String {
-    return when (format) {
-      Format.DASHED -> "$sss-$nnn"
-      Format.COMA_SEPARATED -> "$sss,$nnn"
-    }
-  }
-
-
-}
-
-private const val codePagePrefix = "IBM-"
-
-enum class CodePage(val codePage: String) {
-  IBM_1025("${codePagePrefix}1025"),
-  IBM_1047("${codePagePrefix}1047")
-}
-
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("XIBMDataType", "org.zowe.kotlinsdk.core.restfiles")
-)
-data class XIBMDataType(
-  val type: Type,
-  @AvailableSince(ZVersion.ZOS_2_4) val encoding: CodePage? = null
-) {
-
-  enum class Type(val value: String) {
-    TEXT("text"),
-    BINARY("binary"),
-    RECORD("record")
-  }
-
-
-  override fun toString(): String {
-    return if (encoding != null) "${type.value};fileEncoding=${encoding.codePage}" else type.value
-  }
-
-
-}
-
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("XIBMAttr", "org.zowe.kotlinsdk.core.restfiles")
-)
-data class XIBMAttr(private val type: Type = Type.BASE, private val isTotal: Boolean = false) {
-
-  enum class Type(val queryVal: String) {
-    BASE("base"),
-    VOL("vol"),
-    DSNAME("dsname"),
-    MEMBER("member")
-  }
-
-  override fun toString(): String {
-    val suffix = if (isTotal) ",total" else ""
-    return type.queryVal + suffix
-  }
-
-}
-
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("SymlinkMode", "org.zowe.kotlinsdk.core.restfiles")
-)
-enum class SymlinkMode(private val symlinksVal: String) {
-  FOLLOW("follow"),
-  REPORT("report");
-
-  override fun toString(): String {
-    return symlinksVal
-  }
-
-
-}
-
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("MigratedRecall", "org.zowe.kotlinsdk.core.restfiles")
-)
-enum class MigratedRecall(private val recallMode: String) {
-
-  WAIT("wait"),
-  NOWAIT("nowait"),
-  ERROR("error");
-
-  override fun toString(): String {
-    return recallMode
-  }
-
 
 }

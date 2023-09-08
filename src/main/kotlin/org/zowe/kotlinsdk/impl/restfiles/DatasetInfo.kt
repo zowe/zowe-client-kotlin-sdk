@@ -1,23 +1,22 @@
-/*
- * This program and the accompanying materials are made available under the terms of the
- * Eclipse Public License v2.0 which accompanies this distribution, and is available at
- * https://www.eclipse.org/legal/epl-v20.html
- *
- * SPDX-License-Identifier: EPL-2.0
- *
- * Copyright IBA Group 2020
- */
+//
+// This program and the accompanying materials are made available under the terms of the
+// Eclipse Public License v2.0 which accompanies this distribution, and is available at
+// https://www.eclipse.org/legal/epl-v20.html
+//
+// SPDX-License-Identifier: EPL-2.0
+//
+// Copyright IBA Group 2020
+//
 
-package org.zowe.kotlinsdk
+package org.zowe.kotlinsdk.impl.restfiles
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import org.zowe.kotlinsdk.core.restfiles.DatasetOrganization
+import org.zowe.kotlinsdk.core.restfiles.DsType
+import org.zowe.kotlinsdk.core.restfiles.RecordFormat
 
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("DatasetInfo", "org.zowe.kotlinsdk.impl.restfiles")
-)
-data class Dataset(
+data class DatasetInfo(
   @SerializedName("dsname")
   @Expose
   val name: String = "",
@@ -40,7 +39,7 @@ data class Dataset(
 
   @SerializedName("dsntp")
   @Expose
-  val dsnameType: DsnameType? = null,
+  val dsnameType: DsType? = null,
 
   @SerializedName("dsorg")
   @Expose
@@ -116,60 +115,44 @@ data class Dataset(
     return this == "?"
   }
 
-}
+  enum class SpaceUnits {
+    @SerializedName("TRACKS")
+    TRACKS,
 
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("DatasetInfo.SpaceUnits", "org.zowe.kotlinsdk.impl.restfiles")
-)
-enum class SpaceUnits {
-  @SerializedName("TRACKS")
-  TRACKS,
+    @SerializedName("BLOCKS")
+    BLOCKS,
 
-  @SerializedName("BLOCKS")
-  BLOCKS,
+    @SerializedName("CYLINDERS")
+    CYLINDERS,
 
-  @SerializedName("CYLINDERS")
-  CYLINDERS,
+    @SerializedName("BYTES")
+    BYTES,
 
-  @SerializedName("BYTES")
-  BYTES,
+    @SerializedName("KILOBYTES")
+    KILOBYTES,
 
-  @SerializedName("KILOBYTES")
-  KILOBYTES,
+    @SerializedName("MEGABYTES")
+    MEGABYTES
+  }
 
-  @SerializedName("MEGABYTES")
-  MEGABYTES
-}
+  interface HasBooleanValue {
+    val value: Boolean
+  }
 
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("DatasetInfo.HasBooleanValue", "org.zowe.kotlinsdk.impl.restfiles")
-)
-interface HasBooleanValue {
-  val value: Boolean
-}
+  enum class MultipleVolumes(override val value: Boolean) : HasBooleanValue {
+    @SerializedName("Y")
+    Y(true),
 
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("DatasetInfo.MultipleVolumes", "org.zowe.kotlinsdk.impl.restfiles")
-)
-enum class MultipleVolumes(override val value: Boolean) : HasBooleanValue {
-  @SerializedName("Y")
-  Y(true),
+    @SerializedName("N")
+    N(false)
+  }
 
-  @SerializedName("N")
-  N(false)
-}
+  enum class HasMigrated(override val value: Boolean) : HasBooleanValue {
+    @SerializedName("YES")
+    YES(true),
 
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("DatasetInfo.HasMigrated", "org.zowe.kotlinsdk.impl.restfiles")
-)
-enum class HasMigrated(override val value: Boolean) : HasBooleanValue {
-  @SerializedName("YES")
-  YES(true),
+    @SerializedName("NO")
+    NO(false)
+  }
 
-  @SerializedName("NO")
-  NO(false)
 }
