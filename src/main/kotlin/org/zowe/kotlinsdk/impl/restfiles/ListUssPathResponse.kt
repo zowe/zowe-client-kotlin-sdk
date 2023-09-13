@@ -13,10 +13,11 @@ package org.zowe.kotlinsdk.impl.restfiles
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class ListDatasetMembersResponse(
+// TODO: doc
+data class ListUssPathResponse(
   @SerializedName("items")
   @Expose
-  val items: List<MemberInfo> = emptyList(),
+  val items: List<FileInfo> = emptyList(),
 
   @SerializedName("returnedRows")
   @Expose

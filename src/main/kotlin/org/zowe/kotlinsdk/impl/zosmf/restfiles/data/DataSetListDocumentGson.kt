@@ -8,29 +8,35 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.impl.restfiles
+package org.zowe.kotlinsdk.impl.zosmf.restfiles.data
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import org.zowe.kotlinsdk.core.zosmf.restfiles.data.DataSetListDocument
 
-data class ListDatasetMembersResponse(
+// TODO: doc
+internal class DataSetListDocumentGson(
   @SerializedName("items")
   @Expose
-  val items: List<MemberInfo> = emptyList(),
+  val items: List<DatasetItemGson>,
 
   @SerializedName("returnedRows")
   @Expose
-  val returnedRows: Int = 0,
+  val returnedRows: Int,
 
   @SerializedName("totalRows")
   @Expose
-  val totalRows: Int? = null,
-
-  @SerializedName("moreRows")
-  @Expose
-  val moreRows: Boolean? = null,
+  val totalRows: Int?,
 
   @SerializedName("JSONversion")
   @Expose
-  val jsonVersion: Int = 0
+  val jsonVersion: Int,
+
+  @Transient
+  val converted: DataSetListDocument = DataSetListDocument(
+    items.map { it.converted },
+    returnedRows,
+    totalRows,
+    jsonVersion
+  )
 )

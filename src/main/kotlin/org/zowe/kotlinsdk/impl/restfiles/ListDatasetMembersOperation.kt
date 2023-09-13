@@ -12,15 +12,16 @@ package org.zowe.kotlinsdk.impl.restfiles
 
 import okhttp3.OkHttpClient
 import org.zowe.kotlinsdk.core.*
-import org.zowe.kotlinsdk.core.restfiles.MigratedRecall
 import org.zowe.kotlinsdk.core.restfiles.RestfilesAPI
 import org.zowe.kotlinsdk.core.restfiles.XIBMAttr
+import org.zowe.kotlinsdk.impl.zosmf.Connection
+import org.zowe.kotlinsdk.impl.zosmf.Operation
 import retrofit2.Call
 
 // TODO: doc
 class ListDatasetMembersOperation(
   private val datasetName: String,
-  private val listParams: DsListParams,
+  private val listParams: ZOSListParams,
   private val connection: Connection,
   httpClient: OkHttpClient
 ) : Operation<RestfilesAPI, ListDatasetMembersResponse>(connection, httpClient, RestfilesAPI::class.java) {

@@ -12,6 +12,7 @@ import retrofit2.Response
 /**
  * Provides copy dataset and dataset member functionality
  */
+@Deprecated("Scheduled for removal since v1.0.0")
 class ZosDsnCopy (
   var connection: ZOSConnection,
   var httpClient: OkHttpClient = UnsafeOkHttpClient.unsafeOkHttpClient
@@ -30,6 +31,10 @@ class ZosDsnCopy (
    * @return http response object
    * @throws Exception error processing copy request
    */
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("CopyToDataset", "org.zowe.kotlinsdk.impl.restfiles")
+  )
   fun copy(params: CopyParams): Response<*> {
     val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
     val dataApi = buildApi<DataAPI>(url, httpClient)

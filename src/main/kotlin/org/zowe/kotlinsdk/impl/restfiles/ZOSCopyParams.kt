@@ -1,15 +1,19 @@
-// Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/
+//
+// This program and the accompanying materials are made available under the terms of the
+// Eclipse Public License v2.0 which accompanies this distribution, and is available at
+// https://www.eclipse.org/legal/epl-v20.html
+//
+// SPDX-License-Identifier: EPL-2.0
+//
+// Copyright IBA Group 2020
+//
 
-package org.zowe.kotlinsdk.zowe.client.sdk.zosfiles.input
+package org.zowe.kotlinsdk.impl.restfiles
 
 /**
  * This interface defines the options that can be sent into the copy data set function.
  */
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("ZOSCopyParams", "org.zowe.kotlinsdk.impl.restfiles")
-)
-class CopyParams (
+class ZOSCopyParams (
 
   /**
    * The volume to copy from.
@@ -40,5 +44,4 @@ class CopyParams (
    * Specified as true to indicate a copying of all members in partial dataset to another partial dataset request
    */
   val copyAllMembers: Boolean = false
-
 )

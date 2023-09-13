@@ -11,8 +11,8 @@
 package org.zowe.kotlinsdk.impl.restfiles
 
 import okhttp3.OkHttpClient
-import org.zowe.kotlinsdk.core.Connection
-import org.zowe.kotlinsdk.core.Operation
+import org.zowe.kotlinsdk.impl.zosmf.Connection
+import org.zowe.kotlinsdk.impl.zosmf.Operation
 import org.zowe.kotlinsdk.core.restfiles.MockedCall
 import org.zowe.kotlinsdk.core.restfiles.RestfilesAPI
 import org.zowe.kotlinsdk.core.restfiles.XIBMAttr
@@ -37,7 +37,7 @@ class GetDatasetInfoOperation (
       str.append(".")
     }
     val dataSetSearchStr = str.toString().substring(0, str.length - 1)
-    val listParams = DsListParams(attribute = XIBMAttr.Type.BASE)
+    val listParams = ZOSListParams(attribute = XIBMAttr.Type.BASE)
     val dsListResponse = ListDatasetsOperation(dataSetSearchStr, listParams, connection, httpClient).runOperation()
     val dataSet: DatasetInfo? = dsListResponse
       .items

@@ -10,15 +10,14 @@
 
 package org.zowe.kotlinsdk.impl.restfiles
 
-import org.zowe.kotlinsdk.core.restfiles.MigratedRecall
+import org.zowe.kotlinsdk.core.restfiles.XIBMMigratedRecall
 import org.zowe.kotlinsdk.core.restfiles.XIBMAttr
 
 
-/**
- * This interface defines the options that can be sent into the list data set function
- */
-class DsListParams(
-
+/** This interface defines the options that can be sent into the list data set function */
+class ZOSListParams(
+  /** X-IBM-Max-Items header. The indicator that specifies the maximum number of items to return */
+  val maxItems: Int? = null,
   /**
    * The volume where the data set resides
    */
@@ -29,10 +28,7 @@ class DsListParams(
    */
   val attribute: XIBMAttr.Type = XIBMAttr.Type.BASE,
 
-  /**
-   * The indicator that specifies the maximum number of items to return
-   */
-  val maxLength: Int? = null,
+
 
   /**
    * An optional search parameter that specifies the first data set name to return to the response document
@@ -42,7 +38,7 @@ class DsListParams(
   /**
    * An optional parameter that specifies how to handle migrated data sets
    */
-  val recall: MigratedRecall = MigratedRecall.WAIT,
+  val recall: XIBMMigratedRecall = XIBMMigratedRecall.WAIT,
 
   /**
    * An optional pattern for restricting the response list

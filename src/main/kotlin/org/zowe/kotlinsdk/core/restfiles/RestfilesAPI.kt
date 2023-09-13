@@ -14,32 +14,19 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import okhttp3.ResponseBody
 import org.zowe.kotlinsdk.impl.restfiles.ListDatasetMembersResponse
-import org.zowe.kotlinsdk.impl.restfiles.ListDatasetsResponse
+import org.zowe.kotlinsdk.impl.restfiles.ListUssPathResponse
 import retrofit2.Call
 import retrofit2.http.*
 
 // TODO: doc
 interface RestfilesAPI {
-
-  @AvailableSince(ZVersion.ZOS_2_1)
-  @GET("zosmf/restfiles/ds")
-  fun listDatasets(
-    @Header("Authorization") authorizationToken: String,
-    @Header("X-IBM-Attributes") xIBMAttr: XIBMAttr = XIBMAttr(),
-    @Header("X-IBM-Max-Items") xIBMMaxItems: Int = 0,
-    @Header("X-IBM-Response-Timeout") xIBMResponseTimeout: String? = null,
-    @Query("dslevel") dsLevel: String,
-    @Query("volser") volser: String? = null,
-    @Query("start") start: String? = null
-  ): Call<ListDatasetsResponse>
-
   @AvailableSince(ZVersion.ZOS_2_1)
   @GET("zosmf/restfiles/ds/{dataset-name}/member")
   fun listDatasetMembers(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-Attributes") xIBMAttr: XIBMAttr = XIBMAttr(),
     @Header("X-IBM-Max-Items") xIBMMaxItems: Int = 0,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
     @Path("dataset-name") datasetName: String,
     @Query("start") start: String? = null,
     @Query("pattern") pattern: String? = null
@@ -52,7 +39,7 @@ interface RestfilesAPI {
     @Header("If-None-Match") ifNoneMatch: String? = null,
     @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
     @Header("X-IBM-Return-Etag") xIBMReturnEtag: Boolean? = null,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
     @Header("X-IBM-Record-Range") xIBMRecordRange: XIBMRecordRange? = null,
     @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
     @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
@@ -71,7 +58,7 @@ interface RestfilesAPI {
     @Header("If-None-Match") ifNoneMatch: String? = null,
     @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
     @Header("X-IBM-Return-Etag") xIBMReturnEtag: Boolean? = null,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
     @Header("X-IBM-Record-Range") xIBMRecordRange: XIBMRecordRange? = null,
     @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
     @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
@@ -91,7 +78,7 @@ interface RestfilesAPI {
     @Header("If-None-Match") ifNoneMatch: String? = null,
     @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
     @Header("X-IBM-Return-Etag") xIBMReturnEtag: Boolean? = null,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
     @Header("X-IBM-Record-Range") xIBMRecordRange: XIBMRecordRange? = null,
     @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
     @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
@@ -111,7 +98,7 @@ interface RestfilesAPI {
     @Header("If-None-Match") ifNoneMatch: String? = null,
     @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
     @Header("X-IBM-Return-Etag") xIBMReturnEtag: Boolean? = null,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
     @Header("X-IBM-Record-Range") xIBMRecordRange: XIBMRecordRange? = null,
     @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
     @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
@@ -131,7 +118,7 @@ interface RestfilesAPI {
     @Header("Authorization") authorizationToken: String,
     @Header("If-Match") ifMatch: String? = null,
     @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
     @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
     @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
     @Header("X-IBM-Session-Ref") xIBMSessionRef: String? = null,
@@ -146,7 +133,7 @@ interface RestfilesAPI {
     @Header("Authorization") authorizationToken: String,
     @Header("If-Match") ifMatch: String? = null,
     @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
     @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
     @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
     @Header("X-IBM-Session-Ref") xIBMSessionRef: String? = null,
@@ -162,7 +149,7 @@ interface RestfilesAPI {
     @Header("Authorization") authorizationToken: String,
     @Header("If-Match") ifMatch: String? = null,
     @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
     @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
     @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
     @Header("X-IBM-Session-Ref") xIBMSessionRef: String? = null,
@@ -178,7 +165,7 @@ interface RestfilesAPI {
     @Header("Authorization") authorizationToken: String,
     @Header("If-Match") ifMatch: String? = null,
     @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
     @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
     @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
     @Header("X-IBM-Session-Ref") xIBMSessionRef: String? = null,
@@ -230,30 +217,11 @@ interface RestfilesAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @GET("zosmf/restfiles/fs")
-  fun listUssPath(
-    @Header("Authorization") authorizationToken: String,
-    @Header("X-IBM-Max-Items") xIBMMaxItems: Int = 0,
-    @Header("X-IBM-Lstat") xIBMLstat: Boolean = false,
-    @Query("path") path: String,
-    @Query("depth") depth: Int = 1,
-    @Query("filesys") fileSystem: String? = null,
-    @Query("symlinks") followSymlinks: SymlinkMode? = null,
-    @Query("group") group: String? = null,
-    @Query("mtime") mtime: String? = null,
-    @Query("name") name: String? = null,
-    @Query("size") size: String? = null,
-    @Query("perm") perm: String? = null,
-    @Query("type") type: String? = null,
-    @Query("user") user: String? = null
-  ): Call<ListDatasetMembersResponse>
-
-  @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restfiles/ds/{to-data-set-name}")
   fun renameDataset(
     @Header("Authorization") authorizationToken: String,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
-    @Body body: RenameData,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
+    @Body body: RenameDatasetBody,
     @Path("to-data-set-name") toDatasetName: String
   ): Call<Void>
 
@@ -261,8 +229,8 @@ interface RestfilesAPI {
   @PUT("/zosmf/restfiles/ds/{to-data-set-name}({member-name})")
   fun renameDatasetMember(
     @Header("Authorization") authorizationToken: String,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
-    @Body body: RenameData,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
+    @Body body: RenameDatasetBody,
     @Path("to-data-set-name") toDatasetName: String,
     @Path("member-name") memberName: String
   ): Call<Void>
@@ -281,8 +249,8 @@ interface RestfilesAPI {
   fun copyToDataset(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
-    @Body body: CopyDataZOS.CopyFromDataset,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
+    @Body body: ZOSCopyBody.FromDataset,
     @Path("to-data-set-name") toDatasetName: String
   ): Call<Void>
 
@@ -302,8 +270,8 @@ interface RestfilesAPI {
   fun copyToDataset(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
-    @Body body: CopyDataZOS.CopyFromDataset,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
+    @Body body: ZOSCopyBody.FromDataset,
     @Path("to-volser") toVolser: String,
     @Path("to-data-set-name") toDatasetName: String
   ): Call<Void>
@@ -318,8 +286,8 @@ interface RestfilesAPI {
   fun copyToDatasetMember(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
-    @Body body: CopyDataZOS.CopyFromDataset,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
+    @Body body: ZOSCopyBody.FromDataset,
     @Path("to-data-set-name") toDatasetName: String,
     @Path("member-name") memberName: String
   ): Call<Void>
@@ -336,8 +304,8 @@ interface RestfilesAPI {
   fun copyToDatasetMemberFromUssFile(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
-    @Body body: CopyDataZOS.CopyFromDataset,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
+    @Body body: ZOSCopyBody.FromDataset,
     @Path("to-volser") toVolser: String,
     @Path("to-data-set-name") toDatasetName: String,
     @Path("member-name") memberName: String
@@ -351,8 +319,8 @@ interface RestfilesAPI {
   fun copyToDatasetFromUss(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
-    @Body body: CopyDataZOS.CopyFromFile,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
+    @Body body: ZOSCopyBody.FromFile,
     @Path("to-data-set-name") toDatasetName: String
   ): Call<Void>
 
@@ -364,8 +332,8 @@ interface RestfilesAPI {
   fun copyToDatasetMemberFromUssFile(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
-    @Body body: CopyDataZOS.CopyFromFile,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
+    @Body body: ZOSCopyBody.FromFile,
     @Path("to-data-set-name") toDatasetName: String,
     @Path("member-name") memberName: String
   ): Call<Void>
@@ -374,7 +342,7 @@ interface RestfilesAPI {
   @PUT("/zosmf/restfiles/ds/{dataset-name}")
   fun recallMigratedDataset(
     @Header("Authorization") authorizationToken: String,
-    @Body body: HRecall = HRecall(),
+    @Body body: HRecallBody = HRecallBody(),
     @Path("dataset-name") datasetName: String
   ): Call<Void>
 
@@ -382,7 +350,7 @@ interface RestfilesAPI {
   @PUT("/zosmf/restfiles/ds/{dataset-name}")
   fun migrateDataset(
     @Header("Authorization") authorizationToken: String,
-    @Body body: HMigrate = HMigrate(),
+    @Body body: HMigrateBody = HMigrateBody(),
     @Path("dataset-name") datasetName: String
   ): Call<Void>
 
@@ -390,9 +358,28 @@ interface RestfilesAPI {
   @PUT("/zosmf/restfiles/ds/{dataset-name}")
   fun deleteMigratedDataset(
     @Header("Authorization") authorizationToken: String,
-    @Body body: HDelete = HDelete(),
+    @Body body: HDeleteBody = HDeleteBody(),
     @Path("dataset-name") datasetName: String
   ): Call<Void>
+
+  @AvailableSince(ZVersion.ZOS_2_1)
+  @GET("zosmf/restfiles/fs")
+  fun listUssPath(
+    @Header("Authorization") authorizationToken: String,
+    @Header("X-IBM-Max-Items") xIBMMaxItems: Int = 0,
+    @Header("X-IBM-Lstat") xIBMLstat: Boolean = false,
+    @Query("path") path: String,
+    @Query("depth") depth: Int = 1,
+    @Query("filesys") fileSystem: String? = null,
+    @Query("symlinks") followSymlinks: SymlinkMode? = null,
+    @Query("group") group: String? = null,
+    @Query("mtime") mtime: String? = null,
+    @Query("name") name: String? = null,
+    @Query("size") size: String? = null,
+    @Query("perm") perm: String? = null,
+    @Query("type") type: String? = null,
+    @Query("user") user: String? = null
+  ): Call<ListUssPathResponse>
 
   @AvailableSince(ZVersion.ZOS_2_1)
   @GET("/zosmf/restfiles/fs/{filepath-name}")
@@ -480,7 +467,7 @@ interface RestfilesAPI {
   fun copyUssFile(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
-    @Body body: CopyDataUSS.CopyFromFileOrDir,
+    @Body body: USSCopyBody.FromFileOrDir,
     @Path("filepath-name", encoded = true) filePath: FilePath,
   ): Call<Void>
 
@@ -496,7 +483,7 @@ interface RestfilesAPI {
   fun copyDatasetOrMemberToUss(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
-    @Body body: CopyDataUSS.CopyFromDataset,
+    @Body body: USSCopyBody.FromDataset,
     @Path("filepath-name") filePath: FilePath,
   ): Call<Void>
 

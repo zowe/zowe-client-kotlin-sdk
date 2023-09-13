@@ -9,7 +9,7 @@ import org.zowe.kotlinsdk.XIBMAttr
  */
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("DsListParams", "org.zowe.kotlinsdk.impl.restfiles")
+  ReplaceWith("ZOSListParams", "org.zowe.kotlinsdk.impl.restfiles")
 )
 class ListParams(
 

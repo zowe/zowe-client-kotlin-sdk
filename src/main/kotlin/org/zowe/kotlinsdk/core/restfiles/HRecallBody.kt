@@ -10,14 +10,16 @@
 
 package org.zowe.kotlinsdk.core.restfiles
 
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
 // TODO: doc
-enum class MigratedRecall(private val recallMode: String) {
+data class HRecallBody(
+  @SerializedName("request")
+  @Expose
+  private val request: String = "hrecall",
 
-  WAIT("wait"),
-  NOWAIT("nowait"),
-  ERROR("error");
-
-  override fun toString(): String {
-    return recallMode
-  }
-}
+  @SerializedName("wait")
+  @Expose
+  var wait: Boolean? = null
+)

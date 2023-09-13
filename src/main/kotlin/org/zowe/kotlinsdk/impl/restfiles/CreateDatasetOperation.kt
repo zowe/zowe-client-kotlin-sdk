@@ -11,8 +11,8 @@
 package org.zowe.kotlinsdk.impl.restfiles
 
 import okhttp3.OkHttpClient
-import org.zowe.kotlinsdk.core.Connection
-import org.zowe.kotlinsdk.core.Operation
+import org.zowe.kotlinsdk.impl.zosmf.Connection
+import org.zowe.kotlinsdk.impl.zosmf.Operation
 import org.zowe.kotlinsdk.core.restfiles.CreateDatasetBody
 import org.zowe.kotlinsdk.core.restfiles.RestfilesAPI
 import retrofit2.Call

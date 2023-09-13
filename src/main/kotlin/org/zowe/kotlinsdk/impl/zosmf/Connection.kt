@@ -8,7 +8,7 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core
+package org.zowe.kotlinsdk.impl.zosmf
 
 import okhttp3.Credentials
 

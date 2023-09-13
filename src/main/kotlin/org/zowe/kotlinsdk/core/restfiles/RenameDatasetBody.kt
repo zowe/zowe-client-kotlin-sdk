@@ -1,23 +1,20 @@
-/*
- * This program and the accompanying materials are made available under the terms of the
- * Eclipse Public License v2.0 which accompanies this distribution, and is available at
- * https://www.eclipse.org/legal/epl-v20.html
- *
- * SPDX-License-Identifier: EPL-2.0
- *
- * Copyright IBA Group 2020
- */
+//
+// This program and the accompanying materials are made available under the terms of the
+// Eclipse Public License v2.0 which accompanies this distribution, and is available at
+// https://www.eclipse.org/legal/epl-v20.html
+//
+// SPDX-License-Identifier: EPL-2.0
+//
+// Copyright IBA Group 2020
+//
 
-package org.zowe.kotlinsdk
+package org.zowe.kotlinsdk.core.restfiles
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("RenameDatasetBody", "org.zowe.kotlinsdk.core.restfiles")
-)
-data class RenameData(
+// TODO: doc
+data class RenameDatasetBody(
   @SerializedName("request")
   @Expose
   var request: String = "rename",
@@ -29,8 +26,6 @@ data class RenameData(
   @SerializedName("enq")
   @Expose
   var enq: Enq? = null
-
-
 ) {
   enum class Enq(private var type: String) {
 
@@ -42,12 +37,9 @@ data class RenameData(
     override fun toString(): String {
       return type
     }
-
-
   }
 
   data class FromDataset(
-
     @SerializedName("dsn")
     @Expose
     var oldDatasetName: String,
@@ -55,6 +47,5 @@ data class RenameData(
     @SerializedName("member")
     @Expose
     var oldMemberName: String? = null,
-
-    )
+  )
 }

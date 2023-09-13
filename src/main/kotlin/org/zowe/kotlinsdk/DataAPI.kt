@@ -534,6 +534,10 @@ enum class XIBMObtainENQ(private val type: String) {
 
 }
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("XIBMBpxkAutoCvt", "org.zowe.kotlinsdk.core.restfiles")
+)
 enum class XIBMBpxkAutoCvt(private val type: String) {
   ON("on"),
   ALL("all"),
@@ -634,7 +638,7 @@ enum class SymlinkMode(private val symlinksVal: String) {
 
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("MigratedRecall", "org.zowe.kotlinsdk.core.restfiles")
+  ReplaceWith("XIBMMigratedRecall", "org.zowe.kotlinsdk.core.restfiles")
 )
 enum class MigratedRecall(private val recallMode: String) {
 

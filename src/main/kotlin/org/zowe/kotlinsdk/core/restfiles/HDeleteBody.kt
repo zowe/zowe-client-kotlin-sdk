@@ -8,29 +8,22 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.impl.restfiles
+package org.zowe.kotlinsdk.core.restfiles
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class ListDatasetsResponse(
-  @SerializedName("items")
+// TODO: doc
+data class HDeleteBody(
+  @SerializedName("request")
   @Expose
-  val items: List<DatasetInfo> = emptyList(),
+  private val request: String = "hdelete",
 
-  @SerializedName("returnedRows")
+  @SerializedName("wait")
   @Expose
-  val returnedRows: Int = 0,
+  var wait: Boolean? = null,
 
-  @SerializedName("totalRows")
+  @SerializedName("purge")
   @Expose
-  val totalRows: Int? = null,
-
-  @SerializedName("moreRows")
-  @Expose
-  val moreRows: Boolean? = null,
-
-  @SerializedName("JSONversion")
-  @Expose
-  val jsonVersion: Int = 0
+  var purge: Boolean? = null
 )
