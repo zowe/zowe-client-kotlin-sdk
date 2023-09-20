@@ -8,19 +8,16 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core.zosmf.restfiles.data
+package org.zowe.kotlinsdk.impl.zosmf.datasets.data
 
 // TODO: doc
-data class XIBMAttributes(private val type: Type = Type.DSNAME, private val isTotal: Boolean = false) {
-  enum class Type(val queryVal: String) {
-    BASE("base"),
-    VOL("vol"),
-    DSNAME("dsname"),
-    MEMBER("member")
-  }
+enum class XIBMMigratedRecall(private val recallMode: String) {
+
+  WAIT("wait"),
+  NOWAIT("nowait"),
+  ERROR("error");
 
   override fun toString(): String {
-    return if(isTotal) "${type.queryVal},total" else type.queryVal
+    return recallMode
   }
-
 }

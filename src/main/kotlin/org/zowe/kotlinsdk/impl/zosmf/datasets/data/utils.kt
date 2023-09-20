@@ -8,16 +8,8 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core.restfiles
+package org.zowe.kotlinsdk.impl.zosmf.datasets.data
 
-// TODO: doc
-enum class XIBMMigratedRecall(private val recallMode: String) {
-
-  WAIT("wait"),
-  NOWAIT("nowait"),
-  ERROR("error");
-
-  override fun toString(): String {
-    return recallMode
-  }
+fun intOrNullFromQuestion(value: String?): Int? {
+  return if (value != null && value != "?") Integer.parseInt(value) else null
 }

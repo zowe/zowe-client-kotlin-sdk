@@ -8,25 +8,29 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.impl.zosmf.restfiles.operations
+package org.zowe.kotlinsdk.impl.zosmf.datasets.operations
 
 import okhttp3.OkHttpClient
-import org.zowe.kotlinsdk.core.zosmf.restfiles.data.DataSetListDocument
-import org.zowe.kotlinsdk.core.zosmf.restfiles.data.ListDatasetsRequest
+import org.zowe.kotlinsdk.core.datasets.data.ListDatasetMembersResponse
 import org.zowe.kotlinsdk.impl.zosmf.Connection
 import org.zowe.kotlinsdk.impl.zosmf.Operation
-import org.zowe.kotlinsdk.impl.zosmf.restfiles.RestfilesAPI
-import org.zowe.kotlinsdk.impl.zosmf.restfiles.data.DataSetListDocumentGson
+import org.zowe.kotlinsdk.impl.zosmf.datasets.ZosmfDatasetsAPICalls
+import org.zowe.kotlinsdk.impl.zosmf.datasets.data.ZosmfListDatasetMembersRequest
+import org.zowe.kotlinsdk.impl.zosmf.datasets.data.ZosmfListDatasetMembersResponse
 import retrofit2.Call
 
 // TODO: doc
-internal class ListDatasetsOperation(
-  private val params: ListDatasetsRequest,
+internal class ListDatasetMembersOperation(
+  private val params: ZosmfListDatasetMembersRequest,
   private val connection: Connection,
   httpClient: OkHttpClient
-) : Operation<RestfilesAPI, DataSetListDocumentGson>(connection, httpClient, RestfilesAPI::class.java) {
-  override fun buildCall(runnerAPI: RestfilesAPI): Call<DataSetListDocumentGson> {
-    return runnerAPI.listDatasets(
+) : Operation<ZosmfDatasetsAPICalls, ZosmfListDatasetMembersResponse>(
+  connection,
+  httpClient,
+  ZosmfDatasetsAPICalls::class.java
+) {
+  override fun buildCall(runnerAPI: ZosmfDatasetsAPICalls): Call<ZosmfListDatasetMembersResponse> {
+    return runnerAPI.listDatasetMembers(
       authorizationToken = connection.basicCredentials,
       asyncThreshold = params.asyncThreshold,
       responseTimeout = params.responseTimeout,
@@ -37,11 +41,12 @@ internal class ListDatasetsOperation(
       targetSystem = params.targetSystem,
       maxItems = params.maxItems,
       attributes = params.attributes,
+      migratedRecall = params.migratedRecall,
       targetSystemUser = params.targetSystemUser,
       targetSystemPassword = params.targetSystemPassword,
-      dslevel = params.dslevel,
-      volumeSerial = params.volumeSerial,
-      start = params.start
+      datasetName = params.datasetName,
+      start = params.start,
+      pattern = params.pattern
     )
   }
 }

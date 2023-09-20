@@ -8,38 +8,42 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core.zosmf.restfiles.data
+package org.zowe.kotlinsdk.impl.zosmf.datasets.data
 
 import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
+import org.zowe.kotlinsdk.core.datasets.data.ListDatasetsRequest
 
 /**
  * TODO: doc
  * For more info, please, refer to:
  * https://www.ibm.com/docs/en/zos/2.5.0?topic=interface-list-zos-data-sets-system
  */
-class ListDatasetsRequest(
+class ZosmfListDatasetsRequest(
+  /** dslevel query param */
+  @AvailableSince(ZVersion.ZOS_2_1) private val dslevel: String,
+
   /** X-IBM-Async-Threshold header */
-  @AvailableSince(ZVersion.ZOS_2_1) asyncThreshold: Int? = null,
+  @AvailableSince(ZVersion.ZOS_2_1) val asyncThreshold: Int? = null,
 
   /** X-IBM-Response-Timeout header */
-  @AvailableSince(ZVersion.ZOS_2_1) responseTimeout: Int? = null,
+  @AvailableSince(ZVersion.ZOS_2_1) val responseTimeout: Int? = null,
 
   /** X-IBM-Session-Limit-Wait header */
-  @AvailableOnly(ZVersion.ZOS_2_4) sessionLimitWait: Int? = null,
-
-  /** X-IBM-Request-Acctnum header */
-  @AvailableSince(ZVersion.ZOS_2_5) requestAcctnum: String? = null,
-
-  /** X-IBM-Request-Proc header */
-  @AvailableSince(ZVersion.ZOS_2_5) requestProc: String? = null,
-
-  /** X-IBM-Request-Region header */
-  @AvailableSince(ZVersion.ZOS_2_5) requestRegion: String? = null,
+  @AvailableOnly(ZVersion.ZOS_2_4) val sessionLimitWait: Int? = null,
 
   /** X-IBM-Target-System header */
-  @AvailableSince(ZVersion.ZOS_2_4) targetSystem: String? = null,
+  @AvailableSince(ZVersion.ZOS_2_4) val targetSystem: String? = null,
+
+  /** X-IBM-Request-Acctnum header */
+  @AvailableSince(ZVersion.ZOS_2_5) val requestAcctnum: String? = null,
+
+  /** X-IBM-Request-Proc header */
+  @AvailableSince(ZVersion.ZOS_2_5) val requestProc: String? = null,
+
+  /** X-IBM-Request-Region header */
+  @AvailableSince(ZVersion.ZOS_2_5) val requestRegion: String? = null,
 
   /** X-IBM-Max-Items header */
   @AvailableSince(ZVersion.ZOS_2_1) val maxItems: Int? = null,
@@ -54,20 +58,9 @@ class ListDatasetsRequest(
   /** X-IBM-Target-System-Password header */
   @AvailableSince(ZVersion.ZOS_2_4) val targetSystemPassword: String? = null,
 
-  /** dslevel query param */
-  @AvailableSince(ZVersion.ZOS_2_1) val dslevel: String,
-
   /** volser query param */
   @AvailableSince(ZVersion.ZOS_2_1) val volumeSerial: String? = null,
 
   /** start query param */
   @AvailableSince(ZVersion.ZOS_2_1) val start: String? = null
-) : CommonRequestHeaders(
-  asyncThreshold,
-  responseTimeout,
-  sessionLimitWait,
-  requestAcctnum,
-  requestProc,
-  requestRegion,
-  targetSystem
-)
+) : ListDatasetsRequest(mask = dslevel)

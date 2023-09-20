@@ -11,7 +11,6 @@
 package org.zowe.kotlinsdk.impl.zosmf
 
 import okhttp3.OkHttpClient
-import org.zowe.kotlinsdk.core.buildApi
 import retrofit2.Call
 
 // TODO: doc

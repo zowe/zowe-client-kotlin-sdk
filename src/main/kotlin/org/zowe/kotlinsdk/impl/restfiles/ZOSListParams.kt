@@ -10,7 +10,7 @@
 
 package org.zowe.kotlinsdk.impl.restfiles
 
-import org.zowe.kotlinsdk.core.restfiles.XIBMMigratedRecall
+import org.zowe.kotlinsdk.impl.zosmf.datasets.data.XIBMMigratedRecall
 import org.zowe.kotlinsdk.core.restfiles.XIBMAttr
 
 

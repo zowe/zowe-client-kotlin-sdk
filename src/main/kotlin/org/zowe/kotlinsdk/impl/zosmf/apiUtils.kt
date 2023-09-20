@@ -8,7 +8,7 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core
+package org.zowe.kotlinsdk.impl.zosmf
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -27,31 +27,13 @@ val gson: Gson = GsonBuilder()
   .create()
 
 /**
+ * TODO: review the doc
  * Build and create the specified API, wrapped with Retrofit2 functionality
  * @param baseUrl the base URL to send requests to and retrieve responses from
  * @param httpClient the [OkHttpClient] to use during request/response process
  * @param convFactory a parameter to specify, which ConverterFactory to use, [ConverterFactory.SCALARS] by default
  * @return the wrapped API
  */
-//inline fun <reified API> buildApi(
-//  baseUrl: String,
-//  httpClient: OkHttpClient,
-//  convFactory: ConverterFactory = ConverterFactory.SCALARS
-//): API {
-//  var retrofitSetup = Retrofit.Builder().baseUrl(baseUrl).client(httpClient)
-//
-//  retrofitSetup = when (convFactory) {
-//    ConverterFactory.SCALARS ->
-//      retrofitSetup
-//        .addConverterFactory(ScalarsConverterFactory.create())
-//        .addConverterFactory(GsonConverterFactory.create(gson))
-//    ConverterFactory.BYTES ->
-//      retrofitSetup
-//        .addConverterFactory(BytesConverterFactory.create())
-//  }
-//
-//  return retrofitSetup.build().create(API::class.java)
-//}
 
 // TODO: doc
 fun <API> buildApi(

@@ -13,25 +13,13 @@ package org.zowe.kotlinsdk.core.restfiles
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import okhttp3.ResponseBody
-import org.zowe.kotlinsdk.impl.restfiles.ListDatasetMembersResponse
 import org.zowe.kotlinsdk.impl.restfiles.ListUssPathResponse
+import org.zowe.kotlinsdk.impl.zosmf.datasets.data.XIBMMigratedRecall
 import retrofit2.Call
 import retrofit2.http.*
 
 // TODO: doc
 interface RestfilesAPI {
-  @AvailableSince(ZVersion.ZOS_2_1)
-  @GET("zosmf/restfiles/ds/{dataset-name}/member")
-  fun listDatasetMembers(
-    @Header("Authorization") authorizationToken: String,
-    @Header("X-IBM-Attributes") xIBMAttr: XIBMAttr = XIBMAttr(),
-    @Header("X-IBM-Max-Items") xIBMMaxItems: Int = 0,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
-    @Path("dataset-name") datasetName: String,
-    @Query("start") start: String? = null,
-    @Query("pattern") pattern: String? = null
-  ): Call<ListDatasetMembersResponse>
-
   @AvailableSince(ZVersion.ZOS_2_1)
   @GET("/zosmf/restfiles/ds/{dataset-name}")
   fun retrieveDatasetContent(
