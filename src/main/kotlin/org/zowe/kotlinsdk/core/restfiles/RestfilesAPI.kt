@@ -13,7 +13,6 @@ package org.zowe.kotlinsdk.core.restfiles
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import okhttp3.ResponseBody
-import org.zowe.kotlinsdk.impl.restfiles.ListUssPathResponse
 import org.zowe.kotlinsdk.impl.zosmf.datasets.data.XIBMMigratedRecall
 import retrofit2.Call
 import retrofit2.http.*
@@ -349,25 +348,6 @@ interface RestfilesAPI {
     @Body body: HDeleteBody = HDeleteBody(),
     @Path("dataset-name") datasetName: String
   ): Call<Void>
-
-  @AvailableSince(ZVersion.ZOS_2_1)
-  @GET("zosmf/restfiles/fs")
-  fun listUssPath(
-    @Header("Authorization") authorizationToken: String,
-    @Header("X-IBM-Max-Items") xIBMMaxItems: Int = 0,
-    @Header("X-IBM-Lstat") xIBMLstat: Boolean = false,
-    @Query("path") path: String,
-    @Query("depth") depth: Int = 1,
-    @Query("filesys") fileSystem: String? = null,
-    @Query("symlinks") followSymlinks: SymlinkMode? = null,
-    @Query("group") group: String? = null,
-    @Query("mtime") mtime: String? = null,
-    @Query("name") name: String? = null,
-    @Query("size") size: String? = null,
-    @Query("perm") perm: String? = null,
-    @Query("type") type: String? = null,
-    @Query("user") user: String? = null
-  ): Call<ListUssPathResponse>
 
   @AvailableSince(ZVersion.ZOS_2_1)
   @GET("/zosmf/restfiles/fs/{filepath-name}")

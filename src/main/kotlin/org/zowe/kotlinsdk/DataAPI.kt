@@ -21,7 +21,7 @@ interface DataAPI {
 
   @AvailableSince(ZVersion.ZOS_2_1)
   @GET("zosmf/restfiles/ds")
-  fun listDataSets(
+    fun listDataSets(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-Attributes") xIBMAttr: XIBMAttr = XIBMAttr(),
     @Header("X-IBM-Max-Items") xIBMMaxItems: Int = 0,

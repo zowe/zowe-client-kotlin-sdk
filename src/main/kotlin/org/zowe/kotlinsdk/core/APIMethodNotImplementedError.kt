@@ -8,17 +8,8 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core.files.data
+package org.zowe.kotlinsdk.core
 
 // TODO: doc
-abstract class FileItem(
-  val name: String,
-  val fileType: FileType? = null,
-  val fileMode: FilePermissions? = null,
-  val isSymlink: Boolean? = null
-) {
-  enum class FileType {
-    FILE,
-    DIRECTORY
-  }
-}
+class APIMethodNotImplementedError(methodName: String, apiType: String? = null) :
+  Error("$methodName is not implemented for the ${apiType ?: "provided"} connection type")

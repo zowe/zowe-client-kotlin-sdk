@@ -8,21 +8,21 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.impl.zosmf.datasets.data
+package org.zowe.kotlinsdk.impl.zosmf.files.data
 
 import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
-import org.zowe.kotlinsdk.core.datasets.data.ListDatasetsRequest
+import org.zowe.kotlinsdk.core.files.data.ListFilesRequest
 
 /**
  * TODO: doc
  * For more info, please, refer to:
- * https://www.ibm.com/docs/en/zos/2.5.0?topic=interface-list-zos-data-sets-system
+ * https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-files-directories-unix-file-path
  */
-class ZosmfListDatasetsRequest(
-  /** dslevel query param */
-  @AvailableSince(ZVersion.ZOS_2_1) private val dslevel: String,
+class ZosmfListFilesRequest(
+  /** path query param */
+  @AvailableSince(ZVersion.ZOS_2_1) private val path: String,
 
   /** X-IBM-Async-Threshold default header */
   @AvailableSince(ZVersion.ZOS_2_1) val asyncThreshold: Int? = null,
@@ -48,9 +48,8 @@ class ZosmfListDatasetsRequest(
   /** X-IBM-Max-Items custom header */
   @AvailableSince(ZVersion.ZOS_2_1) val maxItems: Int? = null,
 
-  /** X-IBM-Attributes custom header */
-  // TODO: in impl module - BASE should not be a default, but the preferred somewhere
-  @AvailableSince(ZVersion.ZOS_2_1) val attributes: XIBMAttributes? = null,
+  /** X-IBM-Lstat custom header */
+  @AvailableSince(ZVersion.ZOS_2_1) val xIBMLstat: Boolean? = null,
 
   /** X-IBM-Target-System-User custom header */
   @AvailableSince(ZVersion.ZOS_2_4) val targetSystemUser: String? = null,
@@ -58,9 +57,36 @@ class ZosmfListDatasetsRequest(
   /** X-IBM-Target-System-Password custom header */
   @AvailableSince(ZVersion.ZOS_2_4) val targetSystemPassword: String? = null,
 
-  /** volser query param */
-  @AvailableSince(ZVersion.ZOS_2_1) val volumeSerial: String? = null,
+  /** depth query param */
+  @AvailableSince(ZVersion.ZOS_2_3) val depth: Int? = null,
 
-  /** start query param */
-  @AvailableSince(ZVersion.ZOS_2_1) val start: String? = null
-) : ListDatasetsRequest(mask = dslevel)
+  /** limit query param */
+  @AvailableSince(ZVersion.ZOS_2_3) val limit: Int? = null,
+
+  /** filesys query param */
+  @AvailableSince(ZVersion.ZOS_2_3) val fileSystem: String? = null,
+
+  /** symlinks query param */
+  @AvailableSince(ZVersion.ZOS_2_3) val followSymlinks: SymlinkMode? = null,
+
+  /** group query param */
+  @AvailableSince(ZVersion.ZOS_2_3) val group: String? = null,
+
+  /** mtime query param */
+  @AvailableSince(ZVersion.ZOS_2_3) val mtime: String? = null,
+
+  /** name query param */
+  @AvailableSince(ZVersion.ZOS_2_3) val name: String? = null,
+
+  /** size query param */
+  @AvailableSince(ZVersion.ZOS_2_3) val size: String? = null,
+
+  /** perm query param */
+  @AvailableSince(ZVersion.ZOS_2_3) val perm: String? = null,
+
+  /** type query param */
+  @AvailableSince(ZVersion.ZOS_2_3) val type: String? = null,
+
+  /** user query param */
+  @AvailableSince(ZVersion.ZOS_2_3) val user: String? = null,
+) : ListFilesRequest(filter = path)
