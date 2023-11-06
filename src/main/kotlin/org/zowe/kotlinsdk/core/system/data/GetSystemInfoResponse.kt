@@ -8,14 +8,7 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core.restfiles
+package org.zowe.kotlinsdk.core.system.data
 
 // TODO: doc
-enum class SymlinkMode(private val symlinksVal: String) {
-  FOLLOW("follow"),
-  REPORT("report");
-
-  override fun toString(): String {
-    return symlinksVal
-  }
-}
+open class GetSystemInfoResponse

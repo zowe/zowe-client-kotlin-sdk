@@ -11,7 +11,6 @@
 package org.zowe.kotlinsdk
 
 import org.zowe.kotlinsdk.annotations.AvailableSince
-import org.zowe.kotlinsdk.annotations.IsSupported
 import org.zowe.kotlinsdk.annotations.ZVersion
 import okhttp3.ResponseBody
 import retrofit2.Call

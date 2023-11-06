@@ -8,20 +8,18 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core.zosmf.info
+package org.zowe.kotlinsdk.impl.zosmf.system.data
 
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
-import org.zowe.kotlinsdk.core.zosmf.info.data.InfoRequest
-import org.zowe.kotlinsdk.core.zosmf.info.data.InfoResponse
+import org.zowe.kotlinsdk.core.system.data.GetSystemInfoRequest
 
 /**
  * TODO: doc
  * For more info, please, refer to:
- * https://www.ibm.com/docs/en/zos/2.5.0?topic=services-zosmf-information-retrieval-service
+ * https://www.ibm.com/docs/en/zos/3.1.0?topic=service-retrieve-zosmf-information
  */
-interface Info {
-  /** https://www.ibm.com/docs/en/zos/2.5.0?topic=service-retrieve-zosmf-information */
-  @AvailableSince(ZVersion.ZOS_2_1)
-  fun getSystemInfo(params: InfoRequest): InfoResponse
-}
+class ZosmfGetSystemInfoRequest(
+  /** Content-Type default header */
+  @AvailableSince(ZVersion.ZOS_2_1) val contentType: String = "application/json"
+): GetSystemInfoRequest()

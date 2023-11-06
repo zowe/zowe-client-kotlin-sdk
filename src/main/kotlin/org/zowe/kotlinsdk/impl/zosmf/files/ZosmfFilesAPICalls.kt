@@ -12,7 +12,6 @@ package org.zowe.kotlinsdk.impl.zosmf.files
 
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
-import org.zowe.kotlinsdk.impl.zosmf.datasets.data.XIBMAttributes
 import org.zowe.kotlinsdk.impl.zosmf.files.data.SymlinkMode
 import org.zowe.kotlinsdk.impl.zosmf.files.data.ZosmfListFilesResponse
 import retrofit2.Call

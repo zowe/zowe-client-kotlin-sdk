@@ -23,7 +23,7 @@ import org.zowe.kotlinsdk.impl.zosmf.files.operations.ListFilesOperation
  * For more info, please, refer to:
  * https://www.ibm.com/docs/en/zos/3.1.0?topic=services-zos-data-set-file-rest-interface
  */
-class ZosmfFilesAPIImpl (val connection: Connection, val httpClient: OkHttpClient) : FilesAPI {
+class ZosmfFilesAPIImpl(val connection: Connection, val httpClient: OkHttpClient) : FilesAPI {
   // TODO: doc
   override fun listFiles(params: ListFilesRequest): ListFilesResponse {
     return ListFilesOperation(params as ZosmfListFilesRequest, connection, httpClient).runOperation()
