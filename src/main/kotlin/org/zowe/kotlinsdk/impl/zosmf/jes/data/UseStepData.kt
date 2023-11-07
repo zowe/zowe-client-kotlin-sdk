@@ -8,14 +8,10 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core.zosmf.restjobs.data
+package org.zowe.kotlinsdk.impl.zosmf.jes.data
 
-/**
- * TODO: doc
- * For more info, please, refer to:
- * https://www.ibm.com/docs/en/zos/2.5.0?topic=interface-obtain-status-job
- */
-enum class ExecData(val value: String) {
+// TODO: doc
+enum class UseStepData(val value: String) {
   YES("Y"),
   NO("N");
 
