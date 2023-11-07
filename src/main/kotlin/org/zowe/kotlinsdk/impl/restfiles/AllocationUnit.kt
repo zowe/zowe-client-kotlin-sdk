@@ -8,13 +8,17 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core.restfiles
+package org.zowe.kotlinsdk.impl.restfiles
+
+import com.google.gson.annotations.SerializedName
 
 // TODO: doc
-enum class XIBMObtainENQ(private val type: String) {
+enum class AllocationUnit(private val type : String) {
+  @SerializedName("TRK")
+  TRK("TRK"),
 
-  EXCL("excl"),
-  SHRW("shrw");
+  @SerializedName("CYL")
+  CYL("CYL");
 
   override fun toString(): String {
     return type

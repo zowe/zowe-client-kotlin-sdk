@@ -8,22 +8,24 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core.restfiles
+package org.zowe.kotlinsdk.impl.restfiles
 
 import com.google.gson.annotations.SerializedName
 
 // TODO: doc
-enum class DatasetOrganization(private val type: String) {
-  @SerializedName("PO")
-  PO("PO"),
-  @SerializedName("PO-E")
-  POE("PO-E"),
-  @SerializedName("PS")
-  PS("PS"),
-  @SerializedName("VS")
-  VS("VS");
-
-  override fun toString(): String {
-    return type
-  }
+enum class DsType {
+  @SerializedName("LIBRARY")
+  LIBRARY,
+  @SerializedName("HFS")
+  HFS,
+  @SerializedName("PDS")
+  PDS,
+  @SerializedName("LARGE")
+  LARGE,
+  @SerializedName("BASIC")
+  BASIC,
+  @SerializedName("EXTREQ")
+  EXTREQ,
+  @SerializedName("EXTREF")
+  EXTPREF
 }

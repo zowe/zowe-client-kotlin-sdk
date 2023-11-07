@@ -13,7 +13,6 @@ package org.zowe.kotlinsdk.impl.restfiles
 import okhttp3.OkHttpClient
 import org.zowe.kotlinsdk.impl.zosmf.Connection
 import org.zowe.kotlinsdk.impl.zosmf.Operation
-import org.zowe.kotlinsdk.core.restfiles.RestfilesAPI
 import retrofit2.Call
 
 // TODO: doc

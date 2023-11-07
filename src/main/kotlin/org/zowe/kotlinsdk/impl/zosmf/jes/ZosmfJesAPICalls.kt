@@ -29,7 +29,7 @@ internal interface ZosmfJesAPICalls {
     @Header("Authorization") authorizationToken: String,
     @Path("job-name") jobName: String,
     @Path("job-id") jobId: String,
-    @Query("step-data") useStepData: UseStepData,
+    @Query("step-data") useStepData: UseStepData?,
     @Query("user-correlator") userCorrelator: String?,
     @Query("exec-data") execData: ExecData?
   ): Call<ZosmfGetJobResponse>
@@ -39,7 +39,7 @@ internal interface ZosmfJesAPICalls {
   fun getJobByCorrelator(
     @Header("Authorization") authorizationToken: String,
     @Path("job-correlator") jobCorrelator: String,
-    @Query("step-data") useStepData: UseStepData,
+    @Query("step-data") useStepData: UseStepData?,
     @Query("user-correlator") userCorrelator: String?,
     @Query("exec-data") execData: ExecData?
   ): Call<ZosmfGetJobResponse>

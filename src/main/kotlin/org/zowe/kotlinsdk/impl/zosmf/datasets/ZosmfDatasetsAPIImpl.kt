@@ -12,16 +12,13 @@ package org.zowe.kotlinsdk.impl.zosmf.datasets
 
 import okhttp3.OkHttpClient
 import org.zowe.kotlinsdk.core.datasets.DatasetsAPI
-import org.zowe.kotlinsdk.core.datasets.data.ListDatasetMembersRequest
-import org.zowe.kotlinsdk.core.datasets.data.ListDatasetMembersResponse
-import org.zowe.kotlinsdk.core.datasets.data.ListDatasetsRequest
-import org.zowe.kotlinsdk.core.datasets.data.ListDatasetsResponse
+import org.zowe.kotlinsdk.core.datasets.data.*
 import org.zowe.kotlinsdk.impl.zosmf.Connection
-import org.zowe.kotlinsdk.impl.zosmf.datasets.data.ZosmfListDatasetMembersRequest
-import org.zowe.kotlinsdk.impl.zosmf.datasets.data.ZosmfListDatasetsRequest
-import org.zowe.kotlinsdk.impl.zosmf.datasets.data.ZosmfListDatasetsResponse
+import org.zowe.kotlinsdk.impl.zosmf.datasets.data.*
 import org.zowe.kotlinsdk.impl.zosmf.datasets.operations.ListDatasetMembersOperation
 import org.zowe.kotlinsdk.impl.zosmf.datasets.operations.ListDatasetsOperation
+import org.zowe.kotlinsdk.impl.zosmf.datasets.operations.RetrieveDatasetContentOperation
+import org.zowe.kotlinsdk.impl.zosmf.datasets.operations.RetrieveDatasetContentWithVolserOperation
 
 /**
  * TODO: doc
@@ -36,5 +33,14 @@ class ZosmfDatasetsAPIImpl(val connection: Connection, val httpClient: OkHttpCli
 
   override fun listDatasetMembers(params: ListDatasetMembersRequest): ListDatasetMembersResponse {
     return ListDatasetMembersOperation(params as ZosmfListDatasetMembersRequest, connection, httpClient).runOperation()
+  }
+
+  override fun retrieveDatasetContent(params: RetrieveDatasetContentRequest): RetrieveDatasetContentResponse {
+    val zosmfParams = params as ZosmfRetrieveDatasetContentRequest
+    val responseBody = if (zosmfParams.volser?.isNotEmpty() == true)
+      RetrieveDatasetContentWithVolserOperation(zosmfParams, connection, httpClient).runOperation()
+    else
+      RetrieveDatasetContentOperation(zosmfParams, connection, httpClient).runOperation()
+    return ZosmfRetrieveDatasetContentResponse(fetchedContent = responseBody)
   }
 }

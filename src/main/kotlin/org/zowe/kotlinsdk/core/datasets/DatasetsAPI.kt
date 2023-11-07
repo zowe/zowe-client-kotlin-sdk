@@ -10,10 +10,7 @@
 
 package org.zowe.kotlinsdk.core.datasets
 
-import org.zowe.kotlinsdk.core.datasets.data.ListDatasetMembersRequest
-import org.zowe.kotlinsdk.core.datasets.data.ListDatasetMembersResponse
-import org.zowe.kotlinsdk.core.datasets.data.ListDatasetsRequest
-import org.zowe.kotlinsdk.core.datasets.data.ListDatasetsResponse
+import org.zowe.kotlinsdk.core.datasets.data.*
 
 // TODO: doc
 interface DatasetsAPI {
@@ -22,4 +19,7 @@ interface DatasetsAPI {
 
   // TODO: doc
   fun listDatasetMembers(params: ListDatasetMembersRequest): ListDatasetMembersResponse
+
+  // TODO: doc
+  fun retrieveDatasetContent(params: RetrieveDatasetContentRequest): RetrieveDatasetContentResponse
 }

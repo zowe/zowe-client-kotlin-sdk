@@ -8,18 +8,22 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core.restfiles
+package org.zowe.kotlinsdk.impl.restfiles
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 // TODO: doc
-data class HMigrateBody(
+data class HDeleteBody(
   @SerializedName("request")
   @Expose
-  private val request: String = "hmigrate",
+  private val request: String = "hdelete",
 
   @SerializedName("wait")
   @Expose
-  var wait: Boolean? = null
+  var wait: Boolean? = null,
+
+  @SerializedName("purge")
+  @Expose
+  var purge: Boolean? = null
 )

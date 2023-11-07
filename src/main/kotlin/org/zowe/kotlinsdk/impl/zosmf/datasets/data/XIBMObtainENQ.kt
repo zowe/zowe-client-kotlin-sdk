@@ -8,20 +8,15 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core.restfiles
+package org.zowe.kotlinsdk.impl.zosmf.datasets.data
 
 // TODO: doc
-data class XIBMRecordRange(private val format: Format, private val sss: Int, private val nnn: Int) {
+enum class XIBMObtainENQ(private val type: String) {
 
-  enum class Format {
-    DASHED,
-    COMA_SEPARATED
-  }
+  EXCL("excl"),
+  SHRW("shrw");
 
   override fun toString(): String {
-    return when (format) {
-      Format.DASHED -> "$sss-$nnn"
-      Format.COMA_SEPARATED -> "$sss,$nnn"
-    }
+    return type
   }
 }

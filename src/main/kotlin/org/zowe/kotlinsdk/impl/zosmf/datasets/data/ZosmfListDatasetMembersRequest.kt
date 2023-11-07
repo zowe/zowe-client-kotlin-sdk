@@ -21,7 +21,7 @@ import org.zowe.kotlinsdk.core.datasets.data.ListDatasetMembersRequest
  * https://www.ibm.com/docs/en/zos/2.5.0?topic=interface-list-members-zos-data-set
  */
 class ZosmfListDatasetMembersRequest(
-  /** dslevel query param */
+  /** dataset-name path param */
   @AvailableSince(ZVersion.ZOS_2_1) private val dslevel: String,
 
   /** X-IBM-Async-Threshold header */

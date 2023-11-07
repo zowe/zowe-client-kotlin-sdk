@@ -12,9 +12,6 @@ package org.zowe.kotlinsdk.impl.restfiles
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import org.zowe.kotlinsdk.core.restfiles.DatasetOrganization
-import org.zowe.kotlinsdk.core.restfiles.DsType
-import org.zowe.kotlinsdk.core.restfiles.RecordFormat
 
 data class DatasetInfo(
   @SerializedName("dsname")

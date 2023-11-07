@@ -11,7 +11,6 @@
 package org.zowe.kotlinsdk.impl.restfiles
 
 import org.zowe.kotlinsdk.impl.zosmf.datasets.data.XIBMMigratedRecall
-import org.zowe.kotlinsdk.core.restfiles.XIBMAttr
 
 
 /** This interface defines the options that can be sent into the list data set function */

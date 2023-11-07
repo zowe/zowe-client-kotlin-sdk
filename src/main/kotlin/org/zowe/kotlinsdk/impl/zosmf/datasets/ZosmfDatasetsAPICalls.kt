@@ -10,13 +10,11 @@
 
 package org.zowe.kotlinsdk.impl.zosmf.datasets
 
+import okhttp3.ResponseBody
+import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
-import org.zowe.kotlinsdk.core.restfiles.XIBMAttr
-import org.zowe.kotlinsdk.impl.zosmf.datasets.data.XIBMMigratedRecall
-import org.zowe.kotlinsdk.impl.zosmf.datasets.data.XIBMAttributes
-import org.zowe.kotlinsdk.impl.zosmf.datasets.data.ZosmfListDatasetMembersResponse
-import org.zowe.kotlinsdk.impl.zosmf.datasets.data.ZosmfListDatasetsResponse
+import org.zowe.kotlinsdk.impl.zosmf.datasets.data.*
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -65,4 +63,63 @@ internal interface ZosmfDatasetsAPICalls {
     @Query("start") start: String?,
     @Query("pattern") pattern: String?
   ): Call<ZosmfListDatasetMembersResponse>
+
+  @AvailableSince(ZVersion.ZOS_2_1)
+  @GET("/zosmf/restfiles/ds/{dataset-name}")
+  fun retrieveDatasetContent(
+    @Header("Authorization") authorizationToken: String,
+    @Header("X-IBM-Async-Threshold") asyncThreshold: Int?,
+    @Header("X-IBM-Response-Timeout") responseTimeout: Int?,
+    @Header("X-IBM-Session-Limit-Wait") sessionLimitWait: Int?,
+    @Header("X-IBM-Request-Acctnum") requestAcctnum: String?,
+    @Header("X-IBM-Request-Proc") requestProc: String?,
+    @Header("X-IBM-Request-Region") requestRegion: String?,
+    @Header("X-IBM-Target-System") targetSystem: String?,
+    @Header("If-None-Match") ifNoneMatch: String?,
+    @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType?,
+    @Header("X-IBM-Return-Etag") xIBMReturnEtag: Boolean?,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall?,
+    @Header("X-IBM-Record-Range") xIBMRecordRange: XIBMRecordRange?,
+    @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ?,
+    @Header("X-IBM-Session-Ref") xIBMSessionRef: String?,
+    @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean?,
+    @Header("X-IBM-Dsname-Encoding") xIBMDsNameEncoding: String?,
+    @Header("X-IBM-Target-System-User") targetSystemUser: String?,
+    @Header("X-IBM-Target-System-Password") targetSystemPassword: String?,
+    @Path("dataset-name") datasetName: String,
+    @Query("search") search: String?,
+    @Query("research") research: String?,
+    @Query("insensitive") insensitive: Boolean?,
+    @Query("maxreturnsize") maxReturnSize: Int?
+  ): Call<ResponseBody>
+
+  @AvailableSince(ZVersion.ZOS_2_1)
+  @GET("/zosmf/restfiles/ds/-({volser})/{dataset-name}")
+  fun retrieveDatasetContent(
+    @Header("Authorization") authorizationToken: String,
+    @Header("X-IBM-Async-Threshold") asyncThreshold: Int?,
+    @Header("X-IBM-Response-Timeout") responseTimeout: Int?,
+    @Header("X-IBM-Session-Limit-Wait") sessionLimitWait: Int?,
+    @Header("X-IBM-Request-Acctnum") requestAcctnum: String?,
+    @Header("X-IBM-Request-Proc") requestProc: String?,
+    @Header("X-IBM-Request-Region") requestRegion: String?,
+    @Header("X-IBM-Target-System") targetSystem: String?,
+    @Header("If-None-Match") ifNoneMatch: String?,
+    @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType?,
+    @Header("X-IBM-Return-Etag") xIBMReturnEtag: Boolean?,
+    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall?,
+    @Header("X-IBM-Record-Range") xIBMRecordRange: XIBMRecordRange?,
+    @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ?,
+    @Header("X-IBM-Session-Ref") xIBMSessionRef: String?,
+    @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean?,
+    @Header("X-IBM-Dsname-Encoding") xIBMDsNameEncoding: String?,
+    @Header("X-IBM-Target-System-User") targetSystemUser: String?,
+    @Header("X-IBM-Target-System-Password") targetSystemPassword: String?,
+    @Path("volser") volser: String,
+    @Path("dataset-name") datasetName: String,
+    @Query("search") search: String?,
+    @Query("research") research: String?,
+    @Query("insensitive") insensitive: Boolean?,
+    @Query("maxreturnsize") maxReturnSize: Int?
+  ): Call<ResponseBody>
 }

@@ -8,15 +8,18 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core.restfiles
+package org.zowe.kotlinsdk.impl.restfiles
+
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
 // TODO: doc
-enum class XIBMBpxkAutoCvt(private val type: String) {
-  ON("on"),
-  ALL("all"),
-  OFF("off");
+data class HRecallBody(
+  @SerializedName("request")
+  @Expose
+  private val request: String = "hrecall",
 
-  override fun toString(): String {
-    return type
-  }
-}
+  @SerializedName("wait")
+  @Expose
+  var wait: Boolean? = null
+)

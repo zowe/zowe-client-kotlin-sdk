@@ -29,17 +29,17 @@ class ZosmfGetJobRequest(
   /** X-IBM-Target-System-Password custom header */
   @AvailableSince(ZVersion.ZOS_2_4) val targetSystemPassword: String? = null,
 
-  /** jobname query param */
+  /** jobname path param */
   @AvailableSince(ZVersion.ZOS_2_1) val jobName: String? = null,
 
-  /** jobid query param */
+  /** jobid path param */
   @AvailableSince(ZVersion.ZOS_2_1) val jobId: String? = null,
 
-  /** correlator query param */
+  /** correlator path param */
   @AvailableSince(ZVersion.ZOS_2_1) val jobCorrelator: String? = null,
 
   /** step-data query param */
-  @AvailableSince(ZVersion.ZOS_2_2) val stepData: UseStepData = UseStepData.NO,
+  @AvailableSince(ZVersion.ZOS_2_2) val stepData: UseStepData? = null,
 
   /** user-correlator query param */
   @AvailableSince(ZVersion.ZOS_2_4) val userCorrelator: String? = null,

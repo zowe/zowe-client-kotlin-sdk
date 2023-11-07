@@ -8,19 +8,7 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core.restfiles
-
-import com.google.gson.annotations.SerializedName
+package org.zowe.kotlinsdk.core.datasets.data
 
 // TODO: doc
-enum class AllocationUnit(private val type : String) {
-  @SerializedName("TRK")
-  TRK("TRK"),
-
-  @SerializedName("CYL")
-  CYL("CYL");
-
-  override fun toString(): String {
-    return type
-  }
-}
+open class RetrieveDatasetContentRequest(val dsName: String)

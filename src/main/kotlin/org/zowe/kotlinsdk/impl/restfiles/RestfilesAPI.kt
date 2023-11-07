@@ -8,56 +8,20 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core.restfiles
+package org.zowe.kotlinsdk.impl.restfiles
 
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import okhttp3.ResponseBody
+import org.zowe.kotlinsdk.impl.zosmf.datasets.data.XIBMDataType
 import org.zowe.kotlinsdk.impl.zosmf.datasets.data.XIBMMigratedRecall
+import org.zowe.kotlinsdk.impl.zosmf.datasets.data.XIBMObtainENQ
+import org.zowe.kotlinsdk.impl.zosmf.datasets.data.XIBMRecordRange
 import retrofit2.Call
 import retrofit2.http.*
 
 // TODO: doc
 interface RestfilesAPI {
-  @AvailableSince(ZVersion.ZOS_2_1)
-  @GET("/zosmf/restfiles/ds/{dataset-name}")
-  fun retrieveDatasetContent(
-    @Header("Authorization") authorizationToken: String,
-    @Header("If-None-Match") ifNoneMatch: String? = null,
-    @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
-    @Header("X-IBM-Return-Etag") xIBMReturnEtag: Boolean? = null,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
-    @Header("X-IBM-Record-Range") xIBMRecordRange: XIBMRecordRange? = null,
-    @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
-    @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
-    @Header("X-IBM-Session-Ref") xIBMSessionRef: String? = null,
-    @Path("dataset-name") datasetName: String,
-    @Query("search") search: String? = null,
-    @Query("research") research: String? = null,
-    @Query("insensitive") insensitive: Boolean? = null,
-    @Query("maxreturnsize") maxReturnSize: Int? = null
-  ): Call<ResponseBody>
-
-  @AvailableSince(ZVersion.ZOS_2_1)
-  @GET("/zosmf/restfiles/ds/-({volser})/{dataset-name}")
-  fun retrieveDatasetContent(
-    @Header("Authorization") authorizationToken: String,
-    @Header("If-None-Match") ifNoneMatch: String? = null,
-    @Header("X-IBM-Data-Type") xIBMDataType: XIBMDataType? = null,
-    @Header("X-IBM-Return-Etag") xIBMReturnEtag: Boolean? = null,
-    @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: XIBMMigratedRecall? = null,
-    @Header("X-IBM-Record-Range") xIBMRecordRange: XIBMRecordRange? = null,
-    @Header("X-IBM-Obtain-ENQ") xIBMObtainENQ: XIBMObtainENQ? = null,
-    @Header("X-IBM-Release-ENQ") xIBMReleaseENQ: Boolean? = null,
-    @Header("X-IBM-Session-Ref") xIBMSessionRef: String? = null,
-    @Path("volser") volser: String,
-    @Path("dataset-name") datasetName: String,
-    @Query("search") search: String? = null,
-    @Query("research") research: String? = null,
-    @Query("insensitive") insensitive: Boolean? = null,
-    @Query("maxreturnsize") maxReturnSize: Int? = null
-  ): Call<ResponseBody>
-
   @AvailableSince(ZVersion.ZOS_2_1)
   @PUT("/zosmf/restfiles/ds/{dataset-name}")
   fun writeToDataset(

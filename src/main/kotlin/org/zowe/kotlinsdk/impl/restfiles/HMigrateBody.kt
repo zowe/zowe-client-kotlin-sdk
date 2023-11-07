@@ -8,16 +8,16 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core.restfiles
+package org.zowe.kotlinsdk.impl.restfiles
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 // TODO: doc
-data class HRecallBody(
+data class HMigrateBody(
   @SerializedName("request")
   @Expose
-  private val request: String = "hrecall",
+  private val request: String = "hmigrate",
 
   @SerializedName("wait")
   @Expose

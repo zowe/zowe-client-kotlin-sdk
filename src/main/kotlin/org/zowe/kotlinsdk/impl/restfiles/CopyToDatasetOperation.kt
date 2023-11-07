@@ -12,8 +12,6 @@ package org.zowe.kotlinsdk.impl.restfiles
 
 import okhttp3.OkHttpClient
 import org.zowe.kotlinsdk.ALL_MEMBERS
-import org.zowe.kotlinsdk.core.restfiles.RestfilesAPI
-import org.zowe.kotlinsdk.core.restfiles.ZOSCopyBody
 import org.zowe.kotlinsdk.impl.zosmf.Connection
 import org.zowe.kotlinsdk.impl.zosmf.Operation
 import retrofit2.Call

@@ -8,7 +8,7 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core.restfiles
+package org.zowe.kotlinsdk.impl.zosmf.datasets.data
 
 import org.zowe.kotlinsdk.CodePage
 import org.zowe.kotlinsdk.annotations.AvailableSince
