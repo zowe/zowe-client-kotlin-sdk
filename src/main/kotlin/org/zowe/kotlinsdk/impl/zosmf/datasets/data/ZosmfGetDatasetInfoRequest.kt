@@ -13,16 +13,15 @@ package org.zowe.kotlinsdk.impl.zosmf.datasets.data
 import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
+import org.zowe.kotlinsdk.core.datasets.data.GetDatasetInfoRequest
 import org.zowe.kotlinsdk.core.datasets.data.ListDatasetsRequest
 
 /**
  * TODO: doc
- * For more info, please, refer to:
- * https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-zos-data-sets-system
  */
-class ZosmfListDatasetsRequest(
-  /** dslevel query param */
-  @AvailableSince(ZVersion.ZOS_2_1) private val dslevel: String,
+class ZosmfGetDatasetInfoRequest(
+  /** dataset name */
+  @AvailableSince(ZVersion.ZOS_2_1) private val datasetName: String,
 
   /** X-IBM-Async-Threshold default header */
   @AvailableSince(ZVersion.ZOS_2_1) val asyncThreshold: Int? = null,
@@ -45,13 +44,6 @@ class ZosmfListDatasetsRequest(
   /** X-IBM-Request-Region default header */
   @AvailableSince(ZVersion.ZOS_2_5) val requestRegion: String? = null,
 
-  /** X-IBM-Max-Items custom header */
-  @AvailableSince(ZVersion.ZOS_2_1) val maxItems: Int? = null,
-
-  /** X-IBM-Attributes custom header */
-  // TODO: in impl module - BASE should not be a default, but the preferred somewhere
-  @AvailableSince(ZVersion.ZOS_2_1) val attributes: XIBMAttributes? = null,
-
   /** X-IBM-Target-System-User custom header */
   @AvailableSince(ZVersion.ZOS_2_4) val targetSystemUser: String? = null,
 
@@ -59,8 +51,25 @@ class ZosmfListDatasetsRequest(
   @AvailableSince(ZVersion.ZOS_2_4) val targetSystemPassword: String? = null,
 
   /** volser query param */
-  @AvailableSince(ZVersion.ZOS_2_1) val volumeSerial: String? = null,
-
-  /** start query param */
-  @AvailableSince(ZVersion.ZOS_2_1) val start: String? = null
-) : ListDatasetsRequest(mask = dslevel)
+  @AvailableSince(ZVersion.ZOS_2_1) val volumeSerial: String? = null
+) : GetDatasetInfoRequest(dsName = datasetName) {
+  // TODO: doc
+  fun toListDatasetsRequest(): ZosmfListDatasetsRequest {
+    return ZosmfListDatasetsRequest(
+      dslevel = this.dsName,
+      asyncThreshold = this.asyncThreshold,
+      responseTimeout = this.responseTimeout,
+      sessionLimitWait = this.sessionLimitWait,
+      targetSystem = this.targetSystem,
+      requestAcctnum = this.requestAcctnum,
+      requestProc = this.requestProc,
+      requestRegion = this.requestRegion,
+      maxItems = 1,
+      attributes = XIBMAttributes(ReqType.BASE),
+      targetSystemUser = this.targetSystemUser,
+      targetSystemPassword = this.targetSystemPassword,
+      volumeSerial = this.volumeSerial,
+      start = this.dsName
+    )
+  }
+}

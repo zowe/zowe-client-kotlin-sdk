@@ -25,7 +25,7 @@ class ZosmfListDatasetsResponse(
   /** items response param */
   @SerializedName("items")
   @Expose
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfItems: List<ZosmfMemberItem> = emptyList(),
+  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfItems: List<ZosmfDatasetItem> = emptyList(),
 
   /** returnedRows response param */
   @SerializedName("returnedRows")

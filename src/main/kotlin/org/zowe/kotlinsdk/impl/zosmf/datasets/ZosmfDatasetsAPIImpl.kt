@@ -31,6 +31,16 @@ class ZosmfDatasetsAPIImpl(val connection: Connection, val httpClient: OkHttpCli
     return ListDatasetsOperation(params as ZosmfListDatasetsRequest, connection, httpClient).runOperation()
   }
 
+  override fun getDatasetInfo(params: GetDatasetInfoRequest): GetDatasetInfoResponse {
+    val zosmfParams = (params as ZosmfGetDatasetInfoRequest).toListDatasetsRequest()
+    val listDatasetsResponse = ListDatasetsOperation(zosmfParams, connection, httpClient).runOperation()
+    val dataset = listDatasetsResponse.items.firstOrNull()
+    return if (dataset?.datasetName?.uppercase() == zosmfParams.mask.uppercase())
+      GetDatasetInfoResponse(dataset)
+    else
+      throw Exception("Dataset for the specified mask: '${zosmfParams.mask}' is not found")
+  }
+
   override fun listDatasetMembers(params: ListDatasetMembersRequest): ListDatasetMembersResponse {
     return ListDatasetMembersOperation(params as ZosmfListDatasetMembersRequest, connection, httpClient).runOperation()
   }

@@ -56,7 +56,7 @@ class ZosDsn(
     )
     val dsLst: DataSetsList = zosDsnList.listDsn(dataSetSearchStr, params)
     val dataSet: Dataset? = dsLst.items.filter { el -> el.name.contains(dataSetName.uppercase()) }.getOrNull(0)
-    return  dataSet ?: emptyDataSet
+    return dataSet ?: emptyDataSet
   }
 
   /**

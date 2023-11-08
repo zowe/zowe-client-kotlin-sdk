@@ -18,6 +18,9 @@ interface DatasetsAPI {
   fun listDatasets(params: ListDatasetsRequest): ListDatasetsResponse
 
   // TODO: doc
+  fun getDatasetInfo(params: GetDatasetInfoRequest): GetDatasetInfoResponse
+
+  // TODO: doc
   fun listDatasetMembers(params: ListDatasetMembersRequest): ListDatasetMembersResponse
 
   // TODO: doc
