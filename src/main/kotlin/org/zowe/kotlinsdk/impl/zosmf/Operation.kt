@@ -18,9 +18,7 @@ abstract class Operation<API, R>(
   connection: Connection,
   private val httpClient: OkHttpClient,
   private val apiClass: Class<out API>,
-  private val customCallFactory: okhttp3.Call.Factory? = null
-// TODO: should it be like this?
-//  var httpClient: OkHttpClient = UnsafeOkHttpClient.unsafeOkHttpClient
+  private val callCustomizer: CallCustomizer? = null
 ) {
   var url: String
 
@@ -32,18 +30,17 @@ abstract class Operation<API, R>(
   // TODO: doc
   private fun retrieveAPI(): API {
     // TODO: implement API Set to get already built API in case if connection is the same as already provided one
-    return buildApi(url, httpClient, apiClass, customCallFactory=customCallFactory)
+    return buildApi(url, httpClient, apiClass)
   }
 
   // TODO: doc
-  protected open fun buildCall(runnerAPI: API): Call<R> {
-    throw NotImplementedError("buildCall should be implemented by the operation class")
-  }
+  protected abstract fun buildCall(runnerAPI: API): Call<R>
 
   // TODO: doc
-  fun runOperation(): R {
+  fun runOperation(callCustomizer: CallCustomizer? = null): R {
     val runnerAPI = this.retrieveAPI()
-    val call = this.buildCall(runnerAPI)
+    var call = this.buildCall(runnerAPI)
+    call = callCustomizer?.customizeCall(call) ?: call
     val response = call.execute()
     if (!response.isSuccessful) {
       throw Exception(response.errorBody()?.string())

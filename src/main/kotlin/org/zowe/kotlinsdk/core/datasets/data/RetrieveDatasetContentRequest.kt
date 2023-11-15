@@ -11,4 +11,4 @@
 package org.zowe.kotlinsdk.core.datasets.data
 
 // TODO: doc
-open class RetrieveDatasetContentRequest(val dsName: String)
+open class RetrieveDatasetContentRequest(open val dsName: String)

@@ -10,10 +10,11 @@
 
 package org.zowe.kotlinsdk.core.datasets
 
+import org.zowe.kotlinsdk.core.API
 import org.zowe.kotlinsdk.core.datasets.data.*
 
 // TODO: doc
-interface DatasetsAPI {
+interface DatasetsAPI : API {
   // TODO: doc
   fun listDatasets(params: ListDatasetsRequest): ListDatasetsResponse
 

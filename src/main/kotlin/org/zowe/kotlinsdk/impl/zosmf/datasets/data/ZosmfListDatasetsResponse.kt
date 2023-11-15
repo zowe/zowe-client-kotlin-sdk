@@ -25,7 +25,7 @@ class ZosmfListDatasetsResponse(
   /** items response param */
   @SerializedName("items")
   @Expose
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfItems: List<ZosmfDatasetItem> = emptyList(),
+  @AvailableSince(ZVersion.ZOS_2_1) override val dsItems: List<ZosmfDatasetItem> = emptyList(),
 
   /** returnedRows response param */
   @SerializedName("returnedRows")
@@ -41,4 +41,4 @@ class ZosmfListDatasetsResponse(
   @SerializedName("JSONversion")
   @Expose
   @AvailableSince(ZVersion.ZOS_2_1) val jsonVersion: Int = 0
-) : ListDatasetsResponse(items = zosmfItems)
+) : ListDatasetsResponse(dsItems)

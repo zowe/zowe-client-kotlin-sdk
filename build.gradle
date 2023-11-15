@@ -44,7 +44,7 @@ buildscript {
 
 plugins {
   id 'java'
-  id 'org.jetbrains.kotlin.jvm' version '1.6.21'
+  id 'org.jetbrains.kotlin.jvm' version '1.8.0'
   id 'org.jetbrains.dokka' version '1.7.20'
   id 'jacoco'
 }
@@ -67,9 +67,16 @@ repositories {
   mavenCentral()
 }
 
+def ktorVersion = "2.3.6"
+
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib"
   implementation "org.jetbrains.kotlin:kotlin-reflect:1.6.21"
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.21"
+  implementation "io.ktor:ktor-client-core:$ktorVersion"
+  implementation "io.ktor:ktor-client-okhttp:$ktorVersion"
+  implementation "io.ktor:ktor-client-content-negotiation:$ktorVersion"
+  implementation "io.ktor:ktor-serialization-gson:$ktorVersion"
   testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
   testImplementation 'com.squareup.okhttp3:mockwebserver:4.10.0'
   testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'

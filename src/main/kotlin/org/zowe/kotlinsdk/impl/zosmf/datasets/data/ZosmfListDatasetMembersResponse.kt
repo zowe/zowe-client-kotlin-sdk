@@ -15,7 +15,6 @@ import com.google.gson.annotations.SerializedName
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.data.ListDatasetMembersResponse
-import org.zowe.kotlinsdk.core.datasets.data.ListDatasetsResponse
 
 /**
  * TODO: doc
@@ -26,7 +25,7 @@ class ZosmfListDatasetMembersResponse(
   /** items response param */
   @SerializedName("items")
   @Expose
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfItems: List<ZosmfMemberItem> = emptyList(),
+  @AvailableSince(ZVersion.ZOS_2_1) override val memberItems: List<ZosmfMemberItem> = emptyList(),
 
   /** returnedRows response param */
   @SerializedName("returnedRows")
@@ -42,4 +41,4 @@ class ZosmfListDatasetMembersResponse(
   @SerializedName("JSONversion")
   @Expose
   @AvailableSince(ZVersion.ZOS_2_1) val jsonVersion: Int = 0
-) : ListDatasetMembersResponse(items = zosmfItems)
+) : ListDatasetMembersResponse(memberItems)

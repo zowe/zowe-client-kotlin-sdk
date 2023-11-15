@@ -8,7 +8,11 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.core.datasets.data
+package org.zowe.kotlinsdk.impl.zosmf
+
+import retrofit2.Call
 
 // TODO: doc
-open class GetDatasetInfoResponse(open val dataset: DatasetItem)
+interface CallCustomizer {
+  fun <T> customizeCall(call: Call<T>): Call<T>
+}

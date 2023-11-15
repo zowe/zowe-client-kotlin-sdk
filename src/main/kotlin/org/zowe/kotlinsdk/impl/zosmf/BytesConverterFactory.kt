@@ -45,6 +45,7 @@ class BytesConverterFactory : Converter.Factory() {
   ): Converter<*, RequestBody>? {
     if (getRawType(type) !== ByteArray::class.java) return null
 
-    return Converter<ByteArray, RequestBody> { RequestBody.create(MediaType.get("application/octet-stream"), it) }
+//    return Converter<ByteArray, RequestBody> { RequestBody.create(MediaType.get("application/octet-stream"), it) }
+    throw Exception()
   }
 }

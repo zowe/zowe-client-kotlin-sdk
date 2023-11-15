@@ -24,7 +24,7 @@ class CreateDatasetOperation (
 ) : Operation<RestfilesAPI, Void>(connection, httpClient, RestfilesAPI::class.java)  {
   override fun buildCall(runnerAPI: RestfilesAPI): Call<Void> {
     return runnerAPI.createDataset(
-      authorizationToken = connection.basicCredentials,
+      authorizationToken = connection.getAuthParam(),
       datasetName = datasetName,
       body = body
     )

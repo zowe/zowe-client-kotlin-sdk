@@ -11,4 +11,4 @@
 package org.zowe.kotlinsdk.core.datasets.data
 
 // TODO: doc
-open class ListDatasetMembersResponse(val items: List<MemberItem>)
+open class ListDatasetMembersResponse(open val memberItems: List<MemberItem>)

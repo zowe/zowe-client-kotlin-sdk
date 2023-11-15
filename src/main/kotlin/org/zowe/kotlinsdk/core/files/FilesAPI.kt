@@ -10,10 +10,11 @@
 
 package org.zowe.kotlinsdk.core.files
 
+import org.zowe.kotlinsdk.core.API
 import org.zowe.kotlinsdk.core.files.data.ListFilesRequest
 import org.zowe.kotlinsdk.core.files.data.ListFilesResponse
 
 // TODO: doc
-interface FilesAPI {
+interface FilesAPI : API {
   fun listFiles(params: ListFilesRequest): ListFilesResponse
 }

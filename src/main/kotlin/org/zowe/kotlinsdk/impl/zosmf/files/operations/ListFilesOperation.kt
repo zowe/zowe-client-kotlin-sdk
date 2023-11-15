@@ -28,7 +28,7 @@ internal class ListFilesOperation (
 ) : Operation<ZosmfFilesAPICalls, ZosmfListFilesResponse>(connection, httpClient, ZosmfFilesAPICalls::class.java) {
   override fun buildCall(runnerAPI: ZosmfFilesAPICalls): Call<ZosmfListFilesResponse> {
     return runnerAPI.listFiles(
-      authorizationToken = connection.basicCredentials,
+      authorizationToken = connection.getAuthParam(),
       asyncThreshold = params.asyncThreshold,
       responseTimeout = params.responseTimeout,
       sessionLimitWait = params.sessionLimitWait,

@@ -12,15 +12,15 @@ package org.zowe.kotlinsdk.core.datasets.data
 
 // TODO: doc
 abstract class DatasetItem(
-  val datasetName: String,
-  val isMigrated: Boolean? = null,
-  val blockSize: Int? = null,
-  val datasetOrganization: DatasetOrganization? = null,
-  val recordLength: Int? = null,
-  val recordFormat: RecordFormat? = null,
-  val sizeInTracks: Int? = null,
-  val spaceUnits: SpaceUnits? = null,
-  val volumeSerial: String? = null,
+  open val datasetName: String,
+  open val isMigrated: Boolean? = null,
+  open val blockSize: Int? = null,
+  open val datasetOrganization: DatasetOrganization? = null,
+  open val recordLength: Int? = null,
+  open val recordFormat: RecordFormat? = null,
+  open val sizeInTracks: Int? = null,
+  open val spaceUnits: SpaceUnits? = null,
+  open val volumeSerial: String? = null,
 ) {
   enum class DatasetOrganization {
     PO,

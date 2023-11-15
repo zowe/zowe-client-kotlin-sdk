@@ -12,4 +12,4 @@ package org.zowe.kotlinsdk.core.datasets.data
 
 
 // TODO: doc
-open class ListDatasetsRequest(val mask: String)
+open class ListDatasetsRequest(open val mask: String)

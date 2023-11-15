@@ -10,10 +10,11 @@
 
 package org.zowe.kotlinsdk.core.system
 
+import org.zowe.kotlinsdk.core.API
 import org.zowe.kotlinsdk.core.system.data.GetSystemInfoRequest
 import org.zowe.kotlinsdk.core.system.data.GetSystemInfoResponse
 
 // TODO: doc
-interface SystemAPI {
+interface SystemAPI : API {
   fun getSystemInfo(params: GetSystemInfoRequest) : GetSystemInfoResponse
 }

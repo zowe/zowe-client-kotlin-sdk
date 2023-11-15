@@ -26,7 +26,7 @@ internal class GetJobByNameAndIdOperation(
 ) : Operation<ZosmfJesAPICalls, ZosmfGetJobResponse>(connection, httpClient, ZosmfJesAPICalls::class.java) {
   override fun buildCall(runnerAPI: ZosmfJesAPICalls): Call<ZosmfGetJobResponse> {
     return runnerAPI.getJobByNameAndId(
-      authorizationToken = connection.basicCredentials,
+      authorizationToken = connection.getAuthParam(),
       jobName = params.jobName ?: throw Exception("'jobName' is not specified"),
       jobId = params.jobId ?: throw Exception("'jobId' is not specified"),
       useStepData = params.stepData,

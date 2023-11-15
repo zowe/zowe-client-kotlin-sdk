@@ -11,4 +11,4 @@
 package org.zowe.kotlinsdk.core.datasets.data
 
 // TODO: doc
-open class ListDatasetMembersRequest(val datasetName: String)
+open class ListDatasetMembersRequest(open val datasetName: String)

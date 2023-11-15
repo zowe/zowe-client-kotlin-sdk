@@ -11,4 +11,4 @@
 package org.zowe.kotlinsdk.core.datasets.data
 
 // TODO: doc
-abstract class MemberItem(val memberName: String)
+abstract class MemberItem(open val memberName: String)

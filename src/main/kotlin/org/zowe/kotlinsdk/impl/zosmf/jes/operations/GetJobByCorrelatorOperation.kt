@@ -26,7 +26,7 @@ internal class GetJobByCorrelatorOperation(
 ) : Operation<ZosmfJesAPICalls, ZosmfGetJobResponse>(connection, httpClient, ZosmfJesAPICalls::class.java) {
   override fun buildCall(runnerAPI: ZosmfJesAPICalls): Call<ZosmfGetJobResponse> {
     return runnerAPI.getJobByCorrelator(
-      authorizationToken = connection.basicCredentials,
+      authorizationToken = connection.getAuthParam(),
       jobCorrelator = params.jobCorrelator ?: throw Exception("'jobCorrelator' is not specified"),
       useStepData = params.stepData,
       execData = params.execData,

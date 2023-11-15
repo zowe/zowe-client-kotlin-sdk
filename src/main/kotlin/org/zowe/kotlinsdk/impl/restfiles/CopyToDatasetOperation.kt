@@ -25,7 +25,7 @@ class CopyToDatasetOperation(
   override fun buildCall(runnerAPI: RestfilesAPI): Call<Void> {
     return if (copyParams.toVolser != null) {
       runnerAPI.copyToDataset(
-        authorizationToken = connection.basicCredentials,
+        authorizationToken = connection.getAuthParam(),
         body = ZOSCopyBody.FromDataset(
           dataset = ZOSCopyBody.FromDataset.Dataset(
             datasetName = copyParams.fromDataSet,
@@ -39,7 +39,7 @@ class CopyToDatasetOperation(
       )
     } else {
       runnerAPI.copyToDataset(
-        authorizationToken = connection.basicCredentials,
+        authorizationToken = connection.getAuthParam(),
         body = ZOSCopyBody.FromDataset(
           dataset = ZOSCopyBody.FromDataset.Dataset(
             datasetName = copyParams.fromDataSet,

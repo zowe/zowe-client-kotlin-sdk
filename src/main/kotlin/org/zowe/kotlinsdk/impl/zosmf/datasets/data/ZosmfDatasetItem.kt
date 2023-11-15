@@ -30,7 +30,7 @@ class ZosmfDatasetItem(
   /** migr response param */
   @SerializedName("migr")
   @Expose
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfIsMigrated: ZosmfIsMigrated? = null,
+  @AvailableSince(ZVersion.ZOS_2_1) val zosmfIsMigrated: ZosmfIsMigrated? = null,
 
   /** blksz response param */
   @SerializedName("blksz")
@@ -40,7 +40,7 @@ class ZosmfDatasetItem(
   /** dsorg response param */
   @SerializedName("dsorg")
   @Expose
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfDatasetOrganization: ZosmfDatasetOrganization? = null,
+  @AvailableSince(ZVersion.ZOS_2_1) val zosmfDatasetOrganization: ZosmfDatasetOrganization? = null,
 
   /** lrecl response param */
   @SerializedName("lrecl")
@@ -50,7 +50,7 @@ class ZosmfDatasetItem(
   /** recfm response param */
   @SerializedName("recfm")
   @Expose
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfRecordFormat: ZosmfRecordFormat? = null,
+  @AvailableSince(ZVersion.ZOS_2_1) val zosmfRecordFormat: ZosmfRecordFormat? = null,
 
   /** sizex response param */
   @SerializedName("sizex")
@@ -60,7 +60,7 @@ class ZosmfDatasetItem(
   /** spaceu response param */
   @SerializedName("spaceu")
   @Expose
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfSpaceUnits: ZosmfSpaceUnits? = null,
+  @AvailableSince(ZVersion.ZOS_2_1) val zosmfSpaceUnits: ZosmfSpaceUnits? = null,
 
   /** vol response param */
   @SerializedName("vol")
@@ -75,7 +75,7 @@ class ZosmfDatasetItem(
   /** mvol response param */
   @SerializedName("mvol")
   @Expose
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfIsMultipleVolumes: ZosmfIsMultipleVolumes? = null,
+  @AvailableSince(ZVersion.ZOS_2_1) val zosmfIsMultipleVolumes: ZosmfIsMultipleVolumes? = null,
 
   /** used response param */
   @SerializedName("used")
@@ -122,15 +122,15 @@ class ZosmfDatasetItem(
   @Expose
   @AvailableSince(ZVersion.ZOS_2_3) val volumeSerials: String? = null,
 ) : DatasetItem(
-  datasetName = zosmfDatasetName,
-  isMigrated = zosmfIsMigrated?.value,
-  blockSize = intOrNullFromQuestion(zosmfBlockSize),
-  datasetOrganization = zosmfDatasetOrganization?.value,
-  recordLength = intOrNullFromQuestion(zosmfRecordLength),
-  recordFormat = zosmfRecordFormat?.value,
-  sizeInTracks = zosmfSizeInTracks,
-  spaceUnits = zosmfSpaceUnits?.value,
-  volumeSerial = zosmfVolumeSerial
+  zosmfDatasetName,
+  zosmfIsMigrated?.value,
+  intOrNullFromQuestion(zosmfBlockSize),
+  zosmfDatasetOrganization?.value,
+  intOrNullFromQuestion(zosmfRecordLength),
+  zosmfRecordFormat?.value,
+  zosmfSizeInTracks,
+  zosmfSpaceUnits?.value,
+  zosmfVolumeSerial
 ) {
   val extentsUsed = intOrNullFromQuestion(zosmfExtentsUsed)
   val isMultipleVolumes = zosmfIsMultipleVolumes?.value
@@ -224,4 +224,31 @@ class ZosmfDatasetItem(
     @SerializedName("N")
     N(false)
   }
+
+  override val datasetName: String
+    get() = zosmfDatasetName
+
+  override val isMigrated: Boolean?
+    get() = zosmfIsMigrated?.value
+
+  override val blockSize: Int?
+    get() = intOrNullFromQuestion(zosmfBlockSize)
+
+  override val datasetOrganization: DatasetOrganization?
+    get() = zosmfDatasetOrganization?.value
+
+  override val recordLength: Int?
+    get() = intOrNullFromQuestion(zosmfRecordLength)
+
+  override val recordFormat: RecordFormat?
+    get() = zosmfRecordFormat?.value
+
+  override val sizeInTracks: Int?
+    get() = zosmfSizeInTracks
+
+  override val spaceUnits: SpaceUnits?
+    get() = zosmfSpaceUnits?.value
+
+  override val volumeSerial: String?
+    get() = zosmfVolumeSerial
 }

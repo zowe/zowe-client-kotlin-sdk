@@ -24,7 +24,7 @@ class DeleteDatasetOperation (
   override fun buildCall(runnerAPI: RestfilesAPI): Call<Void> {
     // TODO: deleteDataset with a specified volser???
     return runnerAPI.deleteDataset(
-      authorizationToken = connection.basicCredentials,
+      authorizationToken = connection.getAuthParam(),
       datasetName = datasetName
     )
   }

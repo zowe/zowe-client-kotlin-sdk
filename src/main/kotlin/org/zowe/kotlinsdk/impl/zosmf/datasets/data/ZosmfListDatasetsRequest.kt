@@ -10,6 +10,7 @@
 
 package org.zowe.kotlinsdk.impl.zosmf.datasets.data
 
+import io.ktor.http.*
 import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
@@ -21,9 +22,6 @@ import org.zowe.kotlinsdk.core.datasets.data.ListDatasetsRequest
  * https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-zos-data-sets-system
  */
 class ZosmfListDatasetsRequest(
-  /** dslevel query param */
-  @AvailableSince(ZVersion.ZOS_2_1) private val dslevel: String,
-
   /** X-IBM-Async-Threshold default header */
   @AvailableSince(ZVersion.ZOS_2_1) val asyncThreshold: Int? = null,
 
@@ -49,7 +47,6 @@ class ZosmfListDatasetsRequest(
   @AvailableSince(ZVersion.ZOS_2_1) val maxItems: Int? = null,
 
   /** X-IBM-Attributes custom header */
-  // TODO: in impl module - BASE should not be a default, but the preferred somewhere
   @AvailableSince(ZVersion.ZOS_2_1) val attributes: XIBMAttributes? = null,
 
   /** X-IBM-Target-System-User custom header */
@@ -58,9 +55,36 @@ class ZosmfListDatasetsRequest(
   /** X-IBM-Target-System-Password custom header */
   @AvailableSince(ZVersion.ZOS_2_4) val targetSystemPassword: String? = null,
 
+  /** dslevel query params */
+  @AvailableSince(ZVersion.ZOS_2_1) override val mask: String,
+
   /** volser query param */
   @AvailableSince(ZVersion.ZOS_2_1) val volumeSerial: String? = null,
 
   /** start query param */
   @AvailableSince(ZVersion.ZOS_2_1) val start: String? = null
-) : ListDatasetsRequest(mask = dslevel)
+) : ListDatasetsRequest(mask), HttpRequest {
+  override val method = HttpMethod.Get
+
+  override val path = "/zosmf/restfiles/ds"
+
+  override val headers = mutableMapOf(
+    "X-IBM-Async-Threshold" to asyncThreshold?.toString(),
+    "X-IBM-Response-Timeout" to responseTimeout?.toString(),
+    "X-IBM-Session-Limit-Wait" to sessionLimitWait?.toString(),
+    "X-IBM-Target-System" to targetSystem,
+    "X-IBM-Request-Acctnum" to requestAcctnum,
+    "X-IBM-Request-Proc" to requestProc,
+    "X-IBM-Request-Region" to requestRegion,
+    "X-IBM-Max-Items" to maxItems?.toString(),
+    "X-IBM-Attributes" to attributes?.toString(),
+    "X-IBM-Target-System-User" to targetSystemUser,
+    "X-IBM-Target-System-Password" to targetSystemPassword
+  )
+
+  override val parameters = mutableMapOf(
+    "dslevel" to mask,
+    "volser" to volumeSerial,
+    "start" to start
+  )
+}

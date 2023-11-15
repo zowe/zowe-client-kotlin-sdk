@@ -14,6 +14,7 @@ import okhttp3.OkHttpClient
 import org.zowe.kotlinsdk.core.files.FilesAPI
 import org.zowe.kotlinsdk.core.files.data.ListFilesRequest
 import org.zowe.kotlinsdk.core.files.data.ListFilesResponse
+import org.zowe.kotlinsdk.impl.zosmf.CallCustomizer
 import org.zowe.kotlinsdk.impl.zosmf.Connection
 import org.zowe.kotlinsdk.impl.zosmf.files.data.ZosmfListFilesRequest
 import org.zowe.kotlinsdk.impl.zosmf.files.operations.ListFilesOperation
@@ -23,9 +24,13 @@ import org.zowe.kotlinsdk.impl.zosmf.files.operations.ListFilesOperation
  * For more info, please, refer to:
  * https://www.ibm.com/docs/en/zos/3.1.0?topic=services-zos-data-set-file-rest-interface
  */
-class ZosmfFilesAPIImpl(val connection: Connection, val httpClient: OkHttpClient) : FilesAPI {
+class ZosmfFilesAPIImpl(
+  val connection: Connection,
+  val httpClient: OkHttpClient,
+  private val callCustomizer: CallCustomizer? = null
+) : FilesAPI {
   // TODO: doc
   override fun listFiles(params: ListFilesRequest): ListFilesResponse {
-    return ListFilesOperation(params as ZosmfListFilesRequest, connection, httpClient).runOperation()
+    return ListFilesOperation(params as ZosmfListFilesRequest, connection, httpClient).runOperation(callCustomizer)
   }
 }

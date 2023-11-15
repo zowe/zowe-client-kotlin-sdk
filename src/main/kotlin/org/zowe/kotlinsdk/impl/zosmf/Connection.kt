@@ -10,28 +10,23 @@
 
 package org.zowe.kotlinsdk.impl.zosmf
 
-import okhttp3.Credentials
-
-/** Represents z/OSMF connection information */
-class Connection(
+/** Represents basic connection information */
+abstract class Connection(
   /** z/OS host IP or root domain */
   val host: String,
-  /** z/OS host z/OSMF port number */
+  /** z/OS host port number */
   val zosmfPort: String,
-  /** z/OS host valid username with access to z/OSMF REST API */
-  val user: String,
-  /** z/OS host user\'s password with access to z/OSMF REST API */
-  val password: String,
-  /** z/OS host z/OSMF protocol to use during a connection */
+  /** z/OS host protocol to use during a connection */
   val protocol: String = "https"
 ) {
 
-  val basicCredentials: String = Credentials.basic(user, password)
-
-  // TODO: doc
-  fun checkConnection() {
-    check(host.isEmpty() || password.isEmpty() || user.isEmpty()) {
-      "Connection data is not set properly. Check if you specified host, user and password"
+  /** Check if the connection has all the necessary parameters specified */
+  open fun checkConnection() {
+    check(host.isNotEmpty()) {
+      "Connection data is not set properly. The host is not specified"
     }
   }
+
+  /** Get authentication parameter to provide during a request */
+  abstract fun getAuthParam(): String
 }

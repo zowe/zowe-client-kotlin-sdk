@@ -14,14 +14,13 @@ import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.data.GetDatasetInfoRequest
-import org.zowe.kotlinsdk.core.datasets.data.ListDatasetsRequest
 
 /**
  * TODO: doc
  */
 class ZosmfGetDatasetInfoRequest(
   /** dataset name */
-  @AvailableSince(ZVersion.ZOS_2_1) private val datasetName: String,
+  @AvailableSince(ZVersion.ZOS_2_1) override val dsName: String,
 
   /** X-IBM-Async-Threshold default header */
   @AvailableSince(ZVersion.ZOS_2_1) val asyncThreshold: Int? = null,
@@ -52,11 +51,11 @@ class ZosmfGetDatasetInfoRequest(
 
   /** volser query param */
   @AvailableSince(ZVersion.ZOS_2_1) val volumeSerial: String? = null
-) : GetDatasetInfoRequest(dsName = datasetName) {
+) : GetDatasetInfoRequest(dsName) {
   // TODO: doc
   fun toListDatasetsRequest(): ZosmfListDatasetsRequest {
     return ZosmfListDatasetsRequest(
-      dslevel = this.dsName,
+      mask = this.dsName,
       asyncThreshold = this.asyncThreshold,
       responseTimeout = this.responseTimeout,
       sessionLimitWait = this.sessionLimitWait,

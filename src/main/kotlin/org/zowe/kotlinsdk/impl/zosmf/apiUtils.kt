@@ -42,13 +42,9 @@ fun <API> buildApi(
   baseUrl: String,
   httpClient: OkHttpClient,
   apiClass: Class<out API>,
-  convFactory: ConverterFactory = ConverterFactory.SCALARS,
-  customCallFactory: Call.Factory? = null
+  convFactory: ConverterFactory = ConverterFactory.SCALARS
 ): API {
   var retrofitSetup = Retrofit.Builder().baseUrl(baseUrl).client(httpClient)
-
-  retrofitSetup =
-    if (customCallFactory != null) retrofitSetup.callFactory(customCallFactory) else retrofitSetup
 
   retrofitSetup = when (convFactory) {
     ConverterFactory.SCALARS ->

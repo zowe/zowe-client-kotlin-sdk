@@ -25,7 +25,7 @@ class ZosmfMemberItem(
   /** member response param */
   @SerializedName("member")
   @Expose
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfMemberName: String,
+  @AvailableSince(ZVersion.ZOS_2_1) override val memberName: String,
 
   /** vers response param */
   @SerializedName("vers")
@@ -121,4 +121,4 @@ class ZosmfMemberItem(
   @SerializedName("ssi")
   @Expose
   @AvailableSince(ZVersion.ZOS_2_1) val ssi: String? = null
-) : MemberItem(memberName = zosmfMemberName)
+) : MemberItem(memberName)

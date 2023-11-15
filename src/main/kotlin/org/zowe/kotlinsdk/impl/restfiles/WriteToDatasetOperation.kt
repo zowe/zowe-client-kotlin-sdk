@@ -25,7 +25,7 @@ class WriteToDatasetOperation (
   override fun buildCall(runnerAPI: RestfilesAPI): Call<Void> {
     // TODO: writeToDataset with a specified volser???
     return runnerAPI.writeToDataset(
-      authorizationToken = connection.basicCredentials,
+      authorizationToken = connection.getAuthParam(),
       datasetName = datasetName,
       content = content
     )

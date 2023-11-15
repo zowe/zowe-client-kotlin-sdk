@@ -11,4 +11,4 @@
 package org.zowe.kotlinsdk.core.datasets.data
 
 // TODO: doc
-open class GetDatasetInfoRequest(val dsName: String)
+open class GetDatasetInfoRequest(open val dsName: String)

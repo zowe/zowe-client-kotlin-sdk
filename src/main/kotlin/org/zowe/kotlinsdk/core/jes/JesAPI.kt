@@ -10,10 +10,11 @@
 
 package org.zowe.kotlinsdk.core.jes
 
+import org.zowe.kotlinsdk.core.API
 import org.zowe.kotlinsdk.core.jes.data.GetJobRequest
 import org.zowe.kotlinsdk.core.jes.data.GetJobResponse
 
 // TODO: doc
-interface JesAPI {
+interface JesAPI : API {
   fun getJob(params: GetJobRequest): GetJobResponse
 }
