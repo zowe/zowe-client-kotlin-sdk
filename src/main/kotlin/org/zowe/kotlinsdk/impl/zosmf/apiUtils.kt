@@ -18,8 +18,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
-const val ZOSMF_API_TYPE = "z/OSMF API"
-
 /** To decide, which converter factory to use */
 enum class ConverterFactory { SCALARS, BYTES }
 

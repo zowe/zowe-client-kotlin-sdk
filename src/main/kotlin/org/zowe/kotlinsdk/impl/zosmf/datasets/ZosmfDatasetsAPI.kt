@@ -20,18 +20,25 @@ import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.DatasetsAPI
 import org.zowe.kotlinsdk.core.datasets.data.*
 import org.zowe.kotlinsdk.impl.zosmf.Connection
+import org.zowe.kotlinsdk.impl.zosmf.RequestCanceller
 import org.zowe.kotlinsdk.impl.zosmf.RequestRunner
 import org.zowe.kotlinsdk.impl.zosmf.datasets.data.*
 
-// TODO: doc
+/**
+ * IBA Group's z/OSMF [DatasetsAPI] implementation to provide functions to work with datasets
+ * @param client KTor initialized [HttpClient] to make requests with
+ * @param connection [Connection] instance to make requests using the connection data
+ * @param requestCanceller [RequestCanceller] instance to cancel requests from the outside
+ */
 internal class ZosmfDatasetsAPI(
   private val client: HttpClient,
-  private val connection: Connection
+  private val connection: Connection,
+  private val requestCanceller: RequestCanceller
 ) : DatasetsAPI {
   @AvailableSince(ZVersion.ZOS_2_1)
   override fun listDatasets(params: ListDatasetsRequest): ListDatasetsResponse {
     return runBlocking {
-      RequestRunner(client, connection)
+      RequestRunner(client, connection, requestCanceller)
         .runRequest(params as ZosmfListDatasetsRequest)
         .body<ZosmfListDatasetsResponse>()
     }
@@ -51,18 +58,23 @@ internal class ZosmfDatasetsAPI(
   @AvailableSince(ZVersion.ZOS_2_1)
   override fun listDatasetMembers(params: ListDatasetMembersRequest): ListDatasetMembersResponse {
     return runBlocking {
-      RequestRunner(client, connection)
+      RequestRunner(client, connection, requestCanceller)
         .runRequest(params as ZosmfListDatasetMembersRequest)
         .body<ZosmfListDatasetMembersResponse>()
     }
   }
 
+  /**
+   * Retrieve the dataset's content in binary or text format
+   * @param params [RetrieveDatasetContentRequest] instance to get parameters for the request from
+   * @return [RetrieveDatasetContentResponse] instance with the succeeded request result
+   */
   @AvailableSince(ZVersion.ZOS_2_1)
   override fun retrieveDatasetContent(params: RetrieveDatasetContentRequest): RetrieveDatasetContentResponse {
     val zosmfParams = params as ZosmfRetrieveDatasetContentRequest
     val isBinary = zosmfParams.xIBMDataType?.type == XIBMDataType.Type.BINARY
     val (fetchedText, fetchedBytes) = runBlocking {
-      val response = RequestRunner(client, connection).runRequest(zosmfParams)
+      val response = RequestRunner(client, connection, requestCanceller).runRequest(zosmfParams)
       if (isBinary) {
         val lengthLong = response.contentLength() ?: throw Exception("The dataset is empty")
         val length = lengthLong.toInt()

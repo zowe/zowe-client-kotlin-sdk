@@ -13,17 +13,34 @@ package org.zowe.kotlinsdk.core.datasets
 import org.zowe.kotlinsdk.core.API
 import org.zowe.kotlinsdk.core.datasets.data.*
 
-// TODO: doc
+/** Datasets API specification to provide functions to work with datasets  */
 interface DatasetsAPI : API {
-  // TODO: doc
+
+  /**
+   * List datasets by the provided parameters
+   * @param params [ListDatasetsRequest] instance to get parameters for the request from
+   * @return [ListDatasetsResponse] instance with the succeeded request result
+   */
   fun listDatasets(params: ListDatasetsRequest): ListDatasetsResponse
 
-  // TODO: doc
+  /**
+   * Get the dataset's info
+   * @param params [GetDatasetInfoRequest] instance to get parameters for the request from
+   * @return [GetDatasetInfoResponse] instance with the succeeded request result
+   */
   fun getDatasetInfo(params: GetDatasetInfoRequest): GetDatasetInfoResponse
 
-  // TODO: doc
+  /**
+   * List the dataset's members
+   * @param params [ListDatasetMembersRequest] instance to get parameters for the request from
+   * @return [ListDatasetMembersResponse] instance with the succeeded request result
+   */
   fun listDatasetMembers(params: ListDatasetMembersRequest): ListDatasetMembersResponse
 
-  // TODO: doc
+  /**
+   * Retrieve the dataset's content
+   * @param params [RetrieveDatasetContentRequest] instance to get parameters for the request from
+   * @return [RetrieveDatasetContentResponse] instance with the succeeded request result
+   */
   fun retrieveDatasetContent(params: RetrieveDatasetContentRequest): RetrieveDatasetContentResponse
 }

@@ -14,11 +14,16 @@ import io.ktor.client.*
 import org.zowe.kotlinsdk.core.datasets.DatasetsAPI
 import org.zowe.kotlinsdk.impl.zosmf.datasets.ZosmfDatasetsAPI
 
-
-// TODO: doc
+/**
+ * The default z/OSMF API provider. Provides all the necessary functions to interact with mainframe through z/OSMF REST API
+ * @param client [HttpClient] to run requests with
+ * @param connection [Connection] instance to run requests with info from
+ * @param requestCanceller [RequestCanceller] instance to cancel active requests from the outside
+ */
 class ZosmfDefaultAPIProvider(
   client: HttpClient,
-  connection: Connection
+  connection: Connection,
+  requestCanceller: RequestCanceller
 ) : APIProvider(
-  DatasetsAPI::class.java to ZosmfDatasetsAPI(client, connection)
+  DatasetsAPI::class.java to ZosmfDatasetsAPI(client, connection, requestCanceller)
 )

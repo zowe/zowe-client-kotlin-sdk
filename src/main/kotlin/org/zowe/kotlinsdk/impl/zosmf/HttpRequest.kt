@@ -8,11 +8,17 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.impl.zosmf.datasets.data
+package org.zowe.kotlinsdk.impl.zosmf
 
 import io.ktor.http.*
 
-// TODO: doc
+/**
+ * Interface to carry all the necessary info to send a z/OSMF HTTP request
+ * @property method an HTTP method to make the HTTP request
+ * @property path the actual URL path to make request to (not the full URL path, only the part without the domain)
+ * @property headers HTTP headers to provide to the request
+ * @property parameters HTTP query parameters to provide to the request
+ */
 interface HttpRequest {
   val method: HttpMethod
   val path: String

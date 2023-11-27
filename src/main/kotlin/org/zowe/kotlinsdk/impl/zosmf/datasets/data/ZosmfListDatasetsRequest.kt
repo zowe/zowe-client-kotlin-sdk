@@ -15,6 +15,7 @@ import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.data.ListDatasetsRequest
+import org.zowe.kotlinsdk.impl.zosmf.HttpRequest
 
 /**
  * TODO: doc
