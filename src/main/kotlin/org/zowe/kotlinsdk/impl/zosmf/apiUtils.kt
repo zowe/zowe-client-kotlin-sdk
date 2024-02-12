@@ -12,11 +12,21 @@ package org.zowe.kotlinsdk.impl.zosmf
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import io.ktor.client.*
+import io.ktor.client.engine.okhttp.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.serialization.gson.*
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.security.SecureRandom
+import java.security.cert.CertificateException
+import java.security.cert.X509Certificate
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSession
+import javax.net.ssl.X509TrustManager
 
 /** To decide, which converter factory to use */
 enum class ConverterFactory { SCALARS, BYTES }
@@ -55,4 +65,39 @@ fun <API> buildApi(
   }
 
   return retrofitSetup.build().create(apiClass)
+}
+
+// TODO: doc
+fun getUnsafeKTorHttpClient(): HttpClient {
+  return HttpClient(OkHttp) {
+    install(ContentNegotiation) {
+      gson()
+    }
+    engine {
+      config {
+        // Create a trust manager that does not validate certificate chains
+        val trustAllCerts = arrayOf<X509TrustManager>(
+          object : X509TrustManager {
+            @Throws(CertificateException::class)
+            override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {}
+
+            @Throws(CertificateException::class)
+            override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {}
+
+            override fun getAcceptedIssuers(): Array<X509Certificate> {
+              return arrayOf()
+            }
+          }
+        )
+
+        // Install the all-trusting trust manager
+        val sslContext = SSLContext.getInstance("TLSv1.2")
+        sslContext.init(null, trustAllCerts, SecureRandom())
+
+        // Create an ssl socket factory with our all-trusting manager
+        sslSocketFactory(sslContext.socketFactory, trustAllCerts[0])
+        hostnameVerifier { hostname: String?, session: SSLSession? -> true }
+      }
+    }
+  }
 }

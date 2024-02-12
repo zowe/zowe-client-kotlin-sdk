@@ -1,0 +1,13 @@
+{
+  "category":2,
+  "rc":4,
+  "reason":3,
+  "message":"ServletDispatcher failed - received TSO Prompt when expecting TsoServletResponse",
+  "stack":"",
+  "details":[
+    "DMS2987 DATA SET CATALOGED TO CA DISK PSEUDO-VOLUME ARCIVE",
+    "DMS2987 CA DISK HAS ARCHIVED USER.DEPLOY.COPY",
+    "",
+    "DMS2971 DO YOU WANT TO RESTORE THE DATA SET? (Y\/N)"
+  ]
+}
