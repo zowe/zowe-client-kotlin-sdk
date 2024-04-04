@@ -47,7 +47,7 @@ class SendTso(
    * @throws Exception error executing command
    */
   @Throws(Exception::class)
-  fun getAllResponses(tsoResponse: TsoResponse): CollectedResponses {
+  fun getAllResponses(tsoResponse: TsoResponse, failOnPrompt: Boolean): CollectedResponses {
     var tso = tsoResponse
     var done = false
     val messages = StringBuilder()
@@ -68,8 +68,14 @@ class SendTso(
               val msg = messages.toString()
               val startIndex = msg.indexOf("IKJ56602I")
               messages.delete(startIndex, startIndex + IKJ56602I.length + "\nREADY".length)
+              return@forEach
             } else if (messages.isNotEmpty() && messages.toString().contains("READY")) {
               done = true
+              return@forEach
+            }
+            if (failOnPrompt) {
+              throw Exception(messages.toString() + "Failed to interact with TSO console: The console requested input, but the 'failOnPrompt'" +
+                      " option is set to true, indicating that interactive prompts should be avoided.")
             }
             // TSO PROMPT reached without getting any data, retrying
           }
@@ -114,7 +120,7 @@ class SendTso(
    * @throws Exception error executing command
    */
   @Throws(Exception::class)
-  fun sendDataToTSOCollect(servletKey: String, command: String): SendResponse {
+  fun sendDataToTSOCollect(servletKey: String, command: String, failOnPrompt: Boolean): SendResponse {
     if (servletKey.isEmpty()) {
       throw Exception("servletKey not specified")
     }
@@ -126,7 +132,7 @@ class SendTso(
       SendTsoParams(servletKey = servletKey, data = command)
     )
 
-    val responses = getAllResponses(putResponse)
+    val responses = getAllResponses(putResponse, failOnPrompt)
     return createResponse(responses)
   }
 

@@ -33,7 +33,7 @@ class IssueTso(
    * @return issue tso response, see IssueResponse object
    * @throws Exception error executing command
    */
-  fun issueTsoCommand(accountNumber: String, command: String, startParams: StartTsoParams): IssueResponse {
+  fun issueTsoCommand(accountNumber: String, command: String, startParams: StartTsoParams, failOnPrompt: Boolean = true): IssueResponse {
     if (accountNumber.isEmpty()) {
       throw Exception("accountNumber not specified")
     }
@@ -55,7 +55,7 @@ class IssueTso(
 
     // second stage send command to tso servlet session created in first stage and collect all tso responses
     val sendTso = SendTso(connection, httpClient)
-    val sendResponse = sendTso.sendDataToTSOCollect(servletKey, command)
+    val sendResponse = sendTso.sendDataToTSOCollect(servletKey, command, failOnPrompt)
 
     zosmfTsoResponses.addAll(sendResponse.tsoResponses)
 
