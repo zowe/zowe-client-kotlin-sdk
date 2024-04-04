@@ -52,7 +52,7 @@ class StartTso(
     var collectedResponses: CollectedResponses? = null
     if (tsoResponse.servletKey != null) {
       val sendTso = SendTso(connection, httpClient)
-      collectedResponses = sendTso.getAllResponses(tsoResponse, failOnPrompt=false)
+      collectedResponses = sendTso.getAllResponses(tsoResponse, failOnPrompt = false)
     }
 
     return StartStopResponses(tsoResponse, collectedResponses)
