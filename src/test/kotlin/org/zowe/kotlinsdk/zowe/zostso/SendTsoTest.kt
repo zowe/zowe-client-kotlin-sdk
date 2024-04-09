@@ -51,7 +51,7 @@ class SendTsoTest {
     )
 
     val tsoResponse = Gson().fromJson(responseDispatcher.readMockJson("startTso"), TsoResponse::class.java)
-    val response = sendTso.getAllResponses(tsoResponse)
+    val response = sendTso.getAllResponses(tsoResponse, failOnPrompt = false)
 
     Assertions.assertEquals(tsoResponse.servletKey, response.tsos[0].servletKey)
     Assertions.assertTrue(response.messages?.contains("LOGON IN PROGRESS AT 17:31:11 ON SEPTEMBER 22, 2022") == true)
@@ -80,7 +80,7 @@ class SendTsoTest {
     )
 
     val servletKey = "DLIS-121-aabcaaat"
-    val response = sendTso.sendDataToTSOCollect(servletKey, "TIME")
+    val response = sendTso.sendDataToTSOCollect(servletKey, "TIME", failOnPrompt = false)
 
     Assertions.assertEquals(servletKey, response.tsoResponses[0].servletKey)
     Assertions.assertTrue(
