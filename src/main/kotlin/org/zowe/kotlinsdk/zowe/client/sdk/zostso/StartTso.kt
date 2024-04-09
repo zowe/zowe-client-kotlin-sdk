@@ -32,7 +32,7 @@ class StartTso(
    * @throws Exception error executing command
    */
   @Throws(Exception::class)
-  fun start(accountNumber: String, params: StartTsoParams): StartStopResponses {
+  fun start(accountNumber: String, params: StartTsoParams, failOnPrompt: Boolean): StartStopResponses {
     if (accountNumber.isEmpty()) {
       throw Exception("accountNumber not specified")
     }
@@ -52,7 +52,7 @@ class StartTso(
     var collectedResponses: CollectedResponses? = null
     if (tsoResponse.servletKey != null) {
       val sendTso = SendTso(connection, httpClient)
-      collectedResponses = sendTso.getAllResponses(tsoResponse, failOnPrompt = false)
+      collectedResponses = sendTso.getAllResponses(tsoResponse, failOnPrompt)
     }
 
     return StartStopResponses(tsoResponse, collectedResponses)
