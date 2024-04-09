@@ -33,7 +33,7 @@ class IssueTso(
    * @return issue tso response, see IssueResponse object
    * @throws Exception error executing command
    */
-  fun issueTsoCommand(accountNumber: String, command: String, startParams: StartTsoParams): IssueResponse {
+  fun issueTsoCommand(accountNumber: String, command: String, startParams: StartTsoParams, failOnPrompt: Boolean = false): IssueResponse {
     if (accountNumber.isEmpty()) {
       throw Exception("accountNumber not specified")
     }
@@ -43,7 +43,7 @@ class IssueTso(
 
     // first stage open tso servlet session to use for our tso command processing
     val startTso = StartTso(connection, httpClient)
-    val startResponse = startTso.start(accountNumber, startParams)
+    val startResponse = startTso.start(accountNumber, startParams, failOnPrompt)
 
     if (!startResponse.success) {
       throw Exception("TSO address space failed to start. Error: ${startResponse.failureResponse ?: "Unknown error"}")
@@ -55,7 +55,7 @@ class IssueTso(
 
     // second stage send command to tso servlet session created in first stage and collect all tso responses
     val sendTso = SendTso(connection, httpClient)
-    val sendResponse = sendTso.sendDataToTSOCollect(servletKey, command)
+    val sendResponse = sendTso.sendDataToTSOCollect(servletKey, command, failOnPrompt)
 
     zosmfTsoResponses.addAll(sendResponse.tsoResponses)
 
