@@ -39,9 +39,7 @@ class ZosUssCopy (
             filePath = FilePath(destPath)
         )
         response = call.execute()
-        if (response?.isSuccessful != true) {
-            throw Exception(response?.errorBody()?.string())
-        }
+        validateResponse(response)
         return response ?: throw Exception("No response returned")
     }
 
@@ -68,9 +66,7 @@ class ZosUssCopy (
             toDatasetName = dsn
         )
         response = call.execute()
-        if (response?.isSuccessful != true) {
-            throw Exception(response?.errorBody()?.string())
-        }
+        validateResponse(response)
         return response ?: throw Exception("No response returned")
     }
 
@@ -99,9 +95,7 @@ class ZosUssCopy (
             memberName = member
         )
         response = call.execute()
-        if (response?.isSuccessful != true) {
-            throw Exception(response?.errorBody()?.string())
-        }
+        validateResponse(response)
         return response ?: throw Exception("No response returned")
     }
 

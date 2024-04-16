@@ -80,10 +80,7 @@ class StartTso(
       rsize = commandParams.regionSize?.toInt() ?: TsoConstants.DEFAULT_RSIZE.toInt()
     )
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception("No results from executing tso command while setting up TSO address space. "
-          + response?.errorBody()?.string())
-    }
+    validateResponse(response, "No results from executing tso command while setting up TSO address space")
     return response?.body() as TsoResponse? ?: throw Exception("No body returned")
   }
 }

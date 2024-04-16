@@ -69,9 +69,7 @@ class ZosDsn(
       datasetName = dataSetName
     )
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception(response?.errorBody()?.string())
-    }
+    validateResponse(response)
     return response ?: throw Exception("No response returned")
   }
 
@@ -92,9 +90,7 @@ class ZosDsn(
       memberName = member
     )
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception(response?.errorBody()?.string())
-    }
+    validateResponse(response)
     return response ?: throw Exception("No response returned")
   }
 
@@ -115,9 +111,7 @@ class ZosDsn(
       content = content
     )
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception(response?.errorBody()?.string())
-    }
+    validateResponse(response)
     return response ?: throw Exception("No response returned")
   }
 
@@ -141,9 +135,7 @@ class ZosDsn(
       memberName = member
     )
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception(response?.errorBody()?.string())
-    }
+    validateResponse(response)
     return response ?: throw Exception("No response returned")
   }
 
@@ -164,9 +156,7 @@ class ZosDsn(
       body = params
     )
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception(response?.errorBody()?.string())
-    }
+    validateResponse(response)
     return response ?: throw Exception("No response returned")
   }
 }

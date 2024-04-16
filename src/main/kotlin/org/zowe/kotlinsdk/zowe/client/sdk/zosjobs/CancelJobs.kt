@@ -65,9 +65,7 @@ class CancelJobs(
       body = CancelJobRequestBody(RequestTypes.CANCEL, params.version!!)
     )
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception(response?.errorBody()?.string())
-    }
+    validateResponse(response)
     return response?.body() as CancelJobRequest? ?: throw Exception("No body returned")
   }
 }

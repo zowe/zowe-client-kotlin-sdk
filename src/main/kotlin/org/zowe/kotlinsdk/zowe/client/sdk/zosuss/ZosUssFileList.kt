@@ -50,9 +50,7 @@ class ZosUssFileList (
             user = params.user
         )
         response = call.execute()
-        if (response?.isSuccessful != true) {
-            throw Exception(response?.errorBody()?.string())
-        }
+        validateResponse(response)
         return response?.body() as UssFilesList? ?: throw Exception("No body returned")
     }
 }

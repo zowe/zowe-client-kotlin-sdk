@@ -10,6 +10,7 @@ import org.zowe.kotlinsdk.zowe.client.sdk.zosfiles.input.DownloadParams
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
+import org.zowe.kotlinsdk.validateResponse
 import retrofit2.Response
 import java.io.InputStream
 
@@ -53,9 +54,7 @@ class ZosDsnDownload (
       )
     }
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception(response?.errorBody()?.string())
-    }
+    validateResponse(response)
     return (response?.body() as ResponseBody).byteStream() ?: throw Exception("No stream returned")
   }
 

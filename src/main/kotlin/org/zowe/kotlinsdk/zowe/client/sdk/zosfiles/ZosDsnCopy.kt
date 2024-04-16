@@ -61,9 +61,7 @@ class ZosDsnCopy (
       )
     }
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception(response?.errorBody()?.string())
-    }
+    validateResponse(response)
     return response ?: throw Exception("No response returned")
   }
 
