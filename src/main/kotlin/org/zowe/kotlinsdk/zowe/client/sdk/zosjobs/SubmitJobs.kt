@@ -87,11 +87,6 @@ class SubmitJobs(
     )
     response = call.execute()
     validateResponse(response)
-//    if (response?.isSuccessful != true) {
-//      throw Exception(response?.errorBody()?.string() +
-//              "\nHTTP status code: ${response?.code()}." +
-//              "\nMessage: ${response?.message()}")
-//    }
     return response?.body() as SubmitJobRequest? ?: throw Exception("No body returned")
   }
 

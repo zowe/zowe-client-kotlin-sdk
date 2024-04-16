@@ -106,9 +106,6 @@ class SendTso(
     )
     response = call.execute()
     validateResponse(response, "Follow up TSO Messages from TSO command cannot be retrieved")
-//    if (response?.isSuccessful != true) {
-//      throw Exception("Follow up TSO Messages from TSO command cannot be retrieved. " + response?.errorBody()?.string())
-//    }
     return response?.body() as TsoResponse? ?: throw Exception("No body returned")
   }
 
