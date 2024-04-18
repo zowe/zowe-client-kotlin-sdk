@@ -105,9 +105,7 @@ class SendTso(
       servletKey = servletKey
     )
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception("Follow up TSO Messages from TSO command cannot be retrieved. " + response?.errorBody()?.string())
-    }
+    validateResponse(response, "Follow up TSO Messages from TSO command cannot be retrieved")
     return response?.body() as TsoResponse? ?: throw Exception("No body returned")
   }
 
@@ -162,12 +160,7 @@ class SendTso(
       servletKey = commandParams.servletKey
     )
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception(
-        "No results from executing tso command after getting TSO address space. "
-            + response?.errorBody()?.string()
-      )
-    }
+    validateResponse(response, "No results from executing tso command after getting TSO address space")
     return response?.body() as TsoResponse? ?: throw Exception("No body returned")
   }
 

@@ -33,9 +33,7 @@ class ZosUssFile (
             filePath = FilePath(filePath)
         )
         response = call.execute()
-        if (response?.isSuccessful != true) {
-            throw Exception(response?.errorBody()?.string())
-        }
+        validateResponse(response)
         return response ?: throw Exception("No response returned")
     }
 
@@ -56,9 +54,7 @@ class ZosUssFile (
             body = params
             )
         response = call.execute()
-        if (response?.isSuccessful != true) {
-            throw Exception(response?.errorBody()?.string())
-        }
+        validateResponse(response)
         return response ?: throw Exception("No response returned")
     }
 
@@ -79,9 +75,7 @@ class ZosUssFile (
             body = text
         )
         response = call.execute()
-        if (response?.isSuccessful != true) {
-            throw Exception(response?.errorBody()?.string())
-        }
+        validateResponse(response)
         return response ?: throw Exception("No response returned")
     }
 
@@ -104,9 +98,7 @@ class ZosUssFile (
             contentType = "application/octet-stream"
         )
         response = call.execute()
-        if (response?.isSuccessful != true) {
-            throw Exception(response?.errorBody()?.string())
-        }
+        validateResponse(response)
         return response ?: throw Exception("No response returned")
     }
 }

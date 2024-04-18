@@ -81,8 +81,8 @@ class IssueTso(
    * @return issue tso response, see IssueResponse object
    * @throws Exception error executing command
    */
-  fun issueTsoCommand(accountNumber: String, command: String): IssueResponse {
-    return issueTsoCommand(accountNumber, command, StartTsoParams())
+  fun issueTsoCommand(accountNumber: String, command: String, failOnPrompt: Boolean = false): IssueResponse {
+    return issueTsoCommand(accountNumber, command, StartTsoParams(), failOnPrompt)
   }
 
 }

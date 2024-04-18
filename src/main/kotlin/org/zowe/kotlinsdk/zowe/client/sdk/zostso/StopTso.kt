@@ -2,14 +2,11 @@
 
 package org.zowe.kotlinsdk.zowe.client.sdk.zostso
 
-import org.zowe.kotlinsdk.TsoApi
-import org.zowe.kotlinsdk.TsoResponse
-import org.zowe.kotlinsdk.UnsafeOkHttpClient
-import org.zowe.kotlinsdk.buildApi
 import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
 import org.zowe.kotlinsdk.zowe.client.sdk.zostso.input.StopTsoParams
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
+import org.zowe.kotlinsdk.*
 import retrofit2.Response
 
 /**
@@ -72,9 +69,7 @@ class StopTso(
       servletKey = commandParams.servletKey
     )
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception("Failed to stop active TSO address space. ${response?.errorBody()?.string()}")
-    }
+    validateResponse(response, "Failed to stop active TSO address space")
 
     return response?.body() as TsoResponse? ?: throw Exception("No body returned")
   }

@@ -127,9 +127,7 @@ class GetJobs(
       maxCount = params.maxJobs
     )
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception(response?.errorBody()?.string())
-    }
+    validateResponse(response)
     return response?.body() as List<Job>? ?: throw Exception("No body returned")
   }
 
@@ -201,9 +199,7 @@ class GetJobs(
       jobId = params.jobId
     )
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception(response?.errorBody()?.string())
-    }
+    validateResponse(response)
     return response?.body() as Job? ?: throw Exception("No body returned")
   }
 
@@ -236,9 +232,7 @@ class GetJobs(
       jobName = params.jobName
     )
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception(response?.errorBody()?.string())
-    }
+    validateResponse(response)
     return response?.body() as List<SpoolFile>? ?: throw Exception("No body returned")
   }
 
@@ -277,9 +271,7 @@ class GetJobs(
       jobId = params.jobId
     )
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception(response?.errorBody()?.string())
-    }
+    validateResponse(response)
     return String(response?.body() as ByteArray? ?: throw Exception("No body returned"))
   }
 
@@ -338,9 +330,7 @@ class GetJobs(
       fileId = spoolId
     )
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception(response?.errorBody()?.string())
-    }
+    validateResponse(response)
     return String(response?.body() as ByteArray? ?: throw Exception("No body returned"))
   }
 
@@ -361,9 +351,7 @@ class GetJobs(
       fileId = file.id
     )
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception(response?.errorBody()?.string())
-    }
+    validateResponse(response)
     return String(response?.body() as ByteArray? ?: throw Exception("No body returned"))
   }
 }
