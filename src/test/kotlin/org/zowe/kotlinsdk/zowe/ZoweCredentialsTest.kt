@@ -10,19 +10,19 @@
 
 package org.zowe.kotlinsdk.zowe
 
-import org.zowe.kotlinsdk.zowe.config.WINDOWS_MAX_PASSWORD_LENGTH
-import org.junit.jupiter.api.TestInstance
-import org.zowe.kotlinsdk.zowe.config.ZoweConfig
-import org.zowe.kotlinsdk.zowe.config.parseConfigJson
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.zowe.kotlinsdk.zowe.config.WINDOWS_MAX_PASSWORD_LENGTH
+import org.zowe.kotlinsdk.zowe.config.ZoweConfig
+import org.zowe.kotlinsdk.zowe.config.parseConfigJson
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ZoweCredentialsTest: ZoweConfigTestBase() {
+class ZoweCredentialsTest : ZoweConfigTestBase() {
 
   @Test
-  fun testExtractCredentials () {
+  fun testExtractCredentials() {
     val zoweConfig = parseConfigJson(stringConfigJson)
     Assertions.assertEquals(null, zoweConfig.user)
     Assertions.assertEquals(null, zoweConfig.password)
@@ -32,9 +32,9 @@ class ZoweCredentialsTest: ZoweConfigTestBase() {
   }
 
   @Test
-  fun testSaveCredentials () {
+  fun testSaveCredentials() {
     val zoweConfig = parseConfigJson(stringConfigJson)
-    val testKeytarWrapper = object: DefaultMockKeytarWrapper() {
+    val testKeytarWrapper = object : DefaultMockKeytarWrapper() {
       override fun setPassword(service: String, account: String, password: String) {
         Assertions.assertEquals(ZoweConfig.ZOWE_SERVICE_BASE, service)
         Assertions.assertEquals(ZoweConfig.ZOWE_SECURE_ACCOUNT, account)
@@ -48,18 +48,82 @@ class ZoweCredentialsTest: ZoweConfigTestBase() {
   }
 
   @Test
-  fun testExtractAndSaveTooLargeCredentials () {
+  fun testSaveSecurePropertiesInEmptyStore() {
+    val testKeytarWrapper = object : DefaultMockKeytarWrapper() {
+      override fun setPassword(service: String, account: String, password: String) {
+        Assertions.assertEquals(ZoweConfig.ZOWE_SERVICE_BASE, service)
+        Assertions.assertEquals(ZoweConfig.ZOWE_SECURE_ACCOUNT, account)
+        Assertions.assertEquals(createSinglePassword(TEST_ZOWE_CONFIG_PATH, TEST_USER, TEST_PASSWORD), password)
+      }
+
+      override fun getCredentials(service: String): Map<String, String> {
+        return mapOf()
+      }
+    }
+    val configCredentialsMap = mutableMapOf<String, Any?>()
+    configCredentialsMap["profiles.base.properties.user"] = TEST_USER
+    configCredentialsMap["profiles.base.properties.password"] = TEST_PASSWORD
+    ZoweConfig.saveNewSecureProperties(TEST_ZOWE_CONFIG_PATH, configCredentialsMap, testKeytarWrapper)
+  }
+
+  @Test
+  fun testUpdateNewSecureProperties() {
+    val testKeytarWrapper = object : DefaultMockKeytarWrapper() {
+      override fun setPassword(service: String, account: String, password: String) {
+        Assertions.assertEquals(ZoweConfig.ZOWE_SERVICE_BASE, service)
+        Assertions.assertEquals(ZoweConfig.ZOWE_SECURE_ACCOUNT, account)
+        Assertions.assertEquals(createSinglePassword(TEST_ZOWE_CONFIG_PATH, "testU", "testP"), password)
+      }
+    }
+    val configCredentialsMap = mutableMapOf<String, Any?>()
+    configCredentialsMap["profiles.base.properties.user"] = "testU"
+    configCredentialsMap["profiles.base.properties.password"] = "testP"
+    ZoweConfig.saveNewSecureProperties(TEST_ZOWE_CONFIG_PATH, configCredentialsMap, testKeytarWrapper)
+  }
+
+  @Test
+  fun testAddNewSecureProperties() {
+    val testKeytarWrapper = object : DefaultMockKeytarWrapper() {
+      override fun setPassword(service: String, account: String, password: String) {
+        Assertions.assertEquals(ZoweConfig.ZOWE_SERVICE_BASE, service)
+        Assertions.assertEquals(ZoweConfig.ZOWE_SECURE_ACCOUNT, account)
+        Assertions.assertEquals(
+          createMultiplePasswords(
+            listOf("TestFilePath", TEST_ZOWE_CONFIG_PATH),
+            TEST_USER,
+            TEST_PASSWORD
+          ), password
+        )
+      }
+
+      override fun getCredentials(service: String): Map<String, String> {
+        return mapOf(
+          Pair(
+            ZoweConfig.ZOWE_SECURE_ACCOUNT,
+            createSinglePassword("TestFilePath", TEST_USER, TEST_PASSWORD)
+          )
+        )
+      }
+    }
+    val configCredentialsMap = mutableMapOf<String, Any?>()
+    configCredentialsMap["profiles.base.properties.user"] = TEST_USER
+    configCredentialsMap["profiles.base.properties.password"] = TEST_PASSWORD
+    ZoweConfig.saveNewSecureProperties(TEST_ZOWE_CONFIG_PATH, configCredentialsMap, testKeytarWrapper)
+  }
+
+  @Test
+  fun testExtractAndSaveTooLargeCredentials() {
     System.setProperty("os.name", "Windows")
     var chunksAmount: Int
 
-    val testKeytarWrapper = object: DefaultMockKeytarWrapper() {
+    val testKeytarWrapper = object : DefaultMockKeytarWrapper() {
       val credentialsMap: MutableMap<String, String>
 
       init {
-        val filePaths = arrayOfNulls<String?>(70).mapIndexedNotNull { i, _ -> "${TEST_ZOWE_CONFIG_PATH}-${i+1}" }
+        val filePaths = arrayOfNulls<String?>(70).mapIndexedNotNull { i, _ -> "${TEST_ZOWE_CONFIG_PATH}-${i + 1}" }
         credentialsMap = createMultiplePasswords(filePaths, TEST_USER, TEST_PASSWORD)
           .chunked(WINDOWS_MAX_PASSWORD_LENGTH)
-          .mapIndexed { i, chunk -> Pair("${ZoweConfig.ZOWE_SECURE_ACCOUNT}-${i+1}", chunk) }
+          .mapIndexed { i, chunk -> Pair("${ZoweConfig.ZOWE_SECURE_ACCOUNT}-${i + 1}", chunk) }
           .associateBy({ it.first }, { it.second })
           .toMutableMap()
         chunksAmount = credentialsMap.size

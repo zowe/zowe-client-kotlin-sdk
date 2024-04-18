@@ -35,6 +35,91 @@ class ZoweConfig(
     val ZOWE_SECURE_ACCOUNT = "secure_config_props"
     val ZOWE_SERVICE_BASE = "Zowe"
     val ZOWE_SERVICE_NAME = "$ZOWE_SERVICE_BASE/$ZOWE_SECURE_ACCOUNT"
+
+    /**
+     * Save secure object configCredentialsMap for provided file in credential object and save these changes to credential storage.
+     * @see readZoweCredentialsFromStorage
+     * @param filePath path of zowe.config.json file. Secure props will be saved
+     *                 inside this property of connection object.
+     * @param configCredentialsMap map with parameters and values to save in credential storage.
+     *                             Ex. "profiles.base.properties.user" = username
+     * @param keytar instance of [KeytarWrapper]. This param is needed for accessing credential storage.
+     * @return Nothing.
+     */
+    fun saveNewSecureProperties(
+      filePath: String,
+      configCredentialsMap: MutableMap<String, Any?>,
+      keytar: KeytarWrapper = DefaultKeytarWrapper()
+    ) {
+      var configCredentials = try {
+        readZoweCredentialsFromStorage(keytar).toMutableMap()
+      } catch (e: Exception) {
+        mutableMapOf()
+      }
+      if (configCredentials.containsKey(filePath)) {
+        @Suppress("UNCHECKED_CAST")
+        configCredentialsMap.forEach {
+          (configCredentials[filePath] as? MutableMap<String, Any?>)?.set(it.key, it.value)
+        }
+      } else {
+        configCredentials[filePath] = configCredentialsMap
+      }
+      savePropertiesInKeyStore(configCredentials, keytar)
+    }
+
+    /**
+     * Save secure object to credential storage.
+     * @param configCredentials map with parameters and values to save in credential storage.
+     * @param keytar instance of [KeytarWrapper]. This param is needed for accessing credential storage.
+     * @return Nothing.
+     */
+    private fun savePropertiesInKeyStore(
+      configCredentials: MutableMap<Any?, Any?>,
+      keytar: KeytarWrapper = DefaultKeytarWrapper()
+    ) {
+      val passwordToSave = Gson().toJson(configCredentials)
+      val osName = System.getProperty("os.name")
+      val encodedObjectToSave = passwordToSave.encodeToBase64()
+      if (passwordToSave.length < WINDOWS_MAX_PASSWORD_LENGTH || !osName.contains("Windows")) {
+        keytar.setPassword(ZOWE_SERVICE_BASE, ZOWE_SECURE_ACCOUNT, encodedObjectToSave)
+      } else {
+        keytar.deletePassword(ZOWE_SERVICE_BASE, ZOWE_SECURE_ACCOUNT)
+        encodedObjectToSave.chunked(WINDOWS_MAX_PASSWORD_LENGTH).forEachIndexed { i, chunk ->
+          keytar.setPassword(ZOWE_SERVICE_BASE, "$ZOWE_SECURE_ACCOUNT-${i + 1}", chunk)
+        }
+      }
+    }
+
+    /**
+     * Extracts and decodes config object of all files from credential storage.
+     * @see KeytarWrapper
+     * @see DefaultKeytarWrapper
+     * @param keytar instance of [KeytarWrapper]. This param is needed for accessing credential storage.
+     * @return Map where key is config file path and value is map of secure properties.
+     *         For example:
+     *         {
+     *           "/user/root/zowe.config.json": {
+     *              "profiles.base.properties.user": "testUser",
+     *              "profiles.base.properties.password": "testPasswird",
+     *           }
+     *         }
+     */
+    private fun readZoweCredentialsFromStorage(keytar: KeytarWrapper = DefaultKeytarWrapper()): Map<*, *> {
+      var configMap = keytar.getCredentials(ZOWE_SERVICE_BASE)
+      if (configMap.isNotEmpty() && configMap.containsKey(ZOWE_SECURE_ACCOUNT)) {
+        return Gson().fromJson(configMap[ZOWE_SECURE_ACCOUNT]?.decodeFromBase64(), Map::class.java)
+      }
+      var result = ""
+      var configNumber = 1
+      do {
+        configMap = keytar.getCredentials("${ZOWE_SERVICE_NAME}-${configNumber}")
+        val account = "${ZOWE_SECURE_ACCOUNT}-${configNumber++}"
+        if (configMap.containsKey(account)) {
+          result += configMap[account]
+        }
+      } while (configMap.isNotEmpty())
+      return Gson().fromJson(result.decodeFromBase64(), Map::class.java)
+    }
   }
 
   /**
@@ -140,37 +225,6 @@ class ZoweConfig(
   }
 
   /**
-   * Extracts and decodes config object of all files from credential storage.
-   * @see KeytarWrapper
-   * @see DefaultKeytarWrapper
-   * @param keytar instance of [KeytarWrapper]. This param is needed for accessing credential storage.
-   * @return Map where key is config file path and value is map of secure properties.
-   *         For example:
-   *         {
-   *           "/user/root/zowe.config.json": {
-   *              "profiles.base.properties.user": "testUser",
-   *              "profiles.base.properties.password": "testPasswird",
-   *           }
-   *         }
-   */
-  private fun readZoweCredentialsFromStorage (keytar: KeytarWrapper = DefaultKeytarWrapper()): Map<*, *> {
-    var configMap = keytar.getCredentials(ZOWE_SERVICE_BASE)
-    if (configMap.isNotEmpty() && configMap.containsKey(ZOWE_SECURE_ACCOUNT)) {
-      return Gson().fromJson(configMap[ZOWE_SECURE_ACCOUNT]?.decodeFromBase64(), Map::class.java)
-    }
-    var result = ""
-    var configNumber = 1
-    do {
-      configMap = keytar.getCredentials("${ZOWE_SERVICE_NAME}-${configNumber}")
-      val account = "${ZOWE_SECURE_ACCOUNT}-${configNumber++}"
-      if (configMap.containsKey(account)) {
-        result += configMap[account]
-      }
-    } while (!configMap.isEmpty())
-    return Gson().fromJson(result.decodeFromBase64(), Map::class.java)
-  }
-
-  /**
    * Extracts secure properties from secure store by zowe config file path in current instance.
    * @see readZoweCredentialsFromStorage
    * @param filePath path of zowe.config.json file. Secure props will be extracted by this parameter.
@@ -211,17 +265,7 @@ class ZoweConfig(
       }
     }
     configCredentials[filePath] = configCredentialsMap
-    val passwordToSave = Gson().toJson(configCredentials)
-    val osName = System.getProperty("os.name")
-    val encodedObjectToSave = passwordToSave.encodeToBase64()
-    if (passwordToSave.length < WINDOWS_MAX_PASSWORD_LENGTH || !osName.contains("Windows")) {
-      keytar.setPassword(ZOWE_SERVICE_BASE, ZOWE_SECURE_ACCOUNT, encodedObjectToSave)
-    } else {
-      keytar.deletePassword(ZOWE_SERVICE_BASE, ZOWE_SECURE_ACCOUNT)
-      encodedObjectToSave.chunked(WINDOWS_MAX_PASSWORD_LENGTH).forEachIndexed { i, chunk ->
-        keytar.setPassword(ZOWE_SERVICE_BASE, "$ZOWE_SECURE_ACCOUNT-${i + 1}", chunk)
-      }
-    }
+    savePropertiesInKeyStore(configCredentials, keytar)
   }
 
   /**
