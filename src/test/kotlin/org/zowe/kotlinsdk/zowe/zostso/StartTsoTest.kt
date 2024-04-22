@@ -65,7 +65,7 @@ class StartTsoTest {
       logonProcedure = "DBSPROCB",
       regionSize = "50000"
     )
-    val response = startTso.start("IZUACCT", startTsoParams)
+    val response = startTso.start("IZUACCT", startTsoParams, failOnPrompt = false)
 
     Assertions.assertTrue(response.success)
     Assertions.assertEquals(null, response.failureResponse)

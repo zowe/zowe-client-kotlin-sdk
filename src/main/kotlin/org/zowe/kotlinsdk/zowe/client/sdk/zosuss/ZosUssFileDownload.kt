@@ -35,9 +35,7 @@ class ZosUssFileDownload (
             filePath = FilePath(filePath)
         )
         response = call.execute()
-        if (response?.isSuccessful != true) {
-            throw Exception(response?.errorBody()?.string())
-        }
+        validateResponse(response)
         return (response?.body() as ResponseBody).byteStream() ?: throw Exception("No stream returned")
     }
 }

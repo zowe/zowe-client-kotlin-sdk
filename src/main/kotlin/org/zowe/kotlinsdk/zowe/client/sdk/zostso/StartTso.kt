@@ -32,7 +32,7 @@ class StartTso(
    * @throws Exception error executing command
    */
   @Throws(Exception::class)
-  fun start(accountNumber: String, params: StartTsoParams): StartStopResponses {
+  fun start(accountNumber: String, params: StartTsoParams, failOnPrompt: Boolean): StartStopResponses {
     if (accountNumber.isEmpty()) {
       throw Exception("accountNumber not specified")
     }
@@ -52,7 +52,7 @@ class StartTso(
     var collectedResponses: CollectedResponses? = null
     if (tsoResponse.servletKey != null) {
       val sendTso = SendTso(connection, httpClient)
-      collectedResponses = sendTso.getAllResponses(tsoResponse)
+      collectedResponses = sendTso.getAllResponses(tsoResponse, failOnPrompt)
     }
 
     return StartStopResponses(tsoResponse, collectedResponses)
@@ -80,10 +80,7 @@ class StartTso(
       rsize = commandParams.regionSize?.toInt() ?: TsoConstants.DEFAULT_RSIZE.toInt()
     )
     response = call.execute()
-    if (response?.isSuccessful != true) {
-      throw Exception("No results from executing tso command while setting up TSO address space. "
-          + response?.errorBody()?.string())
-    }
+    validateResponse(response, "No results from executing tso command while setting up TSO address space")
     return response?.body() as TsoResponse? ?: throw Exception("No body returned")
   }
 }
