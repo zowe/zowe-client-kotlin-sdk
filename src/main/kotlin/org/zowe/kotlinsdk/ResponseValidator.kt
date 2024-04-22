@@ -16,7 +16,7 @@ fun validateResponse(response: Response<*>?, defaultMessage: String = "") {
         if (response?.errorBody()?.string().isNullOrBlank()) {
             throw Exception("HTTP code = ${response?.code()}; Message: ${response?.message()}")
         } else {
-            throw Exception("${if (defaultMessage.isBlank()) "" else "$defaultMessage. "}${response?.errorBody()}")
+            throw Exception("${if (defaultMessage.isBlank()) "" else "$defaultMessage. "}${response?.errorBody()?.string()}")
         }
     }
 }
