@@ -226,13 +226,6 @@ publishing {
           }
         }
       }
-
-//      artifact(sourceJar) {
-//        classifier = "sources"
-//      }
-//      artifact(javadocJar) {
-//        classifier = "javadoc"
-//      }
     }
   }
   repositories {
