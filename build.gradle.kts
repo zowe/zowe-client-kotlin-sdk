@@ -9,7 +9,6 @@
  */
 
 import net.researchgate.release.GitAdapter
-import org.gradle.api.JavaVersion
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -37,22 +36,21 @@ version = properties("version").get()
 
 val retrofit2Version = "2.11.0"
 
-val artifactoryMavenSnapshotRepo = properties("artifactoryMavenSnapshotRepo").get()
-val artifactoryMavenRepo = properties("artifactoryMavenRepo").get()
+val releaseScope = if (project.hasProperty("release.scope")) project.property("release.scope") else "patch"
 val mavenUser = properties("mavenUser").get()
 val mavenPassword = properties("mavenPassword").get()
 
 repositories {
   mavenCentral()
   maven {
-    url = uri(artifactoryMavenSnapshotRepo)
+    url = uri(properties("artifactoryMavenSnapshotRepo").get())
     credentials {
       username = mavenUser
       password = mavenPassword
     }
   }
   maven {
-    url = uri(artifactoryMavenRepo)
+    url = uri(properties("artifactoryMavenRepo").get())
     credentials {
       username = mavenUser
       password = mavenPassword
@@ -243,6 +241,10 @@ publishing {
         username = if (project.hasProperty("zowe.deploy.username")) project.property("zowe.deploy.username") as String else ""
         password = if (project.hasProperty("zowe.deploy.password")) project.property("zowe.deploy.password") as String else ""
       }
+      url = if (properties("version").get().endsWith("-SNAPSHOT"))
+        uri(properties("artifactoryPublishingMavenSnapshotRepo").get())
+      else
+        uri(properties("artifactoryPublishingMavenRepo").get())
     }
   }
 }
@@ -261,12 +263,34 @@ release {
   newVersionCommitMessage = "Create new version:"
   versionPropertyFile = "gradle.properties"
 
-  versionPatterns = mapOf(
-    "(\\d+)([^\\d]*$)"
-      to KotlinClosure2<Matcher, Project, String>({ m: Matcher, _ ->
-        m.replaceAll("${m.group(1).toInt() + 1}${m.group(2)}")
-      })
-  )
+  when (releaseScope) {
+    "minor" -> {
+      versionPatterns = mapOf(
+        "[.]*\\.(\\d+)\\.(\\d+)[.]*"
+                to KotlinClosure2<Matcher, Project, String>({ m: Matcher, _ ->
+          m.replaceAll(".${m.group(0)[1] + 1}.0")
+        })
+      )
+    }
+
+    "major" -> {
+      versionPatterns = mapOf(
+        "(\\d+)\\.(\\d+)\\.(\\d+)[.]*"
+                to KotlinClosure2<Matcher, Project, String>({ m: Matcher, _ ->
+          m.replaceAll("${m.group(0)[1] + 1}.0.0")
+        })
+      )
+    }
+
+    else -> {
+      versionPatterns = mapOf(
+        "(\\d+)([^\\d]*$)"
+                to KotlinClosure2<Matcher, Project, String>({ m: Matcher, _ ->
+          m.replaceAll("${m.group(1).toInt() + 1}${m.group(2)}")
+        })
+      )
+    }
+  }
 
   scmAdapters = listOf(GitAdapter::class.java)
 
