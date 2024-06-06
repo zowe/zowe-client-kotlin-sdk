@@ -73,8 +73,6 @@ java {
 }
 
 dependencies {
-  implementation("org.jetbrains.kotlin:kotlin-stdlib")
-  implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.20")
   implementation("com.squareup.retrofit2:retrofit:$retrofit2Version")
   implementation("com.squareup.retrofit2:converter-gson:$retrofit2Version")
   implementation("com.squareup.retrofit2:converter-scalars:$retrofit2Version")
