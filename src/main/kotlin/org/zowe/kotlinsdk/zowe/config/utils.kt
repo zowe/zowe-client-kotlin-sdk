@@ -30,7 +30,7 @@ fun String.decodeFromBase64(charset: Charset = Charsets.UTF_8): String = String(
 // TODO: doc
 fun String.withBasicPrefix () = "Basic $this"
 
-// TODO: doc
+@Deprecated("Scheduled for removal since v1.0.0")
 fun ZoweConnection.getAuthEncoding (): String {
   if (port == null || host?.isEmpty() != false || password?.isEmpty() != false || user?.isEmpty() != false) {
     throw IllegalStateException("Connection data not setup properly")
@@ -38,7 +38,7 @@ fun ZoweConnection.getAuthEncoding (): String {
   return "$user:$password".encodeToBase64()
 }
 
-// TODO: doc
+@Deprecated("Scheduled for removal since v1.0.0")
 fun ZoweConfig.getAuthEncoding (): String {
   if (host?.isEmpty() != false || port == null || user?.isEmpty() != false || password?.isEmpty() != false) {
     throw IllegalStateException("Connection data not setup properly")
@@ -46,7 +46,7 @@ fun ZoweConfig.getAuthEncoding (): String {
   return "$user:$password".encodeToBase64()
 }
 
-// TODO: doc
+@Deprecated("Scheduled for removal since v1.0.0")
 fun parseConfigYaml (inputStream: InputStream): ZoweConnection {
   val loaded: Map<String, Any> = Yaml().load(inputStream)
   return ZoweConnection(
@@ -62,7 +62,7 @@ fun parseConfigYaml (inputStream: InputStream): ZoweConnection {
   )
 }
 
-// TODO: doc
+@Deprecated("Scheduled for removal since v1.0.0")
 fun parseConfigYaml (configString: String): ZoweConnection = parseConfigYaml(ByteArrayInputStream(configString.toByteArray()))
 
 // TODO: doc

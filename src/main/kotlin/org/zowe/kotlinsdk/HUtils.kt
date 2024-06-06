@@ -13,6 +13,10 @@ package org.zowe.kotlinsdk
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("HRecallBody", "org.zowe.kotlinsdk.core.restfiles")
+)
 data class HRecall(
   @SerializedName("request")
   @Expose
@@ -24,6 +28,10 @@ data class HRecall(
   var wait: Boolean? = null
 )
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("HMigrateBody", "org.zowe.kotlinsdk.core.restfiles")
+)
 data class HMigrate(
   @SerializedName("request")
   @Expose
@@ -34,6 +42,10 @@ data class HMigrate(
   var wait: Boolean? = null
 )
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("HDeleteBody", "org.zowe.kotlinsdk.core.restfiles")
+)
 data class HDelete(
   @SerializedName("request")
   @Expose

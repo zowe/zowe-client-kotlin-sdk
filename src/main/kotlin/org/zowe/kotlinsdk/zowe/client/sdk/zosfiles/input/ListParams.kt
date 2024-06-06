@@ -7,6 +7,10 @@ import org.zowe.kotlinsdk.XIBMAttr
 /**
  * This interface defines the options that can be sent into the list data set function
  */
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("ZOSListParams", "org.zowe.kotlinsdk.impl.restfiles")
+)
 class ListParams(
 
   /**

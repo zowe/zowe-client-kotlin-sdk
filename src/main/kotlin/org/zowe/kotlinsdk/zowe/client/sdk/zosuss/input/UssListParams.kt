@@ -11,6 +11,10 @@ import retrofit2.http.Query
 /**
  * This interface defines the options that can be sent into the list data set function
  */
+@Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("USSListParams", "org.zowe.kotlinsdk.impl.restfiles")
+)
 class UssListParams(
 
     val limit: Int = 0,

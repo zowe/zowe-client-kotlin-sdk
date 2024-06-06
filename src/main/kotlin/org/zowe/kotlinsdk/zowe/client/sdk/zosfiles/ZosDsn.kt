@@ -12,6 +12,7 @@ import retrofit2.Response
 /**
  * ZosDsn class that provides CRUD operations on Datasets
  */
+@Deprecated("Scheduled for removal since v1.0.0")
 class ZosDsn(
   var connection: ZOSConnection,
   var httpClient: OkHttpClient = UnsafeOkHttpClient.unsafeOkHttpClient
@@ -31,6 +32,10 @@ class ZosDsn(
    * @see Dataset
    * @throws Exception error processing request
    */
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("GetDatasetInfoOperation", "org.zowe.kotlinsdk.impl.restfiles")
+  )
   fun getDatasetInfo(dataSetName: String): Dataset {
     val emptyDataSet = Dataset(dataSetName)
     val tokens: List<String> = dataSetName.split(".")
@@ -51,7 +56,7 @@ class ZosDsn(
     )
     val dsLst: DataSetsList = zosDsnList.listDsn(dataSetSearchStr, params)
     val dataSet: Dataset? = dsLst.items.filter { el -> el.name.contains(dataSetName.uppercase()) }.getOrNull(0)
-    return  dataSet ?: emptyDataSet
+    return dataSet ?: emptyDataSet
   }
 
   /**
@@ -61,6 +66,10 @@ class ZosDsn(
    * @return http response object
    * @throws Exception error processing request
    */
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("DeleteDatasetOperation", "org.zowe.kotlinsdk.impl.restfiles")
+  )
   fun deleteDsn(dataSetName: String): Response<*> {
     val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
     val dataApi = buildApi<DataAPI>(url, httpClient)
@@ -81,6 +90,10 @@ class ZosDsn(
    * @return http response object
    * @throws Exception error processing request
    */
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("DeleteDatasetMemberOperation", "org.zowe.kotlinsdk.impl.restfiles")
+  )
   fun deleteDsn(dataSetName: String, member: String): Response<*> {
     val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
     val dataApi = buildApi<DataAPI>(url, httpClient)
@@ -102,6 +115,10 @@ class ZosDsn(
    * @return http response object
    * @throws Exception error processing request
    */
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("WriteToDatasetOperation", "org.zowe.kotlinsdk.impl.restfiles")
+  )
   fun writeDsn(dataSetName: String, content: ByteArray): Response<*> {
     val baseUrl = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
     val dataApi = buildApiWithBytesConverter<DataAPI>(baseUrl, httpClient)
@@ -125,6 +142,10 @@ class ZosDsn(
    * @return http response object
    * @throws Exception error processing request
    */
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("WriteToDatasetMemberOperation", "org.zowe.kotlinsdk.impl.restfiles")
+  )
   fun writeDsn(dataSetName: String, member: String, content: ByteArray): Response<*> {
     val baseUrl = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
     val dataApi = buildApiWithBytesConverter<DataAPI>(baseUrl, httpClient)
@@ -147,6 +168,10 @@ class ZosDsn(
    * @return http response object
    * @throws Exception error processing request
    */
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("CreateDatasetOperation", "org.zowe.kotlinsdk.impl.restfiles")
+  )
   fun createDsn(dataSetName: String, params: CreateDataset): Response<*> {
     val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
     val dataApi = buildApi<DataAPI>(url, httpClient)

@@ -17,6 +17,10 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import java.lang.reflect.Type
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("BytesConverterFactory", "org.zowe.kotlinsdk.core")
+)
 class BytesConverterFactory : Converter.Factory() {
   override fun responseBodyConverter(
     type: Type,
@@ -36,8 +40,10 @@ class BytesConverterFactory : Converter.Factory() {
   ): Converter<*, RequestBody>? {
     if (getRawType(type) !== ByteArray::class.java) return null
 
-    return Converter<ByteArray, RequestBody> { RequestBody.create(MediaType.get("application/octet-stream"), it) }
+//    return Converter<ByteArray, RequestBody> { RequestBody.create(MediaType.get("application/octet-stream"), it) }
+    throw Exception()
   }
+
   companion object Factory {
     fun create(): BytesConverterFactory = BytesConverterFactory()
   }

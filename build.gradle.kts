@@ -35,6 +35,7 @@ group = properties("group").get()
 version = properties("version").get()
 
 val retrofit2Version = "2.11.0"
+val ktorVersion = "2.3.6"
 
 val releaseScope = if (project.hasProperty("release.scope")) project.property("release.scope") else "patch"
 val mavenUser = properties("mavenUser").get()
@@ -79,6 +80,10 @@ dependencies {
   implementation("com.google.code.gson:gson:2.10.1")
   implementation("com.starxg:java-keytar:1.0.0")
   implementation("org.yaml:snakeyaml:2.2")
+  implementation("io.ktor:ktor-client-core:$ktorVersion")
+  implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+  implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+  implementation("io.ktor:ktor-serialization-gson:$ktorVersion")
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
   testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")

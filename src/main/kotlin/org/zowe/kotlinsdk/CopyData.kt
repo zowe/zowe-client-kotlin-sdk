@@ -15,6 +15,10 @@ import com.google.gson.annotations.SerializedName
 
 val ALL_MEMBERS = "*"
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("ZOSCopyBody", "org.zowe.kotlinsdk.core.restfiles")
+)
 class CopyDataZOS {
   data class CopyFromFile(
     @SerializedName("request")
@@ -130,6 +134,10 @@ class CopyDataZOS {
   }
 }
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("USSCopyBody", "org.zowe.kotlinsdk.core.restfiles")
+)
 class CopyDataUSS {
 
   data class CopyFromFileOrDir(

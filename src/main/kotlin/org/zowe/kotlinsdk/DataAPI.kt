@@ -11,7 +11,6 @@
 package org.zowe.kotlinsdk
 
 import org.zowe.kotlinsdk.annotations.AvailableSince
-import org.zowe.kotlinsdk.annotations.IsSupported
 import org.zowe.kotlinsdk.annotations.ZVersion
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -21,7 +20,7 @@ interface DataAPI {
 
   @AvailableSince(ZVersion.ZOS_2_1)
   @GET("zosmf/restfiles/ds")
-  fun listDataSets(
+    fun listDataSets(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-Attributes") xIBMAttr: XIBMAttr = XIBMAttr(),
     @Header("X-IBM-Max-Items") xIBMMaxItems: Int = 0,
@@ -518,7 +517,10 @@ enum class XIBMOption(private val type: String = "recursive") {
 
 }
 
-
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("XIBMObtainENQ", "org.zowe.kotlinsdk.core.restfiles")
+)
 enum class XIBMObtainENQ(private val type: String) {
 
   EXCL("excl"),
@@ -531,6 +533,10 @@ enum class XIBMObtainENQ(private val type: String) {
 
 }
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("XIBMBpxkAutoCvt", "org.zowe.kotlinsdk.core.restfiles")
+)
 enum class XIBMBpxkAutoCvt(private val type: String) {
   ON("on"),
   ALL("all"),
@@ -543,6 +549,10 @@ enum class XIBMBpxkAutoCvt(private val type: String) {
 
 }
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("XIBMDataType", "org.zowe.kotlinsdk.core.restfiles")
+)
 data class XIBMRecordRange(private val format: Format, private val sss: Int, private val nnn: Int) {
 
   enum class Format {
@@ -567,6 +577,10 @@ enum class CodePage(val codePage: String) {
   IBM_1047("${codePagePrefix}1047")
 }
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("XIBMDataType", "org.zowe.kotlinsdk.core.restfiles")
+)
 data class XIBMDataType(
   val type: Type,
   @AvailableSince(ZVersion.ZOS_2_4) val encoding: CodePage? = null
@@ -586,6 +600,10 @@ data class XIBMDataType(
 
 }
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("XIBMAttr", "org.zowe.kotlinsdk.core.restfiles")
+)
 data class XIBMAttr(private val type: Type = Type.BASE, private val isTotal: Boolean = false) {
 
   enum class Type(val queryVal: String) {
@@ -602,6 +620,10 @@ data class XIBMAttr(private val type: Type = Type.BASE, private val isTotal: Boo
 
 }
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("SymlinkMode", "org.zowe.kotlinsdk.core.restfiles")
+)
 enum class SymlinkMode(private val symlinksVal: String) {
   FOLLOW("follow"),
   REPORT("report");
@@ -613,6 +635,10 @@ enum class SymlinkMode(private val symlinksVal: String) {
 
 }
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("XIBMMigratedRecall", "org.zowe.kotlinsdk.core.restfiles")
+)
 enum class MigratedRecall(private val recallMode: String) {
 
   WAIT("wait"),

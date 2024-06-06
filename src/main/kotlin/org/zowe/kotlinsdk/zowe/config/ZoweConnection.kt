@@ -10,7 +10,7 @@
 
 package org.zowe.kotlinsdk.zowe.config
 
-// TODO: doc or remove
+@Deprecated("Scheduled for removal since v1.0.0")
 data class ZoweConnection(
   var host: String?,
   var port: Int?,
