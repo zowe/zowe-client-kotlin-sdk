@@ -1,6 +1,6 @@
 <component name="CopyrightManager">
   <copyright>
-    <option name="notice" value="Copyright © 2020 IBA Group, a.s. All rights reserved. Use of this source code is governed by Eclipse Public License – v 2.0 that can be found at: https://www.eclipse.org/legal/epl-2.0/  " />
+    <option name="notice" value="&#10;This program and the accompanying materials are made available under the terms of the&#10;Eclipse Public License v2.0 which accompanies this distribution, and is available at&#10;https://www.eclipse.org/legal/epl-v20.html&#10;&#10;SPDX-License-Identifier: EPL-2.0&#10;&#10;Copyright IBA Group 2020&#10;" />
     <option name="myName" value="kotlinsdk" />
   </copyright>
 </component>

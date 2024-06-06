@@ -18,6 +18,7 @@ import java.lang.annotation.Inherited
 
 private const val osVersionPrefix = "z/OS"
 
+// TODO: doc, transfer to availability.kt
 enum class ZVersion(val version: String) {
   ZOS_2_1("$osVersionPrefix 2.1"),
   ZOS_2_2("$osVersionPrefix 2.2"),
@@ -27,14 +28,14 @@ enum class ZVersion(val version: String) {
   ZOS_3_1("$osVersionPrefix 3.1"),
 }
 
+// TODO: doc, transfer to availability.kt
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FUNCTION)
 @Inherited
 annotation class IsSupported(val value: Boolean)
 
+// TODO: doc, transfer to availability.kt
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FIELD, AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FUNCTION)
 @Inherited
-annotation class AvailableSince(
-  @IsSupported(true) val version: ZVersion
-  )
+annotation class AvailableSince(@IsSupported(true) val version: ZVersion)

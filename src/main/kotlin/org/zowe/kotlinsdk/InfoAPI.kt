@@ -19,6 +19,10 @@ import org.zowe.kotlinsdk.annotations.ZVersion
 import retrofit2.Call
 import retrofit2.http.GET
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("InfoAPI", "org.zowe.kotlinsdk.core.info")
+)
 interface InfoAPI {
 
   /**

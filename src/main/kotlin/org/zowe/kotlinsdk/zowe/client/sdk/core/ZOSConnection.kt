@@ -20,6 +20,10 @@ package org.zowe.kotlinsdk.zowe.client.sdk.core
  * @author Frank Giordano
  * @author Uladzislau Kalesnikau
  */
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("Connection", "org.zowe.kotlinsdk.core")
+)
 data class ZOSConnection(
   /**
    * machine host pointing to backend z/OS instance
@@ -62,7 +66,6 @@ data class ZOSConnection(
    */
   val profileName: String = "zosmf"
 ) {
-  // TODO: doc
   fun checkConnection() {
     if (host.isEmpty() || password.isEmpty() || user.isEmpty()) {
       throw IllegalStateException("Connection data not setup properly")
