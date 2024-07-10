@@ -8,7 +8,7 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.impl.restfiles
+package org.zowe.kotlinsdk.impl.restfiles_ignore
 
 import okhttp3.OkHttpClient
 import org.zowe.kotlinsdk.impl.zosmf.Connection
@@ -16,19 +16,17 @@ import org.zowe.kotlinsdk.impl.zosmf.Operation
 import retrofit2.Call
 
 // TODO: doc
-class WriteToDatasetMemberOperation (
+class DeleteDatasetMemberOperation (
   private val datasetName: String,
   private val memberName: String,
-  private val content: ByteArray,
   private val connection: Connection,
   httpClient: OkHttpClient
 ) : Operation<RestfilesAPI, Void>(connection, httpClient, RestfilesAPI::class.java)  {
   override fun buildCall(runnerAPI: RestfilesAPI): Call<Void> {
-    // TODO: writeToDatasetMember with a specified volser???
-    return runnerAPI.writeToDatasetMember(
+    // TODO: deleteDatasetMember with a specified volser???
+    return runnerAPI.deleteDatasetMember(
       authorizationToken = connection.getAuthParam(),
       datasetName = datasetName,
-      content = content,
       memberName = memberName
     )
   }

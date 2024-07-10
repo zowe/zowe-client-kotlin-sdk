@@ -8,19 +8,24 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.impl.restfiles
+package org.zowe.kotlinsdk.impl.restfiles_ignore
 
 import com.google.gson.annotations.SerializedName
 
 // TODO: doc
-enum class AllocationUnit(private val type : String) {
-  @SerializedName("TRK")
-  TRK("TRK"),
-
-  @SerializedName("CYL")
-  CYL("CYL");
-
-  override fun toString(): String {
-    return type
-  }
+enum class DsType {
+  @SerializedName("LIBRARY")
+  LIBRARY,
+  @SerializedName("HFS")
+  HFS,
+  @SerializedName("PDS")
+  PDS,
+  @SerializedName("LARGE")
+  LARGE,
+  @SerializedName("BASIC")
+  BASIC,
+  @SerializedName("EXTREQ")
+  EXTREQ,
+  @SerializedName("EXTREF")
+  EXTPREF
 }
