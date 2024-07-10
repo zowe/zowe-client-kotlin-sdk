@@ -8,7 +8,7 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.impl.restfiles
+package org.zowe.kotlinsdk.impl.restfiles_ignore
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

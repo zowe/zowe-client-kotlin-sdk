@@ -8,15 +8,13 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.impl.restfiles
+package org.zowe.kotlinsdk.impl.restfiles_ignore
 
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
-import okhttp3.ResponseBody
 import org.zowe.kotlinsdk.impl.zosmf.datasets.data.XIBMDataType
 import org.zowe.kotlinsdk.impl.zosmf.datasets.data.XIBMMigratedRecall
 import org.zowe.kotlinsdk.impl.zosmf.datasets.data.XIBMObtainENQ
-import org.zowe.kotlinsdk.impl.zosmf.datasets.data.XIBMRecordRange
 import retrofit2.Call
 import retrofit2.http.*
 

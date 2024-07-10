@@ -8,18 +8,15 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.impl.restfiles
-
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
+package org.zowe.kotlinsdk.impl.restfiles_ignore
 
 // TODO: doc
-data class HMigrateBody(
-  @SerializedName("request")
-  @Expose
-  private val request: String = "hmigrate",
+enum class XIBMBpxkAutoCvt(private val type: String) {
+  ON("on"),
+  ALL("all"),
+  OFF("off");
 
-  @SerializedName("wait")
-  @Expose
-  var wait: Boolean? = null
-)
+  override fun toString(): String {
+    return type
+  }
+}
