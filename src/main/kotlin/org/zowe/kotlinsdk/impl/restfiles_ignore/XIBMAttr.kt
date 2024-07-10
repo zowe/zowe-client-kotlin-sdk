@@ -8,15 +8,21 @@
 // Copyright IBA Group 2020
 //
 
-package org.zowe.kotlinsdk.impl.restfiles
+package org.zowe.kotlinsdk.impl.restfiles_ignore
 
 // TODO: doc
-enum class XIBMBpxkAutoCvt(private val type: String) {
-  ON("on"),
-  ALL("all"),
-  OFF("off");
+data class XIBMAttr(private val type: Type = Type.BASE, private val isTotal: Boolean = false) {
+
+  enum class Type(val queryVal: String) {
+    BASE("base"),
+    VOL("vol"),
+    DSNAME("dsname"),
+    MEMBER("member")
+  }
 
   override fun toString(): String {
-    return type
+    val suffix = if (isTotal) ",total" else ""
+    return type.queryVal + suffix
   }
+
 }
