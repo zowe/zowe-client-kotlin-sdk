@@ -1,3 +1,4 @@
+// Copyright (c) 2024 IBA Group.
 //
 // This program and the accompanying materials are made available under the terms of the
 // Eclipse Public License v2.0 which accompanies this distribution, and is available at
@@ -5,8 +6,9 @@
 //
 // SPDX-License-Identifier: EPL-2.0
 //
-// Copyright IBA Group 2020
-//
+// Contributors:
+//   IBA Group
+//   Zowe Community
 
 package org.zowe.kotlinsdk.impl.zosmf
 
@@ -16,7 +18,6 @@ import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.serialization.gson.*
-import okhttp3.Call
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

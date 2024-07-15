@@ -14,11 +14,11 @@
 
 package common
 
-import org.zowe.kotlinsdk.JESApi
-import org.zowe.kotlinsdk.SpoolFile
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.zowe.kotlinsdk.JESApi
+import org.zowe.kotlinsdk.SpoolFile
 import retrofit2.Call
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

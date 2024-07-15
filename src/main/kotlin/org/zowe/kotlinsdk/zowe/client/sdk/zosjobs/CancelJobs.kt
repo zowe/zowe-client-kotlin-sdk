@@ -14,11 +14,11 @@
 
 package org.zowe.kotlinsdk.zowe.client.sdk.zosjobs
 
+import okhttp3.Credentials
+import okhttp3.OkHttpClient
 import org.zowe.kotlinsdk.*
 import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
 import org.zowe.kotlinsdk.zowe.client.sdk.zosjobs.input.ModifyJobParams
-import okhttp3.Credentials
-import okhttp3.OkHttpClient
 import retrofit2.Response
 
 /**

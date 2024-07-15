@@ -14,7 +14,6 @@
 
 package org.zowe.kotlinsdk
 
-import okhttp3.MediaType
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Converter

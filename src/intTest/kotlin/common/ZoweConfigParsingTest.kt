@@ -14,11 +14,16 @@
 
 package common
 
-import okhttp3.mockwebserver.MockWebServer
-import org.zowe.kotlinsdk.DataAPI
-import org.zowe.kotlinsdk.zowe.config.*
 import okhttp3.OkHttpClient
-import org.junit.jupiter.api.*
+import okhttp3.mockwebserver.MockWebServer
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.zowe.kotlinsdk.DataAPI
+import org.zowe.kotlinsdk.zowe.config.KeytarWrapper
+import org.zowe.kotlinsdk.zowe.config.ZoweConfig
+import org.zowe.kotlinsdk.zowe.config.getAuthEncoding
+import org.zowe.kotlinsdk.zowe.config.withBasicPrefix
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ZoweConfigParsingTest() {

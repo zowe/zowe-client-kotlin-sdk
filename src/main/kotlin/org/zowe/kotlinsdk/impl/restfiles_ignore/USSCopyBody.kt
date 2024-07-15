@@ -1,3 +1,4 @@
+// Copyright (c) 2024 IBA Group.
 //
 // This program and the accompanying materials are made available under the terms of the
 // Eclipse Public License v2.0 which accompanies this distribution, and is available at
@@ -5,14 +6,15 @@
 //
 // SPDX-License-Identifier: EPL-2.0
 //
-// Copyright IBA Group 2020
-//
+// Contributors:
+//   IBA Group
+//   Zowe Community
 
 package org.zowe.kotlinsdk.impl.restfiles_ignore
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import org.zowe.kotlinsdk.impl.zosmf.datasets.data.XIBMDataType
+import org.zowe.kotlinsdk.impl.zosmf.common.XIBMDataType
 
 // TODO: doc
 class USSCopyBody {

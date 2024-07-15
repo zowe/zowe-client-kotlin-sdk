@@ -14,8 +14,8 @@
 
 package common
 
-import org.zowe.kotlinsdk.*
 import org.junit.jupiter.api.Test
+import org.zowe.kotlinsdk.*
 
 class TsoApiTest: BaseTest() {
 

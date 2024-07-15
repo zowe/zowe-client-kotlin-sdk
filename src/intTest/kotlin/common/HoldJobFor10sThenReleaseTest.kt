@@ -14,9 +14,9 @@
 
 package common
 
-import org.zowe.kotlinsdk.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import org.zowe.kotlinsdk.*
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

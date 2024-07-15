@@ -17,7 +17,8 @@ package org.zowe.kotlinsdk
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.PUT
 
 interface ServiceAPI {
 

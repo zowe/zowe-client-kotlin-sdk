@@ -15,19 +15,14 @@
 package org.zowe.kotlinsdk
 
 import okhttp3.OkHttpClient
-import java.lang.Exception
-import javax.net.ssl.TrustManager
-import javax.net.ssl.X509TrustManager
-import kotlin.Throws
-import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.HostnameVerifier
-import javax.net.ssl.SSLSession
-import java.lang.RuntimeException
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
 import java.time.Duration
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSession
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 object UnsafeOkHttpClient {
   // Create a trust manager that does not validate certificate chains

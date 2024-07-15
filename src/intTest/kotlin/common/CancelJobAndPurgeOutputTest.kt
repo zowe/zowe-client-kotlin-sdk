@@ -14,11 +14,11 @@
 
 package common
 
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 import org.zowe.kotlinsdk.CancelJobPurgeOutRequest
 import org.zowe.kotlinsdk.JESApi
 import org.zowe.kotlinsdk.ProcessMethod
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

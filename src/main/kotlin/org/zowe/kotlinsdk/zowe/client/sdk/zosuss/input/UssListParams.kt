@@ -14,11 +14,7 @@
 
 package org.zowe.kotlinsdk.zowe.client.sdk.zosuss.input
 
-import org.zowe.kotlinsdk.FilePath
 import org.zowe.kotlinsdk.SymlinkMode
-import org.zowe.kotlinsdk.XIBMAttr
-import retrofit2.http.Header
-import retrofit2.http.Query
 
 /**
  * This interface defines the options that can be sent into the list data set function
