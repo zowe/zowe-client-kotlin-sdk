@@ -14,15 +14,12 @@
 
 package org.zowe.kotlinsdk.zowe.client.sdk.zosuss
 
+import okhttp3.Credentials
+import okhttp3.OkHttpClient
 import org.zowe.kotlinsdk.*
 import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
 import org.zowe.kotlinsdk.zowe.client.sdk.zosuss.input.UssListParams
-import okhttp3.Credentials
-import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
 import retrofit2.Response
-import retrofit2.http.Query
-import java.io.InputStream
 
 class ZosUssFileList (
     var connection: ZOSConnection,

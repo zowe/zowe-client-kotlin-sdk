@@ -14,17 +14,16 @@
 
 package org.zowe.kotlinsdk.zowe.zosfiles
 
+import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import org.junit.jupiter.api.*
 import org.zowe.kotlinsdk.zowe.*
 import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
 import org.zowe.kotlinsdk.zowe.client.sdk.zosfiles.ZosDsnList
 import org.zowe.kotlinsdk.zowe.client.sdk.zosfiles.input.ListParams
-import okhttp3.OkHttpClient
-import org.junit.jupiter.api.*
 import java.net.InetSocketAddress
 import java.net.Proxy
-import kotlin.concurrent.thread
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

@@ -1,3 +1,4 @@
+// Copyright (c) 2024 IBA Group.
 //
 // This program and the accompanying materials are made available under the terms of the
 // Eclipse Public License v2.0 which accompanies this distribution, and is available at
@@ -5,12 +6,16 @@
 //
 // SPDX-License-Identifier: EPL-2.0
 //
-// Copyright IBA Group 2020
-//
+// Contributors:
+//   IBA Group
+//   Zowe Community
 
 package org.zowe.kotlinsdk.impl.zosmf.files.data
 
-// TODO: doc
+/**
+ * symlinks query param
+ * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-files-directories-unix-file-path">List the files and directories of a UNIX file path</a>
+ * */
 enum class SymlinkMode(private val symlinksVal: String) {
   FOLLOW("follow"),
   REPORT("report");

@@ -1,3 +1,4 @@
+// Copyright (c) 2024 IBA Group.
 //
 // This program and the accompanying materials are made available under the terms of the
 // Eclipse Public License v2.0 which accompanies this distribution, and is available at
@@ -5,14 +6,15 @@
 //
 // SPDX-License-Identifier: EPL-2.0
 //
-// Copyright IBA Group 2020
-//
+// Contributors:
+//   IBA Group
+//   Zowe Community
 
 package org.zowe.kotlinsdk.impl.zosmf
 
 import io.ktor.client.*
-import org.zowe.kotlinsdk.core.datasets.DatasetsAPI
-import org.zowe.kotlinsdk.impl.zosmf.datasets.ZosmfDatasetsAPI
+import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
+import org.zowe.kotlinsdk.impl.zosmf.datasets.api.ZosmfDatasetsAPI
 
 /**
  * The default z/OSMF API provider. Provides all the necessary functions to interact with mainframe through z/OSMF REST API

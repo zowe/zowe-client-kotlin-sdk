@@ -14,13 +14,12 @@
 
 package org.zowe.kotlinsdk.zowe.client.sdk.zostso
 
+import okhttp3.Credentials
+import okhttp3.OkHttpClient
 import org.zowe.kotlinsdk.*
 import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
 import org.zowe.kotlinsdk.zowe.client.sdk.zostso.input.SendTsoParams
-import okhttp3.Credentials
-import okhttp3.OkHttpClient
 import retrofit2.Response
-import kotlin.jvm.Throws
 
 /**
  * Class to handle sending data to TSO

@@ -1,3 +1,4 @@
+// Copyright (c) 2024 IBA Group.
 //
 // This program and the accompanying materials are made available under the terms of the
 // Eclipse Public License v2.0 which accompanies this distribution, and is available at
@@ -5,12 +6,15 @@
 //
 // SPDX-License-Identifier: EPL-2.0
 //
-// Copyright IBA Group 2020
-//
+// Contributors:
+//   IBA Group
+//   Zowe Community
 
 package org.zowe.kotlinsdk.core.datasets.data
 
-// TODO: doc
+/**
+ * Represents basic dataset instance
+ * */
 abstract class DatasetItem(
   open val datasetName: String,
   open val isMigrated: Boolean? = null,
@@ -38,7 +42,6 @@ abstract class DatasetItem(
     VSAM,
     VA
   }
-
   enum class SpaceUnits {
     TRACKS,
     BLOCKS,
@@ -47,4 +50,4 @@ abstract class DatasetItem(
     KILOBYTES,
     MEGABYTES
   }
- }
+}

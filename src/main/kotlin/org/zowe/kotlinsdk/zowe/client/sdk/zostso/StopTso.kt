@@ -14,11 +14,11 @@
 
 package org.zowe.kotlinsdk.zowe.client.sdk.zostso
 
-import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
-import org.zowe.kotlinsdk.zowe.client.sdk.zostso.input.StopTsoParams
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import org.zowe.kotlinsdk.*
+import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
+import org.zowe.kotlinsdk.zowe.client.sdk.zostso.input.StopTsoParams
 import retrofit2.Response
 
 /**

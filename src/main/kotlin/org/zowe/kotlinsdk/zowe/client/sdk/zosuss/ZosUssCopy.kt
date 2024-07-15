@@ -14,10 +14,10 @@
 
 package org.zowe.kotlinsdk.zowe.client.sdk.zosuss
 
-import org.zowe.kotlinsdk.*
-import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
+import org.zowe.kotlinsdk.*
+import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
 import retrofit2.Response
 
 class ZosUssCopy (

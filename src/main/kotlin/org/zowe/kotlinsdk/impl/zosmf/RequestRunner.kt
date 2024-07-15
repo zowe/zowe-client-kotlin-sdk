@@ -1,3 +1,4 @@
+// Copyright (c) 2024 IBA Group.
 //
 // This program and the accompanying materials are made available under the terms of the
 // Eclipse Public License v2.0 which accompanies this distribution, and is available at
@@ -5,8 +6,9 @@
 //
 // SPDX-License-Identifier: EPL-2.0
 //
-// Copyright IBA Group 2020
-//
+// Contributors:
+//   IBA Group
+//   Zowe Community
 
 package org.zowe.kotlinsdk.impl.zosmf
 
@@ -14,7 +16,9 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.cancel
+import org.zowe.kotlinsdk.core.HttpRequest
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.coroutineContext
 
@@ -58,11 +62,11 @@ internal class RequestRunner(
     val fullUrl = "${connection.protocol}://${connection.host}:${connection.zosmfPort}${request.path}"
     val response = client.request(fullUrl) {
       method = request.method
-      headers {
-        append("Authorization", connection.getAuthParam())
-        request.headers.forEach { (name, value) -> if (value != null) append(name, value) }
+      appendHeaders(request)
+      appendParams(request)
+      if (request.body != null) {
+        setBody(request.body)
       }
-      request.parameters.forEach { (name, value) -> if (value != null) parameter(name, value) }
     }
     disallowRequestCancellation()
     if (!response.status.isSuccess()) {
@@ -75,5 +79,26 @@ internal class RequestRunner(
   override fun cancel() {
     disallowRequestCancellation()
     requestCoroutineContext?.cancel(CancellationException("Request cancelled"))
+  }
+
+  /**
+   * Append HTTP query parameters to request
+   * @param request the [HttpRequest] instance with all the necessary query parameters
+   * @return [Unit]
+   * */
+  private fun HttpRequestBuilder.appendParams(request: HttpRequest) {
+    request.parameters.forEach { (name, value) -> if (value != null) parameter(name, value) }
+  }
+
+  /**
+   * Append HTTP headers to request
+   * @param request the [HttpRequest] instance with all the necessary headers
+   * @return [Unit]
+   * */
+  private fun HttpRequestBuilder.appendHeaders(request: HttpRequest) {
+    headers {
+      append("Authorization", connection.getAuthParam())
+      request.headers.forEach { (name, value) -> if (value != null) append(name, value) }
+    }
   }
 }

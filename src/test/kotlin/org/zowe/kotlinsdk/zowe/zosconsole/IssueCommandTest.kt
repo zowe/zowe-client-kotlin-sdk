@@ -14,17 +14,16 @@
 
 package org.zowe.kotlinsdk.zowe.zosconsole
 
+import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import org.junit.jupiter.api.*
 import org.zowe.kotlinsdk.IssueRequestBody
 import org.zowe.kotlinsdk.zowe.*
 import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
 import org.zowe.kotlinsdk.zowe.client.sdk.zosconsole.IssueCommand
-import okhttp3.OkHttpClient
-import org.junit.jupiter.api.*
 import java.net.InetSocketAddress
 import java.net.Proxy
-import kotlin.concurrent.thread
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class IssueCommandTest {

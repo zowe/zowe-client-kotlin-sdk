@@ -14,11 +14,11 @@
 
 package common
 
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 import org.zowe.kotlinsdk.JESApi
 import org.zowe.kotlinsdk.SubmitFileNameBody
 import org.zowe.kotlinsdk.SubmitJobRequest
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

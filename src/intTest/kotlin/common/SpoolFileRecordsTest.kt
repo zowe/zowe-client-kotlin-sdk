@@ -13,12 +13,12 @@
  */
 package common
 
-import org.zowe.kotlinsdk.BinaryMode
-import org.zowe.kotlinsdk.JESApi
-import org.zowe.kotlinsdk.RecordRange
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.zowe.kotlinsdk.BinaryMode
+import org.zowe.kotlinsdk.JESApi
+import org.zowe.kotlinsdk.RecordRange
 import retrofit2.Call
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

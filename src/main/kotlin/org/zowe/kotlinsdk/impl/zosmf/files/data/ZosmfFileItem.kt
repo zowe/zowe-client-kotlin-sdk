@@ -1,3 +1,4 @@
+// Copyright (c) 2024 IBA Group.
 //
 // This program and the accompanying materials are made available under the terms of the
 // Eclipse Public License v2.0 which accompanies this distribution, and is available at
@@ -5,8 +6,9 @@
 //
 // SPDX-License-Identifier: EPL-2.0
 //
-// Copyright IBA Group 2020
-//
+// Contributors:
+//   IBA Group
+//   Zowe Community
 
 package org.zowe.kotlinsdk.impl.zosmf.files.data
 
@@ -19,9 +21,8 @@ import org.zowe.kotlinsdk.core.files.data.FileItem
 import org.zowe.kotlinsdk.core.files.data.FilePermissions
 
 /**
- * TODO: doc
- * For more info, please, refer to:
- * https://www.ibm.com/docs/en/zos/3.1.0?topic=zdsfri-json-document-specifications-zos-data-set-file-rest-interface-requests#RESTFILES_JSONDocumentSpecifications__unixfileattributes__title__1
+ * Represents UNIX file or directory on a z/OS system
+ * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-files-directories-unix-file-path">List the files and directories of a UNIX file path</a>
  */
 class ZosmfFileItem(
   /** name response param */

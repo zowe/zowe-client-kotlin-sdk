@@ -18,7 +18,6 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import retrofit2.Call
 import retrofit2.http.*
-import java.lang.IllegalArgumentException
 
 interface JESApi {
 

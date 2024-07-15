@@ -14,9 +14,12 @@
 
 package common
 
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.Timeout
 import org.zowe.kotlinsdk.JESApi
 import org.zowe.kotlinsdk.Job
-import org.junit.jupiter.api.*
 import retrofit2.Call
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
