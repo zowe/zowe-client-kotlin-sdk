@@ -10,7 +10,7 @@
 
 package org.zowe.kotlinsdk.zowe.config
 
-import com.google.gson.*
+import com.google.gson.Gson
 import com.starxg.keytar.Keytar
 import org.yaml.snakeyaml.Yaml
 import java.io.ByteArrayInputStream
@@ -86,6 +86,7 @@ private fun formProfiles (profiles: Map<String, ZoweConfigProfile>?) {
  */
 fun parseConfigJson(configString: String): ZoweConfig {
   val zoweConfig = Gson().fromJson(configString, ZoweConfig::class.java)
+  zoweConfig.zosmfProfile = zoweConfig.profile(zoweConfig.defaults["zosmf"])
   formProfiles(zoweConfig.profiles)
   return zoweConfig
 }
