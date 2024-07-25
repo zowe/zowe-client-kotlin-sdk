@@ -38,17 +38,20 @@ class ZoweCredentialsTest : ZoweConfigTestBase() {
       override fun setPassword(service: String, account: String, password: String) {
         Assertions.assertEquals(ZoweConfig.ZOWE_SERVICE_BASE, service)
         Assertions.assertEquals(ZoweConfig.ZOWE_SECURE_ACCOUNT, account)
-        Assertions.assertEquals(createSinglePassword(TEST_ZOWE_CONFIG_PATH, "testU", "testP"), password)
+        if(zoweConfig.user=="testU")
+          Assertions.assertEquals(createSinglePassword(TEST_ZOWE_CONFIG_PATH, "testU", "testP"), password)
       }
     }
     zoweConfig.extractSecureProperties(TEST_ZOWE_CONFIG_PATH, testKeytarWrapper)
     zoweConfig.user = "testU"
     zoweConfig.password = "testP"
     zoweConfig.saveSecureProperties(TEST_ZOWE_CONFIG_PATH, testKeytarWrapper)
+    zoweConfig.user = "testUser"
+    zoweConfig.saveSecureProperties("TEST_ZOWE_CONFIG_PATH", testKeytarWrapper)
   }
 
   @Test
-  fun testSaveSecurePropertiesInEmptyStore() {
+  fun testSaveNewSecurePropertiesInEmptyStore() {
     val testKeytarWrapper = object : DefaultMockKeytarWrapper() {
       override fun setPassword(service: String, account: String, password: String) {
         Assertions.assertEquals(ZoweConfig.ZOWE_SERVICE_BASE, service)

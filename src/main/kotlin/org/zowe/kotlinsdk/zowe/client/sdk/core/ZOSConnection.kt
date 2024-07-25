@@ -8,7 +8,7 @@ package org.zowe.kotlinsdk.zowe.client.sdk.core
  * @author Frank Giordano
  * @author Uladzislau Kalesnikau
  */
-class ZOSConnection(
+data class ZOSConnection(
   /**
    * machine host pointing to backend z/OS instance
    */
@@ -56,5 +56,6 @@ class ZOSConnection(
       throw IllegalStateException("Connection data not setup properly")
     }
   }
-  override fun toString()= "ZOSConnection{host='$host', zosmfPort='$zosmfPort', user='$user', password='$password'}"
+  override fun toString() =
+    "ZOSConnection{host='$host', zosmfPort='$zosmfPort', user='$user', password='$password', rejectUnauthorized='$rejectUnauthorized', profileName='$profileName'}"
 }
