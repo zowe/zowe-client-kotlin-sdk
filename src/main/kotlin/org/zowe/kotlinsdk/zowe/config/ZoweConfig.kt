@@ -12,11 +12,11 @@ package org.zowe.kotlinsdk.zowe.config
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
 import java.io.File
-import java.lang.IllegalStateException
-import kotlin.collections.ArrayList
+import java.util.*
 
 /**
  * Represents an object model of zowe.config.json file.
@@ -25,16 +25,19 @@ import kotlin.collections.ArrayList
  * @since 2021-08-12
  */
 class ZoweConfig(
+  @Expose
   @SerializedName("\$schema")
   private val schema: String,
+  @Expose
   val profiles: Map<String, ZoweConfigProfile>,
+  @Expose
   val defaults: Map<String, String>
 ) {
 
   companion object {
-    val ZOWE_SECURE_ACCOUNT = "secure_config_props"
-    val ZOWE_SERVICE_BASE = "Zowe"
-    val ZOWE_SERVICE_NAME = "$ZOWE_SERVICE_BASE/$ZOWE_SECURE_ACCOUNT"
+    const val ZOWE_SECURE_ACCOUNT = "secure_config_props"
+    const val ZOWE_SERVICE_BASE = "Zowe"
+    private val ZOWE_SERVICE_NAME = "$ZOWE_SERVICE_BASE/$ZOWE_SECURE_ACCOUNT"
 
     /**
      * Save secure object configCredentialsMap for provided file in credential object and save these changes to credential storage.
@@ -51,7 +54,7 @@ class ZoweConfig(
       configCredentialsMap: MutableMap<String, Any?>,
       keytar: KeytarWrapper = DefaultKeytarWrapper()
     ) {
-      var configCredentials = try {
+      val configCredentials = try {
         readZoweCredentialsFromStorage(keytar).toMutableMap()
       } catch (e: Exception) {
         mutableMapOf()
@@ -186,16 +189,15 @@ class ZoweConfig(
    * method will try to find property in base profile and set it there etc. If profile with
    * corresponding property not found then nothing will happen.
    */
-  fun PropertyBuilder.set (value: Any?) {
+  fun PropertyBuilder.set(value: Any?) {
     val profiles = profilesToSearchProp.filterNotNull()
-    for (profile in profiles) {
-      if (profile.properties?.containsKey(propName) == true) {
-        profile.properties[propName] = value
-      }
-      if (profile.parentProfile?.properties?.containsKey(propName) == true) {
-        profile.parentProfile?.properties?.set(propName, value)
-      }
-    }
+    fun updateProfile(isUpdateBase: Boolean) =
+      profiles
+        .find { if (isUpdateBase) it.type == "base" else it.type != "base" }
+        ?.properties
+        ?.takeIf { it.containsKey(propName) }
+        ?.set(propName, value)
+    updateProfile(false) ?: updateProfile(true)
   }
 
   /**
@@ -207,7 +209,7 @@ class ZoweConfig(
    *              in the right order.
    * @return Property value.
    */
-  fun searchProperty (propName: String, block: PropertyBuilder.() -> Unit): Any? {
+  private fun searchProperty(propName: String, block: PropertyBuilder.() -> Unit): Any? {
     return PropertyBuilder(propName).apply(block).search()
   }
 
@@ -220,7 +222,7 @@ class ZoweConfig(
    *              in the right order.
    * @return Nothing.
    */
-  fun updateProperty (propName: String, propValue: Any?, block: PropertyBuilder.() -> Unit) {
+  private fun updateProperty(propName: String, propValue: Any?, block: PropertyBuilder.() -> Unit) {
     PropertyBuilder(propName).apply(block).set(propValue)
   }
 
@@ -236,14 +238,44 @@ class ZoweConfig(
     if (configCredentials.containsKey(filePath)) {
       @Suppress("UNCHECKED_CAST")
       val configCredentialsMap = configCredentials[filePath] as Map<String, Any>
-      this.profiles.forEach {(profileName, profile) ->
-        profile.secure?.forEach { secureProfileProp ->
-          profile.properties?.set(secureProfileProp,
-            configCredentialsMap["profiles.${profileName}.properties.${secureProfileProp}"]
-          )
-        }
+      extractSecureProperties(configCredentialsMap, profiles)
+    }
+  }
+
+  /**
+   * Recursively extracts secure properties from secure store
+   * @param configCredentialsMap map for zosmf secure properties
+   * @param ps profiles
+   * @return Nothing.
+   */
+  private fun extractSecureProperties(configCredentialsMap: Map<String, Any>, ps: Map<String, ZoweConfigProfile>) {
+    ps.forEach { (_, profile) ->
+      if (profile.profiles != null) extractSecureProperties(configCredentialsMap, profile.profiles)
+      profile.secure?.forEach { secureProfileProp ->
+        profile.properties?.set(
+          secureProfileProp,
+          configCredentialsMap["profiles.${buildCredPath(profile, ".profiles.")}.properties.${secureProfileProp}"]
+        )
       }
     }
+  }
+
+  /**
+   * Builds full path for profile
+   * @param profile
+   * @param separator between profile's names
+   * @return full profile name  to extract secure properties from secure store or full profile name.
+   */
+  private fun buildCredPath(profile: ZoweConfigProfile?, separator: String): String {
+    val currProfile = mutableListOf<String>()
+    currProfile.add(profile?.name.toString())
+    var v: ZoweConfigProfile? = profile
+    while (v?.parentProfile != null) {
+      currProfile.add(v.parentProfile?.name.toString())
+      v = v.parentProfile
+    }
+    currProfile.reverse()
+    return currProfile.fold("") { curr, next -> "$curr$separator$next" }.substring(separator.length)
   }
 
   /**
@@ -254,18 +286,50 @@ class ZoweConfig(
    * @param keytar instance of [KeytarWrapper]. This param is needed for accessing credential storage.
    * @return Nothing.
    */
+  @Suppress("UNCHECKED_CAST")
   fun saveSecureProperties (filePath: String, keytar: KeytarWrapper = DefaultKeytarWrapper()) {
     val configCredentials = readZoweCredentialsFromStorage(keytar).toMutableMap()
-    val configCredentialsMap = mutableMapOf<String, Any?>()
-    this.profiles.forEach { (profileName, profile) ->
+    val zosmfConfigCredentialsMap = mutableMapOf<String, Any?>()
+    val baseConfigCredentialsMap = mutableMapOf<String, Any?>()
+
+    buildSecureProperties(this.profiles, zosmfConfigCredentialsMap, baseConfigCredentialsMap)
+    if (configCredentials[filePath] != null) {
+      if (zosmfConfigCredentialsMap.isNotEmpty()) zosmfConfigCredentialsMap.forEach { (k, v) ->
+        (configCredentials[filePath] as MutableMap<String, Any?>)[k] = v
+      }
+      else baseConfigCredentialsMap.forEach { (k, v) ->
+        (configCredentials[filePath] as MutableMap<String, Any?>)[k] = v
+      }
+    } else configCredentials[filePath] = zosmfConfigCredentialsMap.ifEmpty { baseConfigCredentialsMap }
+    savePropertiesInKeyStore(configCredentials, keytar)
+  }
+
+  /**
+   * Fills config credentials for zosmf and/or base profile
+   * @param prfs profiles
+   * @param zosmfConfigCredentialsMap map for zosmf secure props
+   * @param baseConfigCredentialsMap  map for base secure props
+   * @return Nothing.
+   */
+  private fun buildSecureProperties(
+    prfs: Map<String, ZoweConfigProfile>,
+    zosmfConfigCredentialsMap: MutableMap<String, Any?>,
+    baseConfigCredentialsMap: MutableMap<String, Any?>
+  ) {
+    val zosmfProfileName = buildCredPath(zosmfProfile, ".profiles.")
+    val baseProfileName = buildCredPath(baseProfile, ".profiles.")
+    prfs.forEach { (_, profile) ->
+      if (profile.profiles != null) {
+        buildSecureProperties(profile.profiles, zosmfConfigCredentialsMap, baseConfigCredentialsMap)
+      }
+      val curr = buildCredPath(profile, ".profiles.")
       profile.secure?.forEach { propName ->
-        if (profile.properties?.containsKey(propName) == true) {
-          configCredentialsMap["profiles.${profileName}.properties.${propName}"] = profile.properties[propName]
-        }
+        if (profile.properties?.containsKey(propName) == true) if (curr == zosmfProfileName) zosmfConfigCredentialsMap["profiles.${curr}.properties.${propName}"] =
+          profile.properties[propName]
+        else if (curr == baseProfileName) baseConfigCredentialsMap["profiles.${curr}.properties.${propName}"] =
+          profile.properties[propName]
       }
     }
-    configCredentials[filePath] = configCredentialsMap
-    savePropertiesInKeyStore(configCredentials, keytar)
   }
 
   /**
@@ -296,15 +360,23 @@ class ZoweConfig(
    * Deserializes current [ZoweConfig] instance to JSON string without secure properties.
    * @return String with deserialized object.
    */
-  fun toJson (): String {
-    val gson = Gson()
+  fun toJson(): String {
+    val gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create()
     val zoweConfigCopy = parseConfigJson(gson.toJson(this))
-    zoweConfigCopy.profiles.forEach { (_, profile) ->
-      profile.secure?.forEach { propName ->
-        profile.properties?.remove(propName)
+    removeSecure(zoweConfigCopy.profiles)
+    return gson.toJson(zoweConfigCopy, zoweConfigCopy::class.java)
+  }
+
+  /**
+   * Recursively remove secure properties from profiles.
+   */
+  private fun removeSecure(ps: Map<String, ZoweConfigProfile>?) {
+    ps?.forEach { (_, v) ->
+      v.secure?.forEach { propName ->
+        v.properties?.remove(propName)
       }
+      removeSecure(v.profiles)
     }
-    return GsonBuilder().setPrettyPrinting().create().toJson(zoweConfigCopy, zoweConfigCopy::class.java)
   }
 
   /**
@@ -315,7 +387,18 @@ class ZoweConfig(
     if (host?.isEmpty() != false || port == null || user?.isEmpty() != false || password == null || protocol.isEmpty()){
       throw IllegalStateException("Zowe config data is not valid for creating ZOSConnection")
     }
-    return ZOSConnection(host ?: "", port.toString(), user ?: "", password ?: "", protocol)
+    return ZOSConnection(
+      host ?: "",
+      port.toString(),
+      user ?: "",
+      password ?: "",
+      protocol,
+      rejectUnauthorized,
+      basePath,
+      encoding,
+      responseTimeout,
+      buildCredPath(zosmfProfile, ".")
+    )
   }
 
   var user: String?
@@ -369,8 +452,15 @@ class ZoweConfig(
     }
   }
 
-  val zosmfProfile: ZoweConfigProfile?
-    get() = profile(defaults["zosmf"])
+  var zosmfProfile: ZoweConfigProfile? = profile(defaults["zosmf"])
+
+  fun setProfile(prName: String) {
+    zosmfProfile = profile(prName)
+  }
+
+  fun restoreProfile() {
+    zosmfProfile = profile(defaults["zosmf"])
+  }
 
   val tsoProfile: ZoweConfigProfile?
     get() = profile(defaults["tso"])
@@ -380,12 +470,46 @@ class ZoweConfig(
 
   val baseProfile: ZoweConfigProfile?
     get() = profile(defaults["base"])
+
+  /**
+   * Searches ZOSConnection in zowe config file.
+   * @return list of found ZOSConnection or empty list
+   */
+  fun getListOfZosmfConections(): List<ZOSConnection> {
+    val tmp = mutableListOf<ZOSConnection>()
+    getZosmfConnections(profiles, tmp)
+    zosmfProfile = profile(defaults["zosmf"])
+    return tmp
+  }
+
+  /**
+   * Function for recursive search of ZOSConnections in zowe config fie.
+   * @param prfs current profile from map
+   * @param tmp list of ZOSConnection
+   * @return Nothing
+   */
+  private fun getZosmfConnections(prfs: Map<String, ZoweConfigProfile>?, tmp: MutableList<ZOSConnection>) {
+    prfs?.forEach { (_, profile) ->
+      if (profile.type == "zosmf") {
+        zosmfProfile = profile(buildCredPath(profile, "."))
+        tmp.add(toZosConnection())
+      }
+      if (profile.profiles != null) {
+        getZosmfConnections(profile.profiles, tmp)
+      }
+    }
+  }
 }
 
 class ZoweConfigProfile(
+  var name: String,
+  @Expose
   val type: String,
+  @Expose
   val properties: MutableMap<String, Any?>?,
+  @Expose
   val secure: ArrayList<String>?,
+  @Expose
   val profiles: Map<String, ZoweConfigProfile>?,
   var parentProfile: ZoweConfigProfile?
 )

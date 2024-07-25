@@ -10,9 +10,9 @@
 
 package org.zowe.kotlinsdk.zowe.config
 
-import com.google.gson.*
-import org.yaml.snakeyaml.Yaml
+import com.google.gson.Gson
 import com.starxg.keytar.Keytar
+import org.yaml.snakeyaml.Yaml
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.nio.charset.Charset
@@ -67,7 +67,8 @@ fun parseConfigYaml (configString: String): ZoweConnection = parseConfigYaml(Byt
 
 // TODO: doc
 private fun formProfiles (profiles: Map<String, ZoweConfigProfile>?) {
-  profiles?.forEach { (_, v) ->
+  profiles?.forEach { (k, v) ->
+    v.name = k
     v.properties?.forEach{ (propKey, propValue) ->
       if (propValue is Double? && propValue == propValue?.toLong()?.toDouble()) {
         v.properties[propKey] = propValue?.toLong()
@@ -85,13 +86,14 @@ private fun formProfiles (profiles: Map<String, ZoweConfigProfile>?) {
  */
 fun parseConfigJson(configString: String): ZoweConfig {
   val zoweConfig = Gson().fromJson(configString, ZoweConfig::class.java)
+  zoweConfig.zosmfProfile = zoweConfig.profile(zoweConfig.defaults["zosmf"])
   formProfiles(zoweConfig.profiles)
   return zoweConfig
 }
 
 /**
  * Reads input stream and parse it to ZoweConfig object model.
- * @param configString - stream with json string of zowe config.
+ * @param inputStream - stream with json string of zowe config.
  * @return ZoweConfig object model.
  */
 fun parseConfigJson (inputStream: InputStream): ZoweConfig = parseConfigJson(String(inputStream.readBytes()))
