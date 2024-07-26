@@ -1,59 +1,77 @@
 {
-    "$schema": "./zowe.schema.json",
-    "profiles": {
-        "zosmf": {
-            "type": "zosmf",
-            "properties": {
-                "port": 443
-            },
-            "secure": []
-        },
-        "lpar1": {
-            "properties": {
-                "host": "example.host1"
-            },
-            "profiles": {
-                "zosmf": {
-                    "type": "zosmf",
-                    "properties": {
-                        "port": 10443
-                    },
-                    "secure": []
-                }
-            }
-        },
-        "tso": {
-            "type": "tso",
-            "properties": {
-                "account": "",
-                "codePage": "1047",
-                "logonProcedure": "IZUFPROC"
-            },
-            "secure": []
-        },
-        "ssh": {
-            "type": "ssh",
-            "properties": {
-                "port": 22
-            },
-            "secure": []
-        },
-        "base": {
-            "type": "base",
-            "properties": {
-                "host": "example.host",
-                "rejectUnauthorized": true
-            },
-            "secure": [
-                "user",
-                "password"
-            ]
-        }
+  "$schema": "./zowe.schema.json",
+  "profiles": {
+    "zosmf": {
+      "type": "zosmf",
+      "properties": {
+        "port": 443
+      },
+      "secure": []
     },
-    "defaults": {
-        "zosmf": "lpar1.zosmf",
-        "tso": "tso",
-        "ssh": "ssh",
-        "base": "base"
+    "lpar1": {
+      "properties": {
+        "host": "example.host1"
+      },
+      "profiles": {
+        "section1": {
+          "properties": {
+            "basePath": "/api"
+          },
+          "profiles": {
+            "testParametersProfile": {
+              "type": "zosmf",
+              "properties": {
+                "host": "example.host2",
+                "port": 443,
+                "rejectUnauthorized": false,
+                "protocol": "https",
+                "encoding": 37,
+                "responseTimeout": 600
+              }
+            }
+          }
+        },
+        "zosmf": {
+          "type": "zosmf",
+          "properties": {
+            "port": 10443
+          },
+          "secure": []
+        }
+      }
+    },
+    "tso": {
+      "type": "tso",
+      "properties": {
+        "account": "",
+        "codePage": "1047",
+        "logonProcedure": "IZUFPROC"
+      },
+      "secure": []
+    },
+    "ssh": {
+      "type": "ssh",
+      "properties": {
+        "port": 22
+      },
+      "secure": []
+    },
+    "base": {
+      "type": "base",
+      "properties": {
+        "host": "example.host",
+        "rejectUnauthorized": true
+      },
+      "secure": [
+        "user",
+        "password"
+      ]
     }
+  },
+  "defaults": {
+    "zosmf": "lpar1.zosmf",
+    "tso": "tso",
+    "ssh": "ssh",
+    "base": "base"
+  }
 }

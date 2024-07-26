@@ -24,7 +24,7 @@ import java.util.*
  * @version 0.5
  * @since 2021-08-12
  */
-class ZoweConfig(
+data class ZoweConfig(
   @Expose
   @SerializedName("\$schema")
   private val schema: String,
@@ -172,14 +172,16 @@ class ZoweConfig(
    */
   private fun PropertyBuilder.search (): Any? {
     val profiles = profilesToSearchProp.filterNotNull()
-    for (profile in profiles) {
-      var property = profile.properties?.get(propName)
-      if (property == null) {
-        property = profile.parentProfile?.properties?.get(propName)
-      }
-      return property ?: continue
-    }
-    return null
+
+    fun searchParentProfile(isBase: Boolean, isParent: Boolean) =
+      getProfile(profiles, isBase, isParent)
+        ?.properties
+        ?.get(propName)
+
+    fun searchProfile(isBase: Boolean) =
+      searchParentProfile(isBase, false) ?: searchParentProfile(isBase, true)
+
+    return searchProfile(false) ?: searchProfile(true)
   }
 
   /**
@@ -191,13 +193,28 @@ class ZoweConfig(
    */
   fun PropertyBuilder.set(value: Any?) {
     val profiles = profilesToSearchProp.filterNotNull()
-    fun updateProfile(isUpdateBase: Boolean) =
-      profiles
-        .find { if (isUpdateBase) it.type == "base" else it.type != "base" }
+
+    fun updateParentProfile(isBase: Boolean, isParent: Boolean) =
+      getProfile(profiles, isBase, isParent)
         ?.properties
         ?.takeIf { it.containsKey(propName) }
         ?.set(propName, value)
+
+    fun updateProfile(isBase: Boolean) =
+      updateParentProfile(isBase, false) ?: updateParentProfile(isBase, true)
+
     updateProfile(false) ?: updateProfile(true)
+  }
+
+  /**
+   * Returns required profile from profilesToSearchProp.
+   * The function is required to get/set property values.
+   * First, the zosmf profile and its parent should be checked
+   * Then base and its parent
+   */
+  private fun getProfile(profiles: List<ZoweConfigProfile?>, isBase: Boolean, isParent: Boolean): ZoweConfigProfile? {
+    val prof = profiles.find { if (isBase) it?.type == "base" else it?.type != "base" }
+    return if (isParent) prof?.parentProfile else prof
   }
 
   /**
@@ -268,10 +285,9 @@ class ZoweConfig(
    */
   private fun buildCredPath(profile: ZoweConfigProfile?, separator: String): String {
     val currProfile = mutableListOf<String>()
-    currProfile.add(profile?.name.toString())
     var v: ZoweConfigProfile? = profile
-    while (v?.parentProfile != null) {
-      currProfile.add(v.parentProfile?.name.toString())
+    while (v != null) {
+      currProfile.add(v.name.toString())
       v = v.parentProfile
     }
     currProfile.reverse()
@@ -324,10 +340,11 @@ class ZoweConfig(
       }
       val curr = buildCredPath(profile, ".profiles.")
       profile.secure?.forEach { propName ->
-        if (profile.properties?.containsKey(propName) == true) if (curr == zosmfProfileName) zosmfConfigCredentialsMap["profiles.${curr}.properties.${propName}"] =
-          profile.properties[propName]
-        else if (curr == baseProfileName) baseConfigCredentialsMap["profiles.${curr}.properties.${propName}"] =
-          profile.properties[propName]
+        if (profile.properties?.containsKey(propName) == true)
+          if (curr == zosmfProfileName)
+            zosmfConfigCredentialsMap["profiles.${curr}.properties.${propName}"] = profile.properties[propName]
+          else if (curr == baseProfileName)
+            baseConfigCredentialsMap["profiles.${curr}.properties.${propName}"] = profile.properties[propName]
       }
     }
   }
@@ -501,7 +518,7 @@ class ZoweConfig(
   }
 }
 
-class ZoweConfigProfile(
+data class ZoweConfigProfile(
   var name: String,
   @Expose
   val type: String,
