@@ -8,7 +8,7 @@ package org.zowe.kotlinsdk.zowe.client.sdk.core
  * @author Frank Giordano
  * @author Uladzislau Kalesnikau
  */
-class ZOSConnection(
+data class ZOSConnection(
   /**
    * machine host pointing to backend z/OS instance
    */
@@ -28,7 +28,27 @@ class ZOSConnection(
   /**
    * machine host z/OSMF protocol to connect to z/OS instance
    */
-  val protocol: String = "https"
+  val protocol: String = "https",
+  /**
+   * rejects self-signed certificates and essentially bypasses the certificate requirement
+   */
+  val rejectUnauthorized: Boolean? = true,
+  /**
+   * indicates the base path of the API ML instance that you want to access.
+   */
+  val basePath: String = "/",
+  /**
+   * encoding
+   */
+  val encoding: Long = 1047,
+  /**
+   * maximum amount of time for the TSO servlet to wait for a response before returning an error
+   */
+  val responseTimeout: Long = 600,
+  /**
+   * profile name from zowe.config.json
+   */
+  val profileName: String = "zosmf"
 ) {
   // TODO: doc
   fun checkConnection() {
@@ -36,5 +56,6 @@ class ZOSConnection(
       throw IllegalStateException("Connection data not setup properly")
     }
   }
-  override fun toString()= "ZOSConnection{host='$host', zosmfPort='$zosmfPort', user='$user', password='$password'}"
+  override fun toString() =
+    "ZOSConnection{host='$host', zosmfPort='$zosmfPort', user='$user', password='$password', rejectUnauthorized='$rejectUnauthorized', profileName='$profileName'}"
 }

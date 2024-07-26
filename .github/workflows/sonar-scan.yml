@@ -26,8 +26,8 @@ jobs:
         run: ./gradlew test
       - name: Code coverage and publish results
         run: >
-            ./gradlew --info sonarqube -Dresults="build/reports/tests/test,build/test-results"
-            -Psonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN
+            ./gradlew --info sonar -Dresults="build/reports/tests/test,build/test-results"
+            -Psonar.host.url=$SONAR_HOST_URL -Dsonar.token=$SONAR_TOKEN
             -Partifactory_user=$ARTIFACTORY_USERNAME -Partifactory_password=$ARTIFACTORY_PASSWORD
             -Dsonar.coverage.jacoco.xmlReportPaths="build/reports/jacoco.xml"
         env:

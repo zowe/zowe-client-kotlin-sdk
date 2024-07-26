@@ -101,4 +101,19 @@ interface TsoApi {
     @Query("tsoforcecancel") tsoForceCancel: Boolean? = null,
   ): Call<TsoResponse>
 
+  /**
+   * An API function to send a command for execution in the TSO address space
+   * @param authorizationToken is a base 64 encoding representation of *userid*:*password*
+   * @param contentType content type of the request
+   * @param body wrapped instance of TsoRequestBody class
+   * @return a wrapped instance of [TsoCmdResponse]
+   */
+  @AvailableSince(ZVersion.ZOS_2_4)
+  @PUT("/zosmf/tsoApp/v1/tso")
+  fun executeTsoCommand(
+    @Header("Authorization") authorizationToken: String,
+    @Header("Content-type") contentType: ContentType = ContentType.APP_JSON,
+    @Body body: TsoCmdRequestBody
+  ): Call<TsoCmdResponse>
+
 }
