@@ -13,10 +13,13 @@ import retrofit2.Response
  */
 fun validateResponse(response: Response<*>?, defaultMessage: String = "") {
     if (response?.isSuccessful != true) {
-        if (response?.errorBody()?.string().isNullOrBlank()) {
-            throw Exception("HTTP code = ${response?.code()}; Message: ${response?.message()}")
-        } else {
-            throw Exception("${if (defaultMessage.isBlank()) "" else "$defaultMessage. "}${response?.errorBody()?.string()}")
+        val errorBody = response?.errorBody()?.string()
+        errorBody?.let {
+            if (errorBody.isBlank()) {
+                throw Exception("HTTP code = ${response.code()}; Message: ${response.message()}")
+            } else {
+                throw Exception("${if (defaultMessage.isBlank()) "" else "$defaultMessage. "}${errorBody}")
+            }
         }
     }
 }
