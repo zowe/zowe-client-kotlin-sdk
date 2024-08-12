@@ -50,10 +50,11 @@ data class ZoweConfig(
      * @return Nothing.
      */
     fun saveNewSecureProperties(
-      filePath: String,
+      origFilePath: String,
       configCredentialsMap: MutableMap<String, Any?>,
       keytar: KeytarWrapper = DefaultKeytarWrapper()
     ) {
+      val filePath = origFilePath.split("/").toTypedArray().joinToString(File.separator)
       val configCredentials = try {
         readZoweCredentialsFromStorage(keytar).toMutableMap()
       } catch (e: Exception) {

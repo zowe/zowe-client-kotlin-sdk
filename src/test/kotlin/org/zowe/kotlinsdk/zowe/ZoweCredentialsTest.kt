@@ -16,6 +16,7 @@ import org.junit.jupiter.api.TestInstance
 import org.zowe.kotlinsdk.zowe.config.WINDOWS_MAX_PASSWORD_LENGTH
 import org.zowe.kotlinsdk.zowe.config.ZoweConfig
 import org.zowe.kotlinsdk.zowe.config.parseConfigJson
+import java.io.File
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -42,12 +43,12 @@ class ZoweCredentialsTest : ZoweConfigTestBase() {
           Assertions.assertEquals(createSinglePassword(TEST_ZOWE_CONFIG_PATH, "testU", "testP"), password)
       }
     }
-    zoweConfig.extractSecureProperties(TEST_ZOWE_CONFIG_PATH, testKeytarWrapper)
+    zoweConfig.extractSecureProperties(TEST_ZOWE_CONFIG_PATH.split("/").toTypedArray().joinToString(File.separator), testKeytarWrapper)
     zoweConfig.user = "testU"
     zoweConfig.password = "testP"
-    zoweConfig.saveSecureProperties(TEST_ZOWE_CONFIG_PATH, testKeytarWrapper)
+    zoweConfig.saveSecureProperties(TEST_ZOWE_CONFIG_PATH.split("/").toTypedArray(), testKeytarWrapper)
     zoweConfig.user = "testUser"
-    zoweConfig.saveSecureProperties("TEST_ZOWE_CONFIG_PATH", testKeytarWrapper)
+    zoweConfig.saveSecureProperties("TEST_ZOWE_CONFIG_PATH".split("/").toTypedArray(), testKeytarWrapper)
   }
 
   @Test
@@ -56,7 +57,7 @@ class ZoweCredentialsTest : ZoweConfigTestBase() {
       override fun setPassword(service: String, account: String, password: String) {
         Assertions.assertEquals(ZoweConfig.ZOWE_SERVICE_BASE, service)
         Assertions.assertEquals(ZoweConfig.ZOWE_SECURE_ACCOUNT, account)
-        Assertions.assertEquals(createSinglePassword(TEST_ZOWE_CONFIG_PATH, TEST_USER, TEST_PASSWORD), password)
+        Assertions.assertEquals(createSinglePassword(TEST_ZOWE_CONFIG_PATH.split("/").toTypedArray().joinToString(File.separator), TEST_USER, TEST_PASSWORD), password)
       }
 
       override fun getCredentials(service: String): Map<String, String> {
@@ -72,10 +73,16 @@ class ZoweCredentialsTest : ZoweConfigTestBase() {
   @Test
   fun testUpdateNewSecureProperties() {
     val testKeytarWrapper = object : DefaultMockKeytarWrapper() {
+      override fun getCredentials(service: String): Map<String, String> {
+        return mapOf(Pair(
+          ZoweConfig.ZOWE_SECURE_ACCOUNT,
+          createSinglePassword(TEST_ZOWE_CONFIG_PATH.split("/").toTypedArray().joinToString(File.separator), TEST_USER, TEST_PASSWORD)
+        ))
+      }
       override fun setPassword(service: String, account: String, password: String) {
         Assertions.assertEquals(ZoweConfig.ZOWE_SERVICE_BASE, service)
         Assertions.assertEquals(ZoweConfig.ZOWE_SECURE_ACCOUNT, account)
-        Assertions.assertEquals(createSinglePassword(TEST_ZOWE_CONFIG_PATH, "testU", "testP"), password)
+        Assertions.assertEquals(createSinglePassword(TEST_ZOWE_CONFIG_PATH.split("/").toTypedArray().joinToString(File.separator), "testU", "testP"), password)
       }
     }
     val configCredentialsMap = mutableMapOf<String, Any?>()
@@ -92,7 +99,7 @@ class ZoweCredentialsTest : ZoweConfigTestBase() {
         Assertions.assertEquals(ZoweConfig.ZOWE_SECURE_ACCOUNT, account)
         Assertions.assertEquals(
           createMultiplePasswords(
-            listOf("TestFilePath", TEST_ZOWE_CONFIG_PATH),
+            listOf("TestFilePath", TEST_ZOWE_CONFIG_PATH.split("/").toTypedArray().joinToString(File.separator)),
             TEST_USER,
             TEST_PASSWORD
           ), password
