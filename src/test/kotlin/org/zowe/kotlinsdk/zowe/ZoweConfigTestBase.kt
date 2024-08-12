@@ -17,7 +17,6 @@ import org.zowe.kotlinsdk.zowe.config.encodeToBase64
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import java.io.InputStream
-import java.util.*
 
 val TEST_HOST = "example.host"
 val TEST_PORT = "443"
