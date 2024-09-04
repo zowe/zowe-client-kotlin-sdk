@@ -1,30 +1,41 @@
 /*
+ * Copyright (c) 2020-2024 IBA Group.
+ *
  * This program and the accompanying materials are made available under the terms of the
  * Eclipse Public License v2.0 which accompanies this distribution, and is available at
  * https://www.eclipse.org/legal/epl-v20.html
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBA Group 2020
+ * Contributors:
+ *   IBA Group
+ *   Zowe Community
  */
 
 import net.researchgate.release.GitAdapter
+import org.jetbrains.changelog.Changelog
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.regex.Matcher
 
 fun properties(key: String) = providers.gradleProperty(key)
+fun dateValue(pattern: String): String =
+  LocalDate.now(ZoneId.of("Europe/Warsaw")).format(DateTimeFormatter.ofPattern(pattern))
 
 plugins {
   base
   java
   `maven-publish`
-  id("org.sonarqube") version "5.0.0.4638"
+  id("org.sonarqube") version "5.1.0.4882"
   id("org.jetbrains.kotlin.jvm") version "1.9.20"
   id("org.jetbrains.dokka") version "1.9.20"
   id("net.researchgate.release") version "3.0.2"
   id("jacoco")
+  id("org.jetbrains.changelog") version "2.2.1"
 }
 
 apply(plugin = "java")
@@ -35,6 +46,11 @@ group = properties("group").get()
 version = properties("version").get()
 
 val retrofit2Version = "2.11.0"
+val gsonVersion = "2.11.0"
+val javaKeytarVersion = "1.0.0"
+val snakeYamlVersion = "2.3"
+val junitJupiterVersion = "5.11.0"
+val mockwebserverVersion = "4.12.0"
 
 val releaseScope = if (project.hasProperty("release.scope")) project.property("release.scope") else "patch"
 val mavenUser = properties("mavenUser").get()
@@ -76,12 +92,33 @@ dependencies {
   implementation("com.squareup.retrofit2:retrofit:$retrofit2Version")
   implementation("com.squareup.retrofit2:converter-gson:$retrofit2Version")
   implementation("com.squareup.retrofit2:converter-scalars:$retrofit2Version")
-  implementation("com.google.code.gson:gson:2.10.1")
-  implementation("com.starxg:java-keytar:1.0.0")
-  implementation("org.yaml:snakeyaml:2.2")
-  testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
-  testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
+  implementation("com.google.code.gson:gson:$gsonVersion")
+  implementation("com.starxg:java-keytar:$javaKeytarVersion")
+  implementation("org.yaml:snakeyaml:$snakeYamlVersion")
+  testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
+  testImplementation("com.squareup.okhttp3:mockwebserver:$mockwebserverVersion")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+}
+
+// Configure Gradle Changelog Plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
+changelog {
+  version = properties("version")
+  header.set(provider { "${version.get()} (${dateValue("yyyy-MM-dd")})" }.get())
+  groups.set(listOf("Breaking changes", "Features", "Bugfixes", "Deprecations", "Security"))
+  keepUnreleasedSection.set(false)
+  itemPrefix.set("*")
+  repositoryUrl = properties("repositoryUrl")
+  sectionUrlBuilder.set { repositoryUrl, currentVersion, previousVersion, isUnreleased: Boolean ->
+    repositoryUrl + when {
+      isUnreleased -> when (previousVersion) {
+        null -> "/commits"
+        else -> "/compare/$previousVersion...HEAD"
+      }
+
+      previousVersion == null -> "/commits/$currentVersion"
+      else -> "/compare/$previousVersion...$currentVersion"
+    }
+  }
 }
 
 tasks {
@@ -125,7 +162,7 @@ tasks {
   withType<DokkaTask> {
     val dokkaBaseConfiguration = """
         {
-          "footerMessage": "(c) 2022 IBA Group",
+          "footerMessage": "(c) 2024 Zowe Community",
           "templatesDir": "${file("dokka/templates").absolutePath.replace('\\', '/')}",
           "customAssets": ["${file("dokka/assets/zowe-icon.png").absolutePath.replace('\\', '/')}"],
           "customStyleSheets": ["${file("dokka/assets/logo-styles.css").absolutePath.replace('\\', '/')}"]

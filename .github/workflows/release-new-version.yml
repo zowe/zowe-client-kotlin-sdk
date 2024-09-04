@@ -2,19 +2,17 @@
 name: Release new binary version manually
 
 on:
-  # push:
-  #   branches: [ main ]
-  # pull_request:
-  #   branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  release:
+  changelog-and-preparations:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
-
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - uses: actions/checkout@v3
+
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.ZOWE_ROBOT_TOKEN }}
@@ -24,22 +22,111 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
+      - name: Fetch Gradle properties
+        id: properties
+        shell: bash
+        run: |
+          PROPERTIES="$(./gradlew properties --console=plain -q)"
+          VERSION_FULL="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
+          CURR_COMMIT="$(git rev-parse HEAD)"
+
+          echo "versionSemVer: $VERSION_FULL"
+          echo "currCommit: $CURR_COMMIT"
+
+          echo "versionSemVer=$VERSION_FULL" >> $GITHUB_OUTPUT
+          echo "currCommit=$CURR_COMMIT" >> $GITHUB_OUTPUT
+
       - name: Clean git
         run: git reset --hard HEAD
 
-      - name: Set email
-        run: git config user.email "formainframe@ibagroup.eu"
+      - name: Set email and user name
+        run: |
+          git config user.email "formainframe@ibagroup.eu"
+          git config user.name "For Mainframe"
 
-      - name: Set name
-        run: git config user.name "For Mainframe"
+      # - name: Release with Gradle automatic
+      #   run: ./gradlew release -x test -x updateVersion -x commitNewVersion -Prelease.useAutomaticVersion=true -Prelease.scope=${{ github.event.inputs.scope || env.DEFAULT_SCOPE }} -Pzowe.deploy.username=$ARTIFACTORY_USERNAME -Pzowe.deploy.password=$ARTIFACTORY_PASSWORD -Partifactory_user=$ARTIFACTORY_USERNAME -Partifactory_password=$ARTIFACTORY_USERNAME
+      #   env:
+      #     ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
+      #     ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+      #     DEFAULT_SCOPE: 'patch'
+      #     BUILD_NUMBER: ${{ github.run_number }}
+      #     BRANCH_NAME: ${{ github.ref_name }}
 
-      - name: Release with Gradle automatic
-        run: ./gradlew release -x test -x updateVersion -x commitNewVersion -Prelease.useAutomaticVersion=true -Prelease.scope=${{ github.event.inputs.scope || env.DEFAULT_SCOPE }} -Pzowe.deploy.username=$ARTIFACTORY_USERNAME -Pzowe.deploy.password=$ARTIFACTORY_PASSWORD -Partifactory_user=$ARTIFACTORY_USERNAME -Partifactory_password=$ARTIFACTORY_USERNAME
+      - name: Prepare changelog
+        shell: bash
+        run: ./gradlew patchChangelog
+
+      - name: Prepare release notes
+        id: release_notes
+        shell: bash
+        run: |
+          CHANGELOG="$(./gradlew getChangelog -q)"
+
+          echo 'version_release_notes<<EOF' >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+          echo "Release notes to be added:"
+          echo "$CHANGELOG"
+
+      - name: Create new release and upload build artifacts
+        if: ${{ !contains(steps.properties.outputs.versionSemVer, '-rc') }}
         env:
-          ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
-          ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
-          DEFAULT_SCOPE: 'patch'
-          BUILD_NUMBER: ${{ github.run_number }}
-          BRANCH_NAME: ${{ github.ref_name }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create ${{ steps.properties.outputs.versionSemVer }} --title ${{ steps.properties.outputs.versionSemVer }} --target ${{ steps.properties.outputs.currCommit }} -F- <<EOF
+          ${{ steps.release_notes.outputs.version_release_notes }}
+          EOF
+
+          gh release upload ${{ steps.properties.outputs.versionSemVer }} ./build/libs/*
+
+      - name: Bump version in gradle.properties
+        run: |
+          # Read current version in gradle.properties
+          current_version=$(grep -E "^version=" gradle.properties | cut -d'=' -f2)
+          echo "Current version: $current_version"
+
+          # Splitting the prefix and the last number
+          prefix=$(echo "$current_version" | sed 's/[0-9]*$//')  # Leave prefix without the last number
+          last_number=$(echo "$current_version" | grep -oE '[0-9]+$')  # Fetching the number
+          new_number=$((last_number + 1))
+          new_version="${prefix}${new_number}"
+
+          echo "New version: $new_version"
+
+          # Update version in gradle.properties
+          sed -i "s/^version=.*/version=${new_version}/" gradle.properties
+
+          echo "gradle.properties after change:"
+          cat gradle.properties
+
+      - name: Create branch with CHANGELOG changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ steps.properties.outputs.versionSemVer }}"
+          BRANCH="release-changelog-update-$VERSION"
+
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+
+          git checkout -b $BRANCH
+          git add gradle.properties
+          # No need to change CHANGELOG in -rc. builds
+          if [[ "$VERSION" == *"-rc"* ]]; then
+            git restore CHANGELOG.md
+          fi
+          git commit -am ":moyai: ${VERSION}" -m "[skip ci]"
+          git push --set-upstream origin $BRANCH
+
+      - name: Close Milestone
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api repos/{owner}/{repo}/milestones \
+            --jq '.[] | select(.title == "${{ steps.properties.outputs.versionSemVer }}") | .number' \
+            | xargs -I '{}' gh api -X PATCH repos/{owner}/{repo}/milestones/{} -F state='closed'
 
       - uses: ./.github/actions/teardown
