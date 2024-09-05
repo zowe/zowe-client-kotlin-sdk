@@ -1,0 +1,74 @@
+---
+---
+<!--
+ Copyright (c) 2020-2024 IBA Group.
+
+ This program and the accompanying materials are made available under the terms of the
+ Eclipse Public License v2.0 which accompanies this distribution, and is available at
+ https://www.eclipse.org/legal/epl-v20.html
+
+ SPDX-License-Identifier: EPL-2.0
+
+ Contributors:
+   IBA Group
+   Zowe Community
+-->
+
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: "en-US" }}">
+  <head>
+    {% include head.html %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>{{ page.title }} - {{ site.title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link href="{{ site.baseurl }}/assets/css/highlight-manni.css" rel="stylesheet">
+    <style>
+      .bg-light-gray-custom {
+        background-color: var(--bs-gray-100) !important;
+      }
+      pre.highlight {
+        background-color: var(--bs-gray-100) !important;
+        padding: 1rem;
+        border-radius: var(--bs-card-border-radius);
+      }
+      code.language-plaintext.highlighter-rouge {
+        padding: 2px;
+        background-color: var(--bs-gray-100) !important;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        scroll-margin-top: 80px;
+      }
+      .note {
+        border-left: 4px solid #1e90ff;
+        background-color: #f0f8ff;
+        padding: 10px;
+        margin: 20px 0;
+      }
+
+      .warning {
+        border-left: 4px solid #ffa500;
+        background-color: #fff8dc;
+        padding: 10px;
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body class="bg-light-gray-custom">
+    <div class="container-fluid bd-gutter my-md-3 bd-layout">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-12 px-4 py-3" id="main">
+            <div class="card">
+              <div class="card-body">
+                {{ content }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+  </body>
+</html>

@@ -1,11 +1,15 @@
 /*
+ * Copyright (c) 2020-2024 IBA Group.
+ *
  * This program and the accompanying materials are made available under the terms of the
  * Eclipse Public License v2.0 which accompanies this distribution, and is available at
  * https://www.eclipse.org/legal/epl-v20.html
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBA Group 2020
+ * Contributors:
+ *   IBA Group
+ *   Zowe Community
  */
 
 package org.zowe.kotlinsdk.annotations
@@ -19,7 +23,8 @@ enum class ZVersion(val version: String) {
   ZOS_2_2("$osVersionPrefix 2.2"),
   ZOS_2_3("$osVersionPrefix 2.3"),
   ZOS_2_4("$osVersionPrefix 2.4"),
-  ZOS_2_5("$osVersionPrefix 2.5")
+  ZOS_2_5("$osVersionPrefix 2.5"),
+  ZOS_3_1("$osVersionPrefix 3.1"),
 }
 
 @Retention(AnnotationRetention.RUNTIME)

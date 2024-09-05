@@ -15,11 +15,5 @@
     <#-- This can be handled by the versioning plugin -->
     <@version/>
   </div>
-  <div class="pull-right d-flex">
-    <@source_set_selector.display/>
-    <a href="https://for-mainframe.github.io/" style="font-weight: 500; display: flex; align-items: center;">Other Docs</a>
-    <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
-    <div id="searchBar"></div>
-  </div>
 </div>
 </#macro>

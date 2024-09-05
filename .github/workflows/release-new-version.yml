@@ -2,19 +2,17 @@
 name: Release new binary version manually
 
 on:
-  # push:
-  #   branches: [ main ]
-  # pull_request:
-  #   branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  release:
+  changelog-and-preparations:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
-
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - uses: actions/checkout@v3
+
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.ZOWE_ROBOT_TOKEN }}
@@ -24,14 +22,29 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
+      - name: Fetch Gradle properties
+        id: properties
+        shell: bash
+        run: |
+          PROPERTIES="$(./gradlew properties --console=plain -q)"
+          VERSION_FULL="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
+          CURR_COMMIT="$(git rev-parse HEAD)"
+
+          echo "versionSemVer: $VERSION_FULL"
+          echo "currCommit: $CURR_COMMIT"
+
+          echo "versionSemVer=$VERSION_FULL" >> $GITHUB_OUTPUT
+          echo "currCommit=$CURR_COMMIT" >> $GITHUB_OUTPUT
+
       - name: Clean git
-        run: git reset --hard HEAD
+        run: |
+          git reset --hard HEAD
+          git pull
 
-      - name: Set email
-        run: git config user.email "formainframe@ibagroup.eu"
-
-      - name: Set name
-        run: git config user.name "For Mainframe"
+      - name: Set email and user name
+        run: |
+          git config user.email "formainframe@ibagroup.eu"
+          git config user.name "For Mainframe"
 
       - name: Release with Gradle automatic
         run: ./gradlew release -x test -x updateVersion -x commitNewVersion -Prelease.useAutomaticVersion=true -Prelease.scope=${{ github.event.inputs.scope || env.DEFAULT_SCOPE }} -Pzowe.deploy.username=$ARTIFACTORY_USERNAME -Pzowe.deploy.password=$ARTIFACTORY_PASSWORD -Partifactory_user=$ARTIFACTORY_USERNAME -Partifactory_password=$ARTIFACTORY_USERNAME
@@ -41,5 +54,133 @@ jobs:
           DEFAULT_SCOPE: 'patch'
           BUILD_NUMBER: ${{ github.run_number }}
           BRANCH_NAME: ${{ github.ref_name }}
+
+      - name: Prepare changelog
+        shell: bash
+        run: ./gradlew patchChangelog
+
+      - name: Prepare release notes
+        id: release_notes
+        shell: bash
+        run: |
+          CHANGELOG="$(./gradlew getChangelog -q)"
+
+          echo 'version_release_notes<<EOF' >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+          echo "Release notes to be added:"
+          echo "$CHANGELOG"
+
+      - name: Create new release and upload build artifacts
+        if: ${{ !contains(steps.properties.outputs.versionSemVer, '-rc') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create ${{ steps.properties.outputs.versionSemVer }} --title ${{ steps.properties.outputs.versionSemVer }} --target ${{ steps.properties.outputs.currCommit }} -F- <<EOF
+          ${{ steps.release_notes.outputs.version_release_notes }}
+          EOF
+
+          gh release upload ${{ steps.properties.outputs.versionSemVer }} ./build/libs/*
+
+      - name: Bump version in gradle.properties
+        run: |
+          # Read current version in gradle.properties
+          current_version=$(grep -E "^version=" gradle.properties | cut -d'=' -f2)
+          echo "Current version: $current_version"
+
+          # Splitting the prefix and the last number
+          prefix=$(echo "$current_version" | sed 's/[0-9]*$//')  # Leave prefix without the last number
+          last_number=$(echo "$current_version" | grep -oE '[0-9]+$')  # Fetching the number
+          new_number=$((last_number + 1))
+          new_version="${prefix}${new_number}"
+
+          echo "New version: $new_version"
+
+          # Update version in gradle.properties
+          sed -i "s/^version=.*/version=${new_version}/" gradle.properties
+
+          echo "gradle.properties after change:"
+          cat gradle.properties
+
+      - name: Push changes to the release branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ steps.properties.outputs.versionSemVer }}"
+
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+
+          git add gradle.properties
+          # No need to change CHANGELOG in -rc. builds
+          if [[ "$VERSION" == *"-rc"* ]]; then
+            git restore CHANGELOG.md
+          fi
+          git commit -am ":moyai: ${VERSION}" -m "[skip ci]"
+          git push
+
+      - name: Build new docs with Dokka and publish to the docs branch
+        run: |
+          VERSION="${{ steps.properties.outputs.versionSemVer }}"
+
+          git checkout -b docs
+
+          echo "=== Preparing the docs ==="
+          ./gradlew dokkaHtml
+
+          echo "=== Setting up docs/version path ==="
+          if [ ! -d "docs" ]; then
+            mkdir -m 755 "docs"
+          fi
+          if [ -d "docs/$VERSION" ]; then
+            rm -rf "docs/$VERSION"
+          fi
+          mkdir -m 755 "docs/$VERSION"
+
+          echo "=== Moving the built docs ==="
+          mv build/dokka/html/* "docs/$VERSION"
+
+          echo "=== Writing Jekyll-related things to the index.html ==="
+          TEMP_FILE=$(mktemp)
+          echo "---" >> $TEMP_FILE
+          echo "id: zowe-client-kotlin-sdk-docs" >> $TEMP_FILE
+          echo "title: Zowe Client Kotlin SDK docs" >> $TEMP_FILE
+          echo "permalink: /docs/$VERSION/" >> $TEMP_FILE
+          echo "---" >> $TEMP_FILE
+          echo "" >> $TEMP_FILE
+          cat "docs/$VERSION/index.html" >> $TEMP_FILE
+          mv $TEMP_FILE "docs/$VERSION/index.html"
+
+          echo "=== Writing docs-related lines to the README_FOR_DOCS.md"
+          TEMP_FILE=$(mktemp)
+          echo "---" >> $TEMP_FILE
+          echo "id: home" >> $TEMP_FILE
+          echo "layout: default" >> $TEMP_FILE
+          echo "title: Home" >> $TEMP_FILE
+          echo "permalink: /" >> $TEMP_FILE
+          echo "---" >> $TEMP_FILE
+          echo "" >> $TEMP_FILE
+          echo "# [Click here](https://zowe.github.io/zowe-client-kotlin-sdk/docs/$VERSION) to go to the Zowe Client Kotlin SDK source code docs" >> $TEMP_FILE
+          echo "" >> $TEMP_FILE
+          echo "---" >> $TEMP_FILE
+          echo "" >> $TEMP_FILE
+          cat "README_FOR_DOCS.md" >> $TEMP_FILE
+          mv $TEMP_FILE README_FOR_DOCS.md
+
+          echo "=== Committing the docs ==="
+          git add .
+          git status
+          git commit -am "Docs for v$VERSION"
+          git push --set-upstream origin docs -f
+
+      - name: Close Milestone
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api repos/{owner}/{repo}/milestones \
+            --jq '.[] | select(.title == "${{ steps.properties.outputs.versionSemVer }}") | .number' \
+            | xargs -I '{}' gh api -X PATCH repos/{owner}/{repo}/milestones/{} -F state='closed'
 
       - uses: ./.github/actions/teardown

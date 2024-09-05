@@ -1,0 +1,36 @@
+<!--
+ This program and the accompanying materials are made available under the terms of the
+ Eclipse Public License v2.0 which accompanies this distribution, and is available at
+ https://www.eclipse.org/legal/epl-v20.html
+
+ SPDX-License-Identifier: EPL-2.0
+
+ Copyright IBA Group 2020
+-->
+
+<style>
+  .custom-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+  }
+  .custom-list-elem a {
+    color: inherit;
+  }
+  .custom-list-elem a:not(:hover) {
+    text-decoration: none;
+  }
+</style>
+{% assign page_contents_elem = site.data.contents | where: "page_id", page.id | first %}
+{% if page_contents_elem %}
+  <div class="text-muted">
+    <strong class="d-none d-md-block h6 mb-2">Contents:</strong>
+    <nav>
+      <ul class="custom-list">
+        {% for page_contents in page_contents_elem.page_contents %}
+          <li class="custom-list-elem"><a href="#{{ page_contents.section }}">{{ page_contents.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+{% endif %}
