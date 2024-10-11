@@ -18,6 +18,16 @@
             "basePath": "/api"
           },
           "profiles": {
+            "section2": {
+              "profiles": {
+                "emptyZosmfProfile": {
+                  "secure": [
+                    "user",
+                    "password"
+                  ]
+                }
+              }
+            },
             "testParametersProfile": {
               "type": "zosmf",
               "properties": {
@@ -26,7 +36,9 @@
                 "rejectUnauthorized": false,
                 "protocol": "https",
                 "encoding": 37,
-                "responseTimeout": 600
+                "responseTimeout": 600,
+                "user": "zosmfUser",
+                "password": "zosmfPassword"
               }
             }
           }
@@ -37,6 +49,13 @@
             "port": 10443
           },
           "secure": []
+        },
+        "base": {
+          "type": "base",
+          "secure": [
+            "user",
+            "password"
+          ]
         }
       }
     },
