@@ -274,10 +274,12 @@ data class ZoweConfig(
     ps.forEach { (_, profile) ->
       if (profile.profiles != null) extractSecureProperties(configCredentialsMap, profile.profiles)
       profile.secure?.forEach { secureProfileProp ->
-        profile.properties?.set(
-          secureProfileProp,
-          configCredentialsMap["profiles.${buildCredPath(profile, ".profiles.")}.properties.${secureProfileProp}"]
-        )
+        if (profile.properties?.get(secureProfileProp) == null &&
+          configCredentialsMap["profiles.${buildCredPath(profile, ".profiles.")}.properties.${secureProfileProp}"] != null)
+          profile.properties?.set(
+            "secure"+secureProfileProp,
+            configCredentialsMap["profiles.${buildCredPath(profile, ".profiles.")}.properties.${secureProfileProp}"]
+          )
       }
     }
   }
@@ -345,11 +347,11 @@ data class ZoweConfig(
       }
       val curr = buildCredPath(profile, ".profiles.")
       profile.secure?.forEach { propName ->
-        if (profile.properties?.containsKey(propName) == true)
+        if (profile.properties?.containsKey("secure"+propName) == true)
           if (curr == zosmfProfileName)
-            zosmfConfigCredentialsMap["profiles.${curr}.properties.${propName}"] = profile.properties[propName]
+            zosmfConfigCredentialsMap["profiles.${curr}.properties.${propName}"] = profile.properties["secure"+propName]
           else if (curr == baseProfileName)
-            baseConfigCredentialsMap["profiles.${curr}.properties.${propName}"] = profile.properties[propName]
+            baseConfigCredentialsMap["profiles.${curr}.properties.${propName}"] = profile.properties["secure"+propName]
       }
     }
   }
@@ -395,7 +397,7 @@ data class ZoweConfig(
   private fun removeSecure(ps: Map<String, ZoweConfigProfile>?) {
     ps?.forEach { (_, v) ->
       v.secure?.forEach { propName ->
-        v.properties?.remove(propName)
+        v.properties?.remove("secure"+propName)
       }
       removeSecure(v.profiles)
     }
@@ -425,11 +427,21 @@ data class ZoweConfig(
 
   var user: String?
     get() = searchProperty("user") { zosmf(); base() } as String?
-    set(el) { updateProperty("user", el ?: "") { zosmf(); base() } }
+      ?: searchProperty("secureuser") { zosmf(); base() } as String?
+    set(el) { if (searchProperty("user") { zosmf(); base() } as String? != null)
+      updateProperty("user", el ?: "") { zosmf(); base() }
+    else
+      updateProperty("secureuser", el ?: "") { zosmf(); base() } }
 
   var password: String?
     get() = searchProperty("password") { zosmf(); base() } as String?
-    set(el) { updateProperty("password", el ?: "") { zosmf(); base() } }
+        ?: searchProperty("securepassword") { zosmf(); base() } as String?
+    set(el) {
+      if (searchProperty("password") { zosmf(); base() } as String? != null)
+        updateProperty("password", el ?: "") { zosmf(); base() }
+      else
+        updateProperty("securepassword", el ?: "") { zosmf(); base() }
+    }
 
   var host: String?
     get() = searchProperty("host") { zosmf(); base() } as String?

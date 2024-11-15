@@ -147,13 +147,26 @@ class ZoweConfigParsingTest: ZoweConfigTestBase() {
     Assertions.assertEquals(zoweConfig.encoding, 1037)
     zoweConfig.responseTimeout = 300
     Assertions.assertEquals(zoweConfig.responseTimeout, 300)
+    Assertions.assertEquals(zoweConfig.user, "zosmfUser")
+    zoweConfig.user = null
+    Assertions.assertEquals(zoweConfig.user, "")
+    zoweConfig.user = "zUser"
+    Assertions.assertEquals(zoweConfig.user, "zUser")
+    Assertions.assertEquals(zoweConfig.password, "zosmfPassword")
+    zoweConfig.password = null
+    Assertions.assertEquals(zoweConfig.password, "")
+    zoweConfig.password = "zPassword"
+    Assertions.assertEquals(zoweConfig.password, "zPassword")
     zoweConfig.restoreProfile()
     Assertions.assertEquals(fullProfileName(zoweConfig.zosmfProfile), "lpar1.zosmf")
     Assertions.assertEquals(zoweConfig.sshProfile?.name, "ssh")
     Assertions.assertEquals(zoweConfig.tsoProfile?.name, "tso")
     Assertions.assertNull(zoweConfig.profile(null))
     Assertions.assertNull(zoweConfig.profile("."))
-    Assertions.assertNull(zoweConfig.profile("non.existent.profile"))
+    zoweConfig.setProfile("lpar1.section1.section2.emptyZosmfProfile")
+    Assertions.assertEquals(zoweConfig.user, "testUser")
+    zoweConfig.user = "zUser1"
+    Assertions.assertEquals(zoweConfig.user, "zUser1")
     zoweConfig.extractSecureProperties("/wrong/zowe/config/path", keytarWrapper)
   }
 
@@ -164,8 +177,8 @@ class ZoweConfigParsingTest: ZoweConfigTestBase() {
       ZOSConnection(
         "example.host2",
         "443",
-        "testUser",
-        "testPassword",
+        "zosmfUser",
+        "zosmfPassword",
         profileName = "lpar1.section1.testParametersProfile",
         rejectUnauthorized = false,
         basePath = "/api",
