@@ -2,6 +2,14 @@
 
 All notable changes to the Zowe Client Kotlin SDK will be documented in this file.
 
+## [Unreleased]
+
+## [0.5.1] (2024-11-15)
+
+### Bugfixes
+
+* Bugfix: Fixed work with encrypted/plaintext credentials in the zowe config ([3f1e48fb](https://github.com/zowe/zowe-client-kotlin-sdk/commit/3f1e48fb))
+
 ## [0.5.0] (2024-09-23)
 
 ### Features
