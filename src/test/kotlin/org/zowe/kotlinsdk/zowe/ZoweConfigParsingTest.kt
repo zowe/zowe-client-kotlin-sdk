@@ -17,6 +17,7 @@ package org.zowe.kotlinsdk.zowe
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.*
+import org.zowe.kotlinsdk.exceptions.EmptyZoweConfigFileException
 import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
 import org.zowe.kotlinsdk.zowe.config.*
 import java.net.InetSocketAddress
@@ -66,6 +67,11 @@ class ZoweConfigParsingTest: ZoweConfigTestBase() {
     val zoweConfig = parseConfigJson(streamConfigJson)
     zoweConfig.extractSecureProperties(TEST_ZOWE_CONFIG_PATH, keytarWrapper)
     checkZoweConfig(zoweConfig)
+  }
+
+  @Test
+  fun testParsingEmptyJsonString() {
+    Assertions.assertThrows(EmptyZoweConfigFileException::class.java){ parseConfigJson("") }
   }
 
   @Test
