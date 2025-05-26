@@ -17,6 +17,10 @@ package org.zowe.kotlinsdk.zowe.client.sdk.zosfiles.input
 /**
  * This interface defines the options that can be sent into the copy data set function.
  */
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("ZOSCopyParams", "org.zowe.kotlinsdk.impl.restfiles")
+)
 class CopyParams (
 
   /**

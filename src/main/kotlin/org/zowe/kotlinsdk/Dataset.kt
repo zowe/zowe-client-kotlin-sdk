@@ -17,6 +17,10 @@ package org.zowe.kotlinsdk
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("DatasetInfo", "org.zowe.kotlinsdk.impl.restfiles")
+)
 data class Dataset(
   @SerializedName("dsname")
   @Expose
@@ -118,6 +122,10 @@ data class Dataset(
 
 }
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("DatasetInfo.SpaceUnits", "org.zowe.kotlinsdk.impl.restfiles")
+)
 enum class SpaceUnits {
   @SerializedName("TRACKS")
   TRACKS,
@@ -138,10 +146,18 @@ enum class SpaceUnits {
   MEGABYTES
 }
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("DatasetInfo.HasBooleanValue", "org.zowe.kotlinsdk.impl.restfiles")
+)
 interface HasBooleanValue {
   val value: Boolean
 }
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("DatasetInfo.MultipleVolumes", "org.zowe.kotlinsdk.impl.restfiles")
+)
 enum class MultipleVolumes(override val value: Boolean) : HasBooleanValue {
   @SerializedName("Y")
   Y(true),
@@ -150,7 +166,10 @@ enum class MultipleVolumes(override val value: Boolean) : HasBooleanValue {
   N(false)
 }
 
-
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("DatasetInfo.HasMigrated", "org.zowe.kotlinsdk.impl.restfiles")
+)
 enum class HasMigrated(override val value: Boolean) : HasBooleanValue {
   @SerializedName("YES")
   YES(true),

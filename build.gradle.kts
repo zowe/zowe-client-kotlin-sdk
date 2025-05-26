@@ -51,6 +51,7 @@ val javaKeytarVersion = "1.0.0"
 val snakeYamlVersion = "2.3"
 val junitJupiterVersion = "5.11.0"
 val mockwebserverVersion = "4.12.0"
+val ktorVersion = "2.3.6"
 
 val releaseScope = if (project.hasProperty("release.scope")) project.property("release.scope") else "patch"
 val mavenUser = properties("mavenUser").get()
@@ -95,6 +96,10 @@ dependencies {
   implementation("com.google.code.gson:gson:$gsonVersion")
   implementation("com.starxg:java-keytar:$javaKeytarVersion")
   implementation("org.yaml:snakeyaml:$snakeYamlVersion")
+  implementation("io.ktor:ktor-client-core:$ktorVersion")
+  implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+  implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+  implementation("io.ktor:ktor-serialization-gson:$ktorVersion")
   testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
   testImplementation("com.squareup.okhttp3:mockwebserver:$mockwebserverVersion")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
