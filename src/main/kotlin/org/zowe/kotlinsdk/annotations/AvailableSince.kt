@@ -10,6 +10,7 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.annotations
@@ -36,6 +37,6 @@ annotation class IsSupported(val value: Boolean)
 
 // TODO: doc, transfer to availability.kt
 @Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.FIELD, AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FUNCTION)
+@Target(AnnotationTarget.FIELD, AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY)
 @Inherited
 annotation class AvailableSince(@IsSupported(true) val version: ZVersion)

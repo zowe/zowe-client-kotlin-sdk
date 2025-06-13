@@ -13,7 +13,6 @@
  */
 
 import net.researchgate.release.GitAdapter
-import org.jetbrains.changelog.Changelog
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -36,6 +35,7 @@ plugins {
   id("net.researchgate.release") version "3.0.2"
   id("jacoco")
   id("org.jetbrains.changelog") version "2.2.1"
+  kotlin("plugin.serialization") version "1.9.25"
 }
 
 apply(plugin = "java")
@@ -50,8 +50,9 @@ val gsonVersion = "2.11.0"
 val javaKeytarVersion = "1.0.0"
 val snakeYamlVersion = "2.3"
 val junitJupiterVersion = "5.11.0"
-val mockwebserverVersion = "4.12.0"
+val okhttp3Version = "4.12.0"
 val ktorVersion = "2.3.6"
+val jsonSerializerVersion = "1.6.0"
 
 val releaseScope = if (project.hasProperty("release.scope")) project.property("release.scope") else "patch"
 val mavenUser = properties("mavenUser").get()
@@ -96,12 +97,14 @@ dependencies {
   implementation("com.google.code.gson:gson:$gsonVersion")
   implementation("com.starxg:java-keytar:$javaKeytarVersion")
   implementation("org.yaml:snakeyaml:$snakeYamlVersion")
-  implementation("io.ktor:ktor-client-core:$ktorVersion")
-  implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+  implementation("io.ktor:ktor-client-core:${ktorVersion}")
+  implementation("io.ktor:ktor-client-cio:$ktorVersion")
   implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-  implementation("io.ktor:ktor-serialization-gson:$ktorVersion")
+  implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$jsonSerializerVersion")
   testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
-  testImplementation("com.squareup.okhttp3:mockwebserver:$mockwebserverVersion")
+  testImplementation("com.squareup.okhttp3:mockwebserver:$okhttp3Version")
+  testImplementation("com.squareup.okhttp3:okhttp-tls:$okhttp3Version")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 

@@ -1,7 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="ijmp-shared">
+  <settings default="kotlinsdk">
     <module2copyright>
-      <element module="All" copyright="ijmp-shared" />
+      <element module="kotlinsdk" copyright="kotlinsdk" />
     </module2copyright>
     <LanguageOptions name="__TEMPLATE__" />
   </settings>
