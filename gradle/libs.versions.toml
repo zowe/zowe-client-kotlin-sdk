@@ -1,0 +1,48 @@
+[versions]
+# libraries
+retrofit2 = "2.11.0"
+gson = "2.13.1"
+java-keytar = "1.0.0"
+snakeyaml = "2.4"
+ktor = "2.3.13"
+kotlinx-serialization-json = "1.6.3"
+junit-jupiter = "5.11.0"
+okhttp3 = "4.12.0"
+sshj = "0.40.0"
+
+# plugins
+sonarqube = "6.2.0.5505"
+kotlin-jvm = "1.9.20"
+dokka = "1.9.20"
+release = "3.1.0"
+changelog = "2.2.1"
+kotlin-serialization = "1.9.20"
+
+[libraries]
+# build deps
+retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
+retrofit2-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit2" }
+retrofit2-converter-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofit2" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+java-keytar = { group = "com.starxg", name = "java-keytar", version.ref = "java-keytar" }
+snakeyaml = { group = "org.yaml", name = "snakeyaml", version.ref = "snakeyaml" }
+ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
+ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+sshj = { group = "com.hierynomus", name = "sshj", version.ref = "sshj" }
+
+# test deps
+junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit-jupiter" }
+junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit-jupiter" }
+mockwebserver= { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "okhttp3" }
+okhttp-tls= { group = "com.squareup.okhttp3", name = "okhttp-tls", version.ref = "okhttp3" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-jvm" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-serialization" }
+sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+release = { id = "net.researchgate.release", version.ref = "release" }
+changelog = { id = "org.jetbrains.changelog", version.ref = "changelog" }

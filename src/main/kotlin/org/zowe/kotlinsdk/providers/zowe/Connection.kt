@@ -19,18 +19,14 @@ abstract class Connection(
   /** z/OS host IP or root domain */
   val host: String,
   /** z/OS host port number */
-  val zosmfPort: String,
-  /** z/OS host protocol to use during a connection */
-  val protocol: String = "https"
+  val port: Int,
+  /** Connection scheme to use during a connection */
+  val scheme: String,
 ) {
-
   /** Check if the connection has all the necessary parameters specified */
   open fun checkConnection() {
     check(host.isNotEmpty()) {
       "Connection data is not set properly. The host is not specified"
     }
   }
-
-  /** Get authentication parameter to provide during a request */
-  abstract fun getAuthParam(): String
 }

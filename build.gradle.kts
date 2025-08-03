@@ -10,6 +10,7 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Uladzislau Kalesnikau
  */
 
 import net.researchgate.release.GitAdapter
@@ -29,13 +30,13 @@ plugins {
   base
   java
   `maven-publish`
-  id("org.sonarqube") version "5.1.0.4882"
-  id("org.jetbrains.kotlin.jvm") version "1.9.20"
-  id("org.jetbrains.dokka") version "1.9.20"
-  id("net.researchgate.release") version "3.0.2"
   id("jacoco")
-  id("org.jetbrains.changelog") version "2.2.1"
-  kotlin("plugin.serialization") version "1.9.25"
+  alias(libs.plugins.kotlin.jvm)
+  alias(libs.plugins.kotlin.serialization)
+  alias(libs.plugins.sonarqube)
+  alias(libs.plugins.dokka)
+  alias(libs.plugins.release)
+  alias(libs.plugins.changelog)
 }
 
 apply(plugin = "java")
@@ -44,15 +45,6 @@ apply(from = "gradle/sonar.gradle")
 
 group = properties("group").get()
 version = properties("version").get()
-
-val retrofit2Version = "2.11.0"
-val gsonVersion = "2.11.0"
-val javaKeytarVersion = "1.0.0"
-val snakeYamlVersion = "2.3"
-val junitJupiterVersion = "5.11.0"
-val okhttp3Version = "4.12.0"
-val ktorVersion = "2.3.6"
-val jsonSerializerVersion = "1.6.0"
 
 val releaseScope = if (project.hasProperty("release.scope")) project.property("release.scope") else "patch"
 val mavenUser = properties("mavenUser").get()
@@ -91,21 +83,22 @@ java {
 }
 
 dependencies {
-  implementation("com.squareup.retrofit2:retrofit:$retrofit2Version")
-  implementation("com.squareup.retrofit2:converter-gson:$retrofit2Version")
-  implementation("com.squareup.retrofit2:converter-scalars:$retrofit2Version")
-  implementation("com.google.code.gson:gson:$gsonVersion")
-  implementation("com.starxg:java-keytar:$javaKeytarVersion")
-  implementation("org.yaml:snakeyaml:$snakeYamlVersion")
-  implementation("io.ktor:ktor-client-core:${ktorVersion}")
-  implementation("io.ktor:ktor-client-cio:$ktorVersion")
-  implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-  implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$jsonSerializerVersion")
-  testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
-  testImplementation("com.squareup.okhttp3:mockwebserver:$okhttp3Version")
-  testImplementation("com.squareup.okhttp3:okhttp-tls:$okhttp3Version")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+  implementation(libs.retrofit2)
+  implementation(libs.retrofit2.converter.gson)
+  implementation(libs.retrofit2.converter.scalars)
+  implementation(libs.gson)
+  implementation(libs.java.keytar)
+  implementation(libs.snakeyaml)
+  implementation(libs.ktor.client.core)
+  implementation(libs.ktor.client.cio)
+  implementation(libs.ktor.client.content.negotiation)
+  implementation(libs.ktor.serialization.kotlinx.json)
+  implementation(libs.kotlinx.serialization.json)
+  implementation(libs.sshj)
+  testImplementation(libs.junit.jupiter.api)
+  testImplementation(libs.mockwebserver)
+  testImplementation(libs.okhttp.tls)
+  testRuntimeOnly(libs.junit.jupiter.engine)
 }
 
 // Configure Gradle Changelog Plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin

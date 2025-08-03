@@ -19,6 +19,7 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.api.messaging.GetDatasetInfoRequest
 import org.zowe.kotlinsdk.providers.zowe.Connection
+import org.zowe.kotlinsdk.providers.zowe.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.ReqType
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMAttributes
 
@@ -27,7 +28,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMAttribut
  * Stores all necessary info to get a dataset information by the specified parameters
  */
 class ZosmfGetDatasetInfoRequest(
-  val connection: Connection,
+  val connection: HttpConnection,
 
   /** dataset name */
   @AvailableSince(ZVersion.ZOS_2_1) override val dsName: String,

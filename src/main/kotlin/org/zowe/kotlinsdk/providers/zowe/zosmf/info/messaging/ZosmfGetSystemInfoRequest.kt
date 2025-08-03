@@ -20,10 +20,11 @@ import io.ktor.http.HttpMethod
 import kotlinx.coroutines.runBlocking
 import org.zowe.kotlinsdk.core.info.api.messaging.GetSystemInfoRequest
 import org.zowe.kotlinsdk.providers.zowe.Connection
+import org.zowe.kotlinsdk.providers.zowe.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 
 /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=service-retrieve-zosmf-information">Retrieve z/OSMF information</a> */
-class ZosmfGetSystemInfoRequest(override val connection: Connection) : HttpRequest, GetSystemInfoRequest {
+class ZosmfGetSystemInfoRequest(override val connection: HttpConnection) : HttpRequest, GetSystemInfoRequest {
 
   override val method = HttpMethod.Get
 

@@ -17,13 +17,15 @@ package org.zowe.kotlinsdk.providers.zowe
 import okhttp3.Credentials
 
 /** Represents connection information with user and password as the auth method */
-class UserPassConnection(
-  host: String, zosmfPort: String, protocol: String,
-  /** z/OS host valid username with access to z/OSMF REST API */
+class UserPassHttpConnection(
+  host: String,
+  port: Int,
+  scheme: String = "https",
+  /** z/OS host valid username with access to HTTP REST API */
   val user: String,
-  /** z/OS host user\'s password with access to z/OSMF REST API */
+  /** z/OS host user\'s password with access to HTTP REST API */
   val password: String
-) : Connection(host, zosmfPort, protocol) {
+) : HttpConnection(host, port, scheme) {
 
   private val basicCredentials: String = Credentials.basic(user, password)
 

@@ -22,13 +22,14 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.jes.api.messaging.GetJobRequest
 import org.zowe.kotlinsdk.providers.zowe.Connection
+import org.zowe.kotlinsdk.providers.zowe.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfTargetSystemRequestHeaders
 import org.zowe.kotlinsdk.providers.zowe.zosmf.jes.definitions.ZosmfJobItem
 
 /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-obtain-status-job">Obtain the status of a job</a> */
 class ZosmfGetJobRequest(
-  override val connection: Connection,
+  override val connection: HttpConnection,
 
   /** jobname path param */
   @AvailableSince(ZVersion.ZOS_2_1) val jobName: String? = null,

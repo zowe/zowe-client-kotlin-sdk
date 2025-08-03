@@ -23,12 +23,13 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.files.api.messaging.ListFilesRequest
 import org.zowe.kotlinsdk.providers.zowe.Connection
+import org.zowe.kotlinsdk.providers.zowe.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.files.definitions.ZosmfSymlinkMode
 
 /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-files-directories-unix-file-path">List the files and directories of a UNIX file path</a> */
 class ZosmfListFilesRequest(
-  override val connection: Connection,
+  override val connection: HttpConnection,
 
   /** path query param */
   @AvailableSince(ZVersion.ZOS_2_1) override val filter: String,

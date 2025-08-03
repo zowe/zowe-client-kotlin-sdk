@@ -20,7 +20,7 @@ import org.zowe.kotlinsdk.core.Request
 
 /**
  * A basic representation of an HTTP request object
- * @property connection the [Connection] instance that suppose to hold all the necessary auth info to make the request
+ * @property connection the [HttpConnection] instance that holds all the necessary auth info to perform the request
  * @property method the [HttpMethod] to execute the request as
  * @property path the URL base path of the request
  * @property headers the headers map to provide with the request
@@ -28,7 +28,7 @@ import org.zowe.kotlinsdk.core.Request
  * @property body the request body to put a payload in
  */
 interface HttpRequest : Request {
-  val connection: Connection
+  val connection: HttpConnection
   val method: HttpMethod
   val path: String
   val headers: Map<String, String?>

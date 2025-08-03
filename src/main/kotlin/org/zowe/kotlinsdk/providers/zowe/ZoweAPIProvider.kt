@@ -21,6 +21,7 @@ import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
 import org.zowe.kotlinsdk.core.files.api.FilesAPI
 import org.zowe.kotlinsdk.core.info.api.InfoAPI
 import org.zowe.kotlinsdk.core.jes.api.JesAPI
+import org.zowe.kotlinsdk.providers.zowe.ssh.datasets.SshDatasetsAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.ZosmfDatasetsAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.files.ZosmfFilesAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.info.ZosmfInfoAPI
@@ -44,6 +45,9 @@ class ZoweAPIProvider(
   ),
   InfoAPI::class.java to ZosmfInfoAPI(
     requestRunners.find { it.protocol == SupportedProtocol.HTTP } ?: throw Exception("HTTP is not supported")
+  ),
+  DatasetsAPI::class.java to SshDatasetsAPI(
+    requestRunners.find { it.protocol == SupportedProtocol.SSH } ?: throw Exception("SSH is not supported")
   )
 ) {
   override val supportedProtocols: List<SupportedProtocol>

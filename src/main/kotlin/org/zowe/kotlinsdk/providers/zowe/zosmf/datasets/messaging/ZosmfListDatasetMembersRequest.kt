@@ -23,13 +23,14 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.api.messaging.ListDatasetMembersRequest
 import org.zowe.kotlinsdk.providers.zowe.Connection
+import org.zowe.kotlinsdk.providers.zowe.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMAttributes
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMMigratedRecall
 
 /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-members-zos-data-set">List the members of a z/OS data set</a> */
 class ZosmfListDatasetMembersRequest(
-  override val connection: Connection,
+  override val connection: HttpConnection,
 
   /** dataset-name path param */
   @AvailableSince(ZVersion.ZOS_2_1) override val dsName: String,

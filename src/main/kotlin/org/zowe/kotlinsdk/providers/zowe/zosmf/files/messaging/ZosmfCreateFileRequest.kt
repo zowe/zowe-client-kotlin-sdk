@@ -22,11 +22,12 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.files.api.messaging.CreateFileRequest
 import org.zowe.kotlinsdk.providers.zowe.Connection
+import org.zowe.kotlinsdk.providers.zowe.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 
 /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-create-unix-file-directory">Create a UNIX file or directory</a> */
 class ZosmfCreateFileRequest(
-  override val connection: Connection,
+  override val connection: HttpConnection,
 
   /** file-path path param */
   @AvailableSince(ZVersion.ZOS_2_1) override val filePath: String,

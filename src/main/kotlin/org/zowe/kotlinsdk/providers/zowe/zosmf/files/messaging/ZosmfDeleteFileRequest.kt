@@ -22,12 +22,13 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.files.api.messaging.DeleteFileRequest
 import org.zowe.kotlinsdk.providers.zowe.Connection
+import org.zowe.kotlinsdk.providers.zowe.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.files.definitions.XIBMOption
 
 /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-delete-unix-file-directory">Delete a UNIX file or directory</a> */
 class ZosmfDeleteFileRequest(
-  override val connection: Connection,
+  override val connection: HttpConnection,
 
   /** file-pathname path param */
   @AvailableSince(ZVersion.ZOS_2_1) override val filePath: String,

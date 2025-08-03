@@ -15,11 +15,13 @@
 package org.zowe.kotlinsdk.providers.zowe
 
 /** Represents connection information with a token as the auth method */
-class TokenConnection(
-  host: String, zosmfPort: String, protocol: String,
+class TokenHttpConnection(
+  host: String,
+  port: Int,
+  scheme: String = "https",
   /** z/OS host valid token as authentication method */
   private val token: String
-) : Connection(host, zosmfPort, protocol) {
+) : HttpConnection(host, port, scheme) {
 
   /** Check if a token is specified, as well as a host */
   override fun checkConnection() {

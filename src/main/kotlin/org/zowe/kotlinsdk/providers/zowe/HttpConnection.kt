@@ -14,15 +14,8 @@
 
 package org.zowe.kotlinsdk.providers.zowe
 
-/**
- * Request canceller class to provide a possibility to cancel a [Cancellable] request
- * @property currentRequest the current running request to cancel (will be null until the request is started)
- */
-class RequestCanceller {
-  var currentRequest: Cancellable? = null
-
-  /** Cancel the current running request if it is present */
-  fun cancelCurrentRequest() {
-    currentRequest?.cancel()
-  }
+// TODO: doc
+abstract class HttpConnection(host: String, port: Int, scheme: String = "https") : Connection(host, port, scheme) {
+  /** Get authentication parameter to provide during a request */
+  abstract fun getAuthParam(): String
 }

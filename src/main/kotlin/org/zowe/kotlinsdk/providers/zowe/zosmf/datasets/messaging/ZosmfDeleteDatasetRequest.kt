@@ -22,6 +22,7 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.api.messaging.DeleteDatasetRequest
 import org.zowe.kotlinsdk.providers.zowe.Connection
+import org.zowe.kotlinsdk.providers.zowe.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 
 /**
@@ -29,7 +30,7 @@ import org.zowe.kotlinsdk.providers.zowe.HttpRequest
  * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-delete-partitioned-data-set-member">Delete a partitioned dataset member</a>
  */
 class ZosmfDeleteDatasetRequest(
-  override val connection: Connection,
+  override val connection: HttpConnection,
 
   /** dataset-name path param */
   @AvailableSince(ZVersion.ZOS_2_1) override val dsName: String,

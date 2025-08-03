@@ -22,13 +22,13 @@ import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.api.messaging.ListDatasetsRequest
-import org.zowe.kotlinsdk.providers.zowe.Connection
+import org.zowe.kotlinsdk.providers.zowe.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMAttributes
 
 /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-zos-data-sets-system">List the z/OS datasets on a system</a> */
 class ZosmfListDatasetsRequest(
-  override val connection: Connection,
+  override val connection: HttpConnection,
 
   /** dslevel query params */
   @AvailableSince(ZVersion.ZOS_2_1) override val mask: String,

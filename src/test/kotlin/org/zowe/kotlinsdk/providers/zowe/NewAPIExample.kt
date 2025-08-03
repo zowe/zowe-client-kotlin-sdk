@@ -19,6 +19,10 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import net.schmizz.sshj.SSHClient
+import net.schmizz.sshj.transport.verification.PromiscuousVerifier
+import net.schmizz.sshj.userauth.method.AuthPassword
+import net.schmizz.sshj.userauth.password.PasswordUtils
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -26,10 +30,9 @@ import okhttp3.mockwebserver.RecordedRequest
 import okhttp3.tls.HandshakeCertificates
 import org.junit.jupiter.api.Test
 import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
-import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging.ZosmfListDatasetsRequest
 import java.util.concurrent.TimeUnit
 import okhttp3.tls.HeldCertificate
-import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging.ZosmfListDatasetsResponse
+import org.zowe.kotlinsdk.providers.zowe.ssh.datasets.messaging.SshListDatasetsRequest
 
 class NewAPIExample {
   private data class ValidationListElem(
@@ -169,14 +172,35 @@ class NewAPIExample {
       }
     )
 
-    val zoweAPIProvider = ZoweAPIProvider(listOf(HttpRequestRunner(ktorClient)))
+    val sshjClient = SSHClient()
+    sshjClient.addHostKeyVerifier(PromiscuousVerifier())
+
+    val zoweAPIProvider = ZoweAPIProvider(
+      listOf(HttpRequestRunner(ktorClient), SshRequestRunner(sshjClient))
+    )
     val datasetsApi = zoweAPIProvider.getApi(DatasetsAPI::class.java)
 
-    val listDatasetsRequest = ZosmfListDatasetsRequest(
-      UserPassConnection("127.0.0.1", "49222", "https", "TEST", "TEST"),
-      "TEST.*"
+    val listDatasetsRequest = SshListDatasetsRequest(
+      SshConnection(
+        "127.0.0.1",
+        username = "test",
+        authMethods = listOf(AuthPassword(PasswordUtils.createOneOff("TEST".toCharArray())))
+      ),
+      "TEST.*",
+//      shouldReturnLabel = true,
+      shouldReturnStatus = true,
+      shouldReturnHistory = true
     )
+
     val listDatasetsResponse = datasetsApi.listDatasets(listDatasetsRequest)
-    assert(listDatasetsResponse is ZosmfListDatasetsResponse)
+    println()
+
+
+//    val listDatasetsRequest = ZosmfListDatasetsRequest(
+//      UserPassHttpConnection("127.0.0.1", 49222, "https", "TEST", "TEST"),
+//      "TEST.*"
+//    )
+//    val listDatasetsResponse = datasetsApi.listDatasets(listDatasetsRequest)
+//    assert(listDatasetsResponse is ZosmfListDatasetsResponse)
   }
 }
