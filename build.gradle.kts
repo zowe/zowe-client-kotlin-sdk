@@ -37,6 +37,7 @@ plugins {
   alias(libs.plugins.dokka)
   alias(libs.plugins.release)
   alias(libs.plugins.changelog)
+  alias(libs.plugins.kover)
 }
 
 apply(plugin = "java")
@@ -95,9 +96,14 @@ dependencies {
   implementation(libs.ktor.serialization.kotlinx.json)
   implementation(libs.kotlinx.serialization.json)
   implementation(libs.sshj)
+  // New way of testing
+  testImplementation(libs.kotest.assertions.core)
+  testImplementation(libs.kotest.runner.junit5)
+  // Old way of testing
   testImplementation(libs.junit.jupiter.api)
   testImplementation(libs.mockwebserver)
   testImplementation(libs.okhttp.tls)
+  testImplementation(libs.sshd.core)
   testRuntimeOnly(libs.junit.jupiter.engine)
 }
 
@@ -122,6 +128,26 @@ changelog {
   }
 }
 
+kover {
+  currentProject {
+    instrumentation {
+      /* exclude Gradle test tasks */
+      disabledForTestTasks.addAll("intTest")
+    }
+  }
+  reports {
+    filters {
+      includes {
+        classes(
+          providers.provider { "org.zowe.kotlinsdk.annotations.*" },
+          providers.provider { "org.zowe.kotlinsdk.core.*" },
+          providers.provider { "org.zowe.kotlinsdk.providers.*" },
+        )
+      }
+    }
+  }
+}
+
 tasks {
   wrapper {
     gradleVersion = properties("gradleVersion").get()
@@ -136,7 +162,27 @@ tasks {
 
   test {
     useJUnitPlatform()
+
+    testLogging {
+      events("passed", "skipped", "failed")
+      // showStandardStreams = true
+    }
+
     finalizedBy("jacocoTestReport")
+    finalizedBy("koverHtmlReport")
+    finalizedBy("koverXmlReport")
+
+    afterSuite(
+      KotlinClosure2<TestDescriptor, TestResult, Unit>({ desc, result ->
+        if (desc.parent == null) { // will match the outermost suite
+          val output =
+            "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} passed, " +
+              "${result.failedTestCount} failed, ${result.skippedTestCount} skipped)"
+          val fileName = "./build/reports/tests/${result.resultType}.txt"
+          File(fileName).writeText(output)
+        }
+      })
+    )
   }
 
   jacocoTestReport {
@@ -145,6 +191,10 @@ tasks {
       xml.required.set(true)
       xml.outputLocation.set(file("${project.layout.buildDirectory.get()}/reports/jacoco.xml"))
     }
+  }
+
+  koverHtmlReport {
+    finalizedBy("koverXmlReport")
   }
 
   register<Test>("intTest") {

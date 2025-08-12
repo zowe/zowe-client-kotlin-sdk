@@ -21,12 +21,13 @@ import org.zowe.kotlinsdk.core.RequestRunner
 import org.zowe.kotlinsdk.core.info.api.InfoAPI
 import org.zowe.kotlinsdk.core.info.api.messaging.GetSystemInfoRequest
 import org.zowe.kotlinsdk.core.info.api.messaging.GetSystemInfoResponse
+import org.zowe.kotlinsdk.providers.zowe.ZoweInternalAPI
 
-// TODO: OptIn mechanism
 /**
  * Implementation of Info API for z/OSMF REST API to work with system information retrieval service
  * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=services-zosmf-information-retrieval-service">z/OSMF information retrieval service</a>
  */
+@ZoweInternalAPI
 class ZosmfInfoAPI(private val requestRunner: RequestRunner) : InfoAPI {
 
   /**

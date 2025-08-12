@@ -26,6 +26,10 @@ interface SshRequest : Request {
   val connection: SshConnection
   val sshCommand: String
 
-  // TODO: doc
+  /**
+   * Execute the SSH request with the provided SSH client
+   * @param client the SSHj client to exec the request with
+   * @return [SshResponse] object
+   */
   fun execRequest(client: SSHClient): SshResponse
 }

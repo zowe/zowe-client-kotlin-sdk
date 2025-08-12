@@ -23,12 +23,19 @@ import org.zowe.kotlinsdk.core.Response
 import org.zowe.kotlinsdk.core.SupportedProtocol
 import kotlin.coroutines.coroutineContext
 
-// TODO: doc
+/**
+ * SSH request runner. Generalizes the way to process SSH requests and responses
+ * @property client the SSHj client to execute requests with
+ */
 class SshRequestRunner(
   private val client: SSHClient,
   requestCanceller: RequestCanceller? = null
 ) : RequestRunner(SupportedProtocol.SSH, requestCanceller) {
-  // TODO: doc
+  /**
+   * Run the SSH request. Provides the way to cancel the request by the requester
+   * @param sshRequest the SSH request object to execute a specific request with
+   * @return [SshResponse] object with the respectively processed data
+   */
   suspend fun runSshRequest(sshRequest: SshRequest): SshResponse {
     val connection = sshRequest.connection
     connection.checkConnection()
@@ -38,7 +45,6 @@ class SshRequestRunner(
     return response
   }
 
-  // TODO: doc
   override fun runRequest(params: Request): Response {
     return runBlocking {
       runSshRequest(params as? SshRequest ?: throw Exception("Invalid params provided"))

@@ -21,6 +21,7 @@ import kotlinx.coroutines.runBlocking
 import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
+import org.zowe.kotlinsdk.core.datasets.AttributesLevel
 import org.zowe.kotlinsdk.core.datasets.api.messaging.ListDatasetsRequest
 import org.zowe.kotlinsdk.providers.zowe.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
@@ -33,6 +34,12 @@ class ZosmfListDatasetsRequest(
   /** dslevel query params */
   @AvailableSince(ZVersion.ZOS_2_1) override val mask: String,
 
+  /** Level of attributes to be returned ([AttributesLevel.FULL] by default) */
+  @AvailableSince(ZVersion.ZOS_2_1) override val attributesLevel: AttributesLevel = AttributesLevel.FULL,
+
+  /** Additional parameter for X-IBM-Attributes. If true - it is set to "$attributes,total" */
+  @AvailableSince(ZVersion.ZOS_2_1) val returnTotalRows: Boolean = true,
+
   /** volser query param */
   @AvailableSince(ZVersion.ZOS_2_1) val volumeSerial: String? = null,
 
@@ -41,9 +48,6 @@ class ZosmfListDatasetsRequest(
 
   /** X-IBM-Max-Items custom header */
   @AvailableSince(ZVersion.ZOS_2_1) override val maxItems: Int? = null,
-
-  /** X-IBM-Attributes custom header */
-  @AvailableSince(ZVersion.ZOS_2_1) override val attributes: XIBMAttributes? = null,
 
   /** X-IBM-Target-System default header */
   @AvailableSince(ZVersion.ZOS_2_4) override val targetSystem: String? = null,
@@ -67,11 +71,13 @@ class ZosmfListDatasetsRequest(
   @AvailableSince(ZVersion.ZOS_2_5) override val requestAcctnum: String? = null,
 
   /** X-IBM-Request-Proc default header */
-  @AvailableSince(ZVersion.ZOS_2_5) override val requestProc: String?= null,
+  @AvailableSince(ZVersion.ZOS_2_5) override val requestProc: String? = null,
 
   /** X-IBM-Request-Region default header */
   @AvailableSince(ZVersion.ZOS_2_5) override val requestRegion: String? = null,
 ) : HttpRequest, ListDatasetsRequest, ZosmfListDatasetsRequestHeaders {
+
+  override val attributes: XIBMAttributes = XIBMAttributes(attributesLevel, isTotal=returnTotalRows)
 
   override val method = HttpMethod.Get
 

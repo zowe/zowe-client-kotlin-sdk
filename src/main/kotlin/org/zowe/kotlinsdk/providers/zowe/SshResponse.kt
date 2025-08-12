@@ -16,5 +16,5 @@ package org.zowe.kotlinsdk.providers.zowe
 
 import org.zowe.kotlinsdk.core.Response
 
-// TODO: doc
+/** A basic representation of an SSH response object */
 interface SshResponse : Response

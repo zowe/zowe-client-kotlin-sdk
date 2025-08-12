@@ -22,13 +22,14 @@ import org.zowe.kotlinsdk.core.RequestRunner
 import org.zowe.kotlinsdk.core.datasets.data.DatasetItem
 import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
 import org.zowe.kotlinsdk.core.datasets.api.messaging.*
+import org.zowe.kotlinsdk.providers.zowe.ZoweInternalAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging.*
 
-// TODO: OptIn mechanism
 /**
  * Implementation of Datasets API for z/OSMF REST API to work with datasets and members
  * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=services-zos-data-set-file-rest-interface">z/OS data set and file REST interface</a>
  */
+@ZoweInternalAPI
 class ZosmfDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
 
   /**

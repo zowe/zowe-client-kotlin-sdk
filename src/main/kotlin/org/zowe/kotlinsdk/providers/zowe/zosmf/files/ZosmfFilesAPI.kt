@@ -49,12 +49,13 @@ import org.zowe.kotlinsdk.core.files.api.messaging.UnlinkFileRequest
 import org.zowe.kotlinsdk.core.files.api.messaging.UnlinkFileResponse
 import org.zowe.kotlinsdk.core.files.api.messaging.WriteToFileRequest
 import org.zowe.kotlinsdk.core.files.api.messaging.WriteToFileResponse
+import org.zowe.kotlinsdk.providers.zowe.ZoweInternalAPI
 
-// TODO: OptIn mechanism
 /**
  * Implementation of Files API for z/OSMF REST API to work with USS files and folders
  * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=services-zos-data-set-file-rest-interface">z/OS data set and file REST interface</a>
  */
+@ZoweInternalAPI
 class ZosmfFilesAPI(private val requestRunner: RequestRunner) : FilesAPI {
 
   /**

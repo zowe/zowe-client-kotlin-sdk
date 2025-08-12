@@ -17,11 +17,9 @@ package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging
 import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
+import org.zowe.kotlinsdk.core.datasets.AttributesLevel
 import org.zowe.kotlinsdk.core.datasets.api.messaging.GetDatasetInfoRequest
-import org.zowe.kotlinsdk.providers.zowe.Connection
 import org.zowe.kotlinsdk.providers.zowe.HttpConnection
-import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.ReqType
-import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMAttributes
 
 /**
  * Get dataset info request parameters holder.
@@ -68,6 +66,8 @@ class ZosmfGetDatasetInfoRequest(
     return ZosmfListDatasetsRequest(
       connection = connection,
       mask = this.dsName,
+      attributesLevel = AttributesLevel.FULL,
+      returnTotalRows = false,
       asyncThreshold = this.asyncThreshold,
       responseTimeout = this.responseTimeout,
       sessionLimitWait = this.sessionLimitWait,
@@ -76,7 +76,6 @@ class ZosmfGetDatasetInfoRequest(
       requestProc = this.requestProc,
       requestRegion = this.requestRegion,
       maxItems = 1,
-      attributes = XIBMAttributes(ReqType.BASE),
       targetSystemUser = this.targetSystemUser,
       targetSystemPassword = this.targetSystemPassword,
       volumeSerial = this.volumeSerial,

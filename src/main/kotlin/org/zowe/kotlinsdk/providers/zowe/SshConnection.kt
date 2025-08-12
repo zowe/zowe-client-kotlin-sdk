@@ -16,13 +16,27 @@ package org.zowe.kotlinsdk.providers.zowe
 
 import net.schmizz.sshj.userauth.method.AuthMethod
 
-// TODO: doc
+/**
+ * SSH connection class. Provides the way to store and gather specific SSH parameters.
+ * Scheme is "ssh" by default
+ * @see [Connection]
+ * @property username the username to use during the connection
+ * @property authMethods authentication methods list with all the necessary information provided to connect
+ */
 class SshConnection(
   host: String,
   port: Int = 22,
   scheme: String = "ssh",
-  /** Username to use during the connection */
   val username: String,
-  /** Ordered authentication methods list with all the necessary information provided to connect */
   val authMethods: List<AuthMethod>
-) : Connection(host, port, scheme)
+) : Connection(host, port, scheme) {
+  override fun checkConnection() {
+    super.checkConnection()
+    check(username.isNotEmpty()) {
+      "Connection data is not set properly. The username is not specified"
+    }
+    check(authMethods.isNotEmpty()) {
+      "Connection data is not set properly. There are no authentication methods specified"
+    }
+  }
+}

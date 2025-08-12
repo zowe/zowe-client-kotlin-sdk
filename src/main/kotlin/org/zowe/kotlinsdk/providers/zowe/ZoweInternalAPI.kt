@@ -14,12 +14,7 @@
 
 package org.zowe.kotlinsdk.providers.zowe
 
-/**
- * HTTP connection abstraction. Provides the way to store and gather specific HTTP parameters.
- * Scheme is "https" by default
- * @see [Connection]
- */
-abstract class HttpConnection(host: String, port: Int, scheme: String = "https") : Connection(host, port, scheme) {
-  /** Get authentication parameter to provide during a request */
-  abstract fun getAuthParam(): String
-}
+/** Annotation class to restrict access to specified internal Zowe API classes */
+@RequiresOptIn(message = "This class functionality provides interaction with internal Zowe APIs and needs an opt-in. Do the opt-in only in specified places to avoid incorrect functionality usage.")
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
+annotation class ZoweInternalAPI

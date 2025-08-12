@@ -15,6 +15,8 @@
 package org.zowe.kotlinsdk.providers.zowe.ssh.datasets
 
 import kotlinx.coroutines.runBlocking
+import org.zowe.kotlinsdk.annotations.AvailableSince
+import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.RequestRunner
 import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
 import org.zowe.kotlinsdk.core.datasets.api.messaging.CopyDatasetRequest
@@ -41,12 +43,19 @@ import org.zowe.kotlinsdk.core.datasets.api.messaging.RetrieveDatasetContentRequ
 import org.zowe.kotlinsdk.core.datasets.api.messaging.RetrieveDatasetContentResponse
 import org.zowe.kotlinsdk.core.datasets.api.messaging.WriteToDatasetRequest
 import org.zowe.kotlinsdk.core.datasets.api.messaging.WriteToDatasetResponse
+import org.zowe.kotlinsdk.providers.zowe.ZoweInternalAPI
 
-// TODO: OptIn mechanism
-// TODO: doc
+/**
+ * Implementation of Datasets API for SSH to work with datasets and members
+ * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=reference-tsoe-commands-subcommands">TSO/E commands and subcommands</a>
+ */
+@ZoweInternalAPI
 class SshDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
-
-  // TODO: doc
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-listds-command">LISTDS command</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=lce-example-1-3">LISTDS command: Example 1</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_1)
   override fun listDatasets(params: ListDatasetsRequest): ListDatasetsResponse {
     return runBlocking {
       requestRunner.runRequest(params) as ListDatasetsResponse
@@ -55,6 +64,7 @@ class SshDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
 
   override fun getDatasetInfo(params: GetDatasetInfoRequest): GetDatasetInfoResponse {
     TODO("Not yet implemented")
+    // Combine LISTDS + LISTCAT?
   }
 
   override fun listDatasetMembers(params: ListDatasetMembersRequest): ListDatasetMembersResponse {

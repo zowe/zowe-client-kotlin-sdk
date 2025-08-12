@@ -16,11 +16,14 @@
 package org.zowe.kotlinsdk.core.datasets.api.messaging
 
 import org.zowe.kotlinsdk.core.Request
+import org.zowe.kotlinsdk.core.datasets.AttributesLevel
 
 /**
  * Represents basic request to list dataset members
  * @property dsName name of dataset whose members will be obtained
+ * @property attributesLevel the level of attributes to be returned
  */
 interface ListDatasetMembersRequest : Request {
   val dsName: String
+  val attributesLevel: AttributesLevel
 }

@@ -28,7 +28,6 @@ interface ZosmfListDatasetMembersRequestHeaders : ZosmfDsAndFilesCommonRequestHe
   @AvailableSince(ZVersion.ZOS_2_1) val maxItems: Int?
 
   /** X-IBM-Attributes custom header */
-  // TODO: in impl module - BASE should not be a default, but the preferred somewhere
   @AvailableSince(ZVersion.ZOS_2_1) val attributes: XIBMAttributes?
 
   /** X-IBM-Migrated-Recall custom header */

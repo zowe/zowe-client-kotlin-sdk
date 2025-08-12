@@ -29,26 +29,35 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.jes.ZosmfJesAPI
 
 /**
  * Zowe's official implementation of the z/OS-compatible API provider
- * @param requestRunners a list of [RequestRunner] instances that provide the API implementations
+ * @param requestRunners a list of [RequestRunner] instances that provide API implementations
  */
+@OptIn(ZoweInternalAPI::class)
 class ZoweAPIProvider(
   private val requestRunners: List<RequestRunner>
 ) : APIProvider(
-  DatasetsAPI::class.java to ZosmfDatasetsAPI(
-    requestRunners.find { it.protocol == SupportedProtocol.HTTP } ?: throw Exception("HTTP is not supported")
-  ),
-  FilesAPI::class.java to ZosmfFilesAPI(
-    requestRunners.find { it.protocol == SupportedProtocol.HTTP } ?: throw Exception("HTTP is not supported")
-  ),
-  JesAPI::class.java to ZosmfJesAPI(
-    requestRunners.find { it.protocol == SupportedProtocol.HTTP } ?: throw Exception("HTTP is not supported")
-  ),
-  InfoAPI::class.java to ZosmfInfoAPI(
-    requestRunners.find { it.protocol == SupportedProtocol.HTTP } ?: throw Exception("HTTP is not supported")
-  ),
-  DatasetsAPI::class.java to SshDatasetsAPI(
-    requestRunners.find { it.protocol == SupportedProtocol.SSH } ?: throw Exception("SSH is not supported")
-  )
+  *(
+    requestRunners
+      .find { it.protocol == SupportedProtocol.HTTP }
+      ?.let {
+        listOf(
+          DatasetsAPI::class.java to ZosmfDatasetsAPI(it),
+          FilesAPI::class.java to ZosmfFilesAPI(it),
+          JesAPI::class.java to ZosmfJesAPI(it),
+          InfoAPI::class.java to ZosmfInfoAPI(it)
+        )
+      }
+      ?: listOf()
+  ).toTypedArray(),
+  *(
+    requestRunners
+      .find { it.protocol == SupportedProtocol.SSH }
+      ?.let {
+        listOf(
+          DatasetsAPI::class.java to SshDatasetsAPI(it),
+        )
+      }
+      ?: listOf()
+  ).toTypedArray()
 ) {
   override val supportedProtocols: List<SupportedProtocol>
     get() = requestRunners.map { it.protocol }

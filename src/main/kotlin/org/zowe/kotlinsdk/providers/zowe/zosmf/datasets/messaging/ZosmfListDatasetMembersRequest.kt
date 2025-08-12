@@ -21,6 +21,7 @@ import kotlinx.coroutines.runBlocking
 import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
+import org.zowe.kotlinsdk.core.datasets.AttributesLevel
 import org.zowe.kotlinsdk.core.datasets.api.messaging.ListDatasetMembersRequest
 import org.zowe.kotlinsdk.providers.zowe.Connection
 import org.zowe.kotlinsdk.providers.zowe.HttpConnection
@@ -44,9 +45,11 @@ class ZosmfListDatasetMembersRequest(
   /** X-IBM-Max-Items custom header */
   @AvailableSince(ZVersion.ZOS_2_1) override val maxItems: Int? = null,
 
-  /** X-IBM-Attributes custom header */
-  // TODO: in impl module - BASE should not be a default, but the preferred somewhere
-  @AvailableSince(ZVersion.ZOS_2_1) override val attributes: XIBMAttributes? = null,
+  /** Level of attributes to be returned ([AttributesLevel.FULL] by default) */
+  @AvailableSince(ZVersion.ZOS_2_1) override val attributesLevel: AttributesLevel = AttributesLevel.FULL,
+
+  /** Additional parameter for X-IBM-Attributes. If true - it is set to "$attributes,total" */
+  @AvailableSince(ZVersion.ZOS_2_1) val returnTotalRows: Boolean = true,
 
   /** X-IBM-Migrated-Recall custom header */
   @AvailableSince(ZVersion.ZOS_2_2) override val migratedRecall: XIBMMigratedRecall? = null,
@@ -78,6 +81,8 @@ class ZosmfListDatasetMembersRequest(
   /** X-IBM-Request-Region default header */
   @AvailableSince(ZVersion.ZOS_2_5) override val requestRegion: String? = null,
 ) : HttpRequest, ListDatasetMembersRequest, ZosmfListDatasetMembersRequestHeaders {
+
+  override val attributes: XIBMAttributes = XIBMAttributes(attributesLevel, isTotal=returnTotalRows)
 
   override val method = HttpMethod.Get
 

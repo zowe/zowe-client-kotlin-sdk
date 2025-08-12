@@ -16,11 +16,14 @@
 package org.zowe.kotlinsdk.core.datasets.api.messaging
 
 import org.zowe.kotlinsdk.core.Request
+import org.zowe.kotlinsdk.core.datasets.AttributesLevel
 
 /**
- * Represents basic request to list datasets
+ * Represents basic request to list data sets
  * @property mask dataset mask
+ * @property attributesLevel the level of attributes to be returned
  */
 interface ListDatasetsRequest : Request {
   val mask: String
+  val attributesLevel: AttributesLevel
 }

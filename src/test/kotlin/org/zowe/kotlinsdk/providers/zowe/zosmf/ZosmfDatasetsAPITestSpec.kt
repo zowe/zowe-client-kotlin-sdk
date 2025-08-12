@@ -12,92 +12,60 @@
  *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe
+package org.zowe.kotlinsdk.providers.zowe.zosmf
 
+import io.kotest.assertions.assertSoftly
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import net.schmizz.sshj.SSHClient
-import net.schmizz.sshj.transport.verification.PromiscuousVerifier
-import net.schmizz.sshj.userauth.method.AuthPassword
-import net.schmizz.sshj.userauth.password.PasswordUtils
-import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import okhttp3.mockwebserver.RecordedRequest
 import okhttp3.tls.HandshakeCertificates
-import org.junit.jupiter.api.Test
-import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
-import java.util.concurrent.TimeUnit
 import okhttp3.tls.HeldCertificate
-import org.zowe.kotlinsdk.providers.zowe.ssh.datasets.messaging.SshListDatasetsRequest
+import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
+import org.zowe.kotlinsdk.providers.zowe.HttpRequestRunner
+import org.zowe.kotlinsdk.providers.zowe.UserPassHttpConnection
+import org.zowe.kotlinsdk.providers.zowe.ZoweAPIProvider
+import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging.ZosmfListDatasetsRequest
+import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging.ZosmfListDatasetsResponse
+import java.util.concurrent.TimeUnit
 
-class NewAPIExample {
-  private data class ValidationListElem(
-    val name: String,
-    val validator: (RecordedRequest?) -> Boolean,
-    val handler: (RecordedRequest?) -> MockResponse
-  )
+class ZosmfDatasetsAPITestSpec  : StringSpec({
+  lateinit var zosmfMockResponseDispatcher: HttpMockResponseDispatcher
+  lateinit var zosmfMockServer: MockWebServer
+  lateinit var zosmfClient: HttpClient
+  lateinit var datasetsApi: DatasetsAPI
 
-  private class MockResponseDispatcher : Dispatcher() {
+  val zosmfServerHost = "127.0.0.1"
+  val zosmfServerPort = 49443
+  val zosmfUsername = "test"
+  val zosmfPassword = "test"
 
-    private var validationList = mutableListOf<ValidationListElem>()
-
-    fun injectEndpoint(
-      name: String,
-      validator: (RecordedRequest?) -> Boolean,
-      handler: (RecordedRequest?) -> MockResponse
-    ) {
-      validationList.add(ValidationListElem(name, validator, handler))
-    }
-
-    fun removeEndpoint(name: String) {
-      validationList.removeAll { it.name == name }
-    }
-
-    fun removeAllEndpoints() {
-      validationList.clear()
-    }
-
-    override fun dispatch(request: RecordedRequest): MockResponse {
-      println("Request received: ${request.requestLine}")
-
-      val foundValidator = validationList
-        .firstOrNull { it.validator(request) }
-
-      return foundValidator
-        ?.handler
-        ?.let { it(request) }
-        ?: MockResponse()
-          .setBody("Response is not implemented")
-          .setResponseCode(404)
-          .addHeader("Content-Type", "application/json")
-    }
-  }
-
-  @Test
-  fun exampleTest() {
+  beforeSpec {
     val localhostCertificate = HeldCertificate.Builder()
       .addSubjectAlternativeName("localhost")
-      .addSubjectAlternativeName("127.0.0.1")
+      .addSubjectAlternativeName(zosmfServerHost)
       .duration(60, TimeUnit.MINUTES)
       .build()
     val serverCertificates = HandshakeCertificates.Builder()
       .heldCertificate(localhostCertificate)
       .build()
-    val mockServer = MockWebServer()
-    val responseDispatcher = MockResponseDispatcher()
-    mockServer.dispatcher = responseDispatcher
-    mockServer.useHttps(serverCertificates.sslSocketFactory(), false)
-    mockServer.start(49222)
+    zosmfMockServer = MockWebServer()
+    zosmfMockResponseDispatcher = HttpMockResponseDispatcher()
+
+    zosmfMockServer.dispatcher = zosmfMockResponseDispatcher
+    zosmfMockServer.useHttps(serverCertificates.sslSocketFactory(), false)
+    zosmfMockServer.start(zosmfServerPort)
 
     val clientCertificates = HandshakeCertificates.Builder()
       .addTrustedCertificate(localhostCertificate.certificate)
       .build()
 
-    val ktorClient = HttpClient(CIO) {
+    zosmfClient = HttpClient(CIO) {
       install(ContentNegotiation) {
         json(
           Json {
@@ -113,16 +81,27 @@ class NewAPIExample {
       }
     }
 
-    responseDispatcher.injectEndpoint(
-      "mock:zosmf/restfiles/ds?dslevel=TEST.*",
-      { it?.requestLine?.contains("/zosmf/restfiles/ds?dslevel=TEST") ?: false },
+    val zoweAPIProvider = ZoweAPIProvider(listOf(HttpRequestRunner(zosmfClient)))
+
+    datasetsApi = zoweAPIProvider.getApi(DatasetsAPI::class.java)
+  }
+
+  afterSpec {
+    zosmfMockResponseDispatcher.clearResolvers()
+    zosmfMockServer.shutdown()
+  }
+
+  "listDatasets should return the correct list of datasets" {
+    zosmfMockResponseDispatcher.injectResolver(
+      "mock:zosmf/restfiles/ds?dslevel=TEST1.*",
+      { it.requestLine.contains("/zosmf/restfiles/ds?dslevel=TEST1") },
       {
         MockResponse()
           .setBody(
             "{\n" +
             "    \"items\": [\n" +
             "        {\n" +
-            "            \"dsname\": \"TEST.TEST1\",\n" +
+            "            \"dsname\": \"TEST1.TEST1\",\n" +
             "            \"blksz\": \"27920\",\n" +
             "            \"catnm\": \"CATALOG.Z23D.MASTER\",\n" +
             "            \"cdate\": \"2023/08/28\",\n" +
@@ -143,7 +122,7 @@ class NewAPIExample {
             "            \"vols\": \"D3SYS1\"\n" +
             "        },\n" +
             "        {\n" +
-            "            \"dsname\": \"TEST.TEST2\",\n" +
+            "            \"dsname\": \"TEST1.TEST2\",\n" +
             "            \"blksz\": \"27920\",\n" +
             "            \"catnm\": \"CATALOG.Z23D.MASTER\",\n" +
             "            \"cdate\": \"2023/08/28\",\n" +
@@ -172,35 +151,20 @@ class NewAPIExample {
       }
     )
 
-    val sshjClient = SSHClient()
-    sshjClient.addHostKeyVerifier(PromiscuousVerifier())
-
-    val zoweAPIProvider = ZoweAPIProvider(
-      listOf(HttpRequestRunner(ktorClient), SshRequestRunner(sshjClient))
-    )
-    val datasetsApi = zoweAPIProvider.getApi(DatasetsAPI::class.java)
-
-    val listDatasetsRequest = SshListDatasetsRequest(
-      SshConnection(
-        "127.0.0.1",
-        username = "test",
-        authMethods = listOf(AuthPassword(PasswordUtils.createOneOff("TEST".toCharArray())))
+    val listDatasetsRequest = ZosmfListDatasetsRequest(
+      UserPassHttpConnection(
+        zosmfServerHost,
+        zosmfServerPort,
+        user=zosmfUsername,
+        password=zosmfPassword
       ),
-      "TEST.*",
-//      shouldReturnLabel = true,
-      shouldReturnStatus = true,
-      shouldReturnHistory = true
+      "TEST1.*"
     )
-
     val listDatasetsResponse = datasetsApi.listDatasets(listDatasetsRequest)
-    println()
 
-
-//    val listDatasetsRequest = ZosmfListDatasetsRequest(
-//      UserPassHttpConnection("127.0.0.1", 49222, "https", "TEST", "TEST"),
-//      "TEST.*"
-//    )
-//    val listDatasetsResponse = datasetsApi.listDatasets(listDatasetsRequest)
-//    assert(listDatasetsResponse is ZosmfListDatasetsResponse)
+    assertSoftly {
+      listDatasetsResponse is ZosmfListDatasetsResponse
+      listDatasetsResponse.dsItems.size shouldBe 2
+    }
   }
-}
+})

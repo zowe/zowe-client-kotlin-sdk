@@ -21,12 +21,13 @@ import org.zowe.kotlinsdk.core.RequestRunner
 import org.zowe.kotlinsdk.core.jes.api.JesAPI
 import org.zowe.kotlinsdk.core.jes.api.messaging.GetJobRequest
 import org.zowe.kotlinsdk.core.jes.api.messaging.GetJobResponse
+import org.zowe.kotlinsdk.providers.zowe.ZoweInternalAPI
 
-// TODO: OptIn mechanism
 /**
  * Implementation of Jes API for z/OSMF REST API to work with JES jobs
  * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=services-zos-jobs-rest-interface">z/OS jobs REST interface</a>
  */
+@ZoweInternalAPI
 class ZosmfJesAPI(private val requestRunner: RequestRunner) : JesAPI {
 
   /**

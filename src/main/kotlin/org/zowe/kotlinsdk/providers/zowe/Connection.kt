@@ -14,15 +14,13 @@
 
 package org.zowe.kotlinsdk.providers.zowe
 
-/** Represents basic connection information */
-abstract class Connection(
-  /** z/OS host IP or root domain */
-  val host: String,
-  /** z/OS host port number */
-  val port: Int,
-  /** Connection scheme to use during a connection */
-  val scheme: String,
-) {
+/**
+ * Represents basic connection information
+ * @property host z/OS host IP or root domain to connect to
+ * @property port z/OS host port number to connect to
+ * @property scheme connection scheme to use
+ */
+abstract class Connection(val host: String, val port: Int, val scheme: String) {
   /** Check if the connection has all the necessary parameters specified */
   open fun checkConnection() {
     check(host.isNotEmpty()) {
