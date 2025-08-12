@@ -98,7 +98,14 @@ class SshListDatasetsRequest(
         val output = ByteArrayOutputStream()
         cmd.inputStream.copyTo(output)
 
+        val error = ByteArrayOutputStream()
+        cmd.errorStream.copyTo(error)
+
         cmd.join()
+
+        val exitStatus = cmd.exitStatus
+        val exitSignal = cmd.exitSignal
+
         return SshListDatasetsResponse(output.toString(), mask, modifiedMask, attributesLevel)
       }
     } finally {

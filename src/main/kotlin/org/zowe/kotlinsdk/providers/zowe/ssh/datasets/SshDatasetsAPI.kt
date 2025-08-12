@@ -63,8 +63,9 @@ class SshDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
   }
 
   override fun getDatasetInfo(params: GetDatasetInfoRequest): GetDatasetInfoResponse {
-    TODO("Not yet implemented")
-    // Combine LISTDS + LISTCAT?
+    return runBlocking {
+      requestRunner.runRequest(params) as GetDatasetInfoResponse
+    }
   }
 
   override fun listDatasetMembers(params: ListDatasetMembersRequest): ListDatasetMembersResponse {
