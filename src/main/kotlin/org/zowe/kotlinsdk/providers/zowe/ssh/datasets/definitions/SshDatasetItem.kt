@@ -14,19 +14,22 @@
 
 package org.zowe.kotlinsdk.providers.zowe.ssh.datasets.definitions
 
+import org.zowe.kotlinsdk.annotations.AvailableSince
+import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.data.DatasetItem
+import java.lang.Exception
 
 /** SSH dataset item, produced by SSH response handling functions */
 class SshDatasetItem(
-  override val datasetName: String,
-  override val isMigrated: Boolean? = null,
-  override val blockSize: Int? = null,
-  override val datasetOrganization: DatasetItem.DatasetOrganization? = null,
-  override val recordLength: Int? = null,
-  override val recordFormat: DatasetItem.RecordFormat? = null,
-  override val sizeInTracks: Int? = null,
-  override val spaceUnits: DatasetItem.SpaceUnits? = null,
-  override val volumeSerial: String? = null
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val datasetName: String,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val isMigrated: Boolean? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val blockSize: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) private val sshDatasetOrganization: SshDatasetOrganization? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val recordLength: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) private val sshRecordFormat: SshRecordFormat? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val sizeInTracks: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) private val sshSpaceUnits: SshSpaceUnits? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val volumeSerial: String? = null
 ) : DatasetItem {
   companion object {
     /**
@@ -38,28 +41,19 @@ class SshDatasetItem(
       val dsName = dsAttrsHeaderToValues.getOrDefault("DSNAME", "ERROR404")
 
       val dsOrg = dsAttrsHeaderToValues
-      .getOrDefault("DSORG", null)
-      .let { it ->
-        when (it) {
-          "PS" -> DatasetItem.DatasetOrganization.PS
-          "PO" -> DatasetItem.DatasetOrganization.PO
-          "VSAM" -> DatasetItem.DatasetOrganization.VS
-          else -> null
+        .getOrDefault("DSORG", null)
+        .let {
+          when (it) {
+            "PS" -> SshDatasetOrganization.PS
+            "PO" -> SshDatasetOrganization.PO
+            "VSAM" -> SshDatasetOrganization.VSAM
+            else -> null
+          }
         }
-      }
 
       val recfm = dsAttrsHeaderToValues
         .getOrDefault("RECFM", null)
-        .let {
-          when (it) {
-            "F" -> DatasetItem.RecordFormat.F
-            "FB" -> DatasetItem.RecordFormat.FB
-            "V" -> DatasetItem.RecordFormat.V
-            "VB" -> DatasetItem.RecordFormat.VB
-            "U" -> DatasetItem.RecordFormat.U
-            else -> if (dsOrg == DatasetItem.DatasetOrganization.VS) DatasetItem.RecordFormat.VSAM else null
-          }
-        }
+        .let { SshRecordFormat.getSshRecordFormatFromString(it ?: "", dsOrg) }
 
       val volser = dsAttrsHeaderToValues
         .getOrDefault("VOLUMES", null)
@@ -69,9 +63,9 @@ class SshDatasetItem(
         .getOrDefault("SPACE_UNITS", "")
         .let {
           when (it) {
-            "CYL" -> DatasetItem.SpaceUnits.CYLINDERS
-            "TRK" -> DatasetItem.SpaceUnits.TRACKS
-            "BLK" -> DatasetItem.SpaceUnits.BLOCKS
+            "CYL" -> SshSpaceUnits.CYLINDERS
+            "TRK" -> SshSpaceUnits.TRACKS
+            "BLK" -> SshSpaceUnits.BLOCKS
             else -> null
           }
         }
@@ -80,15 +74,129 @@ class SshDatasetItem(
         dsName,
         isMigrated = false,
         blockSize = dsAttrsHeaderToValues.getOrDefault("BLKSIZE", null)?.toIntOrNull(),
-        datasetOrganization = dsOrg,
+        sshDatasetOrganization = dsOrg,
         recordLength = dsAttrsHeaderToValues.getOrDefault("LRECL", null)?.toIntOrNull(),
-        recordFormat = recfm,
+        sshRecordFormat = recfm,
         sizeInTracks = dsAttrsHeaderToValues.getOrDefault("SIZE_IN_TRACKS", null)?.toIntOrNull(),
-        spaceUnits = spaceu,
+        sshSpaceUnits = spaceu,
         volumeSerial = volser
       )
     }
   }
+
+  // TODO: doc
+  // TODO: GDG
+  class SshRecordFormat(
+    val recFmLength: SshRecordFormatLength? = null,
+    val recFmBlocking: SshRecordFormatBlocking? = null,
+    val recFmControlChar: SshRecordFormatControlCharacter? = null,
+    val hasVarLengthAscii: Boolean = false,
+    val hasTrkOverflowWrite: Boolean = false
+  ) {
+    // Mutually exclusive
+    enum class SshRecordFormatLength { F, V, U, VSAM }
+
+    // Mutually exclusive
+    enum class SshRecordFormatBlocking { B, S }
+
+    // Mutually exclusive
+    enum class SshRecordFormatControlCharacter { A, M }
+
+    companion object {
+      // TODO: doc
+      fun getSshRecordFormatFromString(rawRecFm: String, dsOrg: SshDatasetOrganization? = null): SshRecordFormat {
+        val recFmLength = when {
+          rawRecFm.contains("F") -> SshRecordFormatLength.F
+          rawRecFm.contains("V") -> SshRecordFormatLength.V
+          rawRecFm.contains("U") -> SshRecordFormatLength.U
+          else -> if (dsOrg == SshDatasetOrganization.VSAM) SshRecordFormatLength.VSAM else null
+        }
+        val recFmBlocking = when {
+          rawRecFm.contains("B") -> SshRecordFormatBlocking.B
+          rawRecFm.contains("S") -> SshRecordFormatBlocking.S
+          else -> null
+        }
+        val recFmControlChar = when {
+          rawRecFm.contains("A") -> SshRecordFormatControlCharacter.A
+          rawRecFm.contains("M") -> SshRecordFormatControlCharacter.M
+          else -> null
+        }
+        val hasVarLengthAscii = rawRecFm.contains("D")
+        val hasTrkOverflowWrite = rawRecFm.contains("T")
+        return SshRecordFormat(recFmLength, recFmBlocking, recFmControlChar, hasVarLengthAscii, hasTrkOverflowWrite)
+      }
+    }
+
+    // TODO: doc
+    fun buildRecFmForAlloc(): String {
+      return when (recFmLength) {
+        null -> ""
+        SshRecordFormatLength.VSAM -> ""
+        SshRecordFormatLength.U -> " RECFM(U)"
+        else -> StringBuilder(" RECFM($recFmLength")
+          .append(if (recFmBlocking != null) ",$recFmBlocking" else "")
+          .append(if (recFmControlChar != null) ",$recFmControlChar" else "")
+          .append(if (hasVarLengthAscii) ",D" else "")
+          .append(if (hasTrkOverflowWrite) ",T" else "")
+          .append(")")
+          .toString()
+      }
+    }
+
+    // TODO: doc
+    fun toRecordFormat(): DatasetItem.RecordFormat = when (this.recFmLength) {
+      SshRecordFormatLength.F -> {
+        if (this.recFmBlocking == SshRecordFormatBlocking.B) DatasetItem.RecordFormat.FB
+        else DatasetItem.RecordFormat.F
+      }
+      SshRecordFormatLength.V -> {
+        if (this.recFmBlocking == SshRecordFormatBlocking.B) DatasetItem.RecordFormat.VB
+        else DatasetItem.RecordFormat.V
+      }
+      SshRecordFormatLength.U -> DatasetItem.RecordFormat.U
+      else -> DatasetItem.RecordFormat.VSAM
+    }
+  }
+
+  // TODO: doc
+  enum class SshDatasetOrganization {
+    DA,
+    DAU,
+    PO,
+    POU,
+    PS,
+    PSU,
+    VSAM;
+
+    fun toDatasetOrganization(): DatasetItem.DatasetOrganization = when (this) {
+      PS -> DatasetItem.DatasetOrganization.PS
+      PO -> DatasetItem.DatasetOrganization.PO
+      VSAM -> DatasetItem.DatasetOrganization.VS
+      else -> throw Exception("Unsupported dataset organization: $this")
+    }
+  }
+
+  // TODO: doc
+  enum class SshSpaceUnits {
+    BLOCKS,
+    CYLINDERS,
+    TRACKS;
+
+    fun toSpaceUnits(): DatasetItem.SpaceUnits = when (this) {
+      BLOCKS -> DatasetItem.SpaceUnits.BLOCKS
+      CYLINDERS -> DatasetItem.SpaceUnits.CYLINDERS
+      TRACKS -> DatasetItem.SpaceUnits.TRACKS
+    }
+  }
+
+  override val datasetOrganization: DatasetItem.DatasetOrganization?
+    get() = sshDatasetOrganization?.toDatasetOrganization()
+
+  override val recordFormat: DatasetItem.RecordFormat?
+    get() = sshRecordFormat?.toRecordFormat()
+
+  override val spaceUnits: DatasetItem.SpaceUnits?
+    get() = sshSpaceUnits?.toSpaceUnits()
 }
 
 

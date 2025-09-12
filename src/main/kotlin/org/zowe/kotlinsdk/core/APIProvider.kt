@@ -14,30 +14,30 @@
 
 package org.zowe.kotlinsdk.core
 
+// TODO: doc
 /**
  * An API provider abstraction to provide a basic implementation of the API providing mechanism
  * @param initialAPIs the initial API instances to provide an appropriate functionality implementation
  */
-abstract class APIProvider(vararg initialAPIs: Pair<Class<out API>, API>) {
+abstract class APIProvider(protected val availableApis: Map<WrapperType, Map<Class<out API>, API>>) {
+  abstract val supportedWrapperTypes: List<WrapperType>
   abstract val supportedProtocols: List<SupportedProtocol>
 
-  private val apiInstances: MutableMap<Class<out API>, API> = mutableMapOf()
-
-  init {
-    for ((apiClass, instance) in initialAPIs) {
-      apiInstances[apiClass] = instance
-    }
+  // TODO: doc
+  fun getWrapperApis(wrapperType: WrapperType): Map<Class<out API>, API> {
+    return availableApis[wrapperType] ?: throw IllegalArgumentException("$wrapperType is not supported by this API provider")
   }
 
-    /**
+  // TODO: doc
+  /**
    * Get API of the provided API base class
    * @param T the type of the API to get
    * @param apiClass the API base class to get API instance by
    * @return the [API] implementation instance if the provider has it, [IllegalArgumentException] otherwise
    */
-  fun <T : API> getApi(apiClass: Class<T>): T {
+  fun <T : API> getApi(wrapperType: WrapperType, apiClass: Class<T>): T {
     @Suppress("UNCHECKED_CAST")
-    apiInstances[apiClass]?.let { return it as T }
+    getWrapperApis(wrapperType)[apiClass]?.let { return it as T }
     throw IllegalArgumentException("API not found for class: ${apiClass.simpleName}")
   }
 }

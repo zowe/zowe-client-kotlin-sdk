@@ -14,10 +14,17 @@
 
 package org.zowe.kotlinsdk.providers.zowe
 
-import org.zowe.kotlinsdk.core.Response
+import net.schmizz.sshj.connection.channel.direct.Signal
 
-// TODO: doc update
-/** A basic representation of an SSH response object */
-interface SshResponse : Response {
-  val status: SshStatus
+// TODO: doc
+data class SshStatus(
+  val exitStatus: Int? = 0,
+  val exitSignal: Signal? = null,
+  val output: String = "",
+  val error: String = "",
+  val stderr: String = ""
+) {
+  companion object {
+    val OK = SshStatus()
+  }
 }

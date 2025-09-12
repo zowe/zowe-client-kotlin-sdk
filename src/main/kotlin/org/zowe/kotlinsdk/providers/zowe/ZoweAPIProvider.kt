@@ -17,6 +17,7 @@ package org.zowe.kotlinsdk.providers.zowe
 import org.zowe.kotlinsdk.core.APIProvider
 import org.zowe.kotlinsdk.core.RequestRunner
 import org.zowe.kotlinsdk.core.SupportedProtocol
+import org.zowe.kotlinsdk.core.WrapperType
 import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
 import org.zowe.kotlinsdk.core.files.api.FilesAPI
 import org.zowe.kotlinsdk.core.info.api.InfoAPI
@@ -27,6 +28,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.files.ZosmfFilesAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.info.ZosmfInfoAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.jes.ZosmfJesAPI
 
+// TODO: doc
 /**
  * Zowe's official implementation of the z/OS-compatible API provider
  * @param requestRunners a list of [RequestRunner] instances that provide API implementations
@@ -35,30 +37,31 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.jes.ZosmfJesAPI
 class ZoweAPIProvider(
   private val requestRunners: List<RequestRunner>
 ) : APIProvider(
-  *(
-    requestRunners
+  mapOf(
+    WrapperType.ZOSMF to (requestRunners
       .find { it.protocol == SupportedProtocol.HTTP }
       ?.let {
-        listOf(
+        mapOf(
           DatasetsAPI::class.java to ZosmfDatasetsAPI(it),
           FilesAPI::class.java to ZosmfFilesAPI(it),
           JesAPI::class.java to ZosmfJesAPI(it),
           InfoAPI::class.java to ZosmfInfoAPI(it)
         )
-      }
-      ?: listOf()
-  ).toTypedArray(),
-  *(
-    requestRunners
+      } ?: mapOf()
+    ),
+    WrapperType.SSH_NATIVE to (requestRunners
       .find { it.protocol == SupportedProtocol.SSH }
       ?.let {
-        listOf(
+        mapOf(
           DatasetsAPI::class.java to SshDatasetsAPI(it),
         )
       }
-      ?: listOf()
-  ).toTypedArray()
+      ?: mapOf()
+    )
+  )
 ) {
+  override val supportedWrapperTypes
+    get() = availableApis.keys.toList()
   override val supportedProtocols: List<SupportedProtocol>
     get() = requestRunners.map { it.protocol }
 }

@@ -14,26 +14,32 @@
 
 package org.zowe.kotlinsdk.providers.zowe.ssh.datasets.messaging
 
-import io.ktor.http.HttpStatusCode
 import net.schmizz.sshj.SSHClient
 import org.zowe.kotlinsdk.core.datasets.AttributesLevel
 import org.zowe.kotlinsdk.core.datasets.api.messaging.GetDatasetInfoRequest
-import org.zowe.kotlinsdk.core.datasets.data.DatasetItem
 import org.zowe.kotlinsdk.providers.zowe.SshConnection
 import org.zowe.kotlinsdk.providers.zowe.SshRequest
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
-import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging.ZosmfGetDatasetInfoRequest
-import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging.ZosmfGetDatasetInfoResponse
-import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging.ZosmfListDatasetsResponse
+import org.zowe.kotlinsdk.providers.zowe.SshStatus
+import org.zowe.kotlinsdk.providers.zowe.ssh.datasets.definitions.SshDatasetItem
 
-// TODO: doc
+/**
+ * Get dataset info SSH request.
+ * Basically makes listDatasets request with full attributes and returns the first entity
+ * @property dsName the data set name to get attributes by
+ * @property connection the SSH connection object
+ */
 class SshGetDatasetInfoRequest(
-  override val dsName: String,
-  override val connection: SshConnection
+  override val connection: SshConnection,
+  override val dsName: String
 ) : GetDatasetInfoRequest, SshRequest {
-  override val sshCommand: String
-    get() = throw NotImplementedError("sshCommand should not be triggered here")
+  override var sshCommand: String = ""
 
+  /**
+   * Executes the listDatasets SSH request, produces the correct response basing on the previously returned response
+   * @param client the SSH connected client to execute the request
+   * @return the [SshGetDatasetInfoResponse] object
+   */
   override fun execRequest(client: SSHClient): SshResponse {
     val sshListDatasetsRequest = SshListDatasetsRequest(
       connection,
@@ -42,30 +48,20 @@ class SshGetDatasetInfoRequest(
     )
     val sshListDatasetsResponse = sshListDatasetsRequest.execRequest(client)
     return if (sshListDatasetsResponse is SshListDatasetsResponse) {
+      val status = sshListDatasetsResponse.status
       val dataset = sshListDatasetsResponse.dsItems.firstOrNull()
+      if (dataset?.datasetName?.uppercase() == dsName.uppercase())
+        SshGetDatasetInfoResponse(status, dataset)
+      else
+        SshGetDatasetInfoResponse(
+          SshStatus(exitStatus = 8, error = "LOCATE ERROR CODE   08"),
+          SshDatasetItem("ERROR404")
+        )
     } else {
       SshGetDatasetInfoResponse(
-
+        SshStatus(-1, error = "RESPONSE OBJECT IS NOT CORRECT"),
+        SshDatasetItem("ERROR404")
       )
     }
-
-
-    return if (dataset?.datasetName?.uppercase() == zosmfParams.mask.uppercase())
-      ZosmfGetDatasetInfoResponse(HttpStatusCode.OK, dataset)
-    else
-      ZosmfGetDatasetInfoResponse(
-        HttpStatusCode(404, "Dataset for the specified mask: '${zosmfParams.mask}' is not found"),
-        object : DatasetItem {
-          override val datasetName = "ERROR404"
-          override val isMigrated: Boolean? = null
-          override val blockSize: Int? = null
-          override val datasetOrganization: DatasetItem.DatasetOrganization? = null
-          override val recordLength: Int? = null
-          override val recordFormat: DatasetItem.RecordFormat? = null
-          override val sizeInTracks: Int? = null
-          override val spaceUnits: DatasetItem.SpaceUnits? = null
-          override val volumeSerial: String? = null
-        }
-      )
   }
 }

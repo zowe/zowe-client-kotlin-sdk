@@ -15,7 +15,9 @@
 package org.zowe.kotlinsdk.providers.zowe
 
 import net.schmizz.sshj.SSHClient
+import net.schmizz.sshj.connection.channel.direct.Session
 import org.zowe.kotlinsdk.core.Request
+import java.io.ByteArrayOutputStream
 
 /**
  * A basic representation of an SSH request object
@@ -24,7 +26,24 @@ import org.zowe.kotlinsdk.core.Request
  */
 interface SshRequest : Request {
   val connection: SshConnection
-  val sshCommand: String
+  var sshCommand: String
+
+  // TODO: doc
+  fun performSshRequest(client: SSHClient, session: Session): SshStatus {
+    val cmd = session.exec(sshCommand)
+
+    val output = ByteArrayOutputStream()
+    cmd.inputStream.copyTo(output)
+
+    val stderr = ByteArrayOutputStream()
+    cmd.errorStream.copyTo(stderr)
+
+    cmd.join()
+
+    val outputStr = output.toString()
+    val error = if (cmd.exitStatus != 0) outputStr else ""
+    return SshStatus(cmd.exitStatus, cmd.exitSignal, outputStr, error, stderr.toString())
+  }
 
   /**
    * Execute the SSH request with the provided SSH client

@@ -14,17 +14,11 @@
 
 package org.zowe.kotlinsdk.providers.zowe.ssh.datasets.messaging
 
-import org.zowe.kotlinsdk.core.datasets.api.messaging.GetDatasetInfoResponse
-import org.zowe.kotlinsdk.core.datasets.data.DatasetItem
+import org.zowe.kotlinsdk.core.datasets.api.messaging.CreateDatasetResponse
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
 import org.zowe.kotlinsdk.providers.zowe.SshStatus
 
-/**
- * Get data set info SSH request response
- * @property status the SSH status of the command ([SshStatus.OK] if the command is succeeded)
- * @property dataset the data set prefilled object with attributes
- */
-class SshGetDatasetInfoResponse(
-  override val status: SshStatus = SshStatus.OK,
-  override val dataset: DatasetItem
-) : GetDatasetInfoResponse, SshResponse
+/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=command-allocate-return-codes">ALLOCATE command return codes  </a> */
+class SshCreateDatasetResponse(
+  override val status: SshStatus = SshStatus.OK
+) : SshResponse, CreateDatasetResponse

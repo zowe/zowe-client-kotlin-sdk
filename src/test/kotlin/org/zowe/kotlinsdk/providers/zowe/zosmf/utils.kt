@@ -66,8 +66,6 @@ class HttpMockResponseDispatcher : Dispatcher() {
    * @return the mock response for the request
    */
   override fun dispatch(request: RecordedRequest): MockResponse {
-    println("HTTP request received: $request")
-
     val foundResolver = responseResolvers.find {
       it.resolver(request)
     }

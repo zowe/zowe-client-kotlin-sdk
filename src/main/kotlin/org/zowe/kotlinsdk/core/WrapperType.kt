@@ -12,12 +12,9 @@
  *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe
+package org.zowe.kotlinsdk.core
 
-import org.zowe.kotlinsdk.core.Response
-
-// TODO: doc update
-/** A basic representation of an SSH response object */
-interface SshResponse : Response {
-  val status: SshStatus
+// TODO: doc
+enum class WrapperType {
+  ZOSMF, SSH_NATIVE
 }

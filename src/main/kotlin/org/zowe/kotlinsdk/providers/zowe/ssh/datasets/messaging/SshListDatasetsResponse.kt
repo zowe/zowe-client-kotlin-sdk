@@ -18,6 +18,7 @@ import org.zowe.kotlinsdk.core.datasets.AttributesLevel
 import org.zowe.kotlinsdk.core.datasets.api.messaging.ListDatasetsResponse
 import org.zowe.kotlinsdk.core.datasets.data.DatasetItem
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
+import org.zowe.kotlinsdk.providers.zowe.SshStatus
 import org.zowe.kotlinsdk.providers.zowe.ssh.datasets.definitions.SshDatasetItem
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -27,7 +28,7 @@ import java.time.ZoneOffset
  * Includes Format-1 DSCB and Format-3 DSCB processing when applicable
  */
 class SshListDatasetsResponse(
-  private val sshCmdOutput: String,
+  override val status: SshStatus = SshStatus.OK,
   private val originalMask: String,
   private val modifiedMask: String,
   private val attributesLevel: AttributesLevel
@@ -239,7 +240,7 @@ class SshListDatasetsResponse(
         nextRawHeader = headerNoFirstHyphens.substringAfter(currHeader)
         val hyphensLengthAfterCurrHeader = nextRawHeader.takeWhile { it == '-' }.length
         hasOtherHeaders = nextRawHeader.any { it != '-' }
-        currHeader = currHeader + "-".repeat(hyphensLengthAfterCurrHeader)
+        currHeader += "-".repeat(hyphensLengthAfterCurrHeader)
         rawDsAttrsHeaderList.add(currIdx, currHeader)
         currIdx++
       }
@@ -380,7 +381,8 @@ class SshListDatasetsResponse(
     val collectedDatasetAttributesStrings = mutableListOf<MutableList<String>?>()
     var nextDatasetAttributesStrings: MutableList<String>? = null
 
-    sshCmdOutput
+    status
+      .output
       .split("\n")
       .filter { it.isNotEmpty() }
       .forEach { sshNextLine ->
@@ -394,7 +396,7 @@ class SshListDatasetsResponse(
 
     return collectedDatasetAttributesStrings
       .filterNotNull()
-      .filter { it[0].matches(Regex("^${originalMask.replace("**", "*")}")) }
+      .filter { it[0].trim().matches(Regex("^${originalMask.replace("**", "*")}")) }
       .mapNotNull {
         if (it.size < 5) {
           produceNonregularSshDatasetItem(it)

@@ -22,7 +22,6 @@ import org.zowe.kotlinsdk.core.datasets.api.messaging.ListDatasetsRequest
 import org.zowe.kotlinsdk.providers.zowe.SshConnection
 import org.zowe.kotlinsdk.providers.zowe.SshRequest
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
-import java.io.ByteArrayOutputStream
 
 /**
  * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-listds-command">LISTDS command</a>
@@ -36,13 +35,6 @@ class SshListDatasetsRequest(
 
   /** Level of attributes to be returned ([AttributesLevel.FULL] by default) */
   @AvailableSince(ZVersion.ZOS_2_1) override val attributesLevel: AttributesLevel = AttributesLevel.FULL,
-
-  // TODO: find the reasonable processing of these parameters
-//  /** STATUS operand */
-//  @AvailableSince(ZVersion.ZOS_2_1) val shouldReturnStatus: Boolean = false,
-//
-//  /** HISTORY operand */
-//  @AvailableSince(ZVersion.ZOS_2_1) val shouldReturnHistory: Boolean = false,
 
   /** CATALOG operand */
   @AvailableSince(ZVersion.ZOS_2_1) val catalogName: String? = null,
@@ -69,48 +61,32 @@ class SshListDatasetsRequest(
     return if (lastDot != -1) prefix.substring(0, lastDot) else prefix
   }
 
-  // TODO: find the reasonable processing of these parameters
-//  private val status = if (shouldReturnStatus) "STATUS" else ""
-  private val status = ""
-//  private val history = if (shouldReturnHistory) "HISTORY" else ""
-  private val history = ""
   private val label = if (attributesLevel == AttributesLevel.FULL) "LABEL" else ""
   private val catalog = if (catalogName != null) "CATALOG($catalogName)" else ""
   private val wildcard = if (mask.contains("*")) "LEVEL" else ""
   private val modifiedMask = if (wildcard.isNotEmpty()) extractPrefixBeforeAsterisk(mask) else mask
 
-  override val sshCommand = "tsocmd LISTDS \"'$modifiedMask'\" $status $history $label $catalog $wildcard"
+  override var sshCommand = "tsocmd LISTDS \"'$modifiedMask'\" $label $catalog $wildcard"
 
   /**
    * Execute the LISTDS SSH TSOCMD request
-   * @param client the SSH client to execute the request with
-   * @return SSH handled response with the list of [org.zowe.kotlinsdk.providers.zowe.ssh.datasets.definitions.SshDatasetItem]'s
+   * @param client the connected SSH client to execute the request with
+   * @return SSH handled response with the list of
+   * [org.zowe.kotlinsdk.providers.zowe.ssh.datasets.definitions.SshDatasetItem]'s
+   * and the final command execution status
    */
   override fun execRequest(client: SSHClient): SshResponse {
-    client.connect(connection.host, connection.port)
-    try {
-      client.auth(connection.username, connection.authMethods)
-
-      val session = client.startSession()
-      session.use {
-        val cmd = it.exec(sshCommand)
-
-        val output = ByteArrayOutputStream()
-        cmd.inputStream.copyTo(output)
-
-        val error = ByteArrayOutputStream()
-        cmd.errorStream.copyTo(error)
-
-        cmd.join()
-
-        val exitStatus = cmd.exitStatus
-        val exitSignal = cmd.exitSignal
-
-        return SshListDatasetsResponse(output.toString(), mask, modifiedMask, attributesLevel)
+    client
+      .startSession()
+      .use {
+        val status = performSshRequest(client, it)
+        return SshListDatasetsResponse(
+          status,
+          mask,
+          modifiedMask,
+          attributesLevel
+        )
       }
-    } finally {
-      client.disconnect()
-    }
   }
 
 }

@@ -62,6 +62,12 @@ class SshDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
     }
   }
 
+  /**
+   * Get the data set info. Basically, the request to get the single data set with full available attributes
+   * @param params [GetDatasetInfoRequest] instance to get parameters for the request from
+   * @return [GetDatasetInfoResponse] instance with the request handling result
+   */
+  @AvailableSince(ZVersion.ZOS_2_1)
   override fun getDatasetInfo(params: GetDatasetInfoRequest): GetDatasetInfoResponse {
     return runBlocking {
       requestRunner.runRequest(params) as GetDatasetInfoResponse
@@ -69,42 +75,101 @@ class SshDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
   }
 
   override fun listDatasetMembers(params: ListDatasetMembersRequest): ListDatasetMembersResponse {
+    // LISTDS 'XXX' MEMBERS
     TODO("Not yet implemented")
   }
 
   override fun retrieveDatasetContent(params: RetrieveDatasetContentRequest): RetrieveDatasetContentResponse {
+    // cat "//'DSN'"
     TODO("Not yet implemented")
   }
 
   override fun writeToDataset(params: WriteToDatasetRequest): WriteToDatasetResponse {
+    // ?
+    // OGET '/dev/stdin' 'DSN'
+    // EDIT ...
+
+//    /**
+//   * Create a member in a data set.
+//   * Will check with "LISTDS" if there is already a member with the same name in the provided data set.
+//   * The member is created as the "OGET" operation, that puts '/dev/null' file's content into the member
+//   * @param client the SSH client to execute the command with
+//   * @return the [SshCreateDatasetResponse] with the resulting status of either the LISTDS command (if error), or OGET command
+//   */
+//  private fun performCreateMember(client: SSHClient): SshResponse {
+//    val sshListDatasetsRequest = SshListDatasetsRequest(
+//      connection,
+//      mask = dsName,
+//      attributesLevel = AttributesLevel.DSNAME
+//    )
+//    val sshListDatasetsResponse = sshListDatasetsRequest.execRequest(client)
+//
+//    if (sshListDatasetsResponse.status.exitStatus == 4) {
+//      sshCommand = "tsocmd \"OGET '/dev/null' '$dsName'\""
+//
+//      client
+//        .startSession()
+//        .use {
+//          val status = performSshRequest(client, it)
+//          return SshCreateDatasetResponse(status)
+//        }
+//    } else if (sshListDatasetsResponse.status.exitStatus == 0) {
+//      val status = SshStatus(exitStatus = 8, error = "DUPLICATE MEMBER NAME")
+//      return SshCreateDatasetResponse(status)
+//    } else {
+//      return SshCreateDatasetResponse(sshListDatasetsResponse.status)
+//    }
+//  }
+    // * For members:
+    // * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-listds-command">LISTDS command</a>
+    // * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=command-listds-operands">LISTDS command operands</a>
+    // * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=tc-oget-copy-zos-unix-files-into-mvs-data-set">OGET - Copy z/OS UNIX files into an MVS data set</a>
     TODO("Not yet implemented")
   }
 
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-allocate-command">ALLOCATE command</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=ace-example-6-allocate-new-sequential-data-set-space-allocated-in-tracks">Example 6: Allocate a new sequential data set with space allocated in tracks</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_1)
   override fun createDataset(params: CreateDatasetRequest): CreateDatasetResponse {
-    TODO("Not yet implemented")
+    return runBlocking {
+      requestRunner.runRequest(params) as CreateDatasetResponse
+    }
   }
 
   override fun deleteDataset(params: DeleteDatasetRequest): DeleteDatasetResponse {
+    // DELETE 'DSNAME'
     TODO("Not yet implemented")
   }
 
   override fun renameDataset(params: RenameDatasetRequest): RenameDatasetResponse {
+    // RENAME 'OLDNM' 'NEWNM'
+    // RENAME 'OLDNM(MEMOLD)' (MEMNEW)
     TODO("Not yet implemented")
   }
 
   override fun copyDataset(params: CopyDatasetRequest): CopyDatasetResponse {
+    // ?
+    // SMCOPY FROMDATASET('PSDS') TODATASET('ANOTHERPSDS')
+    // SMCOPY FROMDATASET('PDSDS(MEM)') TODATASET('ANOTHERPPDSDS(MEM)')
+    // For PDS / PDS/E - copy member by member
+    // Avoid processing of RECFM=U datasets
     TODO("Not yet implemented")
   }
 
   override fun migrateDataset(params: MigrateDatasetRequest): MigrateDatasetResponse {
+    // HMIGRATE
     TODO("Not yet implemented")
   }
 
   override fun recallDataset(params: RecallDatasetRequest): RecallDatasetResponse {
+    // HRECALL
     TODO("Not yet implemented")
   }
 
   override fun deleteDatasetBackupVersion(params: DeleteDatasetBackupVersionRequest): DeleteDatasetBackupVersionResponse {
+    // HDELETE
     TODO("Not yet implemented")
   }
 }

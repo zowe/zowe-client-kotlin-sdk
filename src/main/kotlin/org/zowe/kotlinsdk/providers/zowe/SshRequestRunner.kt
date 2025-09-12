@@ -14,6 +14,7 @@
 
 package org.zowe.kotlinsdk.providers.zowe
 
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.runBlocking
 import net.schmizz.sshj.SSHClient
 import org.zowe.kotlinsdk.core.Request
@@ -21,7 +22,6 @@ import org.zowe.kotlinsdk.core.RequestCanceller
 import org.zowe.kotlinsdk.core.RequestRunner
 import org.zowe.kotlinsdk.core.Response
 import org.zowe.kotlinsdk.core.SupportedProtocol
-import kotlin.coroutines.coroutineContext
 
 /**
  * SSH request runner. Generalizes the way to process SSH requests and responses
@@ -39,7 +39,8 @@ class SshRequestRunner(
   suspend fun runSshRequest(sshRequest: SshRequest): SshResponse {
     val connection = sshRequest.connection
     connection.checkConnection()
-    allowRequestCancellation(coroutineContext)
+
+    allowRequestCancellation(currentCoroutineContext())
     val response = sshRequest.execRequest(client)
     disallowRequestCancellation()
     return response
