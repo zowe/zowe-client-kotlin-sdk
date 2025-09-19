@@ -14,9 +14,16 @@
 
 package org.zowe.kotlinsdk.providers.zowe
 
-import org.zowe.kotlinsdk.core.Response
-
-/** A basic representation of an SSH response object */
-interface SshResponse : Response {
-  val status: SshStatus
+/**
+ * SSH channel state.
+ * READY - read is not yet started, command is not yet executed
+ * READ_STARTED - the command is already executed, channel read is possible
+ * COMPLETE - the channel reading is completed and is not possible anymore
+ * CLOSED - the channel is closed, SSH status object is formed, channel is not possible to operate anymore
+ */
+enum class SshChannelState {
+  READY,
+  READ_STARTED,
+  COMPLETE,
+  CLOSED
 }

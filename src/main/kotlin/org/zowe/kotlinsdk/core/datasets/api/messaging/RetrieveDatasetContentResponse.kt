@@ -15,7 +15,12 @@
 
 package org.zowe.kotlinsdk.core.datasets.api.messaging
 
+import org.zowe.kotlinsdk.core.DataType
 import org.zowe.kotlinsdk.core.Response
 
+// TODO: doc
 /** Represents basic response for [RetrieveDatasetContentRequest] */
-interface RetrieveDatasetContentResponse : Response
+interface RetrieveDatasetContentResponse : Response {
+  val fetchedDataType: DataType
+  val fetchedData: Any?
+}

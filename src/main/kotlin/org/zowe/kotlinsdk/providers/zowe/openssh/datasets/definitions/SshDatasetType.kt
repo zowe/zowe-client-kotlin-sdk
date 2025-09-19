@@ -12,9 +12,9 @@
  *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe.ssh.datasets.definitions
+package org.zowe.kotlinsdk.providers.zowe.openssh.datasets.definitions
 
-// TODO: doc
+/** SSH-compatible data set type */
 enum class SshDatasetType {
   LIBRARY,
   LIBRARY_1,
@@ -30,7 +30,7 @@ enum class SshDatasetType {
   BASIC,
   LARGE;
 
-  // TODO: doc
+  /** Build a string of the data set type for ALLOC TSO command */
   fun buildDsnTypeForAlloc(): String {
     return StringBuilder(" DSNTYPE(")
       .append(when (this) {

@@ -12,26 +12,29 @@
  *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe.ssh.datasets.messaging
+package org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging
 
 import net.schmizz.sshj.SSHClient
+import org.zowe.kotlinsdk.annotations.AvailableSince
+import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.AttributesLevel
 import org.zowe.kotlinsdk.core.datasets.api.messaging.GetDatasetInfoRequest
 import org.zowe.kotlinsdk.providers.zowe.SshConnection
 import org.zowe.kotlinsdk.providers.zowe.SshRequest
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
 import org.zowe.kotlinsdk.providers.zowe.SshStatus
-import org.zowe.kotlinsdk.providers.zowe.ssh.datasets.definitions.SshDatasetItem
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.definitions.SshDatasetItem
 
 /**
  * Get dataset info SSH request.
  * Basically makes listDatasets request with full attributes and returns the first entity
- * @property dsName the data set name to get attributes by
  * @property connection the SSH connection object
  */
 class SshGetDatasetInfoRequest(
   override val connection: SshConnection,
-  override val dsName: String
+
+  /** Data set name to find the data set by */
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val dsName: String
 ) : GetDatasetInfoRequest, SshRequest {
   override var sshCommand: String = ""
 
@@ -54,12 +57,12 @@ class SshGetDatasetInfoRequest(
         SshGetDatasetInfoResponse(status, dataset)
       else
         SshGetDatasetInfoResponse(
-          SshStatus(exitStatus = 8, error = "LOCATE ERROR CODE   08"),
+          SshStatus(exitStatus = 8, output = "DATASET '$dsName' IS NOT FOUND"),
           SshDatasetItem("ERROR404")
         )
     } else {
       SshGetDatasetInfoResponse(
-        SshStatus(-1, error = "RESPONSE OBJECT IS NOT CORRECT"),
+        SshStatus(1, output = "RESPONSE OBJECT IS NOT CORRECT"),
         SshDatasetItem("ERROR404")
       )
     }

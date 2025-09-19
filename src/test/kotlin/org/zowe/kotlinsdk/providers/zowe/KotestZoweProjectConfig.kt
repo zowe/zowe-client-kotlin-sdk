@@ -36,6 +36,7 @@ import org.apache.sshd.server.command.Command
 import org.apache.sshd.server.command.CommandFactory
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider
 import org.zowe.kotlinsdk.providers.zowe.ssh.SshMockResponseDispatcher
+import org.zowe.kotlinsdk.providers.zowe.SshRequestRunner
 import org.zowe.kotlinsdk.providers.zowe.zosmf.HttpMockResponseDispatcher
 import java.io.InputStream
 import java.io.OutputStream
@@ -52,6 +53,13 @@ object KotestZoweProjectConfig : AbstractProjectConfig() {
   lateinit var sshMockResponseDispatcher: SshMockResponseDispatcher
   lateinit var sshMockServer: SshServer
   lateinit var sshClient: SSHClient
+
+  val mockSshConnection = SshConnection(
+    MOCK_SERVER_HOST,
+    port = MOCK_SSH_SERVER_PORT,
+    username = MOCK_USERNAME,
+    authMethods = sshAuthMethods
+  )
 
   lateinit var zosmfMockResponseDispatcher: HttpMockResponseDispatcher
   lateinit var zosmfMockServer: MockWebServer

@@ -15,22 +15,19 @@
 package org.zowe.kotlinsdk.providers.zowe.ssh
 
 import io.kotest.assertions.assertSoftly
+import io.kotest.assertions.fail
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
 import org.zowe.kotlinsdk.core.WrapperType
-import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.MOCK_SERVER_HOST
-import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.MOCK_SSH_SERVER_PORT
-import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.MOCK_USERNAME
-import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.sshAuthMethods
 import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.sshMockResponseDispatcher
 import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
 import org.zowe.kotlinsdk.core.datasets.data.DatasetItem
+import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.mockSshConnection
 import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.zoweAPIProvider
-import org.zowe.kotlinsdk.providers.zowe.SshConnection
-import org.zowe.kotlinsdk.providers.zowe.ssh.datasets.messaging.SshGetDatasetInfoRequest
-import org.zowe.kotlinsdk.providers.zowe.ssh.datasets.messaging.SshGetDatasetInfoResponse
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshGetDatasetInfoRequest
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshGetDatasetInfoResponse
 import kotlin.text.contains
 import kotlin.text.trim
 
@@ -44,11 +41,11 @@ class SshGetDatasetInfoTestSpec : ShouldSpec({
         resolver = {
           it.trim().startsWith("tsocmd")
           && it.contains("LISTDS")
-          && it.contains("TEST1.TEST2")
+          && it.contains("TEST.GETDS1.TEST1")
         },
         handler = {
           val output = listOf(
-            "TEST1.TEST2".padEnd(44),
+            "TEST.GETDS1.TEST1".padEnd(44),
             "--RECFM-LRECL-BLKSIZE-DSORG",
             "  FB    80    6160    PO".padEnd(114),
             "--VOLUMES--",
@@ -69,15 +66,7 @@ class SshGetDatasetInfoTestSpec : ShouldSpec({
         }
       )
 
-      val getDatasetInfoRequest = SshGetDatasetInfoRequest(
-        SshConnection(
-          MOCK_SERVER_HOST,
-          port = MOCK_SSH_SERVER_PORT,
-          username = MOCK_USERNAME,
-          authMethods = sshAuthMethods
-        ),
-        "TEST1.TEST2"
-      )
+      val getDatasetInfoRequest = SshGetDatasetInfoRequest(mockSshConnection, "TEST.GETDS1.TEST1")
 
       val getDatasetInfoResponse = datasetsApi.getDatasetInfo(getDatasetInfoRequest)
 
@@ -99,11 +88,11 @@ class SshGetDatasetInfoTestSpec : ShouldSpec({
         resolver = {
           it.trim().startsWith("tsocmd")
           && it.contains("LISTDS")
-          && it.contains("TEST2")
+          && it.contains("TEST.GETDS2")
         },
         handler = {
           val output = listOf(
-            "IKJ58518I  UNABLE TO COMPLETE PROCESSING FOR ENTRY 'TEST2'  +",
+            "IKJ58518I  UNABLE TO COMPLETE PROCESSING FOR ENTRY 'TEST.GETDS2'  +",
             "IKJ58518I LOCATE ERROR CODE   08",
             "",
           ).joinToString("\n")
@@ -111,25 +100,16 @@ class SshGetDatasetInfoTestSpec : ShouldSpec({
         }
       )
 
-      val getDatasetInfoRequest = SshGetDatasetInfoRequest(
-        SshConnection(
-          MOCK_SERVER_HOST,
-          port = MOCK_SSH_SERVER_PORT,
-          username = MOCK_USERNAME,
-          authMethods = sshAuthMethods
-        ),
-        "TEST2"
-      )
-
+      val getDatasetInfoRequest = SshGetDatasetInfoRequest(mockSshConnection, "TEST.GETDS2")
       val getDatasetInfoResponse = datasetsApi.getDatasetInfo(getDatasetInfoRequest)
 
-      val status = if (getDatasetInfoResponse is SshGetDatasetInfoResponse) getDatasetInfoResponse.status else null
-
-      assertSoftly {
-        (getDatasetInfoResponse is SshGetDatasetInfoResponse) shouldBe true
-        status shouldNotBe null
-        status?.exitStatus shouldBe 8
-        status?.error shouldContain "LOCATE ERROR CODE   08"
+      if (getDatasetInfoResponse !is SshGetDatasetInfoResponse) {
+        fail("Should be instance of ${SshGetDatasetInfoResponse::class.java.name}")
+      } else {
+        assertSoftly {
+          getDatasetInfoResponse.status.exitStatus shouldBe 8
+          getDatasetInfoResponse.status.output shouldContain "IS NOT FOUND"
+        }
       }
     }
   }

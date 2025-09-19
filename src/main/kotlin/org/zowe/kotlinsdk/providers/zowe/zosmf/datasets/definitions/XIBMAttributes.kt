@@ -30,7 +30,7 @@ data class XIBMAttributes(
   private val isTotal: Boolean = false
 ) {
   private var attributesLevelStr: String = when (attributesLevel) {
-    AttributesLevel.DSNAME -> if (isMemberList) "member" else "dsname"
+    AttributesLevel.NAME -> if (isMemberList) "member" else "dsname"
     AttributesLevel.VOLSER -> if (isMemberList) "member" else "vol"
     AttributesLevel.FULL -> "base"
   }

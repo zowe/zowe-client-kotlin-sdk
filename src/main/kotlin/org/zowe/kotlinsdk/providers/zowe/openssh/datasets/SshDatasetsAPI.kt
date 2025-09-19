@@ -12,7 +12,7 @@
  *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe.ssh.datasets
+package org.zowe.kotlinsdk.providers.zowe.openssh.datasets
 
 import kotlinx.coroutines.runBlocking
 import org.zowe.kotlinsdk.annotations.AvailableSince
@@ -74,20 +74,37 @@ class SshDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
     }
   }
 
+  /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-listds-command">LISTDS command</a> */
+  @AvailableSince(ZVersion.ZOS_2_1)
   override fun listDatasetMembers(params: ListDatasetMembersRequest): ListDatasetMembersResponse {
-    // LISTDS 'XXX' MEMBERS
-    TODO("Not yet implemented")
+    return runBlocking {
+      requestRunner.runRequest(params) as ListDatasetMembersResponse
+    }
   }
 
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=tc-oput-copy-mvs-data-set-member-into-zos-unix-file">OPUT - Copy an MVS data set member into a z/OS UNIX file</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=tc-oput-copy-mvs-data-set-member-into-zos-unix-file#tsooput__title__7">OPUT - Copy an MVS data set member into a z/OS UNIX file: Examples</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_1)
   override fun retrieveDatasetContent(params: RetrieveDatasetContentRequest): RetrieveDatasetContentResponse {
-    // cat "//'DSN'"
-    TODO("Not yet implemented")
+    return runBlocking {
+      requestRunner.runRequest(params) as RetrieveDatasetContentResponse
+    }
   }
 
   override fun writeToDataset(params: WriteToDatasetRequest): WriteToDatasetResponse {
-    // ?
-    // OGET '/dev/stdin' 'DSN'
-    // EDIT ...
+    // tsocmd "OGET '/dev/fd0' 'ULADZ.TEST.SSH80.PDS(TEST1)'" <<EOF
+    //some test text
+    //EOF
+    //
+    // tsocmd "OGET '/dev/fd0' 'ULADZ.TEST.SSH80.PDS(TEST1)'"
+    //
+    // OGET '/dev/fd0' 'DSN'
+    //
+    // To create data set member:
+    // Check with LISTDS first if the member already exist
+    // OGET '/dev/null' '$dsName'
 
 //    /**
 //   * Create a member in a data set.
@@ -100,7 +117,7 @@ class SshDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
 //    val sshListDatasetsRequest = SshListDatasetsRequest(
 //      connection,
 //      mask = dsName,
-//      attributesLevel = AttributesLevel.DSNAME
+//      attributesLevel = AttributesLevel.NAME
 //    )
 //    val sshListDatasetsResponse = sshListDatasetsRequest.execRequest(client)
 //
@@ -110,7 +127,7 @@ class SshDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
 //      client
 //        .startSession()
 //        .use {
-//          val status = performSshRequest(client, it)
+//          val status = performSshPlainRequest(client, it)
 //          return SshCreateDatasetResponse(status)
 //        }
 //    } else if (sshListDatasetsResponse.status.exitStatus == 0) {
@@ -138,9 +155,15 @@ class SshDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
     }
   }
 
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-delete-command">DELETE command</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=dce-example">DELETE command: Example</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_1)
   override fun deleteDataset(params: DeleteDatasetRequest): DeleteDatasetResponse {
-    // DELETE 'DSNAME'
-    TODO("Not yet implemented")
+    return runBlocking {
+      requestRunner.runRequest(params) as DeleteDatasetResponse
+    }
   }
 
   override fun renameDataset(params: RenameDatasetRequest): RenameDatasetResponse {

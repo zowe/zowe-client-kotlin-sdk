@@ -15,13 +15,13 @@
 package org.zowe.kotlinsdk.core.datasets
 
 /**
- * The attributes level for data sets:
- *  - [DSNAME] - returned data sets list will contain data set names only
+ * The attributes level for data sets and members:
+ *  - [NAME] - returned data sets or members list will contain data set or member names only
  *  - [VOLSER] - returned data sets list will contain data set names and volumes
- *  - [FULL] - returned data sets list will contain all data set base attributes
+ *  - [FULL] - returned data sets or members list will contain all data set base attributes
  */
 sealed interface AttributesLevel {
-  object DSNAME : AttributesLevel
+  object NAME : AttributesLevel
   object VOLSER : AttributesLevel
   object FULL : AttributesLevel
 }

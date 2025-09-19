@@ -12,13 +12,13 @@
  *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe.ssh.datasets.messaging
+package org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging
 
-import org.zowe.kotlinsdk.core.datasets.api.messaging.CreateDatasetResponse
+import org.zowe.kotlinsdk.core.datasets.api.messaging.DeleteDatasetResponse
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
 import org.zowe.kotlinsdk.providers.zowe.SshStatus
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=command-allocate-return-codes">ALLOCATE command return codes  </a> */
-class SshCreateDatasetResponse(
+/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=command-delete-return-codes">DELETE command return codes</a> */
+class SshDeleteDatasetResponse(
   override val status: SshStatus = SshStatus.OK
-) : SshResponse, CreateDatasetResponse
+) : SshResponse, DeleteDatasetResponse

@@ -17,6 +17,8 @@ package org.zowe.kotlinsdk.providers.zowe
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.connection.channel.direct.Session
 import org.zowe.kotlinsdk.core.Request
+import org.zowe.kotlinsdk.providers.zowe.SshResponse
+import org.zowe.kotlinsdk.providers.zowe.SshStatus
 import java.io.ByteArrayOutputStream
 
 /**
@@ -29,7 +31,7 @@ interface SshRequest : Request {
   var sshCommand: String
 
   // TODO: doc
-  fun performSshRequest(client: SSHClient, session: Session): SshStatus {
+  fun performSshPlainRequest(client: SSHClient, session: Session): SshStatus {
     val cmd = session.exec(sshCommand)
 
     val output = ByteArrayOutputStream()
@@ -41,8 +43,7 @@ interface SshRequest : Request {
     cmd.join()
 
     val outputStr = output.toString()
-    val error = if (cmd.exitStatus != 0) outputStr else ""
-    return SshStatus(cmd.exitStatus, cmd.exitSignal, outputStr, error, stderr.toString())
+    return SshStatus(cmd.exitStatus, cmd.exitSignal, outputStr, stderr.toString())
   }
 
   /**

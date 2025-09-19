@@ -22,7 +22,7 @@ import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
 import org.zowe.kotlinsdk.core.files.api.FilesAPI
 import org.zowe.kotlinsdk.core.info.api.InfoAPI
 import org.zowe.kotlinsdk.core.jes.api.JesAPI
-import org.zowe.kotlinsdk.providers.zowe.ssh.datasets.SshDatasetsAPI
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.SshDatasetsAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.ZosmfDatasetsAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.files.ZosmfFilesAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.info.ZosmfInfoAPI

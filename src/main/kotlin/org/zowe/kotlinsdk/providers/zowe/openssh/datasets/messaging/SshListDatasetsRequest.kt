@@ -12,7 +12,7 @@
  *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe.ssh.datasets.messaging
+package org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging
 
 import net.schmizz.sshj.SSHClient
 import org.zowe.kotlinsdk.annotations.AvailableSince
@@ -31,13 +31,13 @@ class SshListDatasetsRequest(
   override val connection: SshConnection,
 
   /** data_set operand */
-  @AvailableSince(ZVersion.ZOS_2_1) override val mask: String,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val mask: String,
 
   /** Level of attributes to be returned ([AttributesLevel.FULL] by default) */
-  @AvailableSince(ZVersion.ZOS_2_1) override val attributesLevel: AttributesLevel = AttributesLevel.FULL,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val attributesLevel: AttributesLevel = AttributesLevel.FULL,
 
   /** CATALOG operand */
-  @AvailableSince(ZVersion.ZOS_2_1) val catalogName: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val catalogName: String? = null,
 ) : SshRequest, ListDatasetsRequest {
 
   /**
@@ -79,13 +79,8 @@ class SshListDatasetsRequest(
     client
       .startSession()
       .use {
-        val status = performSshRequest(client, it)
-        return SshListDatasetsResponse(
-          status,
-          mask,
-          modifiedMask,
-          attributesLevel
-        )
+        val status = performSshPlainRequest(client, it)
+        return SshListDatasetsResponse(status, mask, modifiedMask, attributesLevel)
       }
   }
 

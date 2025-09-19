@@ -15,12 +15,15 @@
 
 package org.zowe.kotlinsdk.core.datasets.api.messaging
 
+import org.zowe.kotlinsdk.core.DataType
 import org.zowe.kotlinsdk.core.Request
 
 /**
  * Represents basic request to retrieve dataset content
  * @property dsName name of the dataset whose content will be retrieved
+ * @property dataType the data type to fetch (text or binary)
  */
 interface RetrieveDatasetContentRequest : Request {
   val dsName: String
+  val dataType: DataType
 }

@@ -32,20 +32,21 @@ class SshWriteToDatasetTestSpec : ShouldSpec({
         resolver = {
           it.trim().startsWith("tsocmd")
           && it.contains("OGET")
-          && it.contains("TEST.ALLOC2(TESTMEM1)")
+          && it.contains("TEST.WRITE1(TESTMEM1)")
         },
         handler = {
           val output = listOf(
-            "TEST.ALLOC2(TESTMEM1)",
+            "TEST.WRITE1(TESTMEM1)",
             "IKJ58502I DIRECTORY INFORMATION NOT AVAILABLE+",
-            "IKJ58502I MEMBER NAME NOT FOUND"
+            "IKJ58502I MEMBER NAME NOT FOUND",
+            ""
           ).joinToString("\n")
           SshMockCommandResponse(output, exitCode = 4)
         }
       )
 
-      // LISTDS 'TEST.ALLOC2(TESTMEM1)' - must be equal to 4
-      // OGET '/dev/null' 'TEST.ALLOC2(TESTMEM1)'
+      // LISTDS 'TEST.WRITE1(TESTMEM1)' - must be equal to 4
+      // OGET '/dev/null' 'TEST.WRITE1(TESTMEM1)'
     }
 
     should("writeToDataset fail cause there is a duplicate data set member") {
@@ -54,15 +55,15 @@ class SshWriteToDatasetTestSpec : ShouldSpec({
         resolver = {
           it.trim().startsWith("tsocmd")
           && it.contains("OGET")
-          && it.contains("TEST.ALLOC2(TESTMEM2)")
+          && it.contains("TEST.WRITE2(TESTMEM2)")
         },
         handler = {
           SshMockCommandResponse("")
         }
       )
 
-      // LISTDS 'TEST.ALLOC2(TESTMEM2)' - must be equal to 0
-      // OGET '/dev/null' 'TEST.ALLOC2(TESTMEM2)'
+      // LISTDS 'TEST.WRITE2(TESTMEM2)' - must be equal to 0
+      // OGET '/dev/null' 'TEST.WRITE2(TESTMEM2)'
     }
   }
 })

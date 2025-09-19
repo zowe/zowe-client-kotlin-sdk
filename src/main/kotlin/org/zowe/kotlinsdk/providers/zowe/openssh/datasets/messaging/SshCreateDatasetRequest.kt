@@ -12,7 +12,7 @@
  *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe.ssh.datasets.messaging
+package org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging
 
 import net.schmizz.sshj.SSHClient
 import org.zowe.kotlinsdk.annotations.AvailableSince
@@ -21,8 +21,8 @@ import org.zowe.kotlinsdk.core.datasets.api.messaging.CreateDatasetRequest
 import org.zowe.kotlinsdk.providers.zowe.SshConnection
 import org.zowe.kotlinsdk.providers.zowe.SshRequest
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
-import org.zowe.kotlinsdk.providers.zowe.ssh.datasets.definitions.SshDatasetItem
-import org.zowe.kotlinsdk.providers.zowe.ssh.datasets.definitions.SshDatasetType
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.definitions.SshDatasetItem
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.definitions.SshDatasetType
 
 /**
  * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-allocate-command">ALLOCATE command</a>
@@ -112,7 +112,7 @@ class SshCreateDatasetRequest(
     client
       .startSession()
       .use {
-        val status = performSshRequest(client, it)
+        val status = performSshPlainRequest(client, it)
         return SshCreateDatasetResponse(status)
       }
   }

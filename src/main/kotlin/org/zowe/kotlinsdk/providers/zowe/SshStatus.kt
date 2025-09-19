@@ -16,15 +16,16 @@ package org.zowe.kotlinsdk.providers.zowe
 
 import net.schmizz.sshj.connection.channel.direct.Signal
 
-// TODO: doc
+/** The SSH command execution status */
 data class SshStatus(
-  val exitStatus: Int? = 0,
-  val exitSignal: Signal? = null,
-  val output: String = "",
-  val error: String = "",
-  val stderr: String = ""
+  var exitStatus: Int? = 0,
+  var exitSignal: Signal? = null,
+  var output: String = "",
+  var stderr: String = "",
+  var channel: SshChannel? = null
 ) {
   companion object {
     val OK = SshStatus()
+    val INCOMPLETE = SshStatus(null)
   }
 }

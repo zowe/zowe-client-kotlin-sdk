@@ -12,20 +12,21 @@
  *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe.ssh.datasets.messaging
+package org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging
 
 import org.zowe.kotlinsdk.core.datasets.AttributesLevel
 import org.zowe.kotlinsdk.core.datasets.api.messaging.ListDatasetsResponse
 import org.zowe.kotlinsdk.core.datasets.data.DatasetItem
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
 import org.zowe.kotlinsdk.providers.zowe.SshStatus
-import org.zowe.kotlinsdk.providers.zowe.ssh.datasets.definitions.SshDatasetItem
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.definitions.SshDatasetItem
 import java.time.LocalDate
 import java.time.ZoneOffset
 
 /**
  * @see <a href="https://www.ibm.com/docs/en/zos/2.1.0?topic=lce-example-1-3">LISTDS command: Example 1</a>
- * Includes Format-1 DSCB and Format-3 DSCB processing when applicable
+ * Includes Format-1 DSCB and Format-3 DSCB processing when applicable.
+ * Exit status becomes 4 if there is no entities found for the provided HLQ
  */
 class SshListDatasetsResponse(
   override val status: SshStatus = SshStatus.OK,
@@ -157,7 +158,8 @@ class SshListDatasetsResponse(
     val expirationDate = getDateFromBytes(bytes, F1.DS1EXPDT.first, F1.DS1EXPDT.first + F1.DS1EXPDT.second)
     val lastRefDate = getDateFromBytes(bytes, F1.DS1REFD.first, F1.DS1REFD.first + F1.DS1REFD.second)
 
-    val numOfExts = u1(bytes[F1.DS1NOEPV.first].toInt().toByte())
+    // TODO: expand returned properties when needed
+//    val numOfExts = u1(bytes[F1.DS1NOEPV.first].toInt().toByte())
 
     val binsDS1SCAL1 = byteToBins(bytes[F1.DS1SCAL1.first])
 
@@ -331,7 +333,7 @@ class SshListDatasetsResponse(
       }
     }
 
-    val dsAttrsHeaderToValues = mapOf("DSNAME" to dsName) +
+    val dsAttrsHeaderToValues = mapOf("NAME" to dsName) +
       dsAttrsHeaderToValues1 +
       dsAttrsHeaderToValues2 +
       extendedDsAttrsHeaderToValues
@@ -374,38 +376,46 @@ class SshListDatasetsResponse(
 
   /**
    * Split output to the dataset raw attributes and process them separately to produce [SshDatasetItem]s.
-   * Also, filters out the datasets, whose names are not compatible with the originally provided mask
+   * Also, filters out the datasets, whose names are not compatible with the originally provided mask.
+   * If the SSH exit status not equals to 0, returns empty list of data sets
    * @return list of produced [SshDatasetItem]s with prefilled parameters (if they are recognized)
    */
   private fun produceDsListFromSshCmdOutput(): List<DatasetItem> {
-    val collectedDatasetAttributesStrings = mutableListOf<MutableList<String>?>()
-    var nextDatasetAttributesStrings: MutableList<String>? = null
+    return if (status.exitStatus == 0) {
+      val collectedDatasetAttributesStrings = mutableListOf<MutableList<String>?>()
+      var nextDatasetAttributesStrings: MutableList<String>? = null
 
-    status
-      .output
-      .split("\n")
-      .filter { it.isNotEmpty() }
-      .forEach { sshNextLine ->
-        if (sshNextLine.startsWith(modifiedMask)) {
-          nextDatasetAttributesStrings = mutableListOf(sshNextLine)
-          collectedDatasetAttributesStrings.add(nextDatasetAttributesStrings)
-        } else {
-          nextDatasetAttributesStrings?.add(sshNextLine)
+      status
+        .output
+        .split("\n")
+        .filter { it.isNotEmpty() }
+        .forEach { sshNextLine ->
+          if (sshNextLine.startsWith(modifiedMask)) {
+            nextDatasetAttributesStrings = mutableListOf(sshNextLine)
+            collectedDatasetAttributesStrings.add(nextDatasetAttributesStrings)
+          } else {
+            nextDatasetAttributesStrings?.add(sshNextLine)
+          }
         }
-      }
 
-    return collectedDatasetAttributesStrings
-      .filterNotNull()
-      .filter { it[0].trim().matches(Regex("^${originalMask.replace("**", "*")}")) }
-      .mapNotNull {
-        if (it.size < 5) {
-          produceNonregularSshDatasetItem(it)
-        } else when (attributesLevel) {
-          AttributesLevel.DSNAME -> produceDsNameOnlySshDatasetItem(it)
-          AttributesLevel.VOLSER -> produceDsNameAndVolserSshDatasetItem(it)
-          AttributesLevel.FULL -> produceRegularSshDatasetItem(it)
+      collectedDatasetAttributesStrings
+        .filterNotNull()
+        .filter { it[0].trim().matches(Regex("^${originalMask.replace("**", "*")}")) }
+        .mapNotNull {
+          if (it.size < 5) {
+            produceNonregularSshDatasetItem(it)
+          } else when (attributesLevel) {
+            AttributesLevel.NAME -> produceDsNameOnlySshDatasetItem(it)
+            AttributesLevel.VOLSER -> produceDsNameAndVolserSshDatasetItem(it)
+            AttributesLevel.FULL -> produceRegularSshDatasetItem(it)
+          }
         }
+    } else {
+      if (status.output.contains("LOCATE ERROR") || status.output.contains("NOT IN CATALOG")) {
+        status.exitStatus = 4
       }
+      listOf()
+    }
   }
 
   init {

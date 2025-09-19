@@ -17,16 +17,13 @@ package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging
 import io.ktor.http.HttpStatusCode
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
+import org.zowe.kotlinsdk.core.DataType
 import org.zowe.kotlinsdk.core.datasets.api.messaging.RetrieveDatasetContentResponse
 import org.zowe.kotlinsdk.providers.zowe.HttpResponse
 
 /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-retrieve-contents-zos-data-set-member">Retrieve the contents of a z/OS dataset or member</a> */
 class ZosmfRetrieveDatasetContentResponse(
   override var status: HttpStatusCode,
-
-  /** text content as the response */
-  @AvailableSince(ZVersion.ZOS_2_1) val fetchedText: String? = null,
-
-  /** bytes content as the response */
-  @AvailableSince(ZVersion.ZOS_2_1) val fetchedBytes: ByteArray? = null
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val fetchedDataType: DataType,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val fetchedData: Any? = null,
 ) : RetrieveDatasetContentResponse, HttpResponse

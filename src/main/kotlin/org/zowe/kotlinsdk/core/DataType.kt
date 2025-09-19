@@ -12,11 +12,11 @@
  *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe
+package org.zowe.kotlinsdk.core
 
-import org.zowe.kotlinsdk.core.Response
-
-/** A basic representation of an SSH response object */
-interface SshResponse : Response {
-  val status: SshStatus
+/** The data type to fetch or write */
+enum class DataType {
+  TEXT,
+  BINARY,
+  ERROR
 }

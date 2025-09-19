@@ -12,11 +12,9 @@
  *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe
+package org.zowe.kotlinsdk.providers.zowe.openssh.datasets.definitions
 
-import org.zowe.kotlinsdk.core.Response
+import org.zowe.kotlinsdk.core.datasets.data.MemberItem
 
-/** A basic representation of an SSH response object */
-interface SshResponse : Response {
-  val status: SshStatus
-}
+/** SSH-compatible data set member */
+class SshMemberItem(override val memberName: String) : MemberItem

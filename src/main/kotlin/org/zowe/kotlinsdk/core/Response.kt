@@ -15,4 +15,6 @@
 package org.zowe.kotlinsdk.core
 
 /** An abstraction to provide a basic response functionality idea to be formed during a [Request] handling in a [RequestRunner] */
+// TODO: come up with logging compatible properties
+// TODO: status enum to define if the response is succeeded or not
 interface Response

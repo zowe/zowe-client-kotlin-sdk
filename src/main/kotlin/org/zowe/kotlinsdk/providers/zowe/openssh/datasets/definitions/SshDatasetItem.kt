@@ -12,7 +12,7 @@
  *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe.ssh.datasets.definitions
+package org.zowe.kotlinsdk.providers.zowe.openssh.datasets.definitions
 
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
@@ -38,7 +38,7 @@ class SshDatasetItem(
      * @return the new entity, translating all related parameters respectively
      */
     fun produceFromMap(dsAttrsHeaderToValues: Map<String, String>): SshDatasetItem {
-      val dsName = dsAttrsHeaderToValues.getOrDefault("DSNAME", "ERROR404")
+      val dsName = dsAttrsHeaderToValues.getOrDefault("NAME", "ERROR404")
 
       val dsOrg = dsAttrsHeaderToValues
         .getOrDefault("DSORG", null)
@@ -84,8 +84,18 @@ class SshDatasetItem(
     }
   }
 
-  // TODO: doc
   // TODO: GDG
+  /**
+   * SSH-compatible record format.
+   * The format consists of separate conflicting RECFM parts.
+   * They are separated basing on the ALLOC TSO command supported RECFM operand options
+   * @see <"https://www.ibm.com/docs/en/zos/3.1.0?topic=command-allocate-operands">ALLOCATE command operands: RECFM</a>
+   * @property recFmLength a record length format. Supported: F - fixed, V - varying, U - unknown, VSAM - for VSAM data sets
+   * @property recFmBlocking a record blocking format. Supported: B - blocked, S - spanned
+   * @property recFmControlChar a record control variable. Supported: A - ASCII control character, M - machine code control characters
+   * @property hasVarLengthAscii indicates variable-length ASCII records
+   * @property hasTrkOverflowWrite indicates the records can be written onto overflow tracks, if required (rarely used, but is there for compatibility)
+   */
   class SshRecordFormat(
     val recFmLength: SshRecordFormatLength? = null,
     val recFmBlocking: SshRecordFormatBlocking? = null,
@@ -103,7 +113,7 @@ class SshDatasetItem(
     enum class SshRecordFormatControlCharacter { A, M }
 
     companion object {
-      // TODO: doc
+      /** Return a formed SSH-compatible entity, parsed from a raw SSH response string */
       fun getSshRecordFormatFromString(rawRecFm: String, dsOrg: SshDatasetOrganization? = null): SshRecordFormat {
         val recFmLength = when {
           rawRecFm.contains("F") -> SshRecordFormatLength.F
@@ -127,7 +137,7 @@ class SshDatasetItem(
       }
     }
 
-    // TODO: doc
+    /** Prepare a record format string for ALLOC TSO command */
     fun buildRecFmForAlloc(): String {
       return when (recFmLength) {
         null -> ""
@@ -143,7 +153,7 @@ class SshDatasetItem(
       }
     }
 
-    // TODO: doc
+    /** Transform to a generic record format entity */
     fun toRecordFormat(): DatasetItem.RecordFormat = when (this.recFmLength) {
       SshRecordFormatLength.F -> {
         if (this.recFmBlocking == SshRecordFormatBlocking.B) DatasetItem.RecordFormat.FB
@@ -158,7 +168,7 @@ class SshDatasetItem(
     }
   }
 
-  // TODO: doc
+  /** SSH-compatible data set organization */
   enum class SshDatasetOrganization {
     DA,
     DAU,
@@ -168,6 +178,7 @@ class SshDatasetItem(
     PSU,
     VSAM;
 
+    /** For now PO, PS and VSAM are the only ones that could be transformed to a generic data set organization */
     fun toDatasetOrganization(): DatasetItem.DatasetOrganization = when (this) {
       PS -> DatasetItem.DatasetOrganization.PS
       PO -> DatasetItem.DatasetOrganization.PO
@@ -176,7 +187,7 @@ class SshDatasetItem(
     }
   }
 
-  // TODO: doc
+  /** SSH-compatible space units */
   enum class SshSpaceUnits {
     BLOCKS,
     CYLINDERS,

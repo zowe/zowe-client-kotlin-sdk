@@ -12,7 +12,7 @@
  *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe.ssh.datasets.messaging
+package org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging
 
 import org.zowe.kotlinsdk.core.datasets.api.messaging.GetDatasetInfoResponse
 import org.zowe.kotlinsdk.core.datasets.data.DatasetItem

@@ -14,11 +14,19 @@
 
 package org.zowe.kotlinsdk.providers.zowe.ssh
 
+import io.kotest.assertions.assertSoftly
+import io.kotest.assertions.fail
 import io.kotest.core.spec.style.ShouldSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import org.zowe.kotlinsdk.core.WrapperType
 import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.sshMockResponseDispatcher
 import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
+import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.mockSshConnection
 import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.zoweAPIProvider
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.definitions.SshDatasetItem
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshCreateDatasetRequest
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshCreateDatasetResponse
 import kotlin.text.contains
 import kotlin.text.trim
 
@@ -27,77 +35,186 @@ class SshCreateDatasetTestSpec : ShouldSpec({
 
   context("createDataset") {
     should("createDataset execute successfully creating a new PS dataset") {
+      val dsName = "TEST.ALLOC1"
+
       sshMockResponseDispatcher.injectResolver(
         "ssh:createDataset_ps_success",
         resolver = {
           it.trim().startsWith("tsocmd")
           && it.contains("ALLOC")
-          && it.contains("TEST.ALLOC1")
+          && it.contains(dsName)
         },
         handler = {
           SshMockCommandResponse("")
         }
       )
 
-      // ALLOC DA('TEST.ALLOC1') DSORG(PS) SPACE(2,0) TRACKS LRECL(80) BLKSIZE(8000) RECFM(F,B) NEW
+      val createDatasetRequest = SshCreateDatasetRequest(
+        mockSshConnection,
+        dsName,
+        datasetOrganization = SshDatasetItem.SshDatasetOrganization.PS,
+        primaryAllocation = 2,
+        secondaryAllocation = 0,
+        allocationUnit = SshDatasetItem.SshSpaceUnits.TRACKS,
+        recordLength = 80,
+        blockSize = 8000,
+        recordFormat = SshDatasetItem.SshRecordFormat(
+          SshDatasetItem.SshRecordFormat.SshRecordFormatLength.F,
+          SshDatasetItem.SshRecordFormat.SshRecordFormatBlocking.B
+        )
+      )
+
+      val createDatasetResponse = datasetsApi.createDataset(createDatasetRequest)
+
+      if (createDatasetResponse !is SshCreateDatasetResponse) {
+        fail("Should be instance of ${SshCreateDatasetResponse::class.java.name}")
+      } else {
+        assertSoftly {
+          createDatasetResponse.status.exitStatus shouldBe 0
+          createDatasetResponse.status.output shouldBe ""
+        }
+      }
     }
 
     should("createDataset execute successfully creating a new PDS dataset") {
+      val dsName = "TEST.ALLOC2"
+
       sshMockResponseDispatcher.injectResolver(
         "ssh:createDataset_pds_success",
         resolver = {
           it.trim().startsWith("tsocmd")
           && it.contains("ALLOC")
-          && it.contains("TEST.ALLOC2")
+          && it.contains(dsName)
         },
         handler = {
           SshMockCommandResponse("")
         }
       )
 
-      // ALLOC DA('TEST.ALLOC2') DSORG(PO) DIR(2) SPACE(2,0) TRACKS LRECL(80) BLKSIZE(8000) RECFM(F,B) NEW
+      val createDatasetRequest = SshCreateDatasetRequest(
+        mockSshConnection,
+        dsName,
+        datasetOrganization = SshDatasetItem.SshDatasetOrganization.PO,
+        primaryAllocation = 2,
+        secondaryAllocation = 0,
+        allocationUnit = SshDatasetItem.SshSpaceUnits.TRACKS,
+        recordLength = 80,
+        blockSize = 8000,
+        recordFormat = SshDatasetItem.SshRecordFormat(
+          SshDatasetItem.SshRecordFormat.SshRecordFormatLength.F,
+          SshDatasetItem.SshRecordFormat.SshRecordFormatBlocking.B
+        )
+      )
+
+      val createDatasetResponse = datasetsApi.createDataset(createDatasetRequest)
+
+      if (createDatasetResponse !is SshCreateDatasetResponse) {
+        fail("Should be instance of ${SshCreateDatasetResponse::class.java.name}")
+      } else {
+        assertSoftly {
+          createDatasetResponse.status.exitStatus shouldBe 0
+          createDatasetResponse.status.output shouldBe ""
+        }
+      }
     }
 
     should("createDataset fail cause there is a duplicate dataset name") {
+      val dsName = "TEST.ALLOC3"
+
       sshMockResponseDispatcher.injectResolver(
         "ssh:createDataset_ps_fail_dupl",
         resolver = {
           it.trim().startsWith("tsocmd")
           && it.contains("ALLOC")
-          && it.contains("TEST.ALLOC3")
+          && it.contains(dsName)
         },
         handler = {
           val output = listOf(
-            "IKJ56893I DATA SET TEST.ALLOC3 NOT ALLOCATED+",
-            "IGD17101I DATA SET TEST.ALLOC3",
+            "IKJ56893I DATA SET $dsName NOT ALLOCATED+",
+            "IGD17101I DATA SET $dsName",
             "NOT DEFINED BECAUSE DUPLICATE NAME EXISTS IN CATALOG",
             "RETURN CODE IS 8 REASON CODE IS 38 IGG0CLEH",
+            ""
           ).joinToString("\n")
           SshMockCommandResponse(output, exitCode = 12)
         }
       )
 
-      // ALLOC DA('TEST.ALLOC3') DSORG(PS) SPACE(2,0) TRACKS LRECL(80) BLKSIZE(8000) RECFM(F,B) NEW
+      val createDatasetRequest = SshCreateDatasetRequest(
+        mockSshConnection,
+        dsName,
+        datasetOrganization = SshDatasetItem.SshDatasetOrganization.PS,
+        primaryAllocation = 2,
+        secondaryAllocation = 0,
+        allocationUnit = SshDatasetItem.SshSpaceUnits.TRACKS,
+        recordLength = 80,
+        blockSize = 8000,
+        recordFormat = SshDatasetItem.SshRecordFormat(
+          SshDatasetItem.SshRecordFormat.SshRecordFormatLength.F,
+          SshDatasetItem.SshRecordFormat.SshRecordFormatBlocking.B
+        )
+      )
+
+      val createDatasetResponse = datasetsApi.createDataset(createDatasetRequest)
+
+      if (createDatasetResponse !is SshCreateDatasetResponse) {
+        fail("Should be instance of ${SshCreateDatasetResponse::class.java.name}")
+      } else {
+        assertSoftly {
+          createDatasetResponse.status.exitStatus shouldBe 12
+          createDatasetResponse.status.output shouldContain "NOT ALLOCATED"
+          createDatasetResponse.status.output shouldContain "DUPLICATE NAME EXISTS"
+        }
+      }
     }
 
     should("createDataset fail cause there is a duplicate dataset name, but the error is uncertain") {
+      val dsName = "TEST.ALLOC4"
+
       sshMockResponseDispatcher.injectResolver(
         "ssh:createDataset_ps_fail_dupl_uncertain",
         resolver = {
           it.trim().startsWith("tsocmd")
           && it.contains("ALLOC")
-          && it.contains("TEST.ALLOC4")
+          && it.contains(dsName)
         },
         handler = {
           val output = listOf(
-            "IKJ56229I DATA SET TEST.ALLOC4 NOT ALLOCATED, CATALOG ERROR+",
-            "IKJ56229I DATA SET NAME CONFLICTS WITH EXISTING DATA SET NAME OR USER IS NOT AUTHORIZED TO PERFORM THE OPERATION."
+            "IKJ56229I DATA SET $dsName NOT ALLOCATED, CATALOG ERROR+",
+            "IKJ56229I DATA SET NAME CONFLICTS WITH EXISTING DATA SET NAME OR USER IS NOT AUTHORIZED TO PERFORM THE OPERATION.",
+            ""
           ).joinToString("\n")
           SshMockCommandResponse(output, exitCode = 12)
         }
       )
 
-      // ALLOC DA('TEST.ALLOC4') DSORG(PS) SPACE(2,0) TRACKS LRECL(80) BLKSIZE(8000) RECFM(F,B) NEW
+      val createDatasetRequest = SshCreateDatasetRequest(
+        mockSshConnection,
+        dsName,
+        datasetOrganization = SshDatasetItem.SshDatasetOrganization.PS,
+        primaryAllocation = 2,
+        secondaryAllocation = 0,
+        allocationUnit = SshDatasetItem.SshSpaceUnits.TRACKS,
+        recordLength = 80,
+        blockSize = 8000,
+        recordFormat = SshDatasetItem.SshRecordFormat(
+          SshDatasetItem.SshRecordFormat.SshRecordFormatLength.F,
+          SshDatasetItem.SshRecordFormat.SshRecordFormatBlocking.B
+        )
+      )
+
+      val createDatasetResponse = datasetsApi.createDataset(createDatasetRequest)
+
+      if (createDatasetResponse !is SshCreateDatasetResponse) {
+        fail("Should be instance of ${SshCreateDatasetResponse::class.java.name}")
+      } else {
+        assertSoftly {
+          createDatasetResponse.status.exitStatus shouldBe 12
+          createDatasetResponse.status.output shouldContain "NOT ALLOCATED"
+          createDatasetResponse.status.output shouldContain "DATA SET NAME CONFLICTS"
+          createDatasetResponse.status.output shouldContain "NOT AUTHORIZED"
+        }
+      }
     }
   }
 })
