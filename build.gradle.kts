@@ -30,7 +30,7 @@ plugins {
   base
   java
   `maven-publish`
-  id("org.sonarqube") version "5.1.0.4882"
+  id("org.sonarqube") version "6.3.1.5724"
   id("org.jetbrains.kotlin.jvm") version "1.9.20"
   id("org.jetbrains.dokka") version "1.9.20"
   id("net.researchgate.release") version "3.0.2"
