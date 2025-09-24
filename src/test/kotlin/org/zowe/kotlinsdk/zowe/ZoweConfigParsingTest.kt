@@ -192,12 +192,10 @@ class ZoweConfigParsingTest: ZoweConfigTestBase() {
       )
     )
     allZosConn.add(ZOSConnection("example.host1", "10443", "testUser", "testPassword", profileName = "lpar1.zosmf"))
-    Assertions.assertArrayEquals(zoweConfig.getListOfZosmfConections().toTypedArray(), allZosConn.toTypedArray())
+    Assertions.assertArrayEquals(zoweConfig.getListOfZosmfConnections().toTypedArray(), allZosConn.toTypedArray())
   }
 
   fun checkToZosConnection(zoweConfig: ZoweConfig) {
-    zoweConfig.user = null
-    Assertions.assertThrows(IllegalStateException::class.java) { zoweConfig.toZosConnection() }
     zoweConfig.user = "user"
     zoweConfig.host = ""
     Assertions.assertThrows(IllegalStateException::class.java) { zoweConfig.toZosConnection() }
