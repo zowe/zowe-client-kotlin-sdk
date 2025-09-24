@@ -1,0 +1,9 @@
+.library-name a {
+  position: relative;
+}
+
+.library-name a::before {
+  content: '';
+  background: url("../images/zowe-icon.svg");
+  background-size: contain;
+}

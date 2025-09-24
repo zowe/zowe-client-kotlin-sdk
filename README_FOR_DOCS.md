@@ -1,3 +1,14 @@
+---
+id: home
+layout: default
+title: Home
+permalink: /
+---
+
+# [Click here](https://zowe.github.io/zowe-client-kotlin-sdk/docs/0.5.2) to go to the Zowe Client Kotlin SDK source code docs
+
+---
+
 # Zowe® Сlient Kotlin SDK
 
 Zowe Client Kotlin SDK cover z/OSMF REST API with Kotlin object-oriented code using Retrofit2. It provides functionality to send HTTP requests to z/OSMF using Kotlin functions.
