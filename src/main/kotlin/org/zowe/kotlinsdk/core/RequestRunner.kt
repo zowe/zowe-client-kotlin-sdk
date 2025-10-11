@@ -14,45 +14,13 @@
 
 package org.zowe.kotlinsdk.core
 
-import kotlinx.coroutines.cancel
-import org.zowe.kotlinsdk.providers.zowe.Cancellable
-import org.zowe.kotlinsdk.core.RequestCanceller
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.cancellation.CancellationException
-
+// TODO: doc update
 /**
  * Abstraction for a request runner. Provides a request cancellation mechanism.
  * Implements a single-point way to handle an HTTP request and produce an HTTP response
  * @property protocol the protocol, supported by the request runner
- * @property requestCanceller the request cancellation mechanism, specific to the runner
  */
-abstract class RequestRunner(
-  val protocol: SupportedProtocol,
-  private val requestCanceller: RequestCanceller? = null
-) : Cancellable {
-  /** The current [CoroutineContext] to cancel the request on a demand. Null if there is no running request */
-  private var requestCoroutineContext: CoroutineContext? = null
-
+abstract class RequestRunner(val protocol: SupportedProtocol) {
   /** Run a [Request], producing an appropriate [Response] */
-  abstract fun runRequest(params: Request): Response
-
-  /**
-   * Allow the current running request to be cancelled from the outside
-   * @param coroutineContext the [CoroutineContext] to cancel the coroutine with the running request
-   */
-  protected fun allowRequestCancellation(coroutineContext: CoroutineContext) {
-    requestCoroutineContext = coroutineContext
-    requestCanceller?.currentRequest = this
-  }
-
-  /** Disallow the current running request to be cancelled as the request is already finished */
-  protected fun disallowRequestCancellation() {
-    requestCanceller?.currentRequest = null
-  }
-
-  /** Cancel the running request as a coroutine (does not cancel the actual request, but the result is ignored) */
-  override fun cancel() {
-    disallowRequestCancellation()
-    requestCoroutineContext?.cancel(CancellationException("Request cancelled"))
-  }
+  abstract suspend fun runRequest(params: Request): Response
 }

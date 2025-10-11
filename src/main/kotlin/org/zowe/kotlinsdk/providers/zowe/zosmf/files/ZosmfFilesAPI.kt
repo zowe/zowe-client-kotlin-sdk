@@ -51,6 +51,8 @@ import org.zowe.kotlinsdk.core.files.api.messaging.WriteToFileRequest
 import org.zowe.kotlinsdk.core.files.api.messaging.WriteToFileResponse
 import org.zowe.kotlinsdk.providers.zowe.ZoweInternalAPI
 
+// TODO: doc
+// TODO: unblock suspend functions
 /**
  * Implementation of Files API for z/OSMF REST API to work with USS files and folders
  * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=services-zos-data-set-file-rest-interface">z/OS data set and file REST interface</a>
@@ -63,10 +65,8 @@ class ZosmfFilesAPI(private val requestRunner: RequestRunner) : FilesAPI {
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-files-directories-unix-file-path#ListUNIXfiles__title__9">List the files and directories of a UNIX file path: Expected response</a>
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  override fun listFiles(params: ListFilesRequest): ListFilesResponse {
-    return runBlocking {
-      requestRunner.runRequest(params) as ListFilesResponse
-    }
+  override suspend fun listFiles(params: ListFilesRequest): ListFilesResponse {
+    return requestRunner.runRequest(params) as ListFilesResponse
   }
 
   /**

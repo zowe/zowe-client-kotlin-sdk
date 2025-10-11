@@ -18,6 +18,7 @@ package org.zowe.kotlinsdk.core.files.api
 import org.zowe.kotlinsdk.core.API
 import org.zowe.kotlinsdk.core.files.api.messaging.*
 
+// TODO: doc
 /** Files API specification to provide functions to work with Unix system services */
 interface FilesAPI : API {
   /**
@@ -25,7 +26,7 @@ interface FilesAPI : API {
    * @param params [ListFilesRequest] instance to get parameters for the request from
    * @return [ListFilesResponse] instance with the request handling result
    */
-  fun listFiles(params: ListFilesRequest): ListFilesResponse
+  suspend fun listFiles(params: ListFilesRequest): ListFilesResponse
 
   /**
    * Retrieve the contents of a file

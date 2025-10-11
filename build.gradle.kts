@@ -88,6 +88,7 @@ dependencies {
   implementation(libs.retrofit2.converter.gson)
   implementation(libs.retrofit2.converter.scalars)
   implementation(libs.gson)
+  // TODO: delete keytar lib after refactoring of interaction with Zowe Config
   implementation(libs.java.keytar)
   implementation(libs.snakeyaml)
   implementation(libs.ktor.client.core)
@@ -158,6 +159,93 @@ tasks {
       jvmTarget = JavaVersion.VERSION_17.toString()
       languageVersion = LanguageVersion.LATEST_STABLE.versionString
     }
+  }
+
+  // Build native Rust secrets library
+  register<Exec>("buildNativeSecrets") {
+    group = "build"
+    description = "Build Rust native secrets library"
+    workingDir = file("src/secrets/scripts")
+
+    commandLine = listOf("sh", "-c", "chmod +x build_secrets.sh && ./build_secrets.sh")
+
+    // Rebuild only if files are changed
+    inputs.files(
+      fileTree("src/secrets/src"),
+      file("src/secrets/Cargo.toml"),
+      file("src/secrets/Cargo.lock")
+    )
+
+    outputs.dirs(
+      "src/main/resources/native/linux/x86_64",
+      "src/main/resources/native/linux/aarch64",
+      "src/main/resources/native/macos/x86_64",
+      "src/main/resources/native/macos/aarch64",
+      "src/main/resources/native/windows/x86_64",
+      "src/main/resources/native/windows/aarch64"
+    )
+  }
+
+  // Make sure Rust secrets native lib is built before Kotlin
+  named("compileKotlin") {
+    dependsOn("buildNativeSecrets")
+  }
+
+  named("processResources") {
+    dependsOn("buildNativeSecrets")
+  }
+
+  // Development: rebuild only Rust secrets native
+  register<Exec>("rebuildNative") {
+    group = "build"
+    description = "Rebuild only the native library for current platform (faster for development)"
+    workingDir = file("src/secrets")
+
+    val osName = System.getProperty("os.name").lowercase()
+    val osArch = System.getProperty("os.arch").lowercase()
+
+    val target = when {
+      osName.contains("linux") && (osArch.contains("aarch64") || osArch.contains("arm64")) ->
+        "aarch64-unknown-linux-gnu"
+      osName.contains("linux") ->
+        "x86_64-unknown-linux-gnu"
+      osName.contains("mac") && (osArch.contains("aarch64") || osArch.contains("arm64")) ->
+        "aarch64-apple-darwin"
+      osName.contains("mac") ->
+        "x86_64-apple-darwin"
+      osName.contains("win") && (osArch.contains("aarch64") || osArch.contains("arm64")) ->
+        "aarch64-pc-windows-msvc"
+      osName.contains("win") ->
+        "x86_64-pc-windows-msvc"
+      else -> throw GradleException("Unsupported platform: $osName / $osArch")
+    }
+
+    commandLine = listOf("cargo", "build", "--release", "--target", target)
+
+    doLast {
+      println("Built for target: $target")
+      println("Run './gradlew processResources' to copy to resources")
+    }
+  }
+
+  // Rust artifacts cleanup
+  register<Delete>("cleanNative") {
+    group = "build"
+    description = "Clean Rust build artifacts"
+    delete(
+      file("src/secrets/target"),
+      fileTree("src/native") {
+        include("**/*.so", "**/*.dylib", "**/*.dll")
+      }
+    )
+  }
+
+  named("clean") {
+    dependsOn("cleanNative")
+  }
+
+  named("sourcesJar") {
+    dependsOn("buildNativeSecrets")
   }
 
   test {

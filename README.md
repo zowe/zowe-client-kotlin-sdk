@@ -286,3 +286,12 @@ Example:
 ```shell
 ./gradlew release -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=0.0.0 -Prelease.newVersion=1.1.0-SNAPSHOT
 ```
+
+## Build from sources
+
+TODO: complete
+Install Rust and Java
+then run:
+```shell
+./gradlew build
+```
