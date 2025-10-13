@@ -6,15 +6,14 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.core
 
-// TODO: doc
+/**
+ * Type of the API wrapper. Indicates the way of working with server,
+ * depending on which the appropriate request/response implementations are used
+ */
 enum class WrapperType {
   ZOSMF, SSH_NATIVE
 }

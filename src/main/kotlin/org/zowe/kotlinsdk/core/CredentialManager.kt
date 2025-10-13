@@ -13,6 +13,8 @@ package org.zowe.kotlinsdk.core
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
+import org.slf4j.LoggerFactory
+import org.zowe.kotlinsdk.secrets.NativeSecretsLoader
 import org.zowe.kotlinsdk.secrets.ZoweSecrets
 import java.util.Base64
 
@@ -21,19 +23,28 @@ const val ZOWE_ACCOUNT_NAME = "secure_config_props"
 const val WINDOWS_CRED_MAX_STRING_LENGTH = 2560
 
 /**
- * TODO: doc
- * TODO: logger
  * A class including static functions for managing credentials
  * Based on the https://github.com/zowe/zowe-client-python-sdk/blob/main/src/core/zowe/core_for_zowe_sdk/credential_manager.py.
  * Uses https://www.npmjs.com/package/@zowe/secrets-for-zowe-sdk
  */
-class CredentialManager {
+open class CredentialManager {
   companion object {
+    private val logger = LoggerFactory.getLogger(CredentialManager::class.java)
     var secureProps: MutableMap<String, Any> = mutableMapOf()
 
     /** Load [secureProps] stored for the given config file */
     fun loadSecureProps() {
-      val encodedSecretValue = getCredential() ?: return
+      if (!NativeSecretsLoader.HAS_KEYRING) {
+        return
+      }
+
+      var encodedSecretValue = ""
+      try {
+        encodedSecretValue = getCredential() ?: return
+      } catch (e: Exception) {
+        logger.error("Failed to load secure profile Zowe", e)
+        throw e
+      }
       val encodedSecretValueAsBytes = encodedSecretValue.toByteArray()
       val decodedSecretValue = String(Base64.getDecoder().decode(encodedSecretValueAsBytes))
       val securePropsAsJsonElement = Json.parseToJsonElement(decodedSecretValue)
@@ -42,6 +53,10 @@ class CredentialManager {
 
     /** Set [secureProps] for the given config file */
     fun saveSecureProps() {
+      if (!NativeSecretsLoader.HAS_KEYRING) {
+        return
+      }
+
       if (secureProps.isNotEmpty()) {
         val securePropsAsJsonBytes = Json.encodeToString(secureProps).toByteArray()
         val encodedSecretValue = Base64.getEncoder().encodeToString(securePropsAsJsonBytes)
@@ -86,7 +101,7 @@ class CredentialManager {
         }
     }
 
-    // TODO: doc
+    /** Set the encoded credential to the keyring or storage */
     private fun setCredential(encodedCredential: String) {
       val serviceName = ZOWE_SERVICE_NAME
       val accountName = ZOWE_ACCOUNT_NAME

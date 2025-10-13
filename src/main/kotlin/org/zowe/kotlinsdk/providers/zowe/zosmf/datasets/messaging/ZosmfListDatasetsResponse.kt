@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging
@@ -32,17 +28,17 @@ class ZosmfListDatasetsResponse(
 
   /** items response param */
   @SerialName("items")
-  @AvailableSince(ZVersion.ZOS_2_1) override val dsItems: List<ZosmfDatasetItem> = emptyList(),
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val dsItems: List<ZosmfDatasetItem> = emptyList(),
 
   /** returnedRows response param */
   @SerialName("returnedRows")
-  @AvailableSince(ZVersion.ZOS_2_1) val returnedRows: Int = 0,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val returnedRows: Int = 0,
 
   /** totalRows response param */
   @SerialName("totalRows")
-  @AvailableSince(ZVersion.ZOS_2_1) val totalRows: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val totalRows: Int? = null,
 
   /** JSONversion response param */
   @SerialName("JSONversion")
-  @AvailableSince(ZVersion.ZOS_2_1) val jsonVersion: Int = 0
+  @property:AvailableSince(ZVersion.ZOS_2_1) val jsonVersion: Int = 0
 ) : HttpResponse, ListDatasetsResponse

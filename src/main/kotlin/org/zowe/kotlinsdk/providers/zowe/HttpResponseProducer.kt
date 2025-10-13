@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe
@@ -26,7 +22,7 @@ class HttpResponseProducer(
   private val delegate: HttpRequest,
   private val clientResponse: HttpResponse
 ) : HttpRequest by delegate {
-  override fun produceResponse(): Response {
+  override suspend fun produceResponse(): Response {
     return produceHttpResponse(clientResponse) ?: super.produceResponse()
   }
 }

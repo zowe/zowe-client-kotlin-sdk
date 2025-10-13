@@ -10,6 +10,7 @@
 
 package org.zowe.kotlinsdk.secrets
 
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -17,28 +18,32 @@ import java.io.InputStream
 // TODO: doc
 internal object NativeSecretsLoader {
   private var isLoaded = false
-  private val logger = System.getLogger(NativeSecretsLoader::class.java.name)
+  private val logger = LoggerFactory.getLogger(javaClass)
   private const val LIB_NAME = "keyring"
+
+  var HAS_KEYRING = false
 
   init {
     try {
       loadNativeLibrary()
+      HAS_KEYRING = true
     } catch (e: Exception) {
-      logger.log(System.Logger.Level.ERROR, "Failed to load native library", e)
-      throw ZoweSecretsException("Failed to initialize native secrets library", e)
+      logger.error("Failed to load native library", e)
+      HAS_KEYRING = false
+//      throw ZoweSecretsException("Failed to initialize native secrets library", e)
     }
   }
 
   private fun loadNativeLibrary() {
     if (isLoaded) {
-      logger.log(System.Logger.Level.DEBUG, "Native library already loaded")
+      logger.debug("Native library already loaded")
       return
     }
 
     val osName = System.getProperty("os.name").lowercase()
     val osArch = System.getProperty("os.arch").lowercase()
 
-    logger.log(System.Logger.Level.INFO, "Loading native library for OS: $osName, arch: $osArch")
+    logger.info("Loading native library for OS: $osName, arch: $osArch")
 
     // Define architecture
     val arch = when {
@@ -63,7 +68,7 @@ internal object NativeSecretsLoader {
       }
     }
 
-    logger.log(System.Logger.Level.DEBUG, "Resource path: $resourcePath (arch: $arch)")
+    logger.debug("Resource path: $resourcePath (arch: $arch)")
 
     // Load the library from resources
     val inputStream: InputStream = NativeSecretsLoader::class.java.classLoader
@@ -78,7 +83,7 @@ internal object NativeSecretsLoader {
     val tempFile = File.createTempFile("lib${LIB_NAME}_$arch", libExtension)
       .apply { deleteOnExit() }
 
-    logger.log(System.Logger.Level.DEBUG, "Extracting library to: ${tempFile.absolutePath}")
+    logger.debug("Extracting library to: ${tempFile.absolutePath}")
 
     // Copy the library to the temporary file
     try {
@@ -93,7 +98,7 @@ internal object NativeSecretsLoader {
     try {
       System.load(tempFile.absolutePath)
       isLoaded = true
-      logger.log(System.Logger.Level.INFO, "Native library loaded successfully for $arch")
+      logger.info("Native library loaded successfully for $arch")
     } catch (e: UnsatisfiedLinkError) {
       throw ZoweSecretsException(
         "Failed to load native library for $osName/$arch: ${e.message}\n" +

@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe
@@ -58,7 +54,7 @@ class HttpRequestRunner(
         setBody(params.body)
       }
     }
-    return HttpResponseProducer(params,  clientResponse).produceResponse()
+    return HttpResponseProducer(params, clientResponse).produceResponse()
   }
 
   /**

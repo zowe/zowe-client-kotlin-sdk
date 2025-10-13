@@ -84,10 +84,15 @@ java {
 }
 
 dependencies {
+  api(libs.slf4j.api)
   implementation(libs.retrofit2)
   implementation(libs.retrofit2.converter.gson)
   implementation(libs.retrofit2.converter.scalars)
+  // TODO: remove and use kotlinx.serialization.json since K2
   implementation(libs.gson)
+  // TODO: remove and use kotlinx.serialization.json since K2
+  implementation(libs.jackson.core.databind)
+  implementation(libs.jackson.module.kotlin)
   // TODO: delete keytar lib after refactoring of interaction with Zowe Config
   implementation(libs.java.keytar)
   implementation(libs.snakeyaml)
@@ -97,6 +102,7 @@ dependencies {
   implementation(libs.ktor.serialization.kotlinx.json)
   implementation(libs.kotlinx.serialization.json)
   implementation(libs.sshj)
+  implementation(libs.json.schema.validator)
   // New way of testing
   testImplementation(libs.kotest.assertions.core)
   testImplementation(libs.kotest.runner.junit5)
@@ -105,6 +111,7 @@ dependencies {
   testImplementation(libs.mockwebserver)
   testImplementation(libs.okhttp.tls)
   testImplementation(libs.sshd.core)
+  testImplementation(libs.logback.classic)
   testRuntimeOnly(libs.junit.jupiter.engine)
 }
 

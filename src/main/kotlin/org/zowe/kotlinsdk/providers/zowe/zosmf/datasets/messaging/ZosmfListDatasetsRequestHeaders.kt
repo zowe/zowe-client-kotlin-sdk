@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging
@@ -23,10 +19,10 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMAttribut
 /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-zos-data-sets-system#ListDataSets__title__3">List the z/OS data sets on a system: Custom headers</a> */
 interface ZosmfListDatasetsRequestHeaders : ZosmfDsAndFilesCommonRequestHeaders, ZosmfTargetSystemRequestHeaders {
   /** X-IBM-Max-Items custom header */
-  @AvailableSince(ZVersion.ZOS_2_1) val maxItems: Int?
+  @property:AvailableSince(ZVersion.ZOS_2_1) val maxItems: Int?
 
   /** X-IBM-Attributes custom header */
-  @AvailableSince(ZVersion.ZOS_2_1) val attributes: XIBMAttributes?
+  @property:AvailableSince(ZVersion.ZOS_2_1) val attributes: XIBMAttributes?
 
   override fun getHeadersMap(): Map<String, String?> {
     return mapOf(

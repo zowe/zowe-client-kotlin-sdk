@@ -25,82 +25,82 @@ interface DatasetsAPI : API {
    * @param params [ListDatasetsRequest] instance to get parameters for the request from
    * @return [ListDatasetsResponse] instance with the succeeded request result
    */
-  fun listDatasets(params: ListDatasetsRequest): ListDatasetsResponse
+  suspend fun listDatasets(params: ListDatasetsRequest): ListDatasetsResponse
 
   /**
    * Get the dataset's info
    * @param params [GetDatasetInfoRequest] instance to get parameters for the request from
    * @return [GetDatasetInfoResponse] instance with the succeeded request result
    */
-  fun getDatasetInfo(params: GetDatasetInfoRequest): GetDatasetInfoResponse
+  suspend fun getDatasetInfo(params: GetDatasetInfoRequest): GetDatasetInfoResponse
 
   /**
    * List the dataset's members
    * @param params [ListDatasetMembersRequest] instance to get parameters for the request from
    * @return [ListDatasetMembersResponse] instance with the succeeded request result
    */
-  fun listDatasetMembers(params: ListDatasetMembersRequest): ListDatasetMembersResponse
+  suspend fun listDatasetMembers(params: ListDatasetMembersRequest): ListDatasetMembersResponse
 
   /**
    * Retrieve the dataset's content
    * @param params [RetrieveDatasetContentRequest] instance to get parameters for the request from
    * @return [RetrieveDatasetContentResponse] instance with the succeeded request result
    */
-  fun retrieveDatasetContent(params: RetrieveDatasetContentRequest): RetrieveDatasetContentResponse
+  suspend fun retrieveDatasetContent(params: RetrieveDatasetContentRequest): RetrieveDatasetContentResponse
 
   /**
    * Writes content to the dataset
    * @param params [WriteToDatasetRequest] instance to get parameters for the request from
    * @return [WriteToDatasetResponse] instance with the request result
    */
-  fun writeToDataset(params: WriteToDatasetRequest): WriteToDatasetResponse
+  suspend fun writeToDataset(params: WriteToDatasetRequest): WriteToDatasetResponse
 
   /**
    * Create a sequential or partitioned dataset
    * @param params [CreateDatasetRequest] instance to get parameters for the request from
    * @return [CreateDatasetResponse] instance with the request result
    */
-  fun createDataset(params: CreateDatasetRequest): CreateDatasetResponse
+  suspend fun createDataset(params: CreateDatasetRequest): CreateDatasetResponse
 
   /**
    * Deletes a sequential and partitioned dataset
    * @param params [DeleteDatasetRequest] instance to get parameters for the request from
    * @return [DeleteDatasetResponse] instance with the request result
    */
-  fun deleteDataset(params: DeleteDatasetRequest): DeleteDatasetResponse
+  suspend fun deleteDataset(params: DeleteDatasetRequest): DeleteDatasetResponse
 
   /**
    * Renames dataset
    * @param params [RenameDatasetRequest] instance to get parameters for the request from
    * @return [RenameDatasetResponse] instance with the request result
    */
-  fun renameDataset(params: RenameDatasetRequest): RenameDatasetResponse
+  suspend fun renameDataset(params: RenameDatasetRequest): RenameDatasetResponse
 
   /**
    * Copy dataset
    * @param params [CopyDatasetRequest] instance to get parameters for the request from
    * @return [CopyDatasetResponse] instance with the request result
    */
-  fun copyDataset(params: CopyDatasetRequest): CopyDatasetResponse
+  suspend fun copyDataset(params: CopyDatasetRequest): CopyDatasetResponse
 
   /**
    * Migrates dataset
    * @param params [MigrateDatasetRequest] instance to get parameters for the request from
    * @return [MigrateDatasetResponse] instance with the request result
    */
-  fun migrateDataset(params: MigrateDatasetRequest): MigrateDatasetResponse
+  suspend fun migrateDataset(params: MigrateDatasetRequest): MigrateDatasetResponse
 
   /**
    * Recalls a migrated dataset
    * @param params [RecallDatasetRequest] instance to get parameters for the request from
    * @return [RecallDatasetResponse] instance with the request result
    */
-  fun recallDataset(params: RecallDatasetRequest): RecallDatasetResponse
+  suspend fun recallDataset(params: RecallDatasetRequest): RecallDatasetResponse
 
   /**
    * Deletes a backup version of a dataset
    * @param params [DeleteDatasetBackupVersionRequest] instance to get parameters for the request from
    * @return [DeleteDatasetBackupVersionResponse] instance with the request result
    */
-  fun deleteDatasetBackupVersion(params: DeleteDatasetBackupVersionRequest): DeleteDatasetBackupVersionResponse
+  suspend fun deleteDatasetBackupVersion(params: DeleteDatasetBackupVersionRequest): DeleteDatasetBackupVersionResponse
 }

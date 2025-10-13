@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe
@@ -40,5 +36,5 @@ interface HttpRequest : Request {
    * @param clientResponse the actual client response to process in the custom handler
    * @return an [org.zowe.kotlinsdk.providers.zowe.HttpResponse] compatible object with the appropriate response handling result
    */
-  fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse? = null
+  suspend fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse? = null
 }
