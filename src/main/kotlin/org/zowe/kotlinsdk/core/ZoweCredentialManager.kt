@@ -23,13 +23,23 @@ const val ZOWE_ACCOUNT_NAME = "secure_config_props"
 const val WINDOWS_CRED_MAX_STRING_LENGTH = 2560
 
 /**
+ * Exception to produce when secure profile load is failed
+ * @param reasonFailed the reason the load is failed
+ * @param originException the original [Exception] produced during a load try
+ */
+class SecureProfileLoadException(
+  reasonFailed: String,
+  originException: Exception
+) : Exception(reasonFailed, originException)
+
+/**
  * A class including static functions for managing credentials
  * Based on the https://github.com/zowe/zowe-client-python-sdk/blob/main/src/core/zowe/core_for_zowe_sdk/credential_manager.py.
  * Uses https://www.npmjs.com/package/@zowe/secrets-for-zowe-sdk
  */
-open class CredentialManager {
+open class ZoweCredentialManager {
   companion object {
-    private val logger = LoggerFactory.getLogger(CredentialManager::class.java)
+    private val logger = LoggerFactory.getLogger(ZoweCredentialManager::class.java)
     var secureProps: MutableMap<String, Any> = mutableMapOf()
 
     /** Load [secureProps] stored for the given config file */
@@ -38,12 +48,16 @@ open class CredentialManager {
         return
       }
 
-      var encodedSecretValue = ""
-      try {
-        encodedSecretValue = getCredential() ?: return
+      val encodedSecretValue = try {
+        getCredential() ?: return
       } catch (e: Exception) {
-        logger.error("Failed to load secure profile Zowe", e)
-        throw e
+        val secureProfileLoadFailedMsg = "Failed to load secure profile Zowe: ${e.message}"
+        val secureProfileLoadFailedException = SecureProfileLoadException(
+          secureProfileLoadFailedMsg,
+          e
+        )
+        logger.error(secureProfileLoadFailedMsg, secureProfileLoadFailedException)
+        throw secureProfileLoadFailedException
       }
       val encodedSecretValueAsBytes = encodedSecretValue.toByteArray()
       val decodedSecretValue = String(Base64.getDecoder().decode(encodedSecretValueAsBytes))

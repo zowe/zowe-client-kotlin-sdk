@@ -36,6 +36,12 @@ class SchemaNotResolvedException(
 ) : Exception("$reasonNotResolved: ${originException.message}", originException)
 
 /**
+ * Exception to throw on JSON validation error
+ * @param reasonNotValid the reason message the JSON is not valid
+ */
+class JsonValidationException(reasonNotValid: String) : Exception(reasonNotValid)
+
+/**
  * Load schema JSON as [String]
  * @param pathSchemaJson path to zowe.schema.json
  * @param location the location to search for the schema in
@@ -109,6 +115,6 @@ fun validateConfigJson(pathConfigJson: Any, pathSchemaJson: String, cwd: String)
 
   if (errors.isNotEmpty()) {
     val errorMessages = errors.joinToString("\n") { it.message }
-    throw IllegalArgumentException("Schema validation failed:\n$errorMessages")
+    throw JsonValidationException("Schema validation failed:\n$errorMessages")
   }
 }

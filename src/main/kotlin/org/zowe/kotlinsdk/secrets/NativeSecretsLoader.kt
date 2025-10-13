@@ -15,7 +15,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 
-// TODO: doc
+/** A native secrets Rust library loader. Provides the way to work with it using Kotlin */
 internal object NativeSecretsLoader {
   private var isLoaded = false
   private val logger = LoggerFactory.getLogger(javaClass)

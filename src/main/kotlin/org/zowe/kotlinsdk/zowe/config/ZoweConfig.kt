@@ -29,6 +29,10 @@ import java.util.*
  * @version 0.5
  * @since 2021-08-12
  */
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("ZoweConfigFile()", "org.zowe.kotlinsdk.core.ZoweConfigFile")
+)
 data class ZoweConfig(
   @Expose
   @SerializedName("\$schema")
@@ -625,6 +629,10 @@ data class ZoweConfig(
   }
 }
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("ZoweProfile()", "org.zowe.kotlinsdk.core.ZoweConfigFile")
+)
 data class ZoweConfigProfile(
   var name: String,
   @Expose
