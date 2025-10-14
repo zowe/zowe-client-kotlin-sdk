@@ -6,23 +6,17 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe
 
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.runBlocking
 import net.schmizz.sshj.SSHClient
 import org.zowe.kotlinsdk.core.Request
-import org.zowe.kotlinsdk.core.RequestCanceller
 import org.zowe.kotlinsdk.core.RequestRunner
 import org.zowe.kotlinsdk.core.Response
 import org.zowe.kotlinsdk.core.SupportedProtocol
 
+// TODO: doc
 /**
  * SSH request runner. Generalizes the way to process SSH requests and responses
  * @property client the SSHj client to execute requests with

@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging
@@ -20,7 +16,6 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentLength
 import io.ktor.http.isSuccess
-import kotlinx.coroutines.runBlocking
 import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
@@ -139,7 +134,7 @@ class ZosmfRetrieveDatasetContentRequest(
     else -> DataType.ERROR
   }
 
-  override fun produceHttpResponse(clientResponse: io.ktor.client.statement.HttpResponse): HttpResponse {
+  override suspend fun produceHttpResponse(clientResponse: io.ktor.client.statement.HttpResponse): HttpResponse {
     if (clientResponse.status.isSuccess()) {
       if (dataType == DataType.BINARY) {
         val lengthLong = clientResponse.contentLength()
@@ -150,9 +145,8 @@ class ZosmfRetrieveDatasetContentRequest(
             var offset = 0
 
             do {
-              val currentRead = runBlocking {
-                clientResponse.bodyAsChannel().readAvailable(byteArray, offset, byteArray.size)
-              }
+              val currentRead = clientResponse.bodyAsChannel()
+                .readAvailable(byteArray, offset, byteArray.size)
               offset += currentRead
             } while (currentRead > 0 && offset != length)
 
@@ -169,7 +163,7 @@ class ZosmfRetrieveDatasetContentRequest(
           return ZosmfRetrieveDatasetContentResponse(clientResponse.status, fetchedDataType = DataType.ERROR)
         }
       } else if (dataType == DataType.TEXT) {
-        val clientResponseBody = runBlocking { clientResponse.bodyAsText() }
+        val clientResponseBody = clientResponse.bodyAsText()
         return ZosmfRetrieveDatasetContentResponse(
           clientResponse.status,
           fetchedDataType = DataType.TEXT,

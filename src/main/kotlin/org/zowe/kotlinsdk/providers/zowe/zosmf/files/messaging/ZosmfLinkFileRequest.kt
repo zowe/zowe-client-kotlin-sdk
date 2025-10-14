@@ -6,22 +6,16 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
 
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpMethod
-import kotlinx.coroutines.runBlocking
 import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.files.api.messaging.LinkFileRequest
-import org.zowe.kotlinsdk.providers.zowe.Connection
 import org.zowe.kotlinsdk.providers.zowe.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.XIBMBPXKAutoCvt
@@ -81,10 +75,8 @@ class ZosmfLinkFileRequest(
 
   override val body = linkFileBody
 
-  override fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse? {
-    return runBlocking {
-      ZosmfLinkFileResponse(clientResponse.status)
-    }
+  override suspend fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse {
+    return ZosmfLinkFileResponse(clientResponse.status)
   }
 
 }

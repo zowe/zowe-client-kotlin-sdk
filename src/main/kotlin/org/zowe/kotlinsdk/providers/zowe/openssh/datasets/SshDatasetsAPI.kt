@@ -6,15 +6,10 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.openssh.datasets
 
-import kotlinx.coroutines.runBlocking
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.RequestRunner
@@ -56,10 +51,8 @@ class SshDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=lce-example-1-3">LISTDS command: Example 1</a>
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  override fun listDatasets(params: ListDatasetsRequest): ListDatasetsResponse {
-    return runBlocking {
-      requestRunner.runRequest(params) as ListDatasetsResponse
-    }
+  override suspend fun listDatasets(params: ListDatasetsRequest): ListDatasetsResponse {
+    return requestRunner.runRequest(params) as ListDatasetsResponse
   }
 
   /**
@@ -68,18 +61,14 @@ class SshDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
    * @return [GetDatasetInfoResponse] instance with the request handling result
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  override fun getDatasetInfo(params: GetDatasetInfoRequest): GetDatasetInfoResponse {
-    return runBlocking {
-      requestRunner.runRequest(params) as GetDatasetInfoResponse
-    }
+  override suspend fun getDatasetInfo(params: GetDatasetInfoRequest): GetDatasetInfoResponse {
+    return requestRunner.runRequest(params) as GetDatasetInfoResponse
   }
 
   /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-listds-command">LISTDS command</a> */
   @AvailableSince(ZVersion.ZOS_2_1)
-  override fun listDatasetMembers(params: ListDatasetMembersRequest): ListDatasetMembersResponse {
-    return runBlocking {
-      requestRunner.runRequest(params) as ListDatasetMembersResponse
-    }
+  override suspend fun listDatasetMembers(params: ListDatasetMembersRequest): ListDatasetMembersResponse {
+    return requestRunner.runRequest(params) as ListDatasetMembersResponse
   }
 
   /**
@@ -87,13 +76,11 @@ class SshDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=tc-oput-copy-mvs-data-set-member-into-zos-unix-file#tsooput__title__7">OPUT - Copy an MVS data set member into a z/OS UNIX file: Examples</a>
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  override fun retrieveDatasetContent(params: RetrieveDatasetContentRequest): RetrieveDatasetContentResponse {
-    return runBlocking {
-      requestRunner.runRequest(params) as RetrieveDatasetContentResponse
-    }
+  override suspend fun retrieveDatasetContent(params: RetrieveDatasetContentRequest): RetrieveDatasetContentResponse {
+    return requestRunner.runRequest(params) as RetrieveDatasetContentResponse
   }
 
-  override fun writeToDataset(params: WriteToDatasetRequest): WriteToDatasetResponse {
+  override suspend fun writeToDataset(params: WriteToDatasetRequest): WriteToDatasetResponse {
     // tsocmd "OGET '/dev/fd0' 'ULADZ.TEST.SSH80.PDS(TEST1)'" <<EOF
     //some test text
     //EOF
@@ -149,10 +136,8 @@ class SshDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=ace-example-6-allocate-new-sequential-data-set-space-allocated-in-tracks">Example 6: Allocate a new sequential data set with space allocated in tracks</a>
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  override fun createDataset(params: CreateDatasetRequest): CreateDatasetResponse {
-    return runBlocking {
-      requestRunner.runRequest(params) as CreateDatasetResponse
-    }
+  override suspend fun createDataset(params: CreateDatasetRequest): CreateDatasetResponse {
+    return requestRunner.runRequest(params) as CreateDatasetResponse
   }
 
   /**
@@ -160,19 +145,17 @@ class SshDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=dce-example">DELETE command: Example</a>
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  override fun deleteDataset(params: DeleteDatasetRequest): DeleteDatasetResponse {
-    return runBlocking {
-      requestRunner.runRequest(params) as DeleteDatasetResponse
-    }
+  override suspend fun deleteDataset(params: DeleteDatasetRequest): DeleteDatasetResponse {
+    return requestRunner.runRequest(params) as DeleteDatasetResponse
   }
 
-  override fun renameDataset(params: RenameDatasetRequest): RenameDatasetResponse {
+  override suspend fun renameDataset(params: RenameDatasetRequest): RenameDatasetResponse {
     // RENAME 'OLDNM' 'NEWNM'
     // RENAME 'OLDNM(MEMOLD)' (MEMNEW)
     TODO("Not yet implemented")
   }
 
-  override fun copyDataset(params: CopyDatasetRequest): CopyDatasetResponse {
+  override suspend fun copyDataset(params: CopyDatasetRequest): CopyDatasetResponse {
     // ?
     // SMCOPY FROMDATASET('PSDS') TODATASET('ANOTHERPSDS')
     // SMCOPY FROMDATASET('PDSDS(MEM)') TODATASET('ANOTHERPPDSDS(MEM)')
@@ -181,17 +164,17 @@ class SshDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
     TODO("Not yet implemented")
   }
 
-  override fun migrateDataset(params: MigrateDatasetRequest): MigrateDatasetResponse {
+  override suspend fun migrateDataset(params: MigrateDatasetRequest): MigrateDatasetResponse {
     // HMIGRATE
     TODO("Not yet implemented")
   }
 
-  override fun recallDataset(params: RecallDatasetRequest): RecallDatasetResponse {
+  override suspend fun recallDataset(params: RecallDatasetRequest): RecallDatasetResponse {
     // HRECALL
     TODO("Not yet implemented")
   }
 
-  override fun deleteDatasetBackupVersion(params: DeleteDatasetBackupVersionRequest): DeleteDatasetBackupVersionResponse {
+  override suspend fun deleteDatasetBackupVersion(params: DeleteDatasetBackupVersionRequest): DeleteDatasetBackupVersionResponse {
     // HDELETE
     TODO("Not yet implemented")
   }

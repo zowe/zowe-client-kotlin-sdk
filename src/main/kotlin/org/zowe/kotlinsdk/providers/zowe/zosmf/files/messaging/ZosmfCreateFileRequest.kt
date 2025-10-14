@@ -6,22 +6,16 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
 
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpMethod
-import kotlinx.coroutines.runBlocking
 import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.files.api.messaging.CreateFileRequest
-import org.zowe.kotlinsdk.providers.zowe.Connection
 import org.zowe.kotlinsdk.providers.zowe.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 
@@ -30,37 +24,37 @@ class ZosmfCreateFileRequest(
   override val connection: HttpConnection,
 
   /** file-path path param */
-  @AvailableSince(ZVersion.ZOS_2_1) override val filePath: String,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val filePath: String,
 
   /** The request body to create a UNIX file or directory */
-  @AvailableSince(ZVersion.ZOS_2_1) val createFileBody: ZosmfCreateFileRequestBody,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val createFileBody: ZosmfCreateFileRequestBody,
 
   /** X-IBM-Target-System default header */
-  @AvailableSince(ZVersion.ZOS_2_4) override val targetSystem: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystem: String? = null,
 
   /** X-IBM-Target-System-User custom header */
-  @AvailableSince(ZVersion.ZOS_2_4) override val targetSystemUser: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystemUser: String? = null,
 
   /** X-IBM-Target-System-Password custom header */
-  @AvailableSince(ZVersion.ZOS_2_4) override val targetSystemPassword: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystemPassword: String? = null,
 
   /** X-IBM-Async-Threshold default header */
-  @AvailableSince(ZVersion.ZOS_2_1) override val asyncThreshold: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val asyncThreshold: Int? = null,
 
   /** X-IBM-Response-Timeout default header */
-  @AvailableSince(ZVersion.ZOS_2_1) override val responseTimeout: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val responseTimeout: Int? = null,
 
   /** X-IBM-Session-Limit-Wait default header */
-  @AvailableOnly(ZVersion.ZOS_2_4) override val sessionLimitWait: Int? = null,
+  @property:AvailableOnly(ZVersion.ZOS_2_4) override val sessionLimitWait: Int? = null,
 
   /** X-IBM-Request-Acctnum default header */
-  @AvailableSince(ZVersion.ZOS_2_5) override val requestAcctnum: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_5) override val requestAcctnum: String? = null,
 
   /** X-IBM-Request-Proc default header */
-  @AvailableSince(ZVersion.ZOS_2_5) override val requestProc: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_5) override val requestProc: String? = null,
 
   /** X-IBM-Request-Region default header */
-  @AvailableSince(ZVersion.ZOS_2_5) override val requestRegion: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_5) override val requestRegion: String? = null,
 ) : HttpRequest, CreateFileRequest, ZosmfCreateFileRequestHeaders {
 
   override val method = HttpMethod.Post
@@ -73,14 +67,12 @@ class ZosmfCreateFileRequest(
 
   override val body = createFileBody
 
-  override fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse? {
-    return runBlocking {
-      val response = ZosmfCreateFileResponse(clientResponse.status)
+  override suspend fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse? {
+    val response = ZosmfCreateFileResponse(clientResponse.status)
       // TODO: log warning?
 //      if (clientResponse.status != HttpStatusCode.Created) {
 //      }
-      response
-    }
+    return response
   }
 
 }

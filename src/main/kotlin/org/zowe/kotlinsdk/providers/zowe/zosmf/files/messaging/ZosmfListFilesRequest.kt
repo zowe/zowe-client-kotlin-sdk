@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
@@ -17,12 +13,10 @@ package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpMethod
-import kotlinx.coroutines.runBlocking
 import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.files.api.messaging.ListFilesRequest
-import org.zowe.kotlinsdk.providers.zowe.Connection
 import org.zowe.kotlinsdk.providers.zowe.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.files.definitions.ZosmfSymlinkMode
@@ -32,73 +26,73 @@ class ZosmfListFilesRequest(
   override val connection: HttpConnection,
 
   /** path query param */
-  @AvailableSince(ZVersion.ZOS_2_1) override val filter: String,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val filter: String,
 
   /** depth query param */
-  @AvailableSince(ZVersion.ZOS_2_3) val depth: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_3) val depth: Int? = null,
 
   /** limit query param */
-  @AvailableSince(ZVersion.ZOS_2_3) val limit: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_3) val limit: Int? = null,
 
   /** filesys query param */
-  @AvailableSince(ZVersion.ZOS_2_3) val fileSystem: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_3) val fileSystem: String? = null,
 
   /** symlinks query param */
-  @AvailableSince(ZVersion.ZOS_2_3) val followSymlinks: ZosmfSymlinkMode? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_3) val followSymlinks: ZosmfSymlinkMode? = null,
 
   /** group query param */
-  @AvailableSince(ZVersion.ZOS_2_3) val group: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_3) val group: String? = null,
 
   /** mtime query param */
-  @AvailableSince(ZVersion.ZOS_2_3) val mtime: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_3) val mtime: String? = null,
 
   /** name query param */
-  @AvailableSince(ZVersion.ZOS_2_3) val name: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_3) val name: String? = null,
 
   /** size query param */
-  @AvailableSince(ZVersion.ZOS_2_3) val size: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_3) val size: String? = null,
 
   /** perm query param */
-  @AvailableSince(ZVersion.ZOS_2_3) val perm: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_3) val perm: String? = null,
 
   /** type query param */
-  @AvailableSince(ZVersion.ZOS_2_3) val type: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_3) val type: String? = null,
 
   /** user query param */
-  @AvailableSince(ZVersion.ZOS_2_3) val user: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_3) val user: String? = null,
 
   /** X-IBM-Max-Items custom header */
-  @AvailableSince(ZVersion.ZOS_2_1) override val maxItems: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val maxItems: Int? = null,
 
   /** X-IBM-Lstat custom header */
-  @AvailableSince(ZVersion.ZOS_2_1) override val lstat: Boolean? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val lstat: Boolean? = null,
 
   /** X-IBM-Target-System default header */
-  @AvailableSince(ZVersion.ZOS_2_4) override val targetSystem: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystem: String? = null,
 
   /** X-IBM-Target-System-User custom header */
-  @AvailableSince(ZVersion.ZOS_2_4) override val targetSystemUser: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystemUser: String? = null,
 
   /** X-IBM-Target-System-Password custom header */
-  @AvailableSince(ZVersion.ZOS_2_4) override val targetSystemPassword: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystemPassword: String? = null,
 
   /** X-IBM-Session-Limit-Wait default header */
-  @AvailableOnly(ZVersion.ZOS_2_4) override val sessionLimitWait: Int? = null,
+  @property:AvailableOnly(ZVersion.ZOS_2_4) override val sessionLimitWait: Int? = null,
 
   /** X-IBM-Async-Threshold default header */
-  @AvailableSince(ZVersion.ZOS_2_1) override val asyncThreshold: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val asyncThreshold: Int? = null,
 
   /** X-IBM-Response-Timeout default header */
-  @AvailableSince(ZVersion.ZOS_2_1) override val responseTimeout: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val responseTimeout: Int? = null,
 
   /** X-IBM-Request-Acctnum default header */
-  @AvailableSince(ZVersion.ZOS_2_5) override val requestAcctnum: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_5) override val requestAcctnum: String? = null,
 
   /** X-IBM-Request-Proc default header */
-  @AvailableSince(ZVersion.ZOS_2_5) override val requestProc: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_5) override val requestProc: String? = null,
 
   /** X-IBM-Request-Region default header */
-  @AvailableSince(ZVersion.ZOS_2_5) override val requestRegion: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_5) override val requestRegion: String? = null,
 ) : HttpRequest, ListFilesRequest, ZosmfListFilesRequestHeaders {
 
   override val method = HttpMethod.Get
@@ -124,12 +118,10 @@ class ZosmfListFilesRequest(
 
   override val body = null
 
-  override fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse? {
-    return runBlocking {
-      val response = clientResponse.body<ZosmfListFilesResponse>()
-      response.status = clientResponse.status
-      response
-    }
+  override suspend fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse {
+    val response = clientResponse.body<ZosmfListFilesResponse>()
+    response.status = clientResponse.status
+    return response
   }
 
 }

@@ -103,6 +103,7 @@ dependencies {
   implementation(libs.kotlinx.serialization.json)
   implementation(libs.sshj)
   implementation(libs.json.schema.validator)
+  implementation(libs.dotenv)
   // New way of testing
   testImplementation(libs.kotest.assertions.core)
   testImplementation(libs.kotest.runner.junit5)

@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.info.messaging
@@ -17,9 +13,7 @@ package org.zowe.kotlinsdk.providers.zowe.zosmf.info.messaging
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpMethod
-import kotlinx.coroutines.runBlocking
 import org.zowe.kotlinsdk.core.info.api.messaging.GetSystemInfoRequest
-import org.zowe.kotlinsdk.providers.zowe.Connection
 import org.zowe.kotlinsdk.providers.zowe.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 
@@ -36,12 +30,10 @@ class ZosmfGetSystemInfoRequest(override val connection: HttpConnection) : HttpR
 
   override val body = null
 
-  override fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse? {
-    return runBlocking {
-      val response = clientResponse.body<ZosmfGetSystemInfoResponse>()
-      response.status = clientResponse.status
-      response
-    }
+  override suspend fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse? {
+    val response = clientResponse.body<ZosmfGetSystemInfoResponse>()
+    response.status = clientResponse.status
+    return response
   }
 
 }

@@ -10,6 +10,7 @@
 
 package org.zowe.kotlinsdk.core
 
+import io.github.cdimascio.dotenv.dotenv
 import org.slf4j.LoggerFactory
 import java.io.FileNotFoundException
 
@@ -27,6 +28,9 @@ class ZoweProfileManager(
   var showWarnings: Boolean = true
 ) {
   companion object {
+    // Collect Zowe environment variables from .env file
+    val devEnv by lazy { dotenv { ignoreIfMissing = true } }
+
     /**
      * Map the env variables to the profile properties
      * @param zoweConfigFile a config file that contains the schema properties.
@@ -42,14 +46,17 @@ class ZoweProfileManager(
         .flatMap { it.entries }
         .associate { it.toPair() }
 
+      // Collect .env variables
+      val envVars: MutableMap<String, Any> = devEnv.entries()
+        .associate { entry -> entry.key to (entry.value ?: "") }
+        .toMutableMap()
+
       // Collect ZOWE_OPT environment variables
-      val env = System.getenv()
+      val userEnv = System.getenv()
         .filterKeys { it.startsWith("ZOWE_OPT") }
         .mapKeys { (key, _) -> key.removePrefix("ZOWE_OPT_").lowercase() }
 
-      val envVars = mutableMapOf<String, Any>()
-
-      for ((nextEnvVarName, nextEnvVarValue) in env) {
+      for ((nextEnvVarName, nextEnvVarValue) in userEnv) {
         val words = nextEnvVarName.split("_")
         val propKey = if (words.size > 1) {
           words[0] + words[1].replaceFirstChar { it.uppercase() }
