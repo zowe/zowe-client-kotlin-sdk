@@ -8,14 +8,20 @@
  * Copyright Contributors to the Zowe Project.
  */
 
-package org.zowe.kotlinsdk.providers.zowe
+package org.zowe.kotlinsdk.core.connectivity
 
 /**
  * HTTP connection abstraction. Provides the way to store and gather specific HTTP parameters.
  * Scheme is "https" by default
  * @see [Connection]
  */
-abstract class HttpConnection(host: String, port: Int, scheme: String = "https") : Connection(host, port, scheme) {
+abstract class HttpConnection(
+  host: String,
+  port: Int,
+  /** Should the connection be established with authorized certificates only or not */
+  val rejectUnauthorized: Boolean = true,
+  scheme: String = "https"
+) : Connection(host, port, scheme) {
   /** Get authentication parameter to provide during a request */
   abstract fun getAuthParam(): String
 }

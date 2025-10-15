@@ -6,13 +6,9 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe
+package org.zowe.kotlinsdk.core.connectivity
 
 import net.schmizz.sshj.userauth.method.AuthMethod
 

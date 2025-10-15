@@ -17,7 +17,7 @@ import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.api.messaging.CreateDatasetRequest
-import org.zowe.kotlinsdk.providers.zowe.HttpConnection
+import org.zowe.kotlinsdk.core.connectivity.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 
 /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-create-sequential-partitioned-data-set">Create a sequential or partitioned data set</a> */

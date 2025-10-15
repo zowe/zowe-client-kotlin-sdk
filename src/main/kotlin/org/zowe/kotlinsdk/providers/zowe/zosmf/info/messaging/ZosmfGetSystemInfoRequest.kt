@@ -14,7 +14,7 @@ import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpMethod
 import org.zowe.kotlinsdk.core.info.api.messaging.GetSystemInfoRequest
-import org.zowe.kotlinsdk.providers.zowe.HttpConnection
+import org.zowe.kotlinsdk.core.connectivity.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 
 /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=service-retrieve-zosmf-information">Retrieve z/OSMF information</a> */
@@ -30,7 +30,7 @@ class ZosmfGetSystemInfoRequest(override val connection: HttpConnection) : HttpR
 
   override val body = null
 
-  override suspend fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse? {
+  override suspend fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse {
     val response = clientResponse.body<ZosmfGetSystemInfoResponse>()
     response.status = clientResponse.status
     return response

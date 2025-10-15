@@ -16,7 +16,7 @@ import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.files.api.messaging.DeleteFileRequest
-import org.zowe.kotlinsdk.providers.zowe.HttpConnection
+import org.zowe.kotlinsdk.core.connectivity.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.files.definitions.XIBMOption
 
@@ -68,7 +68,7 @@ class ZosmfDeleteFileRequest(
 
   override val body = null
 
-  override suspend fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse? {
+  override suspend fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse {
     val response = ZosmfDeleteFileResponse(clientResponse.status)
       // TODO: log warning?
 //      if (clientResponse.status != HttpStatusCode.NoContent) {

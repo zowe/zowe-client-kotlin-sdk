@@ -20,7 +20,7 @@ import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.files.api.messaging.RetrieveFileContentRequest
-import org.zowe.kotlinsdk.providers.zowe.HttpConnection
+import org.zowe.kotlinsdk.core.connectivity.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 import org.zowe.kotlinsdk.providers.zowe.HttpResponse
 import org.zowe.kotlinsdk.providers.zowe.zosmf.XIBMDataType
@@ -100,7 +100,7 @@ class ZosmfRetrieveFileContentRequest(
 
   override val body = null
 
-  override suspend fun produceHttpResponse(clientResponse: io.ktor.client.statement.HttpResponse): HttpResponse? {
+  override suspend fun produceHttpResponse(clientResponse: io.ktor.client.statement.HttpResponse): HttpResponse {
     if (clientResponse.status.isSuccess()) {
       if (xIBMDataType?.type == XIBMDataType.Type.BINARY) {
         val lengthLong = clientResponse.contentLength()

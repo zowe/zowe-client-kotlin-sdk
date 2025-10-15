@@ -17,7 +17,7 @@ import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.files.api.messaging.GetFileACLRequest
-import org.zowe.kotlinsdk.providers.zowe.HttpConnection
+import org.zowe.kotlinsdk.core.connectivity.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.XIBMBPXKAutoCvt
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfUtilitiesRequestHeaders
@@ -76,7 +76,7 @@ class ZosmfGetFileACLRequest(
 
   override val body = getFileAclBody
 
-  override suspend fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse? {
+  override suspend fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse {
     val response = clientResponse.body<ZosmfGetFileACLResponse>()
     response.status = clientResponse.status
     return response

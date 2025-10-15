@@ -18,7 +18,7 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.AttributesLevel
 import org.zowe.kotlinsdk.core.datasets.api.messaging.ListDatasetMembersRequest
-import org.zowe.kotlinsdk.providers.zowe.HttpConnection
+import org.zowe.kotlinsdk.core.connectivity.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMAttributes
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMMigratedRecall
@@ -91,7 +91,7 @@ class ZosmfListDatasetMembersRequest(
 
   override val body = null
 
-  override suspend fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse? {
+  override suspend fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse {
     val response = clientResponse.body<ZosmfListDatasetMembersResponse>()
     response.status = clientResponse.status
     return response

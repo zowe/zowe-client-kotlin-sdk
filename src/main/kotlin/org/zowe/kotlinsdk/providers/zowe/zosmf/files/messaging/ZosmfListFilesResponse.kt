@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
@@ -32,21 +28,21 @@ class ZosmfListFilesResponse(
 
   /** items response param */
   @SerialName("items")
-  @AvailableSince(ZVersion.ZOS_2_1) override val items: List<ZosmfFileItem> = emptyList(),
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val items: List<ZosmfFileItem> = emptyList(),
 
   /** returnedRows response param */
   @SerialName("returnedRows")
-  @AvailableSince(ZVersion.ZOS_2_1) val returnedRows: Int = 0,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val returnedRows: Int = 0,
 
   /** moreRows response param */
   @SerialName("moreRows")
-  @AvailableSince(ZVersion.ZOS_2_1) val moreRows: Boolean? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val moreRows: Boolean? = null,
 
   /** totalRows response param */
   @SerialName("totalRows")
-  @AvailableSince(ZVersion.ZOS_2_1) val totalRows: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val totalRows: Int? = null,
 
   /** JSONversion response param */
   @SerialName("JSONversion")
-  @AvailableSince(ZVersion.ZOS_2_1) val jsonVersion: Int = 0
+  @property:AvailableSince(ZVersion.ZOS_2_1) val jsonVersion: Int = 0
 ): HttpResponse, ListFilesResponse

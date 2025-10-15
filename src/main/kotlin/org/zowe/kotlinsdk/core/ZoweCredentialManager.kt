@@ -13,6 +13,7 @@ package org.zowe.kotlinsdk.core
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import org.slf4j.LoggerFactory
 import org.zowe.kotlinsdk.secrets.NativeSecretsLoader
 import org.zowe.kotlinsdk.secrets.ZoweSecrets
@@ -62,7 +63,14 @@ open class ZoweCredentialManager {
       val encodedSecretValueAsBytes = encodedSecretValue.toByteArray()
       val decodedSecretValue = String(Base64.getDecoder().decode(encodedSecretValueAsBytes))
       val securePropsAsJsonElement = Json.parseToJsonElement(decodedSecretValue)
-      secureProps = securePropsAsJsonElement.jsonObject.toMutableMap()
+      secureProps = securePropsAsJsonElement.jsonObject
+        .toMap()
+        .mapValues { (_, configSecretValues) ->
+          configSecretValues.jsonObject
+            .toMap()
+            .mapValues { (_, propValueAsJson) -> propValueAsJson.jsonPrimitive.content }
+        }
+        .toMutableMap()
     }
 
     /** Set [secureProps] for the given config file */

@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf
@@ -26,7 +22,7 @@ import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.MOCK_ZOSMF_SERV
 import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.zosmfMockResponseDispatcher
 import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
 import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.zoweAPIProvider
-import org.zowe.kotlinsdk.providers.zowe.UserPassHttpConnection
+import org.zowe.kotlinsdk.core.connectivity.UserPassHttpConnection
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging.ZosmfListDatasetsRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging.ZosmfListDatasetsResponse
 
@@ -36,7 +32,7 @@ class ZosmfListDatasetsTestSpec : ShouldSpec({
   context("listDatasets") {
     should("listDatasets return the correct list of datasets") {
       zosmfMockResponseDispatcher.injectResolver(
-        "mock:zosmf/restfiles/ds?dslevel=TEST1.*",
+        "listDatasets_success",
         { it.requestLine.contains("/zosmf/restfiles/ds?dslevel=TEST1") },
         {
           MockResponse()
@@ -109,6 +105,32 @@ class ZosmfListDatasetsTestSpec : ShouldSpec({
         listDatasetsResponse is ZosmfListDatasetsResponse
         listDatasetsResponse.dsItems.size shouldBe 2
       }
+    }
+
+    // TODO: finalize
+    should("listDatasets return an empty list when there is no data sets under the specified mask") {
+/*
+{"items":[],"returnedRows":0,"totalRows":0,"JSONversion":1}
+ */
+    }
+
+    // TODO: finalize
+    should("listDatasets return an error when there are archived data sets on a non-MIGRAT volumes") {
+/*
+ {
+    "rc": 4,
+    "reason": 3,
+    "details":["ARC1020I DFSMSHSM IS RECALLING FROM TAPE DSN=TSARB.BACKUP.ASNA21.HDT0.D160323, YOU MAY CONTINUE THE RECALL IN THE BACKGROUND AND FREE YOUR TSO SESSION BY PRESSING THE ATTENTION KEY                    ",
+    "ARC1020I DFSMSHSM IS RECALLING FROM TAPE DSN=TSARB.BACKUP.VOLTAGE.HDT0.D150120, YOU MAY CONTINUE THE RECALL IN THE BACKGROUND AND FREE YOUR TSO SESSION BY PRESSING THE ATTENTION KEY                   ",
+    "ARC1020I DFSMSHSM IS RECALLING FROM TAPE DSN=TSARB.BACKUP.ZSECURE.HDT0.D150128, YOU MAY CONTINUE THE RECALL IN THE BACKGROUND AND FREE YOUR TSO SESSION BY PRESSING THE ATTENTION KEY                   ",
+    "IDI0034I Fault analysis skipped due to: EXCLUDE option specification (FAST)",
+    "* ISPF Subtask abend *        ",
+    "IKJ56641I ISPSTART ENDED DUE TO ERROR+               ",
+    "READY "],
+    "category": 2,
+    "message": "ServletDispatcher failed - received TSO Prompt when expecting TsoServletResponse"
+}
+ */
     }
   }
 })

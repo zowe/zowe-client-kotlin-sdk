@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe
@@ -35,8 +31,8 @@ import org.apache.sshd.server.channel.ChannelSession
 import org.apache.sshd.server.command.Command
 import org.apache.sshd.server.command.CommandFactory
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider
+import org.zowe.kotlinsdk.core.connectivity.SshConnection
 import org.zowe.kotlinsdk.providers.zowe.ssh.SshMockResponseDispatcher
-import org.zowe.kotlinsdk.providers.zowe.SshRequestRunner
 import org.zowe.kotlinsdk.providers.zowe.zosmf.HttpMockResponseDispatcher
 import java.io.InputStream
 import java.io.OutputStream

@@ -8,7 +8,7 @@
  * Copyright Contributors to the Zowe Project.
  */
 
-package org.zowe.kotlinsdk.providers.zowe
+package org.zowe.kotlinsdk.core.connectivity
 
 /**
  * Represents basic connection information

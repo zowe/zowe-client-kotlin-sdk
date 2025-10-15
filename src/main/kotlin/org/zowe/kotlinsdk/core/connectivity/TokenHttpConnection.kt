@@ -6,22 +6,19 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe
+package org.zowe.kotlinsdk.core.connectivity
 
 /** Represents connection information with a token as the auth method */
 class TokenHttpConnection(
   host: String,
   port: Int,
+  rejectUnauthorized: Boolean = true,
   scheme: String = "https",
   /** z/OS host valid token as authentication method */
   private val token: String
-) : HttpConnection(host, port, scheme) {
+) : HttpConnection(host, port, rejectUnauthorized, scheme) {
 
   /** Check if a token is specified, as well as a host */
   override fun checkConnection() {

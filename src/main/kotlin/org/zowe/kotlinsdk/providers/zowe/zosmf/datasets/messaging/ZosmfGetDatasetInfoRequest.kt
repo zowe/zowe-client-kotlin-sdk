@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging
@@ -19,7 +15,7 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.AttributesLevel
 import org.zowe.kotlinsdk.core.datasets.api.messaging.GetDatasetInfoRequest
-import org.zowe.kotlinsdk.providers.zowe.HttpConnection
+import org.zowe.kotlinsdk.core.connectivity.HttpConnection
 
 /**
  * Get dataset info request parameters holder.
@@ -29,37 +25,37 @@ class ZosmfGetDatasetInfoRequest(
   val connection: HttpConnection,
 
   /** dataset name */
-  @AvailableSince(ZVersion.ZOS_2_1) override val dsName: String,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val dsName: String,
 
   /** volser query param */
-  @AvailableSince(ZVersion.ZOS_2_1) val volumeSerial: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val volumeSerial: String? = null,
 
   /** X-IBM-Target-System default header */
-  @AvailableSince(ZVersion.ZOS_2_4) override val targetSystem: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystem: String? = null,
 
   /** X-IBM-Target-System-User custom header */
-  @AvailableSince(ZVersion.ZOS_2_4) override val targetSystemUser: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystemUser: String? = null,
 
   /** X-IBM-Target-System-Password custom header */
-  @AvailableSince(ZVersion.ZOS_2_4) override val targetSystemPassword: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystemPassword: String? = null,
 
   /** X-IBM-Async-Threshold default header */
-  @AvailableSince(ZVersion.ZOS_2_1) override val asyncThreshold: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val asyncThreshold: Int? = null,
 
   /** X-IBM-Response-Timeout default header */
-  @AvailableSince(ZVersion.ZOS_2_1) override val responseTimeout: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val responseTimeout: Int? = null,
 
   /** X-IBM-Session-Limit-Wait default header */
-  @AvailableOnly(ZVersion.ZOS_2_4) override val sessionLimitWait: Int? = null,
+  @property:AvailableOnly(ZVersion.ZOS_2_4) override val sessionLimitWait: Int? = null,
 
   /** X-IBM-Request-Acctnum default header */
-  @AvailableSince(ZVersion.ZOS_2_5) override val requestAcctnum: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_5) override val requestAcctnum: String? = null,
 
   /** X-IBM-Request-Proc default header */
-  @AvailableSince(ZVersion.ZOS_2_5) override val requestProc: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_5) override val requestProc: String? = null,
 
   /** X-IBM-Request-Region default header */
-  @AvailableSince(ZVersion.ZOS_2_5) override val requestRegion: String? = null
+  @property:AvailableSince(ZVersion.ZOS_2_5) override val requestRegion: String? = null
 ) : GetDatasetInfoRequest, ZosmfGetDatasetInfoRequestHeaders {
   /** Produce a [ZosmfListDatasetsRequest] parameters for a single dataset */
   fun toListDatasetsRequest(): ZosmfListDatasetsRequest {

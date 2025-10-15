@@ -28,8 +28,8 @@ class ZoweProfileManager(
   var showWarnings: Boolean = true
 ) {
   companion object {
-    // Collect Zowe environment variables from .env file
-    val devEnv by lazy { dotenv { ignoreIfMissing = true } }
+    // To collect Zowe environment variables from .env file
+    private val devEnv by lazy { dotenv { ignoreIfMissing = true } }
 
     /**
      * Map the env variables to the profile properties
@@ -46,17 +46,15 @@ class ZoweProfileManager(
         .flatMap { it.entries }
         .associate { it.toPair() }
 
-      // Collect .env variables
-      val envVars: MutableMap<String, Any> = devEnv.entries()
-        .associate { entry -> entry.key to (entry.value ?: "") }
-        .toMutableMap()
-
       // Collect ZOWE_OPT environment variables
-      val userEnv = System.getenv()
-        .filterKeys { it.startsWith("ZOWE_OPT") }
+      val envVars: Map<String, String> = devEnv.entries()
+        .filter { entry -> entry.key.startsWith("ZOWE_OPT") }
+        .associate { entry -> entry.key to (entry.value ?: "") }
         .mapKeys { (key, _) -> key.removePrefix("ZOWE_OPT_").lowercase() }
+        .toMutableMap()
+      val resolvedEnvVars: MutableMap<String, Any> = envVars.toMutableMap()
 
-      for ((nextEnvVarName, nextEnvVarValue) in userEnv) {
+      for ((nextEnvVarName, nextEnvVarValue) in envVars) {
         val words = nextEnvVarName.split("_")
         val propKey = if (words.size > 1) {
           words[0] + words[1].replaceFirstChar { it.uppercase() }
@@ -69,8 +67,8 @@ class ZoweProfileManager(
           val propMap = props[propKey] as? Map<String, Any>
           val propType = propMap?.get("type") as? String
 
-          envVars[propKey] = when (propType) {
-            "number" -> nextEnvVarValue?.trimStart('-')?.toIntOrNull() ?: 0
+          resolvedEnvVars[propKey] = when (propType) {
+            "number" -> nextEnvVarValue.trimStart('-').toIntOrNull() ?: 0
             "boolean" -> nextEnvVarValue.lowercase() in listOf("true", "1", "yes")
             else -> nextEnvVarValue
           }

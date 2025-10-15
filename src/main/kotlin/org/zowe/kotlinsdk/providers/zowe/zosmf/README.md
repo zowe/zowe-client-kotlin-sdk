@@ -4,7 +4,7 @@
 
 | Method                     | Implemented | Test coverage |
 |----------------------------|-------------|---------------|
-| listDatasets               | ✅           | ❌             |
+| listDatasets               | ✅           | partial       |
 | getDatasetInfo             | ✅           | ❌             |
 | listDatasetMembers         | ✅           | ❌             |
 | retrieveDatasetContent     | ✅           | ❌             |
@@ -21,7 +21,7 @@
 
 | Method                   | Implemented | Test coverage |
 |--------------------------|-------------|---------------|
-| listFiles                | ✅           | ❌             |
+| listFiles                | ✅           | partial       |
 | retrieveFileContent      | ✅           | ❌             |
 | writeToUssFile           | ✅           | ❌             |
 | createFile               | ✅           | ❌             |

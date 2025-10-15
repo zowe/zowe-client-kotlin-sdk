@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging
@@ -19,7 +15,7 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.AttributesLevel
 import org.zowe.kotlinsdk.core.datasets.api.messaging.GetDatasetInfoRequest
-import org.zowe.kotlinsdk.providers.zowe.SshConnection
+import org.zowe.kotlinsdk.core.connectivity.SshConnection
 import org.zowe.kotlinsdk.providers.zowe.SshRequest
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
 import org.zowe.kotlinsdk.providers.zowe.SshStatus

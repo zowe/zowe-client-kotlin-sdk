@@ -16,7 +16,7 @@ import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.files.api.messaging.LinkFileRequest
-import org.zowe.kotlinsdk.providers.zowe.HttpConnection
+import org.zowe.kotlinsdk.core.connectivity.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.XIBMBPXKAutoCvt
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfUtilitiesRequestHeaders
@@ -26,43 +26,43 @@ class ZosmfLinkFileRequest(
   override val connection: HttpConnection,
 
   /** file-path-name path param */
-  @AvailableSince(ZVersion.ZOS_2_1) override val filePath: String,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val filePath: String,
 
   /** The request body to execute link function on a UNIX System Services file or directory */
-  @AvailableSince(ZVersion.ZOS_2_1) val linkFileBody: ZosmfLinkFileRequestBody,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val linkFileBody: ZosmfLinkFileRequestBody,
 
   /** charset-name param for Content-Type header  */
-  @AvailableSince(ZVersion.ZOS_2_1) override val charsetName: String? = "UTF-8",
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val charsetName: String? = "UTF-8",
 
   /** X-IBM-BPXK-AUTOCVT custom header */
-  @AvailableSince(ZVersion.ZOS_2_1) override val xIBMBPXKAutoCvt: XIBMBPXKAutoCvt? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val xIBMBPXKAutoCvt: XIBMBPXKAutoCvt? = null,
 
   /** X-IBM-Target-System default header */
-  @AvailableSince(ZVersion.ZOS_2_4) override val targetSystem: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystem: String? = null,
 
   /** X-IBM-Target-System-User custom header */
-  @AvailableSince(ZVersion.ZOS_2_4) override val targetSystemUser: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystemUser: String? = null,
 
   /** X-IBM-Target-System-Password custom header */
-  @AvailableSince(ZVersion.ZOS_2_4) override val targetSystemPassword: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystemPassword: String? = null,
 
   /** X-IBM-Async-Threshold default header */
-  @AvailableSince(ZVersion.ZOS_2_1) override val asyncThreshold: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val asyncThreshold: Int? = null,
 
   /** X-IBM-Response-Timeout default header */
-  @AvailableSince(ZVersion.ZOS_2_1) override val responseTimeout: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val responseTimeout: Int? = null,
 
   /** X-IBM-Session-Limit-Wait default header */
-  @AvailableOnly(ZVersion.ZOS_2_4) override val sessionLimitWait: Int? = null,
+  @property:AvailableOnly(ZVersion.ZOS_2_4) override val sessionLimitWait: Int? = null,
 
   /** X-IBM-Request-Acctnum default header */
-  @AvailableSince(ZVersion.ZOS_2_5) override val requestAcctnum: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_5) override val requestAcctnum: String? = null,
 
   /** X-IBM-Request-Proc default header */
-  @AvailableSince(ZVersion.ZOS_2_5) override val requestProc: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_5) override val requestProc: String? = null,
 
   /** X-IBM-Request-Region default header */
-  @AvailableSince(ZVersion.ZOS_2_5) override val requestRegion: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_5) override val requestRegion: String? = null,
 ) : HttpRequest, LinkFileRequest, ZosmfUtilitiesRequestHeaders {
 
   override val method = HttpMethod.Put

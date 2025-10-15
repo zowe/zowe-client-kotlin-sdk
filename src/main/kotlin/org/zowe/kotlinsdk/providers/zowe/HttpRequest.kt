@@ -12,6 +12,7 @@ package org.zowe.kotlinsdk.providers.zowe
 
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpMethod
+import org.zowe.kotlinsdk.core.connectivity.HttpConnection
 import org.zowe.kotlinsdk.core.Request
 
 /**

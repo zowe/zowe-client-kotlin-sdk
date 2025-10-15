@@ -8,7 +8,7 @@
  * Copyright Contributors to the Zowe Project.
  */
 
-package org.zowe.kotlinsdk.providers.zowe
+package org.zowe.kotlinsdk.core.connectivity
 
 import okhttp3.Credentials
 
@@ -16,12 +16,13 @@ import okhttp3.Credentials
 class UserPassHttpConnection(
   host: String,
   port: Int,
+  rejectUnauthorized: Boolean = true,
   scheme: String = "https",
   /** z/OS host valid username with access to HTTP REST API */
   val user: String,
   /** z/OS host user\'s password with access to HTTP REST API */
   val password: String
-) : HttpConnection(host, port, scheme) {
+) : HttpConnection(host, port, rejectUnauthorized, scheme) {
 
   private val basicCredentials: String = Credentials.basic(user, password)
 

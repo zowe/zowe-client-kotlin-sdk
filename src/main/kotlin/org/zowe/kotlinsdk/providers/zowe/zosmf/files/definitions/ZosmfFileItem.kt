@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.definitions
@@ -28,39 +24,39 @@ import org.zowe.kotlinsdk.core.files.data.FilePermissions
 class ZosmfFileItem(
   /** name response param */
   @SerialName("name")
-  @AvailableSince(ZVersion.ZOS_2_1) override val name: String,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val name: String,
 
   /** mode response param */
   @SerialName("mode")
-  @AvailableSince(ZVersion.ZOS_2_1) private val mode: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) private val mode: String? = null,
 
   /** size response param */
   @SerialName("size")
-  @AvailableSince(ZVersion.ZOS_2_1) val size: Long? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val size: Long? = null,
 
   /** uid response param */
   @SerialName("uid")
-  @AvailableSince(ZVersion.ZOS_2_1) val uid: Long? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val uid: Long? = null,
 
   /** user response param */
   @SerialName("user")
-  @AvailableSince(ZVersion.ZOS_2_1) val user: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val user: String? = null,
 
   /** gid response param */
   @SerialName("gid")
-  @AvailableSince(ZVersion.ZOS_2_1) val gid: Long? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val gid: Long? = null,
 
   /** group response param */
   @SerialName("group")
-  @AvailableSince(ZVersion.ZOS_2_1) val group: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val group: String? = null,
 
   /** mtime response param */
   @SerialName("mtime")
-  @AvailableSince(ZVersion.ZOS_2_1) val mtime: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val mtime: String? = null,
 
   /** target response param */
   @SerialName("target")
-  @AvailableSince(ZVersion.ZOS_2_1) val target: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val target: String? = null,
 ) : FileItem {
   override val fileType: FileType
     get() = if (mode?.first() == 'd') FileType.DIRECTORY else FileType.FILE
@@ -68,6 +64,6 @@ class ZosmfFileItem(
   override val fileMode: FilePermissions
     get() = mode?.let { FilePermissions.fromString(it) } ?: EMPTY_FILE_PERMISSIONS
 
-  override val isSymlink: Boolean?
+  override val isSymlink: Boolean
     get() = target != null
 }

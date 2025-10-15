@@ -21,7 +21,7 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.DataType
 import org.zowe.kotlinsdk.core.datasets.api.messaging.RetrieveDatasetContentRequest
-import org.zowe.kotlinsdk.providers.zowe.HttpConnection
+import org.zowe.kotlinsdk.core.connectivity.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 import org.zowe.kotlinsdk.providers.zowe.HttpResponse
 import org.zowe.kotlinsdk.providers.zowe.zosmf.XIBMDataType
