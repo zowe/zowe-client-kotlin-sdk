@@ -10,12 +10,12 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Dzianis Lisiankou
  */
 
 package org.zowe.kotlinsdk
 
 import org.zowe.kotlinsdk.annotations.AvailableSince
-import org.zowe.kotlinsdk.annotations.IsSupported
 import org.zowe.kotlinsdk.annotations.ZVersion
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -67,7 +67,7 @@ interface DataAPI {
   ): Call<MembersList>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @GET("/zosmf/restfiles/ds/{dataset-name}")
+  @GET("zosmf/restfiles/ds/{dataset-name}")
   fun retrieveDatasetContent(
     @Header("Authorization") authorizationToken: String,
     @Header("If-None-Match") ifNoneMatch: String? = null,
@@ -86,7 +86,7 @@ interface DataAPI {
   ): Call<ResponseBody>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @GET("/zosmf/restfiles/ds/{dataset-name}({member-name})")
+  @GET("zosmf/restfiles/ds/{dataset-name}({member-name})")
   fun retrieveMemberContent(
     @Header("Authorization") authorizationToken: String,
     @Header("If-None-Match") ifNoneMatch: String? = null,
@@ -106,7 +106,7 @@ interface DataAPI {
   ): Call<String>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @GET("/zosmf/restfiles/ds/-({volser})/{dataset-name}")
+  @GET("zosmf/restfiles/ds/-({volser})/{dataset-name}")
   fun retrieveDatasetContent(
     @Header("Authorization") authorizationToken: String,
     @Header("If-None-Match") ifNoneMatch: String? = null,
@@ -126,7 +126,7 @@ interface DataAPI {
   ): Call<ResponseBody>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @GET("/zosmf/restfiles/ds/-({volser})/{dataset-name}({member-name})")
+  @GET("zosmf/restfiles/ds/-({volser})/{dataset-name}({member-name})")
   fun retrieveMemberContent(
     @Header("Authorization") authorizationToken: String,
     @Header("If-None-Match") ifNoneMatch: String? = null,
@@ -147,7 +147,7 @@ interface DataAPI {
   ): Call<String>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/ds/{dataset-name}")
+  @PUT("zosmf/restfiles/ds/{dataset-name}")
   fun writeToDataset(
     @Header("Authorization") authorizationToken: String,
     @Header("If-Match") ifMatch: String? = null,
@@ -162,7 +162,7 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/ds/{dataset-name}({member-name})")
+  @PUT("zosmf/restfiles/ds/{dataset-name}({member-name})")
   fun writeToDatasetMember(
     @Header("Authorization") authorizationToken: String,
     @Header("If-Match") ifMatch: String? = null,
@@ -178,7 +178,7 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/ds/-({volser})/{dataset-name}")
+  @PUT("zosmf/restfiles/ds/-({volser})/{dataset-name}")
   fun writeToDataset(
     @Header("Authorization") authorizationToken: String,
     @Header("If-Match") ifMatch: String? = null,
@@ -194,7 +194,7 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/ds/-({volser})/{dataset-name}({member-name})")
+  @PUT("zosmf/restfiles/ds/-({volser})/{dataset-name}({member-name})")
   fun writeToDatasetMember(
     @Header("Authorization") authorizationToken: String,
     @Header("If-Match") ifMatch: String? = null,
@@ -211,7 +211,7 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @POST("/zosmf/restfiles/ds/{dataset-name}")
+  @POST("zosmf/restfiles/ds/{dataset-name}")
   fun createDataset(
     @Header("Authorization") authorizationToken: String,
     @Path("dataset-name") datasetName: String,
@@ -219,14 +219,14 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @DELETE("/zosmf/restfiles/ds/{dataset-name}")
+  @DELETE("zosmf/restfiles/ds/{dataset-name}")
   fun deleteDataset(
     @Header("Authorization") authorizationToken: String,
     @Path("dataset-name") datasetName: String,
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @DELETE("/zosmf/restfiles/ds/-({volume})/{dataset-name}")
+  @DELETE("zosmf/restfiles/ds/-({volume})/{dataset-name}")
   fun deleteDataset(
     @Header("Authorization") authorizationToken: String,
     @Path("volume") volume: String,
@@ -234,7 +234,7 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @DELETE("/zosmf/restfiles/ds/{dataset-name}({member-name})")
+  @DELETE("zosmf/restfiles/ds/{dataset-name}({member-name})")
   fun deleteDatasetMember(
     @Header("Authorization") authorizationToken: String,
     @Path("dataset-name") datasetName: String,
@@ -242,7 +242,7 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @DELETE("/zosmf/restfiles/ds/-({volume})/{dataset-name}({member-name})")
+  @DELETE("zosmf/restfiles/ds/-({volume})/{dataset-name}({member-name})")
   fun deleteDatasetMember(
     @Header("Authorization") authorizationToken: String,
     @Path("volume") volume: String,
@@ -251,7 +251,7 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/ds/{to-data-set-name}")
+  @PUT("zosmf/restfiles/ds/{to-data-set-name}")
   fun renameDataset(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
@@ -260,7 +260,7 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/ds/{to-data-set-name}({member-name})")
+  @PUT("zosmf/restfiles/ds/{to-data-set-name}({member-name})")
   fun renameDatasetMember(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-Migrated-Recall") xIBMMigratedRecall: MigratedRecall? = null,
@@ -279,7 +279,7 @@ interface DataAPI {
    * **PDS MEMBER or MEMBERS** -> **PDS** (adds or replaces)
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/ds/{to-data-set-name}")
+  @PUT("zosmf/restfiles/ds/{to-data-set-name}")
   fun copyToDataset(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
@@ -300,7 +300,7 @@ interface DataAPI {
    * **PDS MEMBER** or **MEMBERS** -> **PDS**
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/ds/-({to-volser})/{to-data-set-name}")
+  @PUT("zosmf/restfiles/ds/-({to-volser})/{to-data-set-name}")
   fun copyToDataset(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
@@ -316,7 +316,7 @@ interface DataAPI {
    * **PDS MEMBER** -> **PDS MEMBER**
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/ds/{to-data-set-name}({member-name})")
+  @PUT("zosmf/restfiles/ds/{to-data-set-name}({member-name})")
   fun copyToDatasetMember(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
@@ -334,7 +334,7 @@ interface DataAPI {
    * **PDS MEMBER** -> **PDS MEMBER**
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/ds/-({to-volser})/{to-data-set-name}({member-name})")
+  @PUT("zosmf/restfiles/ds/-({to-volser})/{to-data-set-name}({member-name})")
   fun copyToDatasetMemberFromUssFile(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
@@ -349,7 +349,7 @@ interface DataAPI {
    * **USS FILE** -> **SEQ** (truncates contents)
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/ds/{to-data-set-name}")
+  @PUT("zosmf/restfiles/ds/{to-data-set-name}")
   fun copyToDatasetFromUss(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
@@ -362,7 +362,7 @@ interface DataAPI {
    * **USS FILE** -> **PDS MEMBER**
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/ds/{to-data-set-name}({member-name})")
+  @PUT("zosmf/restfiles/ds/{to-data-set-name}({member-name})")
   fun copyToDatasetMemberFromUssFile(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
@@ -373,7 +373,7 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/ds/{dataset-name}")
+  @PUT("zosmf/restfiles/ds/{dataset-name}")
   fun recallMigratedDataset(
     @Header("Authorization") authorizationToken: String,
     @Body body: HRecall = HRecall(),
@@ -381,7 +381,7 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/ds/{dataset-name}")
+  @PUT("zosmf/restfiles/ds/{dataset-name}")
   fun migrateDataset(
     @Header("Authorization") authorizationToken: String,
     @Body body: HMigrate = HMigrate(),
@@ -389,7 +389,7 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/ds/{dataset-name}")
+  @PUT("zosmf/restfiles/ds/{dataset-name}")
   fun deleteMigratedDataset(
     @Header("Authorization") authorizationToken: String,
     @Body body: HDelete = HDelete(),
@@ -397,7 +397,7 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @GET("/zosmf/restfiles/fs/{filepath-name}")
+  @GET("zosmf/restfiles/fs/{filepath-name}")
   fun retrieveUssFileContent(
     @Header("Authorization") authorizationToken: String,
     @Header("If-None-Match") ifNoneMatch: String? = null,
@@ -413,7 +413,7 @@ interface DataAPI {
   ): Call<ResponseBody>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/fs/{filepath-name}")
+  @PUT("zosmf/restfiles/fs/{filepath-name}")
   fun writeToUssFile(
     @Header("Authorization") authorizationToken: String,
     @Header("If-Match") ifNoneMatch: String? = null,
@@ -425,7 +425,7 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @POST("/zosmf/restfiles/fs/{filepath-name}")
+  @POST("zosmf/restfiles/fs/{filepath-name}")
   fun createUssFile(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-Override-Umask") xIBMOverrideUmask: Boolean = true,
@@ -434,7 +434,7 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @DELETE("/zosmf/restfiles/fs/{filepath-name}")
+  @DELETE("zosmf/restfiles/fs/{filepath-name}")
   fun deleteUssFile(
     @Header("Authorization") authorizationToken: String,
     @Path("filepath-name", encoded = true) filePath: FilePath,
@@ -442,7 +442,7 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/fs/{filepath-name}")
+  @PUT("zosmf/restfiles/fs/{filepath-name}")
   fun changeFileMode(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
@@ -451,7 +451,7 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/fs/{filepath-name}")
+  @PUT("zosmf/restfiles/fs/{filepath-name}")
   fun changeFileOwner(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
@@ -460,7 +460,7 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/fs/{filepath-name}")
+  @PUT("zosmf/restfiles/fs/{filepath-name}")
   fun changeFileTag(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
@@ -469,7 +469,7 @@ interface DataAPI {
   ): Call<ResponseBody>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/fs/{filepath-name}")
+  @PUT("zosmf/restfiles/fs/{filepath-name}")
   fun moveUssFile(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
@@ -478,7 +478,7 @@ interface DataAPI {
   ): Call<Void>
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/fs/{filepath-name}")
+  @PUT("zosmf/restfiles/fs/{filepath-name}")
   fun copyUssFile(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,
@@ -494,7 +494,7 @@ interface DataAPI {
    * **WARNING:** PDS -> USS DIR doesn't work
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restfiles/fs/{filepath-name}")
+  @PUT("zosmf/restfiles/fs/{filepath-name}")
   fun copyDatasetOrMemberToUss(
     @Header("Authorization") authorizationToken: String,
     @Header("X-IBM-BPXK-AUTOCVT") xIBMBpxkAutoCvt: XIBMBpxkAutoCvt? = null,

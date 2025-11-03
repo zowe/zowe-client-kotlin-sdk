@@ -10,6 +10,7 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Dzianis Lisiankou
  */
 
 package org.zowe.kotlinsdk
@@ -22,7 +23,7 @@ import retrofit2.http.*
 interface ServiceAPI {
 
   @AvailableSince(ZVersion.ZOS_2_5)
-  @PUT("/zosmf/services/authenticate")
+  @PUT("zosmf/services/authenticate")
   fun changeUserPassword(
     @Body body: ChangePassword
   ): Call<ChangePasswordResponse>

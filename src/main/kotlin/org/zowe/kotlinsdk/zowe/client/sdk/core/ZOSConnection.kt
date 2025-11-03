@@ -10,6 +10,7 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Dzianis Lisiankou
  */
 
 package org.zowe.kotlinsdk.zowe.client.sdk.core
@@ -37,6 +38,10 @@ data class ZOSConnection(
    * machine host username\'s password with access to backend z/OS instance
    */
   val password: String,
+  /**
+   *
+   */
+  val tokenValue: String,
   /**
    * machine host z/OSMF protocol to connect to z/OS instance
    */

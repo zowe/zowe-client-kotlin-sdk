@@ -10,6 +10,7 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Dzianis Lisiankou
  */
 
 package org.zowe.kotlinsdk.zowe
@@ -159,20 +160,21 @@ class ZoweConfigParsingTest: ZoweConfigTestBase() {
 
   fun checkGetListOfZosmfConections(zoweConfig: ZoweConfig) {
     val allZosConn = mutableListOf<ZOSConnection>()
-    allZosConn.add(ZOSConnection("example.host", "443", "testUser", "testPassword", profileName = "zosmf"))
+    allZosConn.add(ZOSConnection("example.host", "443", "testUser", "testPassword", "testTokenValue", profileName = "zosmf"))
     allZosConn.add(
       ZOSConnection(
         "example.host2",
         "443",
         "testUser",
         "testPassword",
+        "testTokenValue",
         profileName = "lpar1.section1.testParametersProfile",
         rejectUnauthorized = false,
         basePath = "/api",
         encoding = 37
       )
     )
-    allZosConn.add(ZOSConnection("example.host1", "10443", "testUser", "testPassword", profileName = "lpar1.zosmf"))
+    allZosConn.add(ZOSConnection("example.host1", "10443", "testUser", "testPassword", "testTokenValue", profileName = "lpar1.zosmf"))
     Assertions.assertArrayEquals(zoweConfig.getListOfZosmfConections().toTypedArray(), allZosConn.toTypedArray())
   }
 

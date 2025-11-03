@@ -10,6 +10,7 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Dzianis Lisiankou
  */
 
 package org.zowe.kotlinsdk
@@ -31,6 +32,7 @@ inline fun <reified API> buildApi(baseUrl: String, httpClient: OkHttpClient): AP
     .baseUrl(baseUrl)
     .client(httpClient)
     .addConverterFactory(ScalarsConverterFactory.create())
+//    .addConverterFactory(EmptyBodyConverterFactory())
     .addConverterFactory(GsonConverterFactory.create(gson))
     .build()
   return retrofit.create(API::class.java)
@@ -41,6 +43,7 @@ fun <API> buildApi(baseUrl: String, httpClient: OkHttpClient, apiClass: Class<ou
     .baseUrl(baseUrl)
     .client(httpClient)
     .addConverterFactory(ScalarsConverterFactory.create())
+//    .addConverterFactory(EmptyBodyConverterFactory())
     .addConverterFactory(GsonConverterFactory.create(gson))
     .build()
   return retrofit.create(apiClass)

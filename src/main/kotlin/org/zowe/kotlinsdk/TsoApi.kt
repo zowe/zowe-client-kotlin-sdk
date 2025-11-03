@@ -10,6 +10,7 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Dzianis Lisiankou
  */
 
 package org.zowe.kotlinsdk
@@ -38,7 +39,7 @@ interface TsoApi {
    * @return a wrapped instance of [TsoResponse]
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  @POST("/zosmf/tsoApp/tso")
+  @POST("zosmf/tsoApp/tso")
   fun startTso(
     @Header("Authorization") authorizationToken: String,
     @Header("Content-type") contentType: ContentType = ContentType.APP_JSON,
@@ -64,7 +65,7 @@ interface TsoApi {
    * @return a wrapped instance of [TsoResponse]
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/tsoApp/tso/{servletKey}")
+  @PUT("zosmf/tsoApp/tso/{servletKey}")
   fun sendMessageToTso(
     @Header("Authorization") authorizationToken: String,
     @Header("Content-type") contentType: ContentType = ContentType.APP_JSON,
@@ -81,7 +82,7 @@ interface TsoApi {
    * @return a wrapped instance of [TsoResponse]
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  @GET("/zosmf/tsoApp/tso/{servletKey}")
+  @GET("zosmf/tsoApp/tso/{servletKey}")
   fun receiveMessagesFromTso(
     @Header("Authorization") authorizationToken: String,
     @Header("Content-type") contentType: ContentType = ContentType.APP_JSON,
@@ -97,7 +98,7 @@ interface TsoApi {
    * @return a wrapped instance of [TsoResponse]
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  @DELETE("/zosmf/tsoApp/tso/{servletKey}")
+  @DELETE("zosmf/tsoApp/tso/{servletKey}")
   fun endTso(
     @Header("Authorization") authorizationToken: String,
     @Header("Content-type") contentType: ContentType = ContentType.APP_JSON,
@@ -113,7 +114,7 @@ interface TsoApi {
    * @return a wrapped instance of [TsoCmdResponse]
    */
   @AvailableSince(ZVersion.ZOS_2_4)
-  @PUT("/zosmf/tsoApp/v1/tso")
+  @PUT("zosmf/tsoApp/v1/tso")
   fun executeTsoCommand(
     @Header("Authorization") authorizationToken: String,
     @Header("Content-type") contentType: ContentType = ContentType.APP_JSON,

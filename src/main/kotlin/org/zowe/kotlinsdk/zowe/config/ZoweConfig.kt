@@ -10,6 +10,7 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Dzianis Lisiankou
  */
 
 package org.zowe.kotlinsdk.zowe.config
@@ -406,7 +407,11 @@ data class ZoweConfig(
    * @return [ZOSConnection] instance
    */
   fun toZosConnection(): ZOSConnection {
-    if (host?.isEmpty() != false || port == null || user?.isEmpty() != false || password == null || protocol.isEmpty()){
+    if (
+      host?.isEmpty() != false || port == null
+      || (tokenValue?.isEmpty() != false && (user?.isEmpty() != false || password == null))
+      || protocol.isEmpty()
+    ) {
       throw IllegalStateException("Zowe config data is not valid for creating ZOSConnection")
     }
     return ZOSConnection(
@@ -414,6 +419,7 @@ data class ZoweConfig(
       port.toString(),
       user ?: "",
       password ?: "",
+      tokenValue ?: "",
       protocol,
       rejectUnauthorized,
       basePath,
@@ -430,6 +436,10 @@ data class ZoweConfig(
   var password: String?
     get() = searchProperty("password") { zosmf(); base() } as String?
     set(el) { updateProperty("password", el ?: "") { zosmf(); base() } }
+
+  var tokenValue: String?
+    get() = searchProperty("tokenValue") { base() } as String?
+    set(el) { updateProperty("tokenValue", el ?: "") { base() } }
 
   var host: String?
     get() = searchProperty("host") { zosmf(); base() } as String?

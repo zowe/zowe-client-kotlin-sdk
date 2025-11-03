@@ -10,6 +10,7 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Dzianis Lisiankou
  */
 
 package org.zowe.kotlinsdk
@@ -26,7 +27,7 @@ import retrofit2.http.Path
 interface ConsoleAPI {
 
   @AvailableSince(ZVersion.ZOS_2_1)
-  @PUT("/zosmf/restconsoles/consoles/{consolename}")
+  @PUT("zosmf/restconsoles/consoles/{consolename}")
   fun issueCommand(
     @Header("Authorization") authorizationToken: String,
     @Header("Content-type") contentType: ContentType = ContentType.APP_JSON,
