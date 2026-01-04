@@ -10,30 +10,27 @@
 
 package org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging
 
-import net.schmizz.sshj.SSHClient
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.AttributesLevel
 import org.zowe.kotlinsdk.core.datasets.api.messaging.ListDatasetsRequest
 import org.zowe.kotlinsdk.core.connectivity.SshConnection
+import org.zowe.kotlinsdk.providers.zowe.SshCmdResponse
 import org.zowe.kotlinsdk.providers.zowe.SshRequest
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
 
 /**
  * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-listds-command">LISTDS command</a>
  * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=command-listds-operands">LISTDS command operands</a>
+ * @property mask data_set operand
+ * @property attributesLevel level of attributes to be returned ([AttributesLevel.FULL] by default)
+ * @property catalogName CATALOG operand
  */
 class SshListDatasetsRequest(
   override val connection: SshConnection,
-
-  /** data_set operand */
-  @property:AvailableSince(ZVersion.ZOS_2_1) override val mask: String,
-
-  /** Level of attributes to be returned ([AttributesLevel.FULL] by default) */
-  @property:AvailableSince(ZVersion.ZOS_2_1) override val attributesLevel: AttributesLevel = AttributesLevel.FULL,
-
-  /** CATALOG operand */
-  @property:AvailableSince(ZVersion.ZOS_2_1) val catalogName: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_2) override val mask: String,
+  @property:AvailableSince(ZVersion.ZOS_2_2) override val attributesLevel: AttributesLevel = AttributesLevel.FULL,
+  @property:AvailableSince(ZVersion.ZOS_2_2) val catalogName: String? = null,
 ) : SshRequest, ListDatasetsRequest {
 
   /**
@@ -51,10 +48,10 @@ class SshListDatasetsRequest(
     val asteriskIndex = mask.indexOf('*')
     if (asteriskIndex == -1) return mask
 
-    val prefix = mask.substring(0, asteriskIndex)
+    val prefix = mask.take(asteriskIndex)
     val lastDot = prefix.lastIndexOf('.')
 
-    return if (lastDot != -1) prefix.substring(0, lastDot) else prefix
+    return if (lastDot != -1) prefix.take(lastDot) else prefix
   }
 
   private val label = if (attributesLevel == AttributesLevel.FULL) "LABEL" else ""
@@ -64,20 +61,13 @@ class SshListDatasetsRequest(
 
   override var sshCommand = "tsocmd LISTDS \"'$modifiedMask'\" $label $catalog $wildcard"
 
-  /**
-   * Execute the LISTDS SSH TSOCMD request
-   * @param client the connected SSH client to execute the request with
-   * @return SSH handled response with the list of
-   * [org.zowe.kotlinsdk.providers.zowe.ssh.datasets.definitions.SshDatasetItem]'s
-   * and the final command execution status
-   */
-  override fun execRequest(client: SSHClient): SshResponse {
-    client
-      .startSession()
-      .use {
-        val status = performSshPlainRequest(client, it)
-        return SshListDatasetsResponse(status, mask, modifiedMask, attributesLevel)
-      }
+  override suspend fun produceResponseObject(clientResponse: Any): SshResponse {
+    return SshListDatasetsResponse(
+      clientResponse as SshCmdResponse,
+      mask,
+      modifiedMask,
+      attributesLevel
+    )
   }
 
 }

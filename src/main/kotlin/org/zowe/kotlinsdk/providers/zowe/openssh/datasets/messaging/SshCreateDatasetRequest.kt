@@ -10,11 +10,11 @@
 
 package org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging
 
-import net.schmizz.sshj.SSHClient
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.api.messaging.CreateDatasetRequest
 import org.zowe.kotlinsdk.core.connectivity.SshConnection
+import org.zowe.kotlinsdk.providers.zowe.SshCmdResponse
 import org.zowe.kotlinsdk.providers.zowe.SshRequest
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.definitions.SshDatasetItem
@@ -23,60 +23,44 @@ import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.definitions.SshDataset
 /**
  * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-allocate-command">ALLOCATE command</a>
  * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=command-allocate-operands">ALLOCATE command operands</a>
+ * @property dsName data set name to allocate
+ * @property volumeSerial volume serial to allocate the data set on (optional)
+ * @property deviceType device type (optional, 3390 by default)
+ * @property datasetOrganization data set organization (optional, because it is not needed for VSAM and GDG)
+ * @property allocationUnit allocation unit (optional, because is not needed for VSAM)
+ * @property primaryAllocation primary allocation
+ * @property secondaryAllocation secondary allocation
+ * @property directoryBlocks Directory blocks (only for PDS)
+ * @property averageBlockLength average block size
+ * @property recordFormat record format (is not needed for VSAM)
+ * @property blockSize block size (for data sets to be allocated in blocks)
+ * @property recordLength record length (not needed for U data sets)
+ * @property storageClass storage class
+ * @property managementClass management class
+ * @property dataClass data class
+ * @property dsnType data set type (could be omitted, the type then is specified automatically basing on the other parameters)
+ * @property datasetModel model data set (if "allocate like" is triggered)
  */
 class SshCreateDatasetRequest(
   override val connection: SshConnection,
 
-  /** Data set name to allocate */
-  @property:AvailableSince(ZVersion.ZOS_2_1) override val dsName: String,
-
-  /** Volume serial to allocate the data set on (optional) */
-  @property:AvailableSince(ZVersion.ZOS_2_1) val volumeSerial: String? = null,
-
-  /** Device type (optional, 3390 by default) */
-  @property:AvailableSince(ZVersion.ZOS_2_1) val deviceType: String? = null,
-
-  /** Data set organization (optional, because it is not needed for VSAM and GDG) */
-  @property:AvailableSince(ZVersion.ZOS_2_1) val datasetOrganization: SshDatasetItem.SshDatasetOrganization? = null,
-
-  /** Allocation unit (optional, because is not needed for VSAM) */
-  @property:AvailableSince(ZVersion.ZOS_2_1) val allocationUnit: SshDatasetItem.SshSpaceUnits? = null,
-
-  /** Primary allocation */
-  @property:AvailableSince(ZVersion.ZOS_2_1) val primaryAllocation: Int,
-
-  /** Secondary allocation */
-  @property:AvailableSince(ZVersion.ZOS_2_1) val secondaryAllocation: Int,
-
-  /** Directory blocks (only for PDS) */
-  @property:AvailableSince(ZVersion.ZOS_2_1) val directoryBlocks: Int? = null,
-
-  /** Average block size */
-  @property:AvailableSince(ZVersion.ZOS_2_1) val averageBlockLength: Int? = null,
-
-  /** Record format (is not needed for VSAM) */
-  @property:AvailableSince(ZVersion.ZOS_2_1) val recordFormat: SshDatasetItem.SshRecordFormat? = null,
-
-  /** Block size (for data sets to be allocated in blocks) */
-  @property:AvailableSince(ZVersion.ZOS_2_1) val blockSize: Int? = null,
-
-  /** Record length (not needed for U data sets) */
-  @property:AvailableSince(ZVersion.ZOS_2_1) val recordLength: Int? = null,
-
-  /** Storage class */
-  @property:AvailableSince(ZVersion.ZOS_2_1) val storageClass: String? = null,
-
-  /** Management class */
-  @property:AvailableSince(ZVersion.ZOS_2_1) val managementClass: String? = null,
-
-  /** Data class */
-  @property:AvailableSince(ZVersion.ZOS_2_1) val dataClass: String? = null,
-
-  /** Data set type (could be omitted, the type then is specified automatically basing on the other parameters) */
-  @property:AvailableSince(ZVersion.ZOS_2_1) val dsnType: SshDatasetType? = null,
-
-  /** Model data set (if "allocate like" is triggered) */
-  @property:AvailableSince(ZVersion.ZOS_2_1) val datasetModel: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_2) override val dsName: String,
+  @property:AvailableSince(ZVersion.ZOS_2_2) val volumeSerial: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_2) val deviceType: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_2) val datasetOrganization: SshDatasetItem.SshDatasetOrganization? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_2) val allocationUnit: SshDatasetItem.SshSpaceUnits? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_2) val primaryAllocation: Int,
+  @property:AvailableSince(ZVersion.ZOS_2_2) val secondaryAllocation: Int,
+  @property:AvailableSince(ZVersion.ZOS_2_2) val directoryBlocks: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_2) val averageBlockLength: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_2) val recordFormat: SshDatasetItem.SshRecordFormat? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_2) val blockSize: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_2) val recordLength: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_2) val storageClass: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_2) val managementClass: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_2) val dataClass: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_2) val dsnType: SshDatasetType? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_2) val datasetModel: String? = null,
 ) : SshRequest, CreateDatasetRequest {
 
   override var sshCommand = StringBuilder("tsocmd \"ALLOC DA('$dsName') NEW")
@@ -98,19 +82,8 @@ class SshCreateDatasetRequest(
     .append("\"")
     .toString()
 
-  /**
-   * Perform a data set creation operation through SSH.
-   * Will form all the necessary parameters for the "ALLOC DA('DSN') NEW" TSO command basing on the provided info
-   * @param client the SSH client to execute the command with
-   * @return the [SshCreateDatasetResponse] with the resulting status of the command
-   */
-  override fun execRequest(client: SSHClient): SshResponse {
-    client
-      .startSession()
-      .use {
-        val status = performSshPlainRequest(client, it)
-        return SshCreateDatasetResponse(status)
-      }
+  override suspend fun produceResponseObject(clientResponse: Any): SshResponse {
+    return SshCreateDatasetResponse(clientResponse as SshCmdResponse)
   }
 
 }

@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging
@@ -19,20 +15,22 @@ import kotlinx.serialization.Serializable
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-data-set-member-utilities#IZUHPINFO_API_PutDataSetMemberUtilities__title__6">z/OS data set and member utilities: Request body</a> */
+/**
+ * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-data-set-member-utilities#IZUHPINFO_API_PutDataSetMemberUtilities__title__6">z/OS data set and member utilities: Request body</a>
+ * @property request indicates the function rename
+ * @property src the dataset to rename
+ * @property enq enq for the "to" dataset is only allowed for renaming members
+ */
 @Serializable
 data class ZosmfRenameDatasetRequestBody(
-  /** Indicates the function rename */
   @SerialName("request")
-  @AvailableSince(ZVersion.ZOS_2_1) val request: String = "rename",
+  @property:AvailableSince(ZVersion.ZOS_2_1) val request: String = "rename",
 
-  /** The dataset to rename */
   @SerialName("from-dataset")
-  @AvailableSince(ZVersion.ZOS_2_1) val src: FromDataset,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val src: FromDataset,
 
-  /** enq for the "to" dataset is only allowed for renaming members */
   @SerialName("enq")
-  @AvailableSince(ZVersion.ZOS_2_1) val enq: Enq,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val enq: Enq? = null,
 ) {
   @Serializable
   enum class Enq(private val type: String) {
@@ -48,10 +46,10 @@ data class ZosmfRenameDatasetRequestBody(
   data class FromDataset(
     /** The source data set name */
     @SerialName("dsn")
-    @AvailableSince(ZVersion.ZOS_2_1) val oldDatasetName: String,
+    @property:AvailableSince(ZVersion.ZOS_2_1) val oldDatasetName: String,
 
     /** If renaming a member this is the old member name */
     @SerialName("member")
-    @AvailableSince(ZVersion.ZOS_2_1) val oldMemberName: String? = null
+    @property:AvailableSince(ZVersion.ZOS_2_1) val oldMemberName: String? = null
   )
 }

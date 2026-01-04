@@ -6,27 +6,22 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging
 
 import io.ktor.http.HttpMethod
-import org.zowe.kotlinsdk.providers.zowe.HttpRequest
-import org.zowe.kotlinsdk.providers.zowe.HttpRequestHeaders
+import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpRequest
 
 /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-data-set-member-utilities">z/OS data set and member utilities</a> */
-abstract class ZosmfDatasetUtilitiesRequest : HttpRequest, HttpRequestHeaders {
+abstract class ZosmfDatasetUtilitiesRequest(
+  override val headers: ZosmfDatasetUtilitiesRequestHeaders
+) : ZosmfHttpRequest {
   override val method = HttpMethod.Put
-
   protected abstract val fullDsPath: String
-
-  override val path = "/zosmf/restfiles/ds/$fullDsPath"
-
-  override val headers = getHeadersMap()
-
+  override val path: String
+    get() {
+      return "/zosmf/restfiles/ds/$fullDsPath"
+    }
   override val parameters = emptyMap<String, String>()
 }

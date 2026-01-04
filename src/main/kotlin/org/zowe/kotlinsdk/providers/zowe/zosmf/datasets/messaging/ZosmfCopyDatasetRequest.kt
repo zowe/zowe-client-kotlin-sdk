@@ -10,75 +10,37 @@
 package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging
 
 import io.ktor.client.statement.HttpResponse
-import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.api.messaging.CopyDatasetRequest
 import org.zowe.kotlinsdk.core.connectivity.HttpConnection
-import org.zowe.kotlinsdk.providers.zowe.zosmf.XIBMBPXKAutoCvt
-import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMMigratedRecall
+import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfErrorReport
+import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfStatus
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-data-set-member-utilities">z/OS data set and member utilities: 'copy' request</a> */
+/**
+ * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-data-set-member-utilities">z/OS data set and member utilities: 'copy' request</a>
+ * @property dsName to-dataset-name path param
+ * @property volser to-volser path param
+ * @property memberName member-name path param
+ * @property body the request body to copy dataset
+ */
 class ZosmfCopyDatasetRequest(
   override val connection: HttpConnection,
-
-  /** to-dataset-name path param */
   @property:AvailableSince(ZVersion.ZOS_2_1) override val dsName: String,
-
-  /** to-volser path param */
   @property:AvailableSince(ZVersion.ZOS_2_1) val volser: String?,
-
-  /** member-name path param */
   @property:AvailableSince(ZVersion.ZOS_2_1) val memberName: String? = null,
-
-  /** The request body to copy dataset */
-  @property:AvailableSince(ZVersion.ZOS_2_1) val copyDatasetBody: ZosmfCopyDatasetRequestBody,
-
-  /** charset-name param for Content-Type header  */
-  @property:AvailableSince(ZVersion.ZOS_2_1) override val charsetName: String? = "UTF-8",
-
-  /** X-IBM-BPXK-AUTOCVT custom headers */
-  @property:AvailableSince(ZVersion.ZOS_2_1) override val xIBMBPXKAutoCvt: XIBMBPXKAutoCvt?,
-
-  /** X-IBM-Migrated-Recall custom header */
-  @property:AvailableSince(ZVersion.ZOS_2_1) override val xIBMMigratedRecall: XIBMMigratedRecall? = null,
-
-  /** X-IBM-Target-System default header */
-  @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystem: String? = null,
-
-  /** X-IBM-Target-System-User custom header */
-  @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystemUser: String? = null,
-
-  /** X-IBM-Target-System-Password custom header */
-  @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystemPassword: String? = null,
-
-  /** X-IBM-Async-Threshold default header */
-  @property:AvailableSince(ZVersion.ZOS_2_1) override val asyncThreshold: Int? = null,
-
-  /** X-IBM-Response-Timeout default header */
-  @property:AvailableSince(ZVersion.ZOS_2_1) override val responseTimeout: Int? = null,
-
-  /** X-IBM-Session-Limit-Wait default header */
-  @property:AvailableOnly(ZVersion.ZOS_2_4) override val sessionLimitWait: Int? = null,
-
-  /** X-IBM-Request-Acctnum default header */
-  @property:AvailableSince(ZVersion.ZOS_2_5) override val requestAcctnum: String? = null,
-
-  /** X-IBM-Request-Proc default header */
-  @property:AvailableSince(ZVersion.ZOS_2_5) override val requestProc: String? = null,
-
-  /** X-IBM-Request-Region default header */
-  @property:AvailableSince(ZVersion.ZOS_2_5) override val requestRegion: String? = null,
-) : ZosmfDatasetUtilitiesRequest(), CopyDatasetRequest, ZosmfDatasetUtilitiesRequestHeaders {
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val body: ZosmfCopyDatasetRequestBody,
+  override val headers: ZosmfDatasetUtilitiesRequestHeaders = ZosmfDatasetUtilitiesRequestHeaders()
+) : ZosmfDatasetUtilitiesRequest(headers), CopyDatasetRequest {
+  override val responseClass = ZosmfCopyDatasetResponse::class.java
 
   private val dsAndMemberPath = if (memberName?.isNotEmpty() == true) "$dsName($memberName)" else dsName
-
   override val fullDsPath = if (volser?.isNotEmpty() == true) "-$volser/$dsAndMemberPath" else dsAndMemberPath
 
-  override val body = copyDatasetBody
-
-  override suspend fun produceHttpResponse(clientResponse: HttpResponse): org.zowe.kotlinsdk.providers.zowe.HttpResponse? {
-    return ZosmfCopyDatasetResponse(clientResponse.status)
+  override suspend fun produceZosmfResponseObject(
+    clientResponse: HttpResponse,
+    errorReport: ZosmfErrorReport?
+  ): ZosmfCopyDatasetResponse {
+    return ZosmfCopyDatasetResponse(ZosmfStatus(clientResponse.status, errorReport))
   }
-
 }

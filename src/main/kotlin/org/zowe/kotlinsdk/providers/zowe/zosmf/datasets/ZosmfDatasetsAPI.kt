@@ -10,14 +10,11 @@
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets
 
-import io.ktor.http.HttpStatusCode
-import kotlinx.coroutines.runBlocking
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
-import org.zowe.kotlinsdk.core.RequestRunner
-import org.zowe.kotlinsdk.core.datasets.data.DatasetItem
 import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
 import org.zowe.kotlinsdk.core.datasets.api.messaging.*
+import org.zowe.kotlinsdk.providers.zowe.HttpRequestRunner
 import org.zowe.kotlinsdk.providers.zowe.ZoweInternalAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging.*
 
@@ -26,15 +23,15 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging.*
  * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=services-zos-data-set-file-rest-interface">z/OS data set and file REST interface</a>
  */
 @ZoweInternalAPI
-class ZosmfDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
+class ZosmfDatasetsAPI(private val requestRunner: HttpRequestRunner) : DatasetsAPI {
 
   /**
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-zos-data-sets-system">List the z/OS data sets on a system</a>
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-zos-data-sets-system#ListDataSets__title__9">List the z/OS data sets on a system: Example response</a>
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  override suspend fun listDatasets(params: ListDatasetsRequest): ListDatasetsResponse {
-    return requestRunner.runRequest(params) as ListDatasetsResponse
+  override suspend fun listDatasets(params: ListDatasetsRequest): ZosmfListDatasetsResponse {
+    return requestRunner.runRequest(params) as ZosmfListDatasetsResponse
   }
 
   /**
@@ -43,27 +40,8 @@ class ZosmfDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
    * @return [GetDatasetInfoResponse] instance with the request handling result
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  override suspend fun getDatasetInfo(params: GetDatasetInfoRequest): GetDatasetInfoResponse {
-    val zosmfParams = (params as ZosmfGetDatasetInfoRequest).toListDatasetsRequest()
-    val listDatasetsResponse = listDatasets(zosmfParams)
-    val dataset = listDatasetsResponse.dsItems.firstOrNull()
-    return if (dataset?.datasetName?.uppercase() == zosmfParams.mask.uppercase())
-      ZosmfGetDatasetInfoResponse(HttpStatusCode.OK, dataset)
-    else
-      ZosmfGetDatasetInfoResponse(
-        HttpStatusCode(404, "Dataset for the specified mask: '${zosmfParams.mask}' is not found"),
-        object : DatasetItem {
-          override val datasetName = "ERROR404"
-          override val isMigrated: Boolean? = null
-          override val blockSize: Int? = null
-          override val datasetOrganization: DatasetItem.DatasetOrganization? = null
-          override val recordLength: Int? = null
-          override val recordFormat: DatasetItem.RecordFormat? = null
-          override val sizeInTracks: Int? = null
-          override val spaceUnits: DatasetItem.SpaceUnits? = null
-          override val volumeSerial: String? = null
-        }
-      )
+  override suspend fun getDatasetInfo(params: GetDatasetInfoRequest): ZosmfGetDatasetInfoResponse {
+    return requestRunner.runRequest(params) as ZosmfGetDatasetInfoResponse
   }
 
   /**
@@ -71,10 +49,8 @@ class ZosmfDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-members-zos-data-set#ListDataSetMembers__getlist_dsmembers_response__title__1">List the members of a z/OS data set: Expected response</a>
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  override suspend fun listDatasetMembers(params: ListDatasetMembersRequest): ListDatasetMembersResponse {
-    return runBlocking {
-      requestRunner.runRequest(params) as ListDatasetMembersResponse
-    }
+  override suspend fun listDatasetMembers(params: ListDatasetMembersRequest): ZosmfListDatasetMembersResponse {
+    return requestRunner.runRequest(params) as ZosmfListDatasetMembersResponse
   }
 
   /**
@@ -82,10 +58,8 @@ class ZosmfDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-retrieve-contents-zos-data-set-member#GetReadDataSet__title__7">Retrieve the contents of a z/OS data set or member: Expected response</a>
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  override suspend fun retrieveDatasetContent(params: RetrieveDatasetContentRequest): RetrieveDatasetContentResponse {
-    return runBlocking {
-      requestRunner.runRequest(params) as RetrieveDatasetContentResponse
-    }
+  override suspend fun retrieveDatasetContent(params: RetrieveDatasetContentRequest): ZosmfRetrieveDatasetContentResponse {
+    return requestRunner.runRequest(params) as ZosmfRetrieveDatasetContentResponse
   }
 
   /**
@@ -94,9 +68,7 @@ class ZosmfDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
    */
   @AvailableSince(ZVersion.ZOS_2_1)
   override suspend fun writeToDataset(params: WriteToDatasetRequest): WriteToDatasetResponse {
-    return runBlocking {
-      requestRunner.runRequest(params) as WriteToDatasetResponse
-    }
+    return requestRunner.runRequest(params) as ZosmfWriteToDatasetResponse
   }
 
   /**
@@ -104,10 +76,8 @@ class ZosmfDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-create-sequential-partitioned-data-set#CreateDataSet__title__10">Create a sequential or partitioned data set: Expected response</a>
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  override suspend fun createDataset(params: CreateDatasetRequest): CreateDatasetResponse {
-    return runBlocking {
-      requestRunner.runRequest(params) as CreateDatasetResponse
-    }
+  override suspend fun createDataset(params: CreateDatasetRequest): ZosmfCreateDatasetResponse {
+    return requestRunner.runRequest(params) as ZosmfCreateDatasetResponse
   }
 
   /**
@@ -117,10 +87,8 @@ class ZosmfDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-delete-partitioned-data-set-member#DeletepartitionedDataSet__getlist_datasets__title__1">Delete a partitioned data set member: Expected response</a>
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  override suspend fun deleteDataset(params: DeleteDatasetRequest): DeleteDatasetResponse {
-    return runBlocking {
-      requestRunner.runRequest(params) as DeleteDatasetResponse
-    }
+  override suspend fun deleteDataset(params: DeleteDatasetRequest): ZosmfDeleteDatasetResponse {
+    return requestRunner.runRequest(params) as ZosmfDeleteDatasetResponse
   }
 
   /**
@@ -128,10 +96,8 @@ class ZosmfDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-data-set-member-utilities#IZUHPINFO_API_PutDataSetMemberUtilities__title__10">z/OS data set and member utilities: 'rename' request: Expected response</a>
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  override suspend fun renameDataset(params: RenameDatasetRequest): RenameDatasetResponse {
-    return runBlocking {
-      requestRunner.runRequest(params) as RenameDatasetResponse
-    }
+  override suspend fun renameDataset(params: RenameDatasetRequest): ZosmfRenameDatasetResponse {
+    return requestRunner.runRequest(params) as ZosmfRenameDatasetResponse
   }
 
   /**
@@ -139,10 +105,8 @@ class ZosmfDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-data-set-member-utilities#IZUHPINFO_API_PutDataSetMemberUtilities__title__10">z/OS data set and member utilities: 'copy' request: Expected response</a>
    */
   @AvailableSince(ZVersion.ZOS_2_1)
-  override suspend fun copyDataset(params: CopyDatasetRequest): CopyDatasetResponse {
-    return runBlocking {
-      requestRunner.runRequest(params) as CopyDatasetResponse
-    }
+  override suspend fun copyDataset(params: CopyDatasetRequest): ZosmfCopyDatasetResponse {
+    return requestRunner.runRequest(params) as ZosmfCopyDatasetResponse
   }
 
   /**

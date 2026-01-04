@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions
@@ -20,88 +16,91 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.data.DatasetItem
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=zdsfri-json-document-specifications-zos-data-set-file-rest-interface-requests#RESTFILES_JSONDocumentSpecifications__itemkeypairsattributebase">JSON document specifications for z/OS data set and file REST interface requests: Data set list with attributes document</a> */
+// TODO: rework respectively according to SshDatasetItem
+/**
+ * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=zdsfri-json-document-specifications-zos-data-set-file-rest-interface-requests#RESTFILES_JSONDocumentSpecifications__itemkeypairsattributebase">JSON document specifications for z/OS data set and file REST interface requests: Data set list with attributes document</a>
+ * @property datasetName dsname response param
+ * @property zosmfBlockSize blksz response param
+ * @property catalogName catnm response param
+ * @property creationDate cdate response param
+ * @property deviceType dev response param
+ * @property usedTracksOrPagesPercent dsntp response param
+ * @property zosmfDatasetOrganization dsorg response param
+ * @property expirationDate edate response param
+ * @property zosmfExtentsUsed extx response param
+ * @property zosmfRecordLength lrecl
+ * @property zosmfIsMigrated migr response param
+ * @property zosmfIsMultipleVolumes mvol response param
+ * @property spaceOverflowIndicator ovf response param
+ * @property lastReferenceDate rdate response param
+ * @property zosmfRecordFormat recfm response param
+ * @property zosmfSizeInTracks sizex response param
+ * @property zosmfSpaceUnits spacu response param
+ * @property zosmfUsedTracksOrBlocks used response param
+ * @property volumeSerial vol response param
+ * @property volumeSerials vols response param
+ */
 @Serializable
 class ZosmfDatasetItem(
-  /** dsname response param */
   @SerialName("dsname")
-  @AvailableSince(ZVersion.ZOS_2_1) override val datasetName: String,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val datasetName: String,
 
-  /** blksz response param */
   @SerialName("blksz")
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfBlockSize: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) private val zosmfBlockSize: String? = null,
 
-  /** catnm response param */
   @SerialName("catnm")
-  @AvailableSince(ZVersion.ZOS_2_1) val catalogName: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val catalogName: String? = null,
 
-  /** cdate response param */
   @SerialName("cdate")
-  @AvailableSince(ZVersion.ZOS_2_1) val creationDate: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val creationDate: String? = null,
 
-  /** dev response param */
   @SerialName("dev")
-  @AvailableSince(ZVersion.ZOS_2_1) val deviceType: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val deviceType: String? = null,
 
-  /** dsntp response param */
   @SerialName("dsntp")
-  @AvailableSince(ZVersion.ZOS_2_1) val usedTracksOrPagesPercent: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val usedTracksOrPagesPercent: String? = null,
 
-  /** dsorg response param */
   @SerialName("dsorg")
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfDatasetOrganization: ZosmfDatasetOrganization? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) private val zosmfDatasetOrganization: ZosmfDatasetOrganization? = null,
 
-  /** edate response param */
   @SerialName("edate")
-  @AvailableSince(ZVersion.ZOS_2_1) val expirationDate: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val expirationDate: String? = null,
 
-  /** extx response param */
   @SerialName("extx")
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfExtentsUsed: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) private val zosmfExtentsUsed: String? = null,
 
-  /** lrecl response param */
   @SerialName("lrecl")
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfRecordLength: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) private val zosmfRecordLength: String? = null,
 
-  /** migr response param */
   @SerialName("migr")
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfIsMigrated: ZosmfIsMigrated? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) private val zosmfIsMigrated: ZosmfIsMigrated? = null,
 
-  /** mvol response param */
   @SerialName("mvol")
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfIsMultipleVolumes: ZosmfIsMultipleVolumes? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) private val zosmfIsMultipleVolumes: ZosmfIsMultipleVolumes? = null,
 
-  /** ovf response param */
   @SerialName("ovf")
-  @AvailableSince(ZVersion.ZOS_2_1) val spaceOverflowIndicator: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val spaceOverflowIndicator: String? = null,
 
-  /** rdate response param */
   @SerialName("rdate")
-  @AvailableSince(ZVersion.ZOS_2_1) val lastReferenceDate: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val lastReferenceDate: String? = null,
 
-  /** recfm response param */
   @SerialName("recfm")
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfRecordFormat: ZosmfRecordFormat? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) private val zosmfRecordFormat: ZosmfRecordFormat? = null,
 
-  /** sizex response param */
   @SerialName("sizex")
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfSizeInTracks: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) private val zosmfSizeInTracks: Int? = null,
 
-  /** spaceu response param */
-  @SerialName("spaceu")
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfSpaceUnits: ZosmfSpaceUnits? = null,
+  @SerialName("spacu")
+  @property:AvailableSince(ZVersion.ZOS_2_1) private val zosmfSpaceUnits: ZosmfSpaceUnits? = null,
 
-  /** used response param */
   @SerialName("used")
-  @AvailableSince(ZVersion.ZOS_2_1) private val zosmfUsedTracksOrBlocks: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) private val zosmfUsedTracksOrBlocks: String? = null,
 
-  /** vol response param */
   @SerialName("vol")
-  @AvailableSince(ZVersion.ZOS_2_1) override val volumeSerial: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val volumeSerial: String? = null,
 
-  /** vols response param */
   @SerialName("vols")
-  @AvailableSince(ZVersion.ZOS_2_3) val volumeSerials: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_3) val volumeSerials: String? = null,
 ) : DatasetItem {
 
   @Serializable
@@ -131,6 +130,7 @@ class ZosmfDatasetItem(
     }
   }
 
+  @Serializable
   enum class ZosmfIsMigrated {
     @SerialName("YES") YES,
     @SerialName("NO") NO;

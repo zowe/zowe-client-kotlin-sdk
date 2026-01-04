@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe
@@ -23,8 +19,8 @@ import java.io.Closeable
  * @property session the SSH session to start the command in
  * @property sshCommand the SSH command to execute
  * @property channelSize the channel size (4096 by default)
- * @property status the associated SSH status object to adjust after on the channel closing
  * @property state the actual channel state
+ * @property cmdResponse the final SSH command response object. Could be used to track the channel read result
  */
 class SshChannel(
   private val session: Session,
@@ -32,16 +28,10 @@ class SshChannel(
   private val channelSize: Int = 4096
 ) : Closeable {
   private val buffer = ByteArray(channelSize)
-
   private var cmd: Session.Command? = null
   var state: SshChannelState = SshChannelState.READY
     private set
-  var status: SshStatus = SshStatus.INCOMPLETE
-    private set
-
-  init {
-    status.channel = this
-  }
+  var cmdResponse = SshCmdResponse()
 
   /**
    * Read next data portion
@@ -72,7 +62,7 @@ class SshChannel(
 
   /**
    * Close the channel, ending the session and the session command execution.
-   * Adjusts the associated SSH status
+   * Adjusts the associated SSH command response
    */
   override fun close() {
     if (state != SshChannelState.CLOSED) {
@@ -84,10 +74,12 @@ class SshChannel(
         it.join()
       }
 
-      status.exitStatus = cmd?.exitStatus
-      status.exitSignal = cmd?.exitSignal
-      status.output = "CHANNELLED READ IS COMPLETED"
-      status.stderr = stderr.toString()
+      cmdResponse = SshCmdResponse(
+        cmd?.exitStatus ?: 0,
+        cmd?.exitSignal,
+        "CHANNELLED READ IS COMPLETED",
+        stderr.toString()
+      )
 
       session.close()
     }

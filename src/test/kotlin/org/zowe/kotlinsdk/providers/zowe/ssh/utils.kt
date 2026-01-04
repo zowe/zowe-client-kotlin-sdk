@@ -6,13 +6,11 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.ssh
+
+import java.io.InputStream
 
 /**
  * SSH mock command response
@@ -34,7 +32,7 @@ class SshMockResponseDispatcher {
   private data class SshMockResponseResolver(
     val endpointName: String,
     val resolver: (cmd: String) -> Boolean,
-    val handler: (cmd: String) -> SshMockCommandResponse
+    val handler: (cmd: String, inputStream: InputStream) -> SshMockCommandResponse
   )
 
   private var responseResolvers = mutableListOf<SshMockResponseResolver>()
@@ -46,7 +44,7 @@ class SshMockResponseDispatcher {
    * Receives the command as a string, returns true or false (true - the handler of the resolver is returned)
    * @param handler the handler of the request resolver to return if the resolver returns true
    */
-  fun injectResolver(name: String, resolver: (String) -> Boolean, handler: (String) -> SshMockCommandResponse) {
+  fun injectResolver(name: String, resolver: (String) -> Boolean, handler: (String, InputStream) -> SshMockCommandResponse) {
     responseResolvers.add(SshMockResponseResolver(name, resolver, handler))
   }
 
@@ -66,16 +64,17 @@ class SshMockResponseDispatcher {
   /**
    * Dispatch the SSH command. Will return the handled result for the command, triggering the respective resolver
    * @param cmd the SSH command to resolve and handle
+   * @param inputStream the SSH channel input stream to handle its data (when needed)
    * @return the SSH command mocked response with prefilled parameters
    */
-  fun dispatch(cmd: String): SshMockCommandResponse {
+  fun dispatch(cmd: String, inputStream: InputStream): SshMockCommandResponse {
     val foundResolver = responseResolvers.find {
       it.resolver(cmd)
     }
 
     return foundResolver
       ?.handler
-      ?.let { it(cmd) }
+      ?.let { it(cmd, inputStream) }
       ?: throw Exception("Resolver is not found for command: $cmd")
   }
 }

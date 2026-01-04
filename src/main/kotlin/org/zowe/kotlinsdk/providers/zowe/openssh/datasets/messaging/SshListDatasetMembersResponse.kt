@@ -6,56 +6,34 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging
 
+import org.zowe.kotlinsdk.core.Status
+import org.zowe.kotlinsdk.core.StatusType
 import org.zowe.kotlinsdk.core.datasets.api.messaging.ListDatasetMembersResponse
-import org.zowe.kotlinsdk.core.datasets.data.MemberItem
+import org.zowe.kotlinsdk.providers.zowe.SshCmdResponse
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
-import org.zowe.kotlinsdk.providers.zowe.SshStatus
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.definitions.SshMemberItem
 
 /** List data set members SSH response */
-class SshListDatasetMembersResponse(
-  override val status: SshStatus = SshStatus.OK,
-) : SshResponse, ListDatasetMembersResponse {
-  override val memberItems: List<MemberItem>
+class SshListDatasetMembersResponse(cmdResponse: SshCmdResponse) : SshResponse, ListDatasetMembersResponse {
+  override var status: Status = SshListDatasetMembersStatus(cmdResponse)
 
   /**
-   * Return the list of members (plain names only).
-   * RC=4 if there are no members in the data set.
-   * RC=8 if the --MEMBERS-- line is not found in the original SSH response
+   * Member items to be formed basing on the response status.
+   * If the status is [StatusType.ERROR], the value is an empty list
    */
-  fun produceMembersListFromSshCmdOutput(): List<SshMemberItem> {
-    return if (status.exitStatus != 0) {
-      listOf()
+  override val memberItems =
+    if (status.type != StatusType.ERROR) {
+      cmdResponse.output
+        .split("--MEMBERS--")
+        .getOrElse(1) { "" }
+        .split("\n")
+        .filter { it.length > 2 && it.substring(0, 2) == "  " }
+        .map { SshMemberItem(it.trim()) }
     } else {
-      if (!status.output.contains("--MEMBERS--")) {
-        status.exitStatus = 8
-        status.output += "THE PROCESSED ENTITY IS NOT A PDS / PDSE DATA SET\n"
-        listOf()
-      } else {
-        val membersToReturn = status.output
-          .split("--MEMBERS--")
-          .getOrElse(1) { "" }
-          .split("\n")
-          .filter { it.length > 2 && it.substring(0, 2) == "  " }
-          .map { SshMemberItem(it.trim()) }
-
-        if (membersToReturn.isEmpty()) {
-          status.exitStatus = 4
-        }
-        membersToReturn
-      }
+      listOf()
     }
-  }
-
-  init {
-    memberItems = produceMembersListFromSshCmdOutput()
-  }
 }

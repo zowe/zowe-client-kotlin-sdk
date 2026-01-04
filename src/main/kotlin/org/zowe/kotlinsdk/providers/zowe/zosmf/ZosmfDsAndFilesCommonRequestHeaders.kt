@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf
@@ -19,24 +15,21 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.providers.zowe.HttpRequestHeaders
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=services-zos-data-set-file-rest-interface#izuhpinfo_api_restfiles__title__5">z/OS data set and file REST interface: Common HTTP Request Headers</a> */
+/**
+ * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=services-zos-data-set-file-rest-interface#izuhpinfo_api_restfiles__title__5">z/OS data set and file REST interface: Common HTTP Request Headers</a>
+ * @property sessionLimitWait X-IBM-Session-Limit-Wait default header
+ * @property asyncThreshold X-IBM-Async-Threshold default header
+ * @property responseTimeout X-IBM-Response-Timeout default header
+ * @property requestAcctnum X-IBM-Request-Acctnum default header
+ * @property requestProc X-IBM-Request-Proc default header
+ * @property requestRegion X-IBM-Request-Region default header
+ */
 interface ZosmfDsAndFilesCommonRequestHeaders : HttpRequestHeaders {
-  /** X-IBM-Session-Limit-Wait default header */
   @AvailableOnly(ZVersion.ZOS_2_4) val sessionLimitWait: Int?
-
-  /** X-IBM-Async-Threshold default header */
   @AvailableSince(ZVersion.ZOS_2_1) val asyncThreshold: Int?
-
-  /** X-IBM-Response-Timeout default header */
   @AvailableSince(ZVersion.ZOS_2_1) val responseTimeout: Int?
-
-  /** X-IBM-Request-Acctnum default header */
   @AvailableSince(ZVersion.ZOS_2_5) val requestAcctnum: String?
-
-  /** X-IBM-Request-Proc default header */
   @AvailableSince(ZVersion.ZOS_2_5) val requestProc: String?
-
-  /** X-IBM-Request-Region default header */
   @AvailableSince(ZVersion.ZOS_2_5) val requestRegion: String?
 
   override fun getHeadersMap(): Map<String, String?> {

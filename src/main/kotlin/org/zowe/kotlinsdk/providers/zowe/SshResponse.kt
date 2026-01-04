@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe
@@ -17,6 +13,4 @@ package org.zowe.kotlinsdk.providers.zowe
 import org.zowe.kotlinsdk.core.Response
 
 /** A basic representation of an SSH response object */
-interface SshResponse : Response {
-  val status: SshStatus
-}
+interface SshResponse : Response

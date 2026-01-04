@@ -4,14 +4,14 @@
 
 | Method                     | Implemented | Test coverage |
 |----------------------------|-------------|---------------|
-| listDatasets               | ✅           | partial       |
-| getDatasetInfo             | ✅           | ❌             |
-| listDatasetMembers         | ✅           | ❌             |
-| retrieveDatasetContent     | ✅           | ❌             |
-| writeToDataset             | ✅           | ❌             |
-| createDataset              | ✅           | ❌             |
-| deleteDataset              | ✅           | ❌             |
-| renameDataset              | ✅           | ❌             |
+| listDatasets               | ✅           | ✅             |
+| getDatasetInfo             | ✅           | ✅             |
+| listDatasetMembers         | ✅           | ✅             |
+| retrieveDatasetContent     | ✅           | ✅             |
+| writeToDataset             | ✅           | ✅             |
+| createDataset              | ✅           | ✅             |
+| deleteDataset              | ✅           | ✅             |
+| renameDataset              | ✅           | ✅             |
 | copyDataset                | ✅           | ❌             |
 | migrateDataset             | ✅           | ❌             |
 | recallDataset              | ✅           | ❌             |
@@ -21,7 +21,7 @@
 
 | Method                   | Implemented | Test coverage |
 |--------------------------|-------------|---------------|
-| listFiles                | ✅           | partial       |
+| listFiles                | ✅           | ✅             |
 | retrieveFileContent      | ✅           | ❌             |
 | writeToUssFile           | ✅           | ❌             |
 | createFile               | ✅           | ❌             |
@@ -41,7 +41,7 @@
 
 | Method | Implemented | Test coverage |
 |--------|-------------|---------------|
-| getJob | ✅           | ❌             |
+| getJob | ✅           | ✅             |
 
 ## [InfoAPI](info/ZosmfInfoAPI.kt) functions
 

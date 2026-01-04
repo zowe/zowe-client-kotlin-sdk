@@ -22,8 +22,17 @@ import org.zowe.kotlinsdk.core.Request
  * Represents basic request to retrieve dataset content
  * @property dsName name of the dataset whose content will be retrieved
  * @property dataType the data type to fetch (text or binary)
+ * @property channelSize the channel size for channeled data read
  */
 interface RetrieveDatasetContentRequest : Request {
   val dsName: String
   val dataType: DataType
+  val channelSize: Int
+    get() = DEFAULT_CHANNEL_SIZE
+
+  companion object {
+    const val DEFAULT_CHANNEL_SIZE = 32768
+    const val SLOW_INTERNET_CHANNEL_SIZE = 8192
+    const val FAST_INTERNET_CHANNEL_SIZE = 65536
+  }
 }

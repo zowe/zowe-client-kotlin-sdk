@@ -27,6 +27,7 @@ enum class ZVersion(val version: String) {
   ZOS_2_4("$osVersionPrefix 2.4"),
   ZOS_2_5("$osVersionPrefix 2.5"),
   ZOS_3_1("$osVersionPrefix 3.1"),
+  ZOS_3_2("$osVersionPrefix 3.2"),
 }
 
 // TODO: doc, transfer to availability.kt

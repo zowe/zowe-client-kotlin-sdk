@@ -6,15 +6,17 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.core.jes.api.messaging
 
 import org.zowe.kotlinsdk.core.Response
+import org.zowe.kotlinsdk.core.jes.data.JobItem
 
-/** Represents a basic response of the get job request */
-interface GetJobResponse : Response
+/**
+ * Represents a basic response of the get job request
+ * @param job the [JobItem] returned by a client
+ */
+interface GetJobResponse : Response {
+  val job: JobItem
+}

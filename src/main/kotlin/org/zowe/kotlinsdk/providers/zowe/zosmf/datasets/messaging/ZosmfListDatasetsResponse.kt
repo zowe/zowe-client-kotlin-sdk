@@ -10,22 +10,17 @@
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging
 
-import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.api.messaging.ListDatasetsResponse
-import org.zowe.kotlinsdk.providers.zowe.HttpResponse
+import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpResponse
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.ZosmfDatasetItem
 
 /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-zos-data-sets-system#ListDataSets__title__9">List the z/OS datasets on a system: Example response</a> */
 @Serializable
 class ZosmfListDatasetsResponse(
-  @Transient
-  override var status: HttpStatusCode = HttpStatusCode.OK,
-
   /** items response param */
   @SerialName("items")
   @property:AvailableSince(ZVersion.ZOS_2_1) override val dsItems: List<ZosmfDatasetItem> = emptyList(),
@@ -41,4 +36,4 @@ class ZosmfListDatasetsResponse(
   /** JSONversion response param */
   @SerialName("JSONversion")
   @property:AvailableSince(ZVersion.ZOS_2_1) val jsonVersion: Int = 0
-) : HttpResponse, ListDatasetsResponse
+) : ZosmfHttpResponse(), ListDatasetsResponse

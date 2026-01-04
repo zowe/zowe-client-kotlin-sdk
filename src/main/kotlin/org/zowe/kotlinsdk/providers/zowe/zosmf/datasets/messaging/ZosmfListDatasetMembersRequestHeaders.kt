@@ -6,37 +6,52 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging
 
+import org.zowe.kotlinsdk.annotations.AvailableOnly
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
+import org.zowe.kotlinsdk.core.datasets.AttributesLevel
+import org.zowe.kotlinsdk.core.datasets.AttributesLevel.FULL
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfDsAndFilesCommonRequestHeaders
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfTargetSystemRequestHeaders
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMAttributes
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMMigratedRecall
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-members-zos-data-set#ListDataSetMembers__title__3">List the members of a z/OS data set: Custom headers</a> */
-interface ZosmfListDatasetMembersRequestHeaders : ZosmfDsAndFilesCommonRequestHeaders,
-  ZosmfTargetSystemRequestHeaders {
-    /** X-IBM-Max-Items custom header */
-  @AvailableSince(ZVersion.ZOS_2_1) val maxItems: Int?
-
+/**
+ * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-members-zos-data-set#ListDataSetMembers__title__3">List the members of a z/OS data set: Custom headers</a>
+ * @property maxItems X-IBM-Max-Items custom header
+ * @property attributesLevel level of attributes to be returned ([AttributesLevel.FULL] by default)
+ * @property returnTotalRows additional parameter for X-IBM-Attributes. If true - it is set to "$attributes,total"
+ * @property migratedRecall X-IBM-Migrated-Recall custom header
+ */
+class ZosmfListDatasetMembersRequestHeaders(
+  @property:AvailableSince(ZVersion.ZOS_2_1) val maxItems: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) private val attributesLevel: AttributesLevel = FULL,
+  @property:AvailableSince(ZVersion.ZOS_2_1) private val returnTotalRows: Boolean = true,
+  @property:AvailableSince(ZVersion.ZOS_2_2) val migratedRecall: XIBMMigratedRecall? = null,
+  // ZosmfDsAndFilesCommonRequestHeaders
+  @property:AvailableOnly(ZVersion.ZOS_2_4) override val sessionLimitWait: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val asyncThreshold: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val responseTimeout: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_5) override val requestAcctnum: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_5) override val requestProc: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_5) override val requestRegion: String? = null,
+  // ZosmfTargetSystemRequestHeaders
+  @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystem: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystemUser: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystemPassword: String? = null,
+) : ZosmfDsAndFilesCommonRequestHeaders, ZosmfTargetSystemRequestHeaders {
   /** X-IBM-Attributes custom header */
-  @AvailableSince(ZVersion.ZOS_2_1) val attributes: XIBMAttributes?
-
-  /** X-IBM-Migrated-Recall custom header */
-  @AvailableSince(ZVersion.ZOS_2_2) val migratedRecall: XIBMMigratedRecall?
+  @AvailableSince(ZVersion.ZOS_2_1) val attributes: XIBMAttributes =
+    XIBMAttributes(attributesLevel, isTotal=returnTotalRows)
 
   override fun getHeadersMap(): Map<String, String?> {
     return mapOf(
       "X-IBM-Max-Items" to maxItems?.toString(),
-      "X-IBM-Attributes" to attributes?.toString(),
+      "X-IBM-Attributes" to attributes.toString(),
       "X-IBM-Migrated-Recall" to migratedRecall?.toString()
     ) +
       super<ZosmfDsAndFilesCommonRequestHeaders>.getHeadersMap() +

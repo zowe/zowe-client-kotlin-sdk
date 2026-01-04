@@ -6,19 +6,16 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe.ssh
+package org.zowe.kotlinsdk.providers.zowe.ssh.datasets
 
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.fail
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import org.zowe.kotlinsdk.core.StatusType
 import org.zowe.kotlinsdk.core.WrapperType
 import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.sshMockResponseDispatcher
 import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
@@ -26,11 +23,16 @@ import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.mockSshConnecti
 import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.zoweAPIProvider
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshListDatasetMembersRequest
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshListDatasetMembersResponse
+import org.zowe.kotlinsdk.providers.zowe.ssh.SshMockCommandResponse
 import kotlin.text.contains
 import kotlin.text.trim
 
 class SshListDatasetMembersTestSpec : ShouldSpec({
   val datasetsApi = zoweAPIProvider.getApi(WrapperType.SSH_NATIVE, DatasetsAPI::class.java)
+
+  afterSpec {
+    sshMockResponseDispatcher.clearResolvers()
+  }
 
   context("listDatasetMembers") {
     should("listDatasetMembers return the correct list of data set members") {
@@ -44,7 +46,7 @@ class SshListDatasetMembersTestSpec : ShouldSpec({
           && it.contains("MEMBERS")
           && it.contains(dsName)
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             dsName.padEnd(44),
             "--RECFM-LRECL-BLKSIZE-DSORG",
@@ -69,7 +71,7 @@ class SshListDatasetMembersTestSpec : ShouldSpec({
         fail("Should be instance of ${SshListDatasetMembersResponse::class.java.name}")
       } else {
         assertSoftly {
-          listDatasetMembersResponse.status.exitStatus shouldBe 0
+          listDatasetMembersResponse.status.type shouldBe StatusType.SUCCESS
           listDatasetMembersResponse.memberItems.size shouldBe 4
           listDatasetMembersResponse.memberItems[0].memberName shouldBe "TESTM1"
           listDatasetMembersResponse.memberItems[1].memberName shouldBe "TESTM2"
@@ -90,7 +92,7 @@ class SshListDatasetMembersTestSpec : ShouldSpec({
           && it.contains("MEMBERS")
           && it.contains(dsName)
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             dsName.padEnd(44),
             "IKJ58503I DATA SET '$dsName' NOT IN CATALOG",
@@ -107,7 +109,8 @@ class SshListDatasetMembersTestSpec : ShouldSpec({
         fail("Should be instance of ${SshListDatasetMembersResponse::class.java.name}")
       } else {
         assertSoftly {
-          listDatasetMembersResponse.status.exitStatus shouldBe 8
+          listDatasetMembersResponse.status.type shouldBe StatusType.ERROR
+          listDatasetMembersResponse.status.text shouldContain "NOT IN CATALOG"
           listDatasetMembersResponse.memberItems.size shouldBe 0
         }
       }
@@ -124,7 +127,7 @@ class SshListDatasetMembersTestSpec : ShouldSpec({
           && it.contains("MEMBERS")
           && it.contains(dsName)
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             dsName.padEnd(44),
             "--RECFM-LRECL-BLKSIZE-DSORG",
@@ -144,8 +147,8 @@ class SshListDatasetMembersTestSpec : ShouldSpec({
         fail("Should be instance of ${SshListDatasetMembersResponse::class.java.name}")
       } else {
         assertSoftly {
-          listDatasetMembersResponse.status.exitStatus shouldBe 8
-          listDatasetMembersResponse.status.output shouldContain "NOT A PDS / PDSE"
+          listDatasetMembersResponse.status.type shouldBe StatusType.ERROR
+          listDatasetMembersResponse.status.text shouldContain "NOT A PDS / PDSE"
           listDatasetMembersResponse.memberItems.size shouldBe 0
         }
       }
@@ -162,7 +165,7 @@ class SshListDatasetMembersTestSpec : ShouldSpec({
           && it.contains("MEMBERS")
           && it.contains(dsName)
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             dsName.padEnd(44),
             "--RECFM-LRECL-BLKSIZE-DSORG",
@@ -183,7 +186,8 @@ class SshListDatasetMembersTestSpec : ShouldSpec({
         fail("Should be instance of ${SshListDatasetMembersResponse::class.java.name}")
       } else {
         assertSoftly {
-          listDatasetMembersResponse.status.exitStatus shouldBe 4
+          listDatasetMembersResponse.status.type shouldBe StatusType.WARNING
+          listDatasetMembersResponse.status.text shouldContain "IS EMPTY"
           listDatasetMembersResponse.memberItems.size shouldBe 0
         }
       }
@@ -200,7 +204,7 @@ class SshListDatasetMembersTestSpec : ShouldSpec({
           && it.contains("MEMBERS")
           && it.contains(dsName)
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             dsName.padEnd(44),
             "TESTERR SOME GENERIC ERROR, RC=12",
@@ -217,7 +221,8 @@ class SshListDatasetMembersTestSpec : ShouldSpec({
         fail("Should be instance of ${SshListDatasetMembersResponse::class.java.name}")
       } else {
         assertSoftly {
-          listDatasetMembersResponse.status.exitStatus shouldBe 12
+          listDatasetMembersResponse.status.type shouldBe StatusType.ERROR
+          listDatasetMembersResponse.status.text shouldContain "SOME GENERIC ERROR"
           listDatasetMembersResponse.memberItems.size shouldBe 0
         }
       }
@@ -234,7 +239,7 @@ class SshListDatasetMembersTestSpec : ShouldSpec({
           && it.contains("MEMBERS")
           && it.contains(dsName)
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             dsName.padEnd(44),
             "--RECFM-LRECL-BLKSIZE-DSORG",
@@ -260,7 +265,7 @@ class SshListDatasetMembersTestSpec : ShouldSpec({
         fail("Should be instance of ${SshListDatasetMembersResponse::class.java.name}")
       } else {
         assertSoftly {
-          listDatasetMembersResponse.status.exitStatus shouldBe 0
+          listDatasetMembersResponse.status.type shouldBe StatusType.SUCCESS
           listDatasetMembersResponse.memberItems.size shouldBe 4
           listDatasetMembersResponse.memberItems[0].memberName shouldBe "TESTM1"
           listDatasetMembersResponse.memberItems[1].memberName shouldBe "TESTM2"

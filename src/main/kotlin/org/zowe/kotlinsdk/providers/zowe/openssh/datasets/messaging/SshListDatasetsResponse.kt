@@ -6,19 +6,17 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging
 
+import org.zowe.kotlinsdk.core.Status
+import org.zowe.kotlinsdk.core.StatusType
 import org.zowe.kotlinsdk.core.datasets.AttributesLevel
 import org.zowe.kotlinsdk.core.datasets.api.messaging.ListDatasetsResponse
 import org.zowe.kotlinsdk.core.datasets.data.DatasetItem
+import org.zowe.kotlinsdk.providers.zowe.SshCmdResponse
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
-import org.zowe.kotlinsdk.providers.zowe.SshStatus
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.definitions.SshDatasetItem
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -29,11 +27,13 @@ import java.time.ZoneOffset
  * Exit status becomes 4 if there is no entities found for the provided HLQ
  */
 class SshListDatasetsResponse(
-  override val status: SshStatus = SshStatus.OK,
+  private val sshCmdResponse: SshCmdResponse,
   private val originalMask: String,
   private val modifiedMask: String,
   private val attributesLevel: AttributesLevel
 ) : SshResponse, ListDatasetsResponse {
+  override var status: Status = SshListDatasetsStatus(sshCmdResponse)
+
   override val dsItems: List<DatasetItem>
 
   /** Produce unsigned single-digit int from a byte */
@@ -378,15 +378,14 @@ class SshListDatasetsResponse(
    * Split output to the dataset raw attributes and process them separately to produce [SshDatasetItem]s.
    * Also, filters out the datasets, whose names are not compatible with the originally provided mask.
    * If the SSH exit status not equals to 0, returns empty list of data sets
-   * @return list of produced [SshDatasetItem]s with prefilled parameters (if they are recognized)
+   * @return list of produced [SshDatasetItem]'s with prefilled parameters (if they are recognized)
    */
   private fun produceDsListFromSshCmdOutput(): List<DatasetItem> {
-    return if (status.exitStatus == 0) {
+    return if (status.type == StatusType.SUCCESS) {
       val collectedDatasetAttributesStrings = mutableListOf<MutableList<String>?>()
       var nextDatasetAttributesStrings: MutableList<String>? = null
 
-      status
-        .output
+      sshCmdResponse.output
         .split("\n")
         .filter { it.isNotEmpty() }
         .forEach { sshNextLine ->
@@ -411,9 +410,6 @@ class SshListDatasetsResponse(
           }
         }
     } else {
-      if (status.output.contains("LOCATE ERROR") || status.output.contains("NOT IN CATALOG")) {
-        status.exitStatus = 4
-      }
       listOf()
     }
   }

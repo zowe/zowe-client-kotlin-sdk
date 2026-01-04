@@ -6,19 +6,16 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe.ssh
+package org.zowe.kotlinsdk.providers.zowe.ssh.datasets
 
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.fail
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import org.zowe.kotlinsdk.core.StatusType
 import org.zowe.kotlinsdk.core.WrapperType
 import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.sshMockResponseDispatcher
 import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
@@ -27,11 +24,16 @@ import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.zoweAPIProvider
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.definitions.SshDatasetItem
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshCreateDatasetRequest
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshCreateDatasetResponse
+import org.zowe.kotlinsdk.providers.zowe.ssh.SshMockCommandResponse
 import kotlin.text.contains
 import kotlin.text.trim
 
 class SshCreateDatasetTestSpec : ShouldSpec({
   val datasetsApi = zoweAPIProvider.getApi(WrapperType.SSH_NATIVE, DatasetsAPI::class.java)
+
+  afterSpec {
+    sshMockResponseDispatcher.clearResolvers()
+  }
 
   context("createDataset") {
     should("createDataset execute successfully creating a new PS dataset") {
@@ -44,7 +46,7 @@ class SshCreateDatasetTestSpec : ShouldSpec({
           && it.contains("ALLOC")
           && it.contains(dsName)
         },
-        handler = {
+        handler = { _, _ ->
           SshMockCommandResponse("")
         }
       )
@@ -70,8 +72,7 @@ class SshCreateDatasetTestSpec : ShouldSpec({
         fail("Should be instance of ${SshCreateDatasetResponse::class.java.name}")
       } else {
         assertSoftly {
-          createDatasetResponse.status.exitStatus shouldBe 0
-          createDatasetResponse.status.output shouldBe ""
+          createDatasetResponse.status.type shouldBe StatusType.SUCCESS
         }
       }
     }
@@ -86,7 +87,7 @@ class SshCreateDatasetTestSpec : ShouldSpec({
           && it.contains("ALLOC")
           && it.contains(dsName)
         },
-        handler = {
+        handler = { _, _ ->
           SshMockCommandResponse("")
         }
       )
@@ -112,8 +113,7 @@ class SshCreateDatasetTestSpec : ShouldSpec({
         fail("Should be instance of ${SshCreateDatasetResponse::class.java.name}")
       } else {
         assertSoftly {
-          createDatasetResponse.status.exitStatus shouldBe 0
-          createDatasetResponse.status.output shouldBe ""
+          createDatasetResponse.status.type shouldBe StatusType.SUCCESS
         }
       }
     }
@@ -128,7 +128,7 @@ class SshCreateDatasetTestSpec : ShouldSpec({
           && it.contains("ALLOC")
           && it.contains(dsName)
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             "IKJ56893I DATA SET $dsName NOT ALLOCATED+",
             "IGD17101I DATA SET $dsName",
@@ -161,9 +161,9 @@ class SshCreateDatasetTestSpec : ShouldSpec({
         fail("Should be instance of ${SshCreateDatasetResponse::class.java.name}")
       } else {
         assertSoftly {
-          createDatasetResponse.status.exitStatus shouldBe 12
-          createDatasetResponse.status.output shouldContain "NOT ALLOCATED"
-          createDatasetResponse.status.output shouldContain "DUPLICATE NAME EXISTS"
+          createDatasetResponse.status.type shouldBe StatusType.ERROR
+          createDatasetResponse.status.text shouldContain "NOT ALLOCATED"
+          createDatasetResponse.status.text shouldContain "DUPLICATE NAME EXISTS"
         }
       }
     }
@@ -178,7 +178,7 @@ class SshCreateDatasetTestSpec : ShouldSpec({
           && it.contains("ALLOC")
           && it.contains(dsName)
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             "IKJ56229I DATA SET $dsName NOT ALLOCATED, CATALOG ERROR+",
             "IKJ56229I DATA SET NAME CONFLICTS WITH EXISTING DATA SET NAME OR USER IS NOT AUTHORIZED TO PERFORM THE OPERATION.",
@@ -209,10 +209,10 @@ class SshCreateDatasetTestSpec : ShouldSpec({
         fail("Should be instance of ${SshCreateDatasetResponse::class.java.name}")
       } else {
         assertSoftly {
-          createDatasetResponse.status.exitStatus shouldBe 12
-          createDatasetResponse.status.output shouldContain "NOT ALLOCATED"
-          createDatasetResponse.status.output shouldContain "DATA SET NAME CONFLICTS"
-          createDatasetResponse.status.output shouldContain "NOT AUTHORIZED"
+          createDatasetResponse.status.type shouldBe StatusType.ERROR
+          createDatasetResponse.status.text shouldContain "NOT ALLOCATED"
+          createDatasetResponse.status.text shouldContain "DATA SET NAME CONFLICTS"
+          createDatasetResponse.status.text shouldContain "NOT AUTHORIZED"
         }
       }
     }

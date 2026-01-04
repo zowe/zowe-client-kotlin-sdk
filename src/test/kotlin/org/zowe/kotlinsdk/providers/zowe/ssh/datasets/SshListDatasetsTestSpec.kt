@@ -6,13 +6,9 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe.ssh
+package org.zowe.kotlinsdk.providers.zowe.ssh.datasets
 
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.fail
@@ -20,6 +16,7 @@ import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
+import org.zowe.kotlinsdk.core.StatusType
 import org.zowe.kotlinsdk.core.WrapperType
 import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.sshMockResponseDispatcher
 import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
@@ -28,11 +25,16 @@ import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.mockSshConnecti
 import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.zoweAPIProvider
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshListDatasetsRequest
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshListDatasetsResponse
+import org.zowe.kotlinsdk.providers.zowe.ssh.SshMockCommandResponse
 import kotlin.text.contains
 import kotlin.text.trim
 
 class SshListDatasetsTestSpec : ShouldSpec({
   val datasetsApi = zoweAPIProvider.getApi(WrapperType.SSH_NATIVE, DatasetsAPI::class.java)
+
+  afterSpec {
+    sshMockResponseDispatcher.clearResolvers()
+  }
 
   context("listDatasets") {
     should("listDatasets return the correct list of datasets") {
@@ -45,7 +47,7 @@ class SshListDatasetsTestSpec : ShouldSpec({
           && it.contains("LISTDS")
           && it.contains(dsHlq)
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             "$dsHlq.PSVB".padEnd(44),
             "--RECFM-LRECL-BLKSIZE-DSORG",
@@ -140,7 +142,7 @@ class SshListDatasetsTestSpec : ShouldSpec({
       assertSoftly {
         (listDatasetsResponse is SshListDatasetsResponse) shouldBe true
         status shouldNotBe null
-        status?.exitStatus shouldBe 0
+        status?.type shouldBe StatusType.SUCCESS
         listDatasetsResponse.dsItems.size shouldBe 9
         listDatasetsResponse.dsItems[0].datasetName shouldBe "$dsHlq.PSVB"
         listDatasetsResponse.dsItems[0].sizeInTracks shouldBe 1
@@ -171,7 +173,7 @@ class SshListDatasetsTestSpec : ShouldSpec({
           && it.contains("LISTDS")
           && it.contains(dsHlq)
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             "IKJ58518I  UNABLE TO COMPLETE PROCESSING FOR ENTRY '$dsHlq'  +",
             "IKJ58518I LOCATE ERROR CODE   08",
@@ -188,8 +190,8 @@ class SshListDatasetsTestSpec : ShouldSpec({
         fail("Should be instance of ${SshListDatasetsResponse::class.java.name}")
       } else {
         assertSoftly {
-          listDatasetsResponse.status.exitStatus shouldBe 4
-          listDatasetsResponse.status.output shouldContain "LOCATE ERROR"
+          listDatasetsResponse.status.type shouldBe StatusType.WARNING
+          listDatasetsResponse.status.text shouldContain "LOCATE ERROR"
         }
       }
     }
@@ -204,7 +206,7 @@ class SshListDatasetsTestSpec : ShouldSpec({
           && it.contains("LISTDS")
           && it.contains(dsHlq)
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             "IKJ58503I DATA SET '$dsHlq' NOT IN CATALOG",
             "",
@@ -220,8 +222,8 @@ class SshListDatasetsTestSpec : ShouldSpec({
         fail("Should be instance of ${SshListDatasetsResponse::class.java.name}")
       } else {
         assertSoftly {
-          listDatasetsResponse.status.exitStatus shouldBe 4
-          listDatasetsResponse.status.output shouldContain "'$dsHlq' NOT IN CATALOG"
+          listDatasetsResponse.status.type shouldBe StatusType.WARNING
+          listDatasetsResponse.status.text shouldContain "'$dsHlq' NOT IN CATALOG"
         }
       }
     }
@@ -236,7 +238,7 @@ class SshListDatasetsTestSpec : ShouldSpec({
             && it.contains("LISTDS")
             && it.contains(dsHlq)
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             "IKJ1234I LISTDS COMMAND IS FAILED DUE TO UNSUCCESSFUL PROCESSING",
             "",
@@ -251,7 +253,8 @@ class SshListDatasetsTestSpec : ShouldSpec({
       if (listDatasetsResponse !is SshListDatasetsResponse) {
         fail("Should be instance of ${SshListDatasetsResponse::class.java.name}")
       } else {
-        listDatasetsResponse.status.exitStatus shouldBe 12
+        listDatasetsResponse.status.type shouldBe StatusType.ERROR
+        listDatasetsResponse.status.text shouldContain "RC: 12"
         listDatasetsResponse.dsItems.size shouldBe 0
       }
     }

@@ -6,35 +6,36 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe.ssh
+package org.zowe.kotlinsdk.providers.zowe.ssh.datasets
 
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.fail
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
 import org.zowe.kotlinsdk.core.DataType
+import org.zowe.kotlinsdk.core.StatusType
 import org.zowe.kotlinsdk.core.WrapperType
 import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.sshMockResponseDispatcher
 import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
 import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.mockSshConnection
 import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.zoweAPIProvider
-import org.zowe.kotlinsdk.providers.zowe.SshChannelState
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshRetrieveDatasetContentRequest
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshRetrieveDatasetContentResponse
-import java.io.ByteArrayOutputStream
+import org.zowe.kotlinsdk.providers.zowe.ssh.SshMockCommandResponse
 import kotlin.text.contains
 import kotlin.text.trim
 
 class SshRetrieveDatasetContentTestSpec : ShouldSpec({
   val datasetsApi = zoweAPIProvider.getApi(WrapperType.SSH_NATIVE, DatasetsAPI::class.java)
+
+  afterSpec {
+    sshMockResponseDispatcher.clearResolvers()
+  }
 
   context("retrieveDatasetContent") {
     should("retrieveDatasetContent execute successfully retrieving a PS data set content (Fixed record length, LRECL=80)") {
@@ -43,11 +44,11 @@ class SshRetrieveDatasetContentTestSpec : ShouldSpec({
       sshMockResponseDispatcher.injectResolver(
         "ssh:retrieveDatasetContent_ps_success_f_80",
         resolver = {
-          it.trim().startsWith("tsocmd")
-          && it.contains("OPUT")
+          it.trim().startsWith("cp ")
           && it.contains(entityName)
+          && it.contains("/dev/fd1")
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             "some test data here                                                     00000100",
             "and here                                                                00000200",
@@ -68,8 +69,8 @@ class SshRetrieveDatasetContentTestSpec : ShouldSpec({
         fail("Should be instance of ${SshRetrieveDatasetContentResponse::class.java.name}")
       } else {
         assertSoftly {
-          retrieveDatasetContentResponse.status.exitStatus shouldBe 0
-          retrieveDatasetContentResponse.status.output shouldContain "some test data"
+          retrieveDatasetContentResponse.status.type shouldBe StatusType.SUCCESS
+          retrieveDatasetContentResponse.fetchedText shouldContain "some test data"
         }
       }
     }
@@ -80,11 +81,11 @@ class SshRetrieveDatasetContentTestSpec : ShouldSpec({
       sshMockResponseDispatcher.injectResolver(
         "ssh:retrieveDatasetContent_pds_mem_success_v_100",
         resolver = {
-          it.trim().startsWith("tsocmd")
-          && it.contains("OPUT")
+          it.trim().startsWith("cp ")
           && it.contains(entityName)
+          && it.contains("/dev/fd1")
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             "some test data here",
             "and here in member",
@@ -105,9 +106,9 @@ class SshRetrieveDatasetContentTestSpec : ShouldSpec({
         fail("Should be instance of ${SshRetrieveDatasetContentResponse::class.java.name}")
       } else {
         assertSoftly {
-          retrieveDatasetContentResponse.status.exitStatus shouldBe 0
-          retrieveDatasetContentResponse.status.output shouldContain "some test data"
-          retrieveDatasetContentResponse.status.output shouldNotContain "     "
+          retrieveDatasetContentResponse.status.type shouldBe StatusType.SUCCESS
+          retrieveDatasetContentResponse.fetchedText shouldContain "some test data"
+          retrieveDatasetContentResponse.fetchedText shouldNotContain "     "
         }
       }
     }
@@ -118,11 +119,11 @@ class SshRetrieveDatasetContentTestSpec : ShouldSpec({
       sshMockResponseDispatcher.injectResolver(
         "ssh:retrieveDatasetContent_empty_ps_success",
         resolver = {
-          it.trim().startsWith("tsocmd")
-          && it.contains("OPUT")
+          it.trim().startsWith("cp ")
           && it.contains(entityName)
+          && it.contains("/dev/fd1")
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             "",
           ).joinToString("\n")
@@ -141,8 +142,9 @@ class SshRetrieveDatasetContentTestSpec : ShouldSpec({
         fail("Should be instance of ${SshRetrieveDatasetContentResponse::class.java.name}")
       } else {
         assertSoftly {
-          retrieveDatasetContentResponse.status.exitStatus shouldBe 0
-          retrieveDatasetContentResponse.status.output shouldBe ""
+          retrieveDatasetContentResponse.status.type shouldBe StatusType.SUCCESS
+          retrieveDatasetContentResponse.fetchedText shouldNotBe null
+          retrieveDatasetContentResponse.fetchedText shouldBe ""
         }
       }
     }
@@ -153,11 +155,11 @@ class SshRetrieveDatasetContentTestSpec : ShouldSpec({
       sshMockResponseDispatcher.injectResolver(
         "ssh:retrieveDatasetContent_fail_entity_not_found",
         resolver = {
-          it.trim().startsWith("tsocmd")
-          && it.contains("OPUT")
+          it.trim().startsWith("cp ")
           && it.contains(entityName)
+          && it.contains("/dev/fd1")
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             "IKJ56228I DATA SET ULADZ.NOTEST.SSH80.PDS NOT IN CATALOG OR CATALOG CAN NOT BE ACCESSED",
             ""
@@ -177,8 +179,9 @@ class SshRetrieveDatasetContentTestSpec : ShouldSpec({
         fail("Should be instance of ${SshRetrieveDatasetContentResponse::class.java.name}")
       } else {
         assertSoftly {
-          retrieveDatasetContentResponse.status.exitStatus shouldBe 12
-          retrieveDatasetContentResponse.status.output shouldContain "NOT IN CATALOG"
+          retrieveDatasetContentResponse.status.type shouldBe StatusType.ERROR
+          retrieveDatasetContentResponse.status.text shouldContain "RC: 12"
+          retrieveDatasetContentResponse.status.text shouldContain "NOT IN CATALOG"
         }
       }
     }
@@ -189,11 +192,11 @@ class SshRetrieveDatasetContentTestSpec : ShouldSpec({
       sshMockResponseDispatcher.injectResolver(
         "ssh:retrieveDatasetContent_fail_generic",
         resolver = {
-          it.trim().startsWith("tsocmd")
-          && it.contains("OPUT")
+          it.trim().startsWith("cp ")
           && it.contains(entityName)
+          && it.contains("/dev/fd1")
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             "IKJ1234I Some generic error occurred, needs to be processed",
             ""
@@ -213,8 +216,9 @@ class SshRetrieveDatasetContentTestSpec : ShouldSpec({
         fail("Should be instance of ${SshRetrieveDatasetContentResponse::class.java.name}")
       } else {
         assertSoftly {
-          retrieveDatasetContentResponse.status.exitStatus shouldBe 12
-          retrieveDatasetContentResponse.status.output shouldContain "generic error"
+          retrieveDatasetContentResponse.status.type shouldBe StatusType.ERROR
+          retrieveDatasetContentResponse.status.text shouldContain "RC: 12"
+          retrieveDatasetContentResponse.status.text shouldContain "generic error"
         }
       }
     }
@@ -225,11 +229,11 @@ class SshRetrieveDatasetContentTestSpec : ShouldSpec({
       sshMockResponseDispatcher.injectResolver(
         "ssh:retrieveDatasetContent_success_pds_mem_bin",
         resolver = {
-          it.trim().startsWith("tsocmd")
-          && it.contains("OPUT")
+          it.trim().startsWith("cp ")
           && it.contains(entityName)
+          && it.contains("/dev/fd1")
         },
-        handler = {
+        handler = { _, _ ->
           val buffer = mutableListOf<Byte>()
 
           buffer.addAll("Hello World".toByteArray().toList())
@@ -253,16 +257,12 @@ class SshRetrieveDatasetContentTestSpec : ShouldSpec({
       if (retrieveDatasetContentResponse !is SshRetrieveDatasetContentResponse) {
         fail("Should be instance of ${SshRetrieveDatasetContentResponse::class.java.name}")
       } else {
-        var responseStr = ""
-        val responseChannel = retrieveDatasetContentResponse.status.channel
-        responseChannel.use {
-          while (responseChannel?.state != SshChannelState.COMPLETE) {
-            responseStr += String(responseChannel?.readNextPortion() ?: ByteArray(0))
-          }
-        }
+        val readChunks = retrieveDatasetContentResponse.readAsIs() as List<ByteArray>
+        val resultingString = readChunks
+          .fold("") { acc, nextChunk -> acc + nextChunk.toString(Charsets.UTF_8) }
         assertSoftly {
-          retrieveDatasetContentResponse.status.exitStatus shouldBe 0
-          responseStr shouldContain "Hello World"
+          retrieveDatasetContentResponse.status.type shouldBe StatusType.SUCCESS
+          resultingString shouldContain "Hello World"
         }
       }
     }

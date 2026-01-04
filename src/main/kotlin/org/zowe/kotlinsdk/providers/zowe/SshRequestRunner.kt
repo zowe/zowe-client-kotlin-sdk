@@ -13,26 +13,22 @@ package org.zowe.kotlinsdk.providers.zowe
 import net.schmizz.sshj.SSHClient
 import org.zowe.kotlinsdk.core.Request
 import org.zowe.kotlinsdk.core.RequestRunner
-import org.zowe.kotlinsdk.core.Response
 import org.zowe.kotlinsdk.core.SupportedProtocol
 
-// TODO: doc
 /**
  * SSH request runner. Generalizes the way to process SSH requests and responses
  * @property client the SSHj client to execute requests with
  */
 class SshRequestRunner(private val client: SSHClient) : RequestRunner(SupportedProtocol.SSH) {
   /**
-   * Run the SSH request. Provides the way to cancel the request by the requester
-   * @param sshRequest the SSH request object to execute a specific request with
+   * Run the SSH request. Checks if the SSH connection could be established before the request
+   * @param params the SSH request object to execute a specific request with
    * @return [SshResponse] object with the respectively processed data
    */
-  override suspend fun runRequest(params: Request): Response {
+  override suspend fun runRequest(params: Request): SshResponse {
     params as? SshRequest ?: throw Exception("Invalid params provided")
     val connection = params.connection
     connection.checkConnection()
-
-    val response = params.execRequest(client)
-    return response
+    return params.execRequest(client)
   }
 }

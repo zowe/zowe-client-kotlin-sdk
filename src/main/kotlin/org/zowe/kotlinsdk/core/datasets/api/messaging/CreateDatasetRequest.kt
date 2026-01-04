@@ -21,6 +21,6 @@ import org.zowe.kotlinsdk.core.Request
  * Represents basic create dataset request
  * @property dsName name of the dataset that will be created
  */
-interface CreateDatasetRequest : Request{
+interface CreateDatasetRequest : Request {
   val dsName: String
 }

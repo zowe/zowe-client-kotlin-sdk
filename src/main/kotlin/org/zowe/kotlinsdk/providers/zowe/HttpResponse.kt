@@ -6,21 +6,11 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe
 
-import io.ktor.http.HttpStatusCode
 import org.zowe.kotlinsdk.core.Response
 
-/**
- * A basic representation of an HTTP response object
- * @property status the [HttpStatusCode] to define the request result
- */
-interface HttpResponse : Response {
-  var status: HttpStatusCode
-}
+/** A basic representation of an HTTP response object specification */
+interface HttpResponse : Response

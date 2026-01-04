@@ -12,47 +12,48 @@ package org.zowe.kotlinsdk.providers.zowe.openssh.datasets
 
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
-import org.zowe.kotlinsdk.core.RequestRunner
 import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
 import org.zowe.kotlinsdk.core.datasets.api.messaging.CopyDatasetRequest
 import org.zowe.kotlinsdk.core.datasets.api.messaging.CopyDatasetResponse
 import org.zowe.kotlinsdk.core.datasets.api.messaging.CreateDatasetRequest
-import org.zowe.kotlinsdk.core.datasets.api.messaging.CreateDatasetResponse
 import org.zowe.kotlinsdk.core.datasets.api.messaging.DeleteDatasetBackupVersionRequest
 import org.zowe.kotlinsdk.core.datasets.api.messaging.DeleteDatasetBackupVersionResponse
 import org.zowe.kotlinsdk.core.datasets.api.messaging.DeleteDatasetRequest
-import org.zowe.kotlinsdk.core.datasets.api.messaging.DeleteDatasetResponse
 import org.zowe.kotlinsdk.core.datasets.api.messaging.GetDatasetInfoRequest
 import org.zowe.kotlinsdk.core.datasets.api.messaging.GetDatasetInfoResponse
 import org.zowe.kotlinsdk.core.datasets.api.messaging.ListDatasetMembersRequest
-import org.zowe.kotlinsdk.core.datasets.api.messaging.ListDatasetMembersResponse
 import org.zowe.kotlinsdk.core.datasets.api.messaging.ListDatasetsRequest
-import org.zowe.kotlinsdk.core.datasets.api.messaging.ListDatasetsResponse
 import org.zowe.kotlinsdk.core.datasets.api.messaging.MigrateDatasetRequest
 import org.zowe.kotlinsdk.core.datasets.api.messaging.MigrateDatasetResponse
 import org.zowe.kotlinsdk.core.datasets.api.messaging.RecallDatasetRequest
 import org.zowe.kotlinsdk.core.datasets.api.messaging.RecallDatasetResponse
 import org.zowe.kotlinsdk.core.datasets.api.messaging.RenameDatasetRequest
-import org.zowe.kotlinsdk.core.datasets.api.messaging.RenameDatasetResponse
 import org.zowe.kotlinsdk.core.datasets.api.messaging.RetrieveDatasetContentRequest
-import org.zowe.kotlinsdk.core.datasets.api.messaging.RetrieveDatasetContentResponse
 import org.zowe.kotlinsdk.core.datasets.api.messaging.WriteToDatasetRequest
-import org.zowe.kotlinsdk.core.datasets.api.messaging.WriteToDatasetResponse
+import org.zowe.kotlinsdk.providers.zowe.SshRequestRunner
 import org.zowe.kotlinsdk.providers.zowe.ZoweInternalAPI
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshCreateDatasetResponse
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshDeleteDatasetResponse
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshGetDatasetInfoResponse
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshListDatasetMembersResponse
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshListDatasetsResponse
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshRenameDatasetResponse
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshRetrieveDatasetContentResponse
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshWriteToDatasetResponse
 
 /**
  * Implementation of Datasets API for SSH to work with datasets and members
  * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=reference-tsoe-commands-subcommands">TSO/E commands and subcommands</a>
  */
 @ZoweInternalAPI
-class SshDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
+class SshDatasetsAPI(private val requestRunner: SshRequestRunner) : DatasetsAPI {
   /**
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-listds-command">LISTDS command</a>
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=lce-example-1-3">LISTDS command: Example 1</a>
    */
-  @AvailableSince(ZVersion.ZOS_2_1)
-  override suspend fun listDatasets(params: ListDatasetsRequest): ListDatasetsResponse {
-    return requestRunner.runRequest(params) as ListDatasetsResponse
+  @AvailableSince(ZVersion.ZOS_2_2)
+  override suspend fun listDatasets(params: ListDatasetsRequest): SshListDatasetsResponse {
+    return requestRunner.runRequest(params) as SshListDatasetsResponse
   }
 
   /**
@@ -60,103 +61,64 @@ class SshDatasetsAPI(private val requestRunner: RequestRunner) : DatasetsAPI {
    * @param params [GetDatasetInfoRequest] instance to get parameters for the request from
    * @return [GetDatasetInfoResponse] instance with the request handling result
    */
-  @AvailableSince(ZVersion.ZOS_2_1)
-  override suspend fun getDatasetInfo(params: GetDatasetInfoRequest): GetDatasetInfoResponse {
-    return requestRunner.runRequest(params) as GetDatasetInfoResponse
+  @AvailableSince(ZVersion.ZOS_2_2)
+  override suspend fun getDatasetInfo(params: GetDatasetInfoRequest): SshGetDatasetInfoResponse {
+    return requestRunner.runRequest(params) as SshGetDatasetInfoResponse
   }
 
   /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-listds-command">LISTDS command</a> */
-  @AvailableSince(ZVersion.ZOS_2_1)
-  override suspend fun listDatasetMembers(params: ListDatasetMembersRequest): ListDatasetMembersResponse {
-    return requestRunner.runRequest(params) as ListDatasetMembersResponse
+  @AvailableSince(ZVersion.ZOS_2_2)
+  override suspend fun listDatasetMembers(params: ListDatasetMembersRequest): SshListDatasetMembersResponse {
+    return requestRunner.runRequest(params) as SshListDatasetMembersResponse
+  }
+
+  /** @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=descriptions-cp-copy-file">cp - Copy a file</a> */
+  @AvailableSince(ZVersion.ZOS_2_2)
+  override suspend fun retrieveDatasetContent(params: RetrieveDatasetContentRequest): SshRetrieveDatasetContentResponse {
+    return requestRunner.runRequest(params) as SshRetrieveDatasetContentResponse
   }
 
   /**
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=tc-oput-copy-mvs-data-set-member-into-zos-unix-file">OPUT - Copy an MVS data set member into a z/OS UNIX file</a>
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=tc-oput-copy-mvs-data-set-member-into-zos-unix-file#tsooput__title__7">OPUT - Copy an MVS data set member into a z/OS UNIX file: Examples</a>
+   * Uses a combination of "tsocmd LISTDS" and "cp" commands. "LISTDS" is used to check whether the data set
+   * or the data set member exists, "cp" - to write the content
+   * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=descriptions-cp-copy-file">cp - Copy a file</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-listds-command">LISTDS command</a>
    */
-  @AvailableSince(ZVersion.ZOS_2_1)
-  override suspend fun retrieveDatasetContent(params: RetrieveDatasetContentRequest): RetrieveDatasetContentResponse {
-    return requestRunner.runRequest(params) as RetrieveDatasetContentResponse
-  }
-
-  override suspend fun writeToDataset(params: WriteToDatasetRequest): WriteToDatasetResponse {
-    // tsocmd "OGET '/dev/fd0' 'ULADZ.TEST.SSH80.PDS(TEST1)'" <<EOF
-    //some test text
-    //EOF
-    //
-    // tsocmd "OGET '/dev/fd0' 'ULADZ.TEST.SSH80.PDS(TEST1)'"
-    //
-    // OGET '/dev/fd0' 'DSN'
-    //
-    // To create data set member:
-    // Check with LISTDS first if the member already exist
-    // OGET '/dev/null' '$dsName'
-
-//    /**
-//   * Create a member in a data set.
-//   * Will check with "LISTDS" if there is already a member with the same name in the provided data set.
-//   * The member is created as the "OGET" operation, that puts '/dev/null' file's content into the member
-//   * @param client the SSH client to execute the command with
-//   * @return the [SshCreateDatasetResponse] with the resulting status of either the LISTDS command (if error), or OGET command
-//   */
-//  private fun performCreateMember(client: SSHClient): SshResponse {
-//    val sshListDatasetsRequest = SshListDatasetsRequest(
-//      connection,
-//      mask = dsName,
-//      attributesLevel = AttributesLevel.NAME
-//    )
-//    val sshListDatasetsResponse = sshListDatasetsRequest.execRequest(client)
-//
-//    if (sshListDatasetsResponse.status.exitStatus == 4) {
-//      sshCommand = "tsocmd \"OGET '/dev/null' '$dsName'\""
-//
-//      client
-//        .startSession()
-//        .use {
-//          val status = performSshPlainRequest(client, it)
-//          return SshCreateDatasetResponse(status)
-//        }
-//    } else if (sshListDatasetsResponse.status.exitStatus == 0) {
-//      val status = SshStatus(exitStatus = 8, error = "DUPLICATE MEMBER NAME")
-//      return SshCreateDatasetResponse(status)
-//    } else {
-//      return SshCreateDatasetResponse(sshListDatasetsResponse.status)
-//    }
-//  }
-    // * For members:
-    // * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-listds-command">LISTDS command</a>
-    // * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=command-listds-operands">LISTDS command operands</a>
-    // * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=tc-oget-copy-zos-unix-files-into-mvs-data-set">OGET - Copy z/OS UNIX files into an MVS data set</a>
-    TODO("Not yet implemented")
+  override suspend fun writeToDataset(params: WriteToDatasetRequest): SshWriteToDatasetResponse {
+    return requestRunner.runRequest(params) as SshWriteToDatasetResponse
   }
 
   /**
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-allocate-command">ALLOCATE command</a>
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=ace-example-6-allocate-new-sequential-data-set-space-allocated-in-tracks">Example 6: Allocate a new sequential data set with space allocated in tracks</a>
    */
-  @AvailableSince(ZVersion.ZOS_2_1)
-  override suspend fun createDataset(params: CreateDatasetRequest): CreateDatasetResponse {
-    return requestRunner.runRequest(params) as CreateDatasetResponse
+  @AvailableSince(ZVersion.ZOS_2_2)
+  override suspend fun createDataset(params: CreateDatasetRequest): SshCreateDatasetResponse {
+    return requestRunner.runRequest(params) as SshCreateDatasetResponse
   }
 
   /**
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-delete-command">DELETE command</a>
    * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=dce-example">DELETE command: Example</a>
    */
-  @AvailableSince(ZVersion.ZOS_2_1)
-  override suspend fun deleteDataset(params: DeleteDatasetRequest): DeleteDatasetResponse {
-    return requestRunner.runRequest(params) as DeleteDatasetResponse
+  @AvailableSince(ZVersion.ZOS_2_2)
+  override suspend fun deleteDataset(params: DeleteDatasetRequest): SshDeleteDatasetResponse {
+    return requestRunner.runRequest(params) as SshDeleteDatasetResponse
   }
 
-  override suspend fun renameDataset(params: RenameDatasetRequest): RenameDatasetResponse {
-    // RENAME 'OLDNM' 'NEWNM'
-    // RENAME 'OLDNM(MEMOLD)' (MEMNEW)
-    TODO("Not yet implemented")
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=subcommands-rename-command">RENAME command</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=command-rename-operands">RENAME command operands</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_2)
+  override suspend fun renameDataset(params: RenameDatasetRequest): SshRenameDatasetResponse {
+    return requestRunner.runRequest(params) as SshRenameDatasetResponse
   }
 
   override suspend fun copyDataset(params: CopyDatasetRequest): CopyDatasetResponse {
-    // ?
+    // <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=descriptions-cp-copy-file">cp - Copy a file</a>
+    // cp
+    // see SshRetrieveDatasetContentRequest
     // SMCOPY FROMDATASET('PSDS') TODATASET('ANOTHERPSDS')
     // SMCOPY FROMDATASET('PDSDS(MEM)') TODATASET('ANOTHERPPDSDS(MEM)')
     // For PDS / PDS/E - copy member by member

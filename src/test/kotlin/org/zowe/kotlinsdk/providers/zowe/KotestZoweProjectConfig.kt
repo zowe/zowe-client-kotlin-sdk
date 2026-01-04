@@ -32,11 +32,13 @@ import org.apache.sshd.server.command.Command
 import org.apache.sshd.server.command.CommandFactory
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider
 import org.zowe.kotlinsdk.core.connectivity.SshConnection
+import org.zowe.kotlinsdk.core.connectivity.ZoweConnectionManager
 import org.zowe.kotlinsdk.providers.zowe.ssh.SshMockResponseDispatcher
 import org.zowe.kotlinsdk.providers.zowe.zosmf.HttpMockResponseDispatcher
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.concurrent.TimeUnit
+import kotlin.concurrent.thread
 
 object KotestZoweProjectConfig : AbstractProjectConfig() {
   const val MOCK_SERVER_HOST = "127.0.0.1"
@@ -57,6 +59,15 @@ object KotestZoweProjectConfig : AbstractProjectConfig() {
     authMethods = sshAuthMethods
   )
 
+  val mockHttpConnection = ZoweConnectionManager
+    .produceHttpConnection(
+      MOCK_SERVER_HOST,
+      MOCK_ZOSMF_SERVER_PORT,
+      rejectUnauthorized = true,
+      user = MOCK_USERNAME,
+      password = MOCK_PASSWORD
+    )
+
   lateinit var zosmfMockResponseDispatcher: HttpMockResponseDispatcher
   lateinit var zosmfMockServer: MockWebServer
   lateinit var zosmfClient: HttpClient
@@ -71,6 +82,7 @@ object KotestZoweProjectConfig : AbstractProjectConfig() {
       passwordAuthenticator = AcceptAllPasswordAuthenticator.INSTANCE
       commandFactory = CommandFactory { _, commandLine ->
         object : Command {
+          private lateinit var input: InputStream
           private lateinit var out: OutputStream
           private lateinit var error: OutputStream
           private lateinit var callback: ExitCallback
@@ -87,17 +99,20 @@ object KotestZoweProjectConfig : AbstractProjectConfig() {
             this.callback = callback
           }
 
-          override fun setInputStream(`in`: InputStream) {}
+          override fun setInputStream(`in`: InputStream) {
+            this.input = `in`
+          }
 
-          override fun start(
-            channel: ChannelSession?,
-            env: Environment?
-          ) {
-            val response = sshMockResponseDispatcher.dispatch(commandLine)
-            out.write(response.output.toByteArray())
-            out.flush()
-            error.write(response.error.toByteArray())
-            callback.onExit(response.exitCode)
+          override fun start(channel: ChannelSession?, env: Environment?) {
+            thread {
+              Thread.sleep(50)
+              val response = sshMockResponseDispatcher.dispatch(commandLine, this.input)
+              out.write(response.output.toByteArray())
+              out.flush()
+              error.write(response.error.toByteArray())
+              error.flush()
+              callback.onExit(response.exitCode)
+            }
           }
 
           override fun destroy(channel: ChannelSession?) {}
@@ -108,8 +123,6 @@ object KotestZoweProjectConfig : AbstractProjectConfig() {
 
     sshClient = SSHClient()
     sshClient.addHostKeyVerifier(PromiscuousVerifier())
-    sshClient.connect(MOCK_SERVER_HOST, MOCK_SSH_SERVER_PORT)
-    sshClient.auth(MOCK_USERNAME, sshAuthMethods)
   }
 
   private fun cleanupSshMockServer() {

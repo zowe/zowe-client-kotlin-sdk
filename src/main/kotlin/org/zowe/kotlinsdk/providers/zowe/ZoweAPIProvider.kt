@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe
@@ -23,6 +19,7 @@ import org.zowe.kotlinsdk.core.files.api.FilesAPI
 import org.zowe.kotlinsdk.core.info.api.InfoAPI
 import org.zowe.kotlinsdk.core.jes.api.JesAPI
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.SshDatasetsAPI
+import org.zowe.kotlinsdk.providers.zowe.openssh.jes.SshJesAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.ZosmfDatasetsAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.files.ZosmfFilesAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.info.ZosmfInfoAPI
@@ -41,6 +38,7 @@ class ZoweAPIProvider(
     WrapperType.ZOSMF to (requestRunners
       .find { it.protocol == SupportedProtocol.HTTP }
       ?.let {
+        it as HttpRequestRunner
         mapOf(
           DatasetsAPI::class.java to ZosmfDatasetsAPI(it),
           FilesAPI::class.java to ZosmfFilesAPI(it),
@@ -52,8 +50,10 @@ class ZoweAPIProvider(
     WrapperType.SSH_NATIVE to (requestRunners
       .find { it.protocol == SupportedProtocol.SSH }
       ?.let {
+        it as SshRequestRunner
         mapOf(
           DatasetsAPI::class.java to SshDatasetsAPI(it),
+          JesAPI::class.java to SshJesAPI(it)
         )
       }
       ?: mapOf()

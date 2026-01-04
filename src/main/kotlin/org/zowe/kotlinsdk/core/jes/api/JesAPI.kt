@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.core.jes.api
@@ -25,5 +21,5 @@ interface JesAPI : API {
    * @param params [GetJobRequest] instance to get the job locator for the request from
    * @return [GetJobResponse] instance with the request result
    */
-  fun getJob(params: GetJobRequest): GetJobResponse
+  suspend fun getJob(params: GetJobRequest): GetJobResponse
 }

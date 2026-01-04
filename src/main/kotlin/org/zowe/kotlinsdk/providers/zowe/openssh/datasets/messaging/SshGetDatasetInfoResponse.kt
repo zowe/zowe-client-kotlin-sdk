@@ -6,25 +6,25 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging
 
+import org.zowe.kotlinsdk.core.Status
 import org.zowe.kotlinsdk.core.datasets.api.messaging.GetDatasetInfoResponse
 import org.zowe.kotlinsdk.core.datasets.data.DatasetItem
+import org.zowe.kotlinsdk.providers.zowe.SshCmdResponse
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
 import org.zowe.kotlinsdk.providers.zowe.SshStatus
 
 /**
  * Get data set info SSH request response
- * @property status the SSH status of the command ([SshStatus.OK] if the command is succeeded)
+ * @property cmdResponse the SSH command to get data set info response to process
  * @property dataset the data set prefilled object with attributes
  */
 class SshGetDatasetInfoResponse(
-  override val status: SshStatus = SshStatus.OK,
+  cmdResponse: SshCmdResponse,
   override val dataset: DatasetItem
-) : GetDatasetInfoResponse, SshResponse
+) : GetDatasetInfoResponse, SshResponse {
+  override var status: Status = SshStatus(cmdResponse)
+}

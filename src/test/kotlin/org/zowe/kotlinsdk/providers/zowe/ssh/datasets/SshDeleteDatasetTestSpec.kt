@@ -6,19 +6,16 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
-package org.zowe.kotlinsdk.providers.zowe.ssh
+package org.zowe.kotlinsdk.providers.zowe.ssh.datasets
 
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.fail
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import org.zowe.kotlinsdk.core.StatusType
 import org.zowe.kotlinsdk.core.WrapperType
 import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.sshMockResponseDispatcher
 import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
@@ -26,11 +23,16 @@ import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.mockSshConnecti
 import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.zoweAPIProvider
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshDeleteDatasetRequest
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshDeleteDatasetResponse
+import org.zowe.kotlinsdk.providers.zowe.ssh.SshMockCommandResponse
 import kotlin.text.contains
 import kotlin.text.trim
 
 class SshDeleteDatasetTestSpec : ShouldSpec({
   val datasetsApi = zoweAPIProvider.getApi(WrapperType.SSH_NATIVE, DatasetsAPI::class.java)
+
+  afterSpec {
+    sshMockResponseDispatcher.clearResolvers()
+  }
 
   context("deleteDataset") {
     should("deleteDataset execute successfully deleting a PS data set") {
@@ -43,7 +45,7 @@ class SshDeleteDatasetTestSpec : ShouldSpec({
           && it.contains("DELETE")
           && it.contains(dsName)
         },
-        handler = {
+        handler = { _, _ ->
           SshMockCommandResponse("IDC0550I ENTRY (A) $dsName DELETED\n")
         }
       )
@@ -55,9 +57,9 @@ class SshDeleteDatasetTestSpec : ShouldSpec({
         fail("Should be instance of ${SshDeleteDatasetResponse::class.java.name}")
       } else {
         assertSoftly {
-          deleteDatasetResponse.status.exitStatus shouldBe 0
-          deleteDatasetResponse.status.output shouldContain "ENTRY"
-          deleteDatasetResponse.status.output shouldContain "$dsName DELETED"
+          deleteDatasetResponse.status.type shouldBe StatusType.SUCCESS
+          deleteDatasetResponse.status.text shouldContain "ENTRY"
+          deleteDatasetResponse.status.text shouldContain "$dsName DELETED"
         }
       }
     }
@@ -73,7 +75,7 @@ class SshDeleteDatasetTestSpec : ShouldSpec({
           && it.contains("DELETE")
           && it.contains("$dsName($memName)")
         },
-        handler = {
+        handler = { _, _ ->
           SshMockCommandResponse("IDC0549I MEMBER $memName DELETED\n")
         }
       )
@@ -85,8 +87,8 @@ class SshDeleteDatasetTestSpec : ShouldSpec({
         fail("Should be instance of ${SshDeleteDatasetResponse::class.java.name}")
       } else {
         assertSoftly {
-          deleteDatasetResponse.status.exitStatus shouldBe 0
-          deleteDatasetResponse.status.output shouldContain "MEMBER $memName DELETED"
+          deleteDatasetResponse.status.type shouldBe StatusType.SUCCESS
+          deleteDatasetResponse.status.text shouldContain "MEMBER $memName DELETED"
         }
       }
     }
@@ -102,7 +104,7 @@ class SshDeleteDatasetTestSpec : ShouldSpec({
           && it.contains("DELETE")
           && it.contains("$dsName($memName)")
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             "IDC3302I  ACTION ERROR ON $dsName",
             "IDC3330I ** ${memName.padEnd(8)} NOT FOUND",
@@ -121,9 +123,9 @@ class SshDeleteDatasetTestSpec : ShouldSpec({
         fail("Should be instance of ${SshDeleteDatasetResponse::class.java.name}")
       } else {
         assertSoftly {
-          deleteDatasetResponse.status.exitStatus shouldBe 8
-          deleteDatasetResponse.status.output shouldContain "MEMBER"
-          deleteDatasetResponse.status.output shouldContain "$memName NOT DELETED"
+          deleteDatasetResponse.status.type shouldBe StatusType.ERROR
+          deleteDatasetResponse.status.text shouldContain "MEMBER"
+          deleteDatasetResponse.status.text shouldContain "$memName NOT DELETED"
         }
       }
     }
@@ -138,7 +140,7 @@ class SshDeleteDatasetTestSpec : ShouldSpec({
           && it.contains("DELETE")
           && it.contains(dsName)
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             "IDC3012I ENTRY $dsName NOT FOUND+",
             "IDC3009I ** VSAM CATALOG RETURN CODE IS 8 - REASON CODE IS IGG0CLEG-42",
@@ -157,8 +159,8 @@ class SshDeleteDatasetTestSpec : ShouldSpec({
         fail("Should be instance of ${SshDeleteDatasetResponse::class.java.name}")
       } else {
         assertSoftly {
-          deleteDatasetResponse.status.exitStatus shouldBe 8
-          deleteDatasetResponse.status.output shouldContain "ENTRY $dsName NOT FOUND"
+          deleteDatasetResponse.status.type shouldBe StatusType.ERROR
+          deleteDatasetResponse.status.text shouldContain "ENTRY $dsName NOT FOUND"
         }
       }
     }
@@ -173,7 +175,7 @@ class SshDeleteDatasetTestSpec : ShouldSpec({
           && it.contains("DELETE")
           && it.contains(dsName)
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             "IDC3012I ENTRY (A) $dsName DELETED, BUT THERE WAS SOME UNEXPECTED WARN",
             ""
@@ -189,9 +191,9 @@ class SshDeleteDatasetTestSpec : ShouldSpec({
         fail("Should be instance of ${SshDeleteDatasetResponse::class.java.name}")
       } else {
         assertSoftly {
-          deleteDatasetResponse.status.exitStatus shouldBe 4
-          deleteDatasetResponse.status.output shouldContain "ENTRY (A) $dsName DELETED"
-          deleteDatasetResponse.status.output shouldContain "WARN"
+          deleteDatasetResponse.status.type shouldBe StatusType.WARNING
+          deleteDatasetResponse.status.text shouldContain "ENTRY (A) $dsName DELETED"
+          deleteDatasetResponse.status.text shouldContain "WARN"
         }
       }
     }
@@ -206,7 +208,7 @@ class SshDeleteDatasetTestSpec : ShouldSpec({
           && it.contains("DELETE")
           && it.contains(dsName)
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             "IDC3012I ENTRY $dsName NOT DELETED DUE TO SOME GENERIC ERROR",
             ""
@@ -222,8 +224,8 @@ class SshDeleteDatasetTestSpec : ShouldSpec({
         fail("Should be instance of ${SshDeleteDatasetResponse::class.java.name}")
       } else {
         assertSoftly {
-          deleteDatasetResponse.status.exitStatus shouldBe 8
-          deleteDatasetResponse.status.output shouldContain "NOT DELETED"
+          deleteDatasetResponse.status.type shouldBe StatusType.ERROR
+          deleteDatasetResponse.status.text shouldContain "NOT DELETED"
         }
       }
     }
@@ -238,7 +240,7 @@ class SshDeleteDatasetTestSpec : ShouldSpec({
           && it.contains("DELETE")
           && it.contains(dsName)
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             "IDC3012I ENTRY $dsName NOT DELETED, PROCESSING UNSUCCESSFUL",
             ""
@@ -254,8 +256,8 @@ class SshDeleteDatasetTestSpec : ShouldSpec({
         fail("Should be instance of ${SshDeleteDatasetResponse::class.java.name}")
       } else {
         assertSoftly {
-          deleteDatasetResponse.status.exitStatus shouldBe 12
-          deleteDatasetResponse.status.output shouldContain "NOT DELETED"
+          deleteDatasetResponse.status.type shouldBe StatusType.ERROR
+          deleteDatasetResponse.status.text shouldContain "NOT DELETED"
         }
       }
     }
@@ -270,7 +272,7 @@ class SshDeleteDatasetTestSpec : ShouldSpec({
           && it.contains("DELETE")
           && it.contains(dsName)
         },
-        handler = {
+        handler = { _, _ ->
           val output = listOf(
             "IDC3012I ENTRY $dsName NOT DELETED, SEVERE ERROR OCCURRED",
             ""
@@ -286,8 +288,8 @@ class SshDeleteDatasetTestSpec : ShouldSpec({
         fail("Should be instance of ${SshDeleteDatasetResponse::class.java.name}")
       } else {
         assertSoftly {
-          deleteDatasetResponse.status.exitStatus shouldBe 16
-          deleteDatasetResponse.status.output shouldContain "NOT DELETED"
+          deleteDatasetResponse.status.type shouldBe StatusType.ERROR
+          deleteDatasetResponse.status.text shouldContain "NOT DELETED"
         }
       }
     }

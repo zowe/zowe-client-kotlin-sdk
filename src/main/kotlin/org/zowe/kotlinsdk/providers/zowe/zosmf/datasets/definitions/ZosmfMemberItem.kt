@@ -6,103 +6,166 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions
 
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.data.MemberItem
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 /**
  * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=zdsfri-json-document-specifications-zos-data-set-file-rest-interface-requests#RESTFILES_JSONDocumentSpecifications__pdskeyPairs">JSON document specifications for z/OS data set and file REST interface requests: PDS/PDSE member list with attributes document (RECFM=F or V)</a>
  * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=zdsfri-json-document-specifications-zos-data-set-file-rest-interface-requests#RESTFILES_JSONDocumentSpecifications__pdsUkeypairs">JSON document specifications for z/OS data set and file REST interface requests: PDS/PDSE member list with attributes document (RECFM=U)</a>
+ * @property memberName the member response param
+ * @property versionNumber the vers response param
+ * @property modificationLevel the mod response param
+ * @property creationDate the c4date response param
+ * @property modificationDate the m4date response param
+ * @property currentNumberOfRecords the cnorc response param
+ * @property beginningNumberOfRecords the inorc response param
+ * @property numberOfChangedRecords the mnorc response param
+ * @property lastChangeTime the mtime response param
+ * @property secondsOfLastChangeTime the msec response param
+ * @property user the user response param
+ * @property modifiedIn the sclm response param
+ * @property authorizationCode the ac response param (RECFM=U)
+ * @property aliasOf the alias-of response param (RECFM=U)
+ * @property amode the amode response param (RECFM=U)
+ * @property loadModuleAttributes the attr response param (RECFM=U)
+ * @property rmode the rmode response param (RECFM=U)
+ * @property size the size response param (RECFM=U)
+ * @property ttr the ttr response param (RECFM=U)
+ * @property ssi the ssi response param (RECFM=U)
  */
 @Serializable
 class ZosmfMemberItem(
-  /** member response param */
   @SerialName("member")
-  @AvailableSince(ZVersion.ZOS_2_1) override val memberName: String,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val memberName: String,
 
-  /** vers response param */
   @SerialName("vers")
-  @AvailableSince(ZVersion.ZOS_2_1) val versionNumber: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val versionNumber: Int? = null,
 
-  /** mod response param */
   @SerialName("mod")
-  @AvailableSince(ZVersion.ZOS_2_1) val modificationLevel: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val modificationLevel: Int? = null,
 
-  /** c4date response param */
   @SerialName("c4date")
-  @AvailableSince(ZVersion.ZOS_2_1) val creationDate: String? = null,
+  @Serializable(with = LocalDateSerializer::class)
+  @property:AvailableSince(ZVersion.ZOS_2_1) val creationDate: LocalDate? = null,
 
-  /** m4date response param */
   @SerialName("m4date")
-  @AvailableSince(ZVersion.ZOS_2_1) val modificationDate: String? = null,
+  @Serializable(with = LocalDateSerializer::class)
+  @property:AvailableSince(ZVersion.ZOS_2_1) val modificationDate: LocalDate? = null,
 
-  /** cnorc response param */
   @SerialName("cnorc")
-  @AvailableSince(ZVersion.ZOS_2_1) val currentNumberOfRecords: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val currentNumberOfRecords: Int? = null,
 
-  /** inorc response param */
   @SerialName("inorc")
-  @AvailableSince(ZVersion.ZOS_2_1) val beginningNumberOfRecords: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val beginningNumberOfRecords: Int? = null,
 
-  /** mnorc response param */
   @SerialName("mnorc")
-  @AvailableSince(ZVersion.ZOS_2_1) val numberOfChangedRecords: Int? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val numberOfChangedRecords: Int? = null,
 
-  /** mtime response param */
   @SerialName("mtime")
-  @AvailableSince(ZVersion.ZOS_2_1) val lastChangeTime: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val lastChangeTime: String? = null,
 
-  /** msec response param */
   @SerialName("msec")
-  @AvailableSince(ZVersion.ZOS_2_1) val secondsOfLastChangeTime: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val secondsOfLastChangeTime: Int? = null,
 
-  /** user response param */
   @SerialName("user")
-  @AvailableSince(ZVersion.ZOS_2_1) val user: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val user: String? = null,
 
-  /** sclm response param */
   @SerialName("sclm")
-  @AvailableSince(ZVersion.ZOS_2_1) val sclm: String? = null,
+  @Serializable(with = ModifiedInSerializer::class)
+  @property:AvailableSince(ZVersion.ZOS_2_1) val modifiedIn: ModifiedIn? = null,
 
-  /** ac response param */
   @SerialName("ac")
-  @AvailableSince(ZVersion.ZOS_2_1) val authorizationCode: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val authorizationCode: String? = null,
 
-  /** alias-of response param */
   @SerialName("alias-of")
-  @AvailableSince(ZVersion.ZOS_2_1) val aliasOf: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val aliasOf: String? = null,
 
-  /** amode response param */
   @SerialName("amode")
-  @AvailableSince(ZVersion.ZOS_2_1) val amode: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val amode: String? = null,
 
-  /** attr response param */
   @SerialName("attr")
-  @AvailableSince(ZVersion.ZOS_2_1) val loadModuleAttributes: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val loadModuleAttributes: String? = null,
 
-  /** rmode response param */
   @SerialName("rmode")
-  @AvailableSince(ZVersion.ZOS_2_1) val rmode: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val rmode: String? = null,
 
-  /** size response param */
   @SerialName("size")
-  @AvailableSince(ZVersion.ZOS_2_1) val size: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val size: String? = null,
 
-  /** ttr response param */
   @SerialName("ttr")
-  @AvailableSince(ZVersion.ZOS_2_1) val ttr: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val ttr: String? = null,
 
-  /** ssi response param */
   @SerialName("ssi")
-  @AvailableSince(ZVersion.ZOS_2_1) val ssi: String? = null
-) : MemberItem
+  @property:AvailableSince(ZVersion.ZOS_2_1) val ssi: String? = null
+) : MemberItem {
+  /** Indicates whether the member was last modified by SCLM or ISPF, or by some other tools */
+  enum class ModifiedIn {
+    SCLM,
+    ISPF,
+    UNDEFINED
+  }
+
+  /** [ModifiedIn] enum serializer. Transforms "Y" into "SCLM", "N" into "ISPF", and null into "UNDEFINED" */
+  class ModifiedInSerializer : KSerializer<ModifiedIn> {
+    override val descriptor = PrimitiveSerialDescriptor("ModifiedIn", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: ModifiedIn) {
+      when (value) {
+        ModifiedIn.SCLM -> encoder.encodeString("Y")
+        ModifiedIn.ISPF -> encoder.encodeString("N")
+        ModifiedIn.UNDEFINED -> encoder.encodeString("")
+      }
+    }
+
+    override fun deserialize(decoder: Decoder): ModifiedIn {
+      return try {
+        when (decoder.decodeString()) {
+          "Y" -> ModifiedIn.SCLM
+          "N" -> ModifiedIn.ISPF
+          else -> ModifiedIn.UNDEFINED
+        }
+      } catch (_: Exception) {
+        ModifiedIn.UNDEFINED
+      }
+    }
+  }
+
+  /** [LocalDate] serializer. Transforms nullable string into nullable [LocalDate] and back */
+  class LocalDateSerializer : KSerializer<LocalDate?> {
+    private val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+
+    override val descriptor = PrimitiveSerialDescriptor("LocalDate", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: LocalDate?) {
+      if (value == null) {
+        encoder.encodeString("")
+      } else {
+        val javaDate = LocalDate.of(value.year, value.monthValue, value.dayOfMonth)
+        encoder.encodeString(formatter.format(javaDate))
+      }
+    }
+
+    override fun deserialize(decoder: Decoder): LocalDate? {
+      return try {
+        val dateString = decoder.decodeString()
+        if (dateString.isBlank()) null else LocalDate.parse(dateString, formatter)
+      } catch (_: Exception) {
+        null
+      }
+    }
+  }
+}

@@ -12,11 +12,12 @@ package org.zowe.kotlinsdk.core
 
 /** An abstraction to provide a basic request functionality idea to process by a [RequestRunner] */
 interface Request {
+  /** Produce a respective [Response] object from the [clientResponse] */
+  suspend fun produceResponseObject(clientResponse: Any): Response
+
   /**
-   * Produce an appropriate [Response] asynchronously by the created request.
-   * Should be implemented in a concrete request class
+   * Execute the request and produce the appropriate [Response]
+   * @param payload some object (like a client or a session) to execute the request with
    */
-  suspend fun produceResponse(): Response {
-    throw Exception("You must define the functionality of producing a correct response yourself")
-  }
+  suspend fun execRequest(payload: Any): Response
 }

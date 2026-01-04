@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging
@@ -19,24 +15,26 @@ import kotlinx.serialization.Serializable
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-data-set-member-utilities#IZUHPINFO_API_PutDataSetMemberUtilities__title__6">z/OS data set and member utilities: Request body</a> */
+/**
+ * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-data-set-member-utilities#IZUHPINFO_API_PutDataSetMemberUtilities__title__6">z/OS data set and member utilities: Request body</a>
+ * @property request indicates the function copy
+ * @property src from-dataset request body param
+ * @property enq enq request body param
+ * @property replace replace request body param
+ */
 @Serializable
 data class ZosmfCopyDatasetRequestBody(
-  /** Indicates the function copy */
   @SerialName("request")
-  @AvailableSince(ZVersion.ZOS_2_1) val request: String = "copy",
+  @property:AvailableSince(ZVersion.ZOS_2_1) val request: String = "copy",
 
-  /** from-dataset request body param */
   @SerialName("from-dataset")
-  @AvailableSince(ZVersion.ZOS_2_1) var src: FromDataset,
+  @property:AvailableSince(ZVersion.ZOS_2_1) var src: FromDataset,
 
-  /** enq request body param */
   @SerialName("enq")
-  @AvailableSince(ZVersion.ZOS_2_1) var enq: Enq?,
+  @property:AvailableSince(ZVersion.ZOS_2_1) var enq: Enq?,
 
-  /** replace request body param */
   @SerialName("replace")
-  @AvailableSince(ZVersion.ZOS_2_1) var replace: Boolean?
+  @property:AvailableSince(ZVersion.ZOS_2_1) var replace: Boolean?
 ) {
   @Serializable
   enum class Enq(private val type: String) {

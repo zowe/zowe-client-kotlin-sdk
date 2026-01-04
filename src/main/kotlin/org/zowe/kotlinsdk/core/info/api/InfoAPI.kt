@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.core.info.api
@@ -25,5 +21,5 @@ interface InfoAPI : API {
    * @param params [GetSystemInfoRequest] parameters of information fetching
    * @return [GetSystemInfoResponse] instance with the request result
    */
-  fun getSystemInfo(params: GetSystemInfoRequest): GetSystemInfoResponse
+  suspend fun getSystemInfo(params: GetSystemInfoRequest): GetSystemInfoResponse
 }

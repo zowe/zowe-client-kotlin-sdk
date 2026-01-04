@@ -8,11 +8,24 @@
 | getDatasetInfo             | ✅           | ✅             |
 | listDatasetMembers         | ✅           | ✅             |
 | retrieveDatasetContent     | ✅           | ✅             |
-| writeToDataset             | ❌           | ❌             |
+| writeToDataset             | ✅           | ✅             |
 | createDataset              | ✅           | ✅             |
 | deleteDataset              | ✅           | ✅             |
-| renameDataset              | ❌           | ❌             |
+| renameDataset              | ✅           | ✅             |
 | copyDataset                | ❌           | ❌             |
 | migrateDataset             | ❌           | ❌             |
 | recallDataset              | ❌           | ❌             |
 | deleteDatasetBackupVersion | ❌           | ❌             |
+
+## [FilesAPI](files/SshFilesAPI.kt) functions
+
+| Method    | Implemented | Test coverage |
+|-----------|-------------|---------------|
+| listFiles | ❌           | ❌             |
+
+## [JesAPI](jes/SshJesAPI.kt) functions
+
+| Method   | Implemented | Test coverage |
+|----------|-------------|---------------|
+| getJob   | ✅           | ✅             |
+| listJobs | ❌           | ❌             |
