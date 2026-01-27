@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
@@ -24,32 +20,32 @@ import org.zowe.kotlinsdk.annotations.ZVersion
 data class ZosmfCopyFileRequestBody(
   /** The file or directory to copy */
   @SerialName("from")
-  @AvailableSince(ZVersion.ZOS_2_1) val from: String?,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val from: String?,
 
   /** The file or directory to copy */
   @SerialName("from-dataset")
-  @AvailableSince(ZVersion.ZOS_2_1) val fromDataset: FromDataset? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val fromDataset: FromDataset? = null,
 
   @SerialName("overwrite")
-  @AvailableSince(ZVersion.ZOS_2_1) val overwrite: Boolean? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val overwrite: Boolean? = null,
 
   /** When 'true', copies all the files and subdirectories that are specified by source into a directory (cp -R) */
   @SerialName("recursive")
-  @AvailableSince(ZVersion.ZOS_2_1) val recursive: Boolean? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val recursive: Boolean? = null,
 
   /**
    * When 'src', follows symbolic links that are specified as source file or directory (cp -H).
    * When 'all', follows symbolic links specified as source file/directory and those encountered in the tree traverse (cp -L)
    */
   @SerialName("links")
-  @AvailableSince(ZVersion.ZOS_2_1) val links: Links? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val links: Links? = null,
 
   /**
    * When 'modtime', sets the modification and access time of each destination file to that of the corresponding source file. (cp -m).
    * When 'all', preserves the modification and access times as well as the file mode, file format, owner, and group owner (cp -p)
    */
   @SerialName("preserve")
-  @AvailableSince(ZVersion.ZOS_2_1) val preserve: Preserve? = null
+  @property:AvailableSince(ZVersion.ZOS_2_1) val preserve: Preserve? = null
 ) {
   /** Indicates the function copy */
   @SerialName("request")
@@ -59,14 +55,14 @@ data class ZosmfCopyFileRequestBody(
   data class FromDataset(
     /** The fully qualified dataset name */
     @SerialName("dsn")
-    @AvailableSince(ZVersion.ZOS_2_1) val datasetName: String,
+    @property:AvailableSince(ZVersion.ZOS_2_1) val datasetName: String,
 
     /** The dataset member to copy */
     @SerialName("member")
-    @AvailableSince(ZVersion.ZOS_2_1) val memberName: String? = null,
+    @property:AvailableSince(ZVersion.ZOS_2_1) val memberName: String? = null,
 
     /** dataset type */
-    @AvailableSince(ZVersion.ZOS_2_1) val type: Type? = null
+    @property:AvailableSince(ZVersion.ZOS_2_1) val type: Type? = null
   ) {
     @Serializable
     enum class Type {

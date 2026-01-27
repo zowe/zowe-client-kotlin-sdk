@@ -92,15 +92,15 @@ class SshDatasetsAPI(private val requestRunner: SshRequestRunner) : DatasetsAPI 
     return requestRunner.runRequest(params) as SshRenameDatasetResponse
   }
 
-  override suspend fun copyDataset(params: CopyDatasetRequest): CopyDatasetResponse {
-    // <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=descriptions-cp-copy-file">cp - Copy a file</a>
-    // cp
-    // see SshRetrieveDatasetContentRequest
-    // SMCOPY FROMDATASET('PSDS') TODATASET('ANOTHERPSDS')
-    // SMCOPY FROMDATASET('PDSDS(MEM)') TODATASET('ANOTHERPPDSDS(MEM)')
-    // For PDS / PDS/E - copy member by member
-    // Avoid processing of RECFM=U datasets
-    TODO("Not yet implemented")
+  /**
+   * Uses a combination of "tsocmd LISTDS" and "cp" commands. "LISTDS" is used to check whether the data set
+   * or the data set member exists, "cp" - to copy to the data set
+   * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=descriptions-cp-copy-file">cp - Copy a file</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-listds-command">LISTDS command</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_2)
+  override suspend fun copyToDataset(params: CopyToDatasetRequest): SshCopyToDatasetResponse {
+    return requestRunner.runRequest(params) as SshCopyToDatasetResponse
   }
 
   override suspend fun migrateDataset(params: MigrateDatasetRequest): MigrateDatasetResponse {

@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
@@ -25,15 +21,15 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.files.definitions.ZosmfFileMode
 data class ZosmfChangeFileModeRequestBody(
   /** The mode value, which is specified as the POSIX symbolic form or octal value (as a JSON string) */
   @SerialName("mode")
-  @AvailableSince(ZVersion.ZOS_2_1) val mode: ZosmfFileMode,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val mode: ZosmfFileMode,
 
   /** This applies a mode change to the file or directory pointed to by any encountered links */
   @SerialName("links")
-  @AvailableSince(ZVersion.ZOS_2_1) val links: Links? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val links: Links? = null,
 
   /** When 'true', the file mode bits of the directory and all files in the file hierarchy below it are changed (chmod -R) */
   @SerialName("recursive")
-  @AvailableSince(ZVersion.ZOS_2_1) val recursive: Boolean? = null
+  @property:AvailableSince(ZVersion.ZOS_2_1) val recursive: Boolean? = null
 ) {
   /** Indicates the function chmod */
   @SerialName("request")

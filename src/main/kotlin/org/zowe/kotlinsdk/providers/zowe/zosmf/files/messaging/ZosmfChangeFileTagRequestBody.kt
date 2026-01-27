@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
@@ -24,26 +20,26 @@ import org.zowe.kotlinsdk.annotations.ZVersion
 data class ZosmfChangeFileTagRequestBody(
   /** The file tag action */
   @SerialName("action")
-  @AvailableSince(ZVersion.ZOS_2_1) var action: Action,
+  @property:AvailableSince(ZVersion.ZOS_2_1) var action: Action,
 
   /** This option can be specified only when the action is [Action.SET] */
   @SerialName("type")
-  @AvailableSince(ZVersion.ZOS_2_1) var type: Type? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) var type: Type? = null,
 
   /**
    * Specifies the coded character set in which text data is encoded, such as ASCII or EBCDIC.
    * For example, the code set for ASCII is ISO8859-1; the code set for EBCDIC is IBM-1047.
    */
   @SerialName("codeSet")
-  @AvailableSince(ZVersion.ZOS_2_1) var codeSet: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) var codeSet: String? = null,
 
   /** This applies a tag change to the file or directory pointed to by any encountered links */
   @SerialName("links")
-  @AvailableSince(ZVersion.ZOS_2_1) var links: Links ? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) var links: Links ? = null,
 
   /** When 'true', tags all the files and subdirectories in that directory (chtag -R) */
   @SerialName("recursive")
-  @AvailableSince(ZVersion.ZOS_2_1) val recursive: Boolean? = null
+  @property:AvailableSince(ZVersion.ZOS_2_1) val recursive: Boolean? = null
 ) {
   /** Indicates the function chtag */
   @SerialName("request")

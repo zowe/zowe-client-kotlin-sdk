@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
@@ -24,7 +20,7 @@ import org.zowe.kotlinsdk.annotations.ZVersion
 data class ZosmfSetFileACLRequestBody(
   /** When true, aborts processing if an error or warning occurs */
   @SerialName("abort")
-  @AvailableSince(ZVersion.ZOS_2_1) val abort: Boolean? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val abort: Boolean? = null,
 
   /**
    * The default is 'follow'. 'suppress' does not follow symbolic links.
@@ -35,7 +31,7 @@ data class ZosmfSetFileACLRequestBody(
    * 'modify' and 'delete' may both be specified, but not with 'delete-type' and 'set'.
    */
   @SerialName("links")
-  @AvailableSince(ZVersion.ZOS_2_1) val links: Links? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val links: Links? = null,
 
   /**
    * Delete all extended ACL entries by type (setfacl -D type)
@@ -43,7 +39,7 @@ data class ZosmfSetFileACLRequestBody(
    * Note: The 'delete-type' keyword cannot be specified with 'set', 'modify' or 'delete'.
    */
   @SerialName("delete-type")
-  @AvailableSince(ZVersion.ZOS_2_1) val deleteType: DeleteType? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val deleteType: DeleteType? = null,
 
   /**
    * sets (replaces) all ACLs with 'entries'. 'entries' represents a string of ACL entries.
@@ -52,7 +48,7 @@ data class ZosmfSetFileACLRequestBody(
    * Note: The 'set' keyword cannot be specified with 'delete-type', 'modify' or 'delete'.
    */
   @SerialName("set")
-  @AvailableSince(ZVersion.ZOS_2_1) val set: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val set: String? = null,
 
   /**
    * Modifies the ACL entries. 'entries' represents a string of ACL entries.
@@ -63,7 +59,7 @@ data class ZosmfSetFileACLRequestBody(
    * Note: The 'modify' keyword cannot be specified with 'delete-type' or 'set'.
    */
   @SerialName("modify")
-  @AvailableSince(ZVersion.ZOS_2_1) val modify: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val modify: String? = null,
 
   /**
    * Deletes the extended ACL entries that are specified by 'entries'.
@@ -73,7 +69,7 @@ data class ZosmfSetFileACLRequestBody(
    * Note: The 'delete' keyword cannot be specified with 'delete-type' or 'set'.
    */
   @SerialName("delete")
-  @AvailableSince(ZVersion.ZOS_2_1) val delete: String? = null
+  @property:AvailableSince(ZVersion.ZOS_2_1) val delete: String? = null
 ) {
   /** Indicates the function setfacl */
   @SerialName("request")

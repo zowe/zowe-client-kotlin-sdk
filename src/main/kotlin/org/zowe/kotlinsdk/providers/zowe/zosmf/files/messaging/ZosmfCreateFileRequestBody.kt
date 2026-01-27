@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
@@ -27,11 +23,11 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.files.definitions.ZosmfFileMode
 data class ZosmfCreateFileRequestBody(
   /** The request type */
   @SerialName("type")
-  @AvailableSince(ZVersion.ZOS_2_1) val type: ZosmfFileType,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val type: ZosmfFileType,
 
   /** Specifies the file or directory permission bits to be used in creating the file or directory */
   @SerialName("mode")
-  @AvailableSince(ZVersion.ZOS_2_1) val mode: ZosmfFileMode
+  @property:AvailableSince(ZVersion.ZOS_2_1) val mode: ZosmfFileMode
 ) {
   @Serializable
   enum class ZosmfFileType {

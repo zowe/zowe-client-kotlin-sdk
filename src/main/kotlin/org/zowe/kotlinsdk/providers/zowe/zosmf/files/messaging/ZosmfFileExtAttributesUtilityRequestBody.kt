@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
@@ -24,11 +20,11 @@ import org.zowe.kotlinsdk.annotations.ZVersion
 data class ZosmfFileExtAttributesUtilityRequestBody(
   /** One or more of the following: alps */
   @SerialName("set")
-  @AvailableSince(ZVersion.ZOS_2_1) val set: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val set: String? = null,
 
   /** One or more of the following: alps */
   @SerialName("reset")
-  @AvailableSince(ZVersion.ZOS_2_1) val reset: String? = null
+  @property:AvailableSince(ZVersion.ZOS_2_1) val reset: String? = null
 ) {
   /** Indicates the function extattr */
   @SerialName("request")

@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
@@ -23,16 +19,16 @@ import org.zowe.kotlinsdk.annotations.ZVersion
 @Serializable
 data class ZosmfChangeFileOwnerRequestBody(
   /** The user ID or UID (as a JSON string) */
-  @AvailableSince(ZVersion.ZOS_2_1) val owner: String,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val owner: String,
 
   /** The group ID or GID (as a JSON string) */
-  @AvailableSince(ZVersion.ZOS_2_1) val group: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val group: String? = null,
 
   /** This applies an owner change to the file or directory pointed to by any encountered links */
-  @AvailableSince(ZVersion.ZOS_2_1) val links: Links? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val links: Links? = null,
 
   /** When 'true', changes all the files and subdirectories in that directory to belong to the specified owner and group, if :group is specified (chown -R) */
-  @AvailableSince(ZVersion.ZOS_2_1) val recursive: Boolean? = null
+  @property:AvailableSince(ZVersion.ZOS_2_1) val recursive: Boolean? = null
 ) {
   /** Indicates the function chown */
   @SerialName("request")

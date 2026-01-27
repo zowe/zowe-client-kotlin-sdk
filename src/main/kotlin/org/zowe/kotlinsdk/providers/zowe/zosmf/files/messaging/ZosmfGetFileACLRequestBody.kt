@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
@@ -28,32 +24,32 @@ data class ZosmfGetFileACLRequestBody(
    * If the target is not a directory, a warning is issued.
    */
   @SerialName("type")
-  @AvailableSince(ZVersion.ZOS_2_1) val type: Type? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val type: Type? = null,
 
   /**
    * The user ID or UID (as a JSON string), displays only the ACL entries for the specified types of
    * access control lists (getfacl -a, -d, -f) which affects the specified user's access (getfacl -e user)
    */
   @SerialName("user")
-  @AvailableSince(ZVersion.ZOS_2_1) val user: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val user: String? = null,
 
   /**
    * The default is 'false'. When true, displays each ACL entry, using commas to separate the ACL entries instead of newlines
    */
   @SerialName("use-commas")
-  @AvailableSince(ZVersion.ZOS_2_1) val useCommas: Boolean? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val useCommas: Boolean? = null,
 
   /**
    * The default is 'false'. When true, the comment header (the first three lines of each file's output) is not to be displayed (getfacl -m)
    */
   @SerialName("suppress-header")
-  @AvailableSince(ZVersion.ZOS_2_1) val suppressHeader: Boolean? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val suppressHeader: Boolean? = null,
 
   /**
    * The default is 'false'. When true, displays only the extended ACL entries. Does not display the base ACL entries (getfacl -o)
    */
   @SerialName("suppress-baseacl")
-  @AvailableSince(ZVersion.ZOS_2_1) val suppressBaseACL: Boolean? = null
+  @property:AvailableSince(ZVersion.ZOS_2_1) val suppressBaseACL: Boolean? = null
 ) {
   /** Indicates the function getfacl */
   @SerialName("request")

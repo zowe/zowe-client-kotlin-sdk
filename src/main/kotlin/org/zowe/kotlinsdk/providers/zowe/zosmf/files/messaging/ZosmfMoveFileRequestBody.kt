@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
@@ -24,10 +20,10 @@ import org.zowe.kotlinsdk.annotations.ZVersion
 data class ZosmfMoveFileRequestBody(
   /** The file or directory to be moved */
   @SerialName("from")
-  @AvailableSince(ZVersion.ZOS_2_1) val from: String,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val from: String,
 
   @SerialName("overwrite")
-  @AvailableSince(ZVersion.ZOS_2_1) val overwrite: Boolean? = null
+  @property:AvailableSince(ZVersion.ZOS_2_1) val overwrite: Boolean? = null
 ) {
   /** Indicates the function move */
   @SerialName("request")

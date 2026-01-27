@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
@@ -24,19 +20,19 @@ import org.zowe.kotlinsdk.annotations.ZVersion
 data class ZosmfLinkFileRequestBody(
   /** The file or directory to link */
   @SerialName("from")
-  @AvailableSince(ZVersion.ZOS_2_1) val from: String,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val from: String,
 
   /** Indicates the link type as a symbol link or an external link */
   @SerialName("type")
-  @AvailableSince(ZVersion.ZOS_2_1) val type: String,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val type: String,
 
   /** When "true", it links the files recursively, linking all the files and subdirectories specified by the source into a directory (ln -R) */
   @SerialName("recursive")
-  @AvailableSince(ZVersion.ZOS_2_1) val recursive: Boolean? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val recursive: Boolean? = null,
 
   /** When it is "true", it forces a link between files and deletes any conflicting path names that do not have confirmation (ln -f) */
   @SerialName("force")
-  @AvailableSince(ZVersion.ZOS_2_1) val force: Boolean? = null
+  @property:AvailableSince(ZVersion.ZOS_2_1) val force: Boolean? = null
 ) {
   /** Indicates the function link */
   @SerialName("request")
