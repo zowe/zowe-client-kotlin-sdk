@@ -41,13 +41,14 @@ class SshGetJobTestSpec : ShouldSpec({
       sshMockResponseDispatcher.injectResolver(
         "ssh:getJob_success_output",
         resolver = {
-          it.contains("### getJob cmd") && it.contains(jobName) && it.contains(jobId)
+          it.contains("### get_job") && it.contains(jobName) && it.contains(jobId)
         },
         handler = { _, _ ->
           SshMockCommandResponse(
-            "=== JOB INFO OUTPUT START ===\n" +
+            "=== JOBS INFO OUTPUT START ===\n" +
             "isfmsg2.1 is: ISF776I Processing started for action 1 of 1.\n" +
             "isfmsg2.2 is: ISF767I Request completed.\n" +
+            "=== JOB 0 OUTPUT START ===\n" +
             "=|||= Job subsystem: JES2 =|||=\n" +
             "=|||= Job name: $jobName =|||=\n" +
             "=|||= Job ID: $jobId =|||=\n" +
@@ -58,7 +59,8 @@ class SshGetJobTestSpec : ShouldSpec({
             "=|||= Job phase name: AWAITING OUTPUT =|||=\n" +
             "=|||= Job class: A =|||=\n" +
             "=|||= Job queue: PRINT =|||=\n" +
-            "=== JOB INFO OUTPUT END ==="
+            "=== JOB 0 OUTPUT END ===\n" +
+            "=== JOBS INFO OUTPUT END ==="
           )
         }
       )
@@ -87,13 +89,14 @@ class SshGetJobTestSpec : ShouldSpec({
       sshMockResponseDispatcher.injectResolver(
         "ssh:getJob_success_extended",
         resolver = {
-          it.contains("### getJob cmd") && it.contains(jobName) && it.contains(jobId)
+          it.contains("### get_job") && it.contains(jobName) && it.contains(jobId)
         },
         handler = { _, _ ->
           SshMockCommandResponse(
-            "=== JOB INFO OUTPUT START ===\n" +
+            "=== JOBS INFO OUTPUT START ===\n" +
             "isfmsg2.1 is: ISF776I Processing started for action 1 of 1.\n" +
             "isfmsg2.2 is: ISF767I Request completed.\n" +
+            "=== JOB 0 OUTPUT START ===\n" +
             "=|||= Job subsystem: JES2 =|||=\n" +
             "=|||= Job name: $jobName =|||=\n" +
             "=|||= Job ID: $jobId =|||=\n" +
@@ -123,7 +126,8 @@ class SshGetJobTestSpec : ShouldSpec({
             " IEF032I STEP/STEP1   /STOP  2025150.0219\n" +
             "=\\= JESYSMSG MESSAGES END =\\=\n" +
             "=\\\\\\= STEP DATA END =\\\\\\=\n" +
-            "=== JOB INFO OUTPUT END ==="
+            "=== JOB 0 OUTPUT END ===\n" +
+            "=== JOBS INFO OUTPUT END ==="
           )
         }
       )
@@ -162,13 +166,14 @@ class SshGetJobTestSpec : ShouldSpec({
       sshMockResponseDispatcher.injectResolver(
         "ssh:getJob_success_active_stc",
         resolver = {
-          it.contains("### getJob cmd") && it.contains(jobName) && it.contains(jobId)
+          it.contains("### get_job") && it.contains(jobName) && it.contains(jobId)
         },
         handler = { _, _ ->
           SshMockCommandResponse(
-            "=== JOB INFO OUTPUT START ===\n" +
+            "=== JOBS INFO OUTPUT START ===\n" +
             "isfmsg2.1 is: ISF776I Processing started for action 1 of 1.\n" +
             "isfmsg2.2 is: ISF767I Request completed.\n" +
+            "=== JOB 0 OUTPUT START ===\n" +
             "=|||= Job subsystem: JES2 =|||=\n" +
             "=|||= Job name: $jobName =|||=\n" +
             "=|||= Job ID: $jobId =|||=\n" +
@@ -179,7 +184,8 @@ class SshGetJobTestSpec : ShouldSpec({
             "=|||= Job phase name: EXECUTING =|||=\n" +
             "=|||= Job class:  =|||=\n" +
             "=|||= Job queue: EXECUTION =|||=\n" +
-            "=== JOB INFO OUTPUT END ==="
+            "=== JOB 0 OUTPUT END ===\n" +
+            "=== JOBS INFO OUTPUT END ==="
           )
         }
       )
@@ -208,7 +214,7 @@ class SshGetJobTestSpec : ShouldSpec({
       sshMockResponseDispatcher.injectResolver(
         "ssh:getJob_fail_not_found",
         resolver = {
-          it.contains("### getJob cmd") && it.contains(jobName) && it.contains(jobId)
+          it.contains("### get_job") && it.contains(jobName) && it.contains(jobId)
         },
         handler = { _, _ ->
           SshMockCommandResponse("=== JOB BY NAME NONEXST IS NOT FOUND ===", exitCode = 255)
@@ -234,7 +240,7 @@ class SshGetJobTestSpec : ShouldSpec({
       sshMockResponseDispatcher.injectResolver(
         "ssh:getJob_fail_isfexec_error",
         resolver = {
-          it.contains("### getJob cmd") && it.contains(jobName) && it.contains(jobId)
+          it.contains("### get_job") && it.contains(jobName) && it.contains(jobId)
         },
         handler = { _, _ ->
           SshMockCommandResponse("=== ISFEXEC ERROR, RC=8 ===", exitCode = 8)
@@ -260,13 +266,14 @@ class SshGetJobTestSpec : ShouldSpec({
       sshMockResponseDispatcher.injectResolver(
         "ssh:getJob_success_abended_job",
         resolver = {
-          it.contains("### getJob cmd") && it.contains(jobName) && it.contains(jobId)
+          it.contains("### get_job") && it.contains(jobName) && it.contains(jobId)
         },
         handler = { _, _ ->
           SshMockCommandResponse(
-            "=== JOB INFO OUTPUT START ===\n" +
+            "=== JOBS INFO OUTPUT START ===\n" +
             "isfmsg2.1 is: ISF776I Processing started for action 1 of 1.\n" +
             "isfmsg2.2 is: ISF767I Request completed.\n" +
+            "=== JOB 0 OUTPUT START ===\n" +
             "=|||= Job subsystem: JES2 =|||=\n" +
             "=|||= Job name: $jobName =|||=\n" +
             "=|||= Job ID: $jobId =|||=\n" +
@@ -296,7 +303,8 @@ class SshGetJobTestSpec : ShouldSpec({
             " IEF032I STEP/STEP0001/STOP  2025150.0219\n" +
             "=\\= JESYSMSG MESSAGES END =\\=\n" +
             "=\\\\\\= STEP DATA END =\\\\\\=\n" +
-            "=== JOB INFO OUTPUT END ==="
+            "=== JOB 0 OUTPUT END ===\n" +
+            "=== JOBS INFO OUTPUT END ==="
           )
         }
       )
@@ -327,13 +335,14 @@ class SshGetJobTestSpec : ShouldSpec({
       sshMockResponseDispatcher.injectResolver(
         "ssh:getJob_success_cancelled_job",
         resolver = {
-          it.contains("### getJob cmd") && it.contains(jobName) && it.contains(jobId)
+          it.contains("### get_job") && it.contains(jobName) && it.contains(jobId)
         },
         handler = { _, _ ->
           SshMockCommandResponse(
-            "=== JOB INFO OUTPUT START ===\n" +
+            "=== JOBS INFO OUTPUT START ===\n" +
             "isfmsg2.1 is: ISF776I Processing started for action 1 of 1.\n" +
             "isfmsg2.2 is: ISF767I Request completed.\n" +
+            "=== JOB 0 OUTPUT START ===\n" +
             "=|||= Job subsystem: JES2 =|||=\n" +
             "=|||= Job name: $jobName =|||=\n" +
             "=|||= Job ID: $jobId =|||=\n" +
@@ -357,7 +366,8 @@ class SshGetJobTestSpec : ShouldSpec({
             " IEF032I STEP/STEP3   /STOP  2025146.0514 \n" +
             "=\\= JESYSMSG MESSAGES END =\\=\n" +
             "=\\\\\\= STEP DATA END =\\\\\\=\n" +
-            "=== JOB INFO OUTPUT END ==="
+            "=== JOB 0 OUTPUT END ===\n" +
+            "=== JOBS INFO OUTPUT END ==="
           )
         }
       )

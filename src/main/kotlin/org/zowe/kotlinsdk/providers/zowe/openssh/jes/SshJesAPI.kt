@@ -12,9 +12,11 @@ package org.zowe.kotlinsdk.providers.zowe.openssh.jes
 
 import org.zowe.kotlinsdk.core.jes.api.JesAPI
 import org.zowe.kotlinsdk.core.jes.api.messaging.GetJobRequest
+import org.zowe.kotlinsdk.core.jes.api.messaging.ListJobsRequest
 import org.zowe.kotlinsdk.providers.zowe.SshRequestRunner
 import org.zowe.kotlinsdk.providers.zowe.ZoweInternalAPI
 import org.zowe.kotlinsdk.providers.zowe.openssh.jes.messaging.SshGetJobResponse
+import org.zowe.kotlinsdk.providers.zowe.openssh.jes.messaging.SshListJobsResponse
 
 // TODO: doc
 @ZoweInternalAPI
@@ -23,10 +25,7 @@ class SshJesAPI(private val requestRunner: SshRequestRunner) : JesAPI {
     return requestRunner.runRequest(params) as SshGetJobResponse
   }
 
-  // listJobs???
-  // tsocmd "STATUS IZUSVR1" - list jobs (names + status only)
-  // Status = OUTPUT:
-  // IKJ56192I JOB TESTJ1(TSU01234) ON OUTPUT QUEUE
-  // Status = ACTIVE:
-  // IKJ56211I JOB TESTJ2(STC01234) EXECUTING
+  override suspend fun listJobs(params: ListJobsRequest): SshListJobsResponse {
+    return requestRunner.runRequest(params) as SshListJobsResponse
+  }
 }

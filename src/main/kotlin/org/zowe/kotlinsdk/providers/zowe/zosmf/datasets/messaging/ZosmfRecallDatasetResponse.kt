@@ -6,19 +6,13 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging
 
-import io.ktor.http.HttpStatusCode
+import org.zowe.kotlinsdk.core.Status
 import org.zowe.kotlinsdk.core.datasets.api.messaging.RecallDatasetResponse
-import org.zowe.kotlinsdk.providers.zowe.HttpResponse
+import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpResponse
 
 /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-data-set-member-utilities#IZUHPINFO_API_PutDataSetMemberUtilities__title__10">z/OS data set and member utilities: Expected response</a> */
-class ZosmfRecallDatasetResponse(
-  override var status: HttpStatusCode
-) : RecallDatasetResponse, HttpResponse
+class ZosmfRecallDatasetResponse(override var status: Status) : ZosmfHttpResponse(), RecallDatasetResponse

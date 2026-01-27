@@ -13,33 +13,10 @@ package org.zowe.kotlinsdk.providers.zowe.openssh.datasets
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
-import org.zowe.kotlinsdk.core.datasets.api.messaging.CopyDatasetRequest
-import org.zowe.kotlinsdk.core.datasets.api.messaging.CopyDatasetResponse
-import org.zowe.kotlinsdk.core.datasets.api.messaging.CreateDatasetRequest
-import org.zowe.kotlinsdk.core.datasets.api.messaging.DeleteDatasetBackupVersionRequest
-import org.zowe.kotlinsdk.core.datasets.api.messaging.DeleteDatasetBackupVersionResponse
-import org.zowe.kotlinsdk.core.datasets.api.messaging.DeleteDatasetRequest
-import org.zowe.kotlinsdk.core.datasets.api.messaging.GetDatasetInfoRequest
-import org.zowe.kotlinsdk.core.datasets.api.messaging.GetDatasetInfoResponse
-import org.zowe.kotlinsdk.core.datasets.api.messaging.ListDatasetMembersRequest
-import org.zowe.kotlinsdk.core.datasets.api.messaging.ListDatasetsRequest
-import org.zowe.kotlinsdk.core.datasets.api.messaging.MigrateDatasetRequest
-import org.zowe.kotlinsdk.core.datasets.api.messaging.MigrateDatasetResponse
-import org.zowe.kotlinsdk.core.datasets.api.messaging.RecallDatasetRequest
-import org.zowe.kotlinsdk.core.datasets.api.messaging.RecallDatasetResponse
-import org.zowe.kotlinsdk.core.datasets.api.messaging.RenameDatasetRequest
-import org.zowe.kotlinsdk.core.datasets.api.messaging.RetrieveDatasetContentRequest
-import org.zowe.kotlinsdk.core.datasets.api.messaging.WriteToDatasetRequest
+import org.zowe.kotlinsdk.core.datasets.api.messaging.*
 import org.zowe.kotlinsdk.providers.zowe.SshRequestRunner
 import org.zowe.kotlinsdk.providers.zowe.ZoweInternalAPI
-import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshCreateDatasetResponse
-import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshDeleteDatasetResponse
-import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshGetDatasetInfoResponse
-import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshListDatasetMembersResponse
-import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshListDatasetsResponse
-import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshRenameDatasetResponse
-import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshRetrieveDatasetContentResponse
-import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshWriteToDatasetResponse
+import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.*
 
 /**
  * Implementation of Datasets API for SSH to work with datasets and members

@@ -36,8 +36,8 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.jes.definitions.ZosmfJobItem
  */
 class ZosmfGetJobRequest(
   override val connection: HttpConnection,
-  @property:AvailableSince(ZVersion.ZOS_2_1) val jobName: String? = null,
-  @property:AvailableSince(ZVersion.ZOS_2_1) val jobId: String? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val jobName: String = "",
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val jobId: String = "",
   @property:AvailableSince(ZVersion.ZOS_2_1) val jobCorellator: String? = null,
   @property:AvailableSince(ZVersion.ZOS_2_2) val isFetchStepData: Boolean = false,
   @property:AvailableSince(ZVersion.ZOS_2_4) val userCorrelator: String? = null,
@@ -49,7 +49,7 @@ class ZosmfGetJobRequest(
   override val method = HttpMethod.Get
 
   private val jobLocator =
-    if (jobName?.isNotEmpty() == true && jobId?.isNotEmpty() == true) "$jobName/$jobId"
+    if (jobName.isNotEmpty() && jobId.isNotEmpty()) "$jobName/$jobId"
     else jobCorellator
       ?: throw Exception("Either job name and job id or job correlator should be provided")
 

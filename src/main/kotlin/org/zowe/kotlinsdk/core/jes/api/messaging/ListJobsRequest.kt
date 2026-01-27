@@ -8,9 +8,14 @@
  * Copyright Contributors to the Zowe Project.
  */
 
-package org.zowe.kotlinsdk.core.datasets.api.messaging
+package org.zowe.kotlinsdk.core.jes.api.messaging
 
-import org.zowe.kotlinsdk.core.Response
+import org.zowe.kotlinsdk.core.Request
 
-/** Represents a basic copy dataset response */
-interface CopyDatasetResponse : Response
+/** Represents a basic request to get a list of jobs */
+interface ListJobsRequest : Request {
+  val jobPrefix: String
+  val jobId: String
+  val jobOwner: String
+  val maxJobsToReturn: Int
+}

@@ -53,21 +53,25 @@ class SshGetJobResponse(cmdResponse: SshCmdResponse) : SshResponse, GetJobRespon
    */
   private fun produceSshJobItem(cmdResponse: SshCmdResponse): SshJobItem {
     return if (status.type == StatusType.SUCCESS) {
-      val jobId = extractJobValue(cmdResponse.output, "Job ID")
-      val jobName = extractJobValue(cmdResponse.output, "Job name")
-      val jobOwner = extractJobValue(cmdResponse.output, "Job owner")
-      val subsystem = extractJobValue(cmdResponse.output, "Job subsystem")
-      val jobQueue = extractJobValue(cmdResponse.output, "Job queue")
+      val jobOutputParts = cmdResponse.output
+        .split(Regex("""=== JOB \d+ OUTPUT START ==="""))
+        .drop(1)
+        .first()
+      val jobId = extractJobValue(jobOutputParts, "Job ID")
+      val jobName = extractJobValue(jobOutputParts, "Job name")
+      val jobOwner = extractJobValue(jobOutputParts, "Job owner")
+      val subsystem = extractJobValue(jobOutputParts, "Job subsystem")
+      val jobQueue = extractJobValue(jobOutputParts, "Job queue")
       val jobStatus = getJobStatusFromQueue(jobQueue)
-      val jobTypeStr = extractJobValue(cmdResponse.output, "Job type")
+      val jobTypeStr = extractJobValue(jobOutputParts, "Job type")
       val jobType = SshJobItem.SshJobType.valueOf(jobTypeStr)
       val jobClass = if (jobType == SshJobItem.SshJobType.STC || jobType == SshJobItem.SshJobType.TSU) jobTypeStr
-        else extractJobValue(cmdResponse.output, "Job class")
-      val jobRc = extractJobValue(cmdResponse.output, "Job RC").ifEmpty { null }
-      val phaseNum = extractJobValue(cmdResponse.output, "Job phase \\(num\\)").toInt()
-      val phaseName = extractJobValue(cmdResponse.output, "Job phase name")
-      val stepData = SshJobStepData.parseJobStepData(cmdResponse.output)
-      val execData = SshJobExecData(cmdResponse.output)
+        else extractJobValue(jobOutputParts, "Job class")
+      val jobRc = extractJobValue(jobOutputParts, "Job RC").ifEmpty { null }
+      val phaseNum = extractJobValue(jobOutputParts, "Job phase \\(num\\)").toInt()
+      val phaseName = extractJobValue(jobOutputParts, "Job phase name")
+      val stepData = SshJobStepData.parseJobStepData(jobOutputParts)
+      val execData = SshJobExecData(jobOutputParts)
       SshJobItem(
         jobId,
         jobName,

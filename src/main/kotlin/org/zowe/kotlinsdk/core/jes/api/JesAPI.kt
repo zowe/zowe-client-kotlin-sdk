@@ -13,6 +13,8 @@ package org.zowe.kotlinsdk.core.jes.api
 import org.zowe.kotlinsdk.core.API
 import org.zowe.kotlinsdk.core.jes.api.messaging.GetJobRequest
 import org.zowe.kotlinsdk.core.jes.api.messaging.GetJobResponse
+import org.zowe.kotlinsdk.core.jes.api.messaging.ListJobsRequest
+import org.zowe.kotlinsdk.core.jes.api.messaging.ListJobsResponse
 
 /** JES API specification to provide functions to work with JES jobs  */
 interface JesAPI : API {
@@ -22,4 +24,11 @@ interface JesAPI : API {
    * @return [GetJobResponse] instance with the request result
    */
   suspend fun getJob(params: GetJobRequest): GetJobResponse
+
+  /**
+   * List jobs by the provided parameters
+   * @param params [ListJobsRequest] instance to get the respective jobs list
+   * @return [ListJobsResponse] instance with the request result
+   */
+  suspend fun listJobs(params: ListJobsRequest): ListJobsResponse
 }

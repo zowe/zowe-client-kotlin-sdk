@@ -14,9 +14,11 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.jes.api.JesAPI
 import org.zowe.kotlinsdk.core.jes.api.messaging.GetJobRequest
+import org.zowe.kotlinsdk.core.jes.api.messaging.ListJobsRequest
 import org.zowe.kotlinsdk.providers.zowe.HttpRequestRunner
 import org.zowe.kotlinsdk.providers.zowe.ZoweInternalAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.jes.messaging.ZosmfGetJobResponse
+import org.zowe.kotlinsdk.providers.zowe.zosmf.jes.messaging.ZosmfListJobsResponse
 
 /**
  * Implementation of Jes API for z/OSMF REST API to work with JES jobs
@@ -32,6 +34,12 @@ class ZosmfJesAPI(private val requestRunner: HttpRequestRunner) : JesAPI {
   @AvailableSince(ZVersion.ZOS_2_1)
   override suspend fun getJob(params: GetJobRequest): ZosmfGetJobResponse {
     return requestRunner.runRequest(params) as ZosmfGetJobResponse
+  }
+
+  // TODO: doc
+  @AvailableSince(ZVersion.ZOS_2_1)
+  override suspend fun listJobs(params: ListJobsRequest): ZosmfListJobsResponse {
+    return requestRunner.runRequest(params) as ZosmfListJobsResponse
   }
 
 }

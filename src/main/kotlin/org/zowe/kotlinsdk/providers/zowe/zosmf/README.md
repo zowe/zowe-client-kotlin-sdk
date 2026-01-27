@@ -12,10 +12,10 @@
 | createDataset              | ✅           | ✅             |
 | deleteDataset              | ✅           | ✅             |
 | renameDataset              | ✅           | ✅             |
-| copyDataset                | ✅           | ❌             |
-| migrateDataset             | ✅           | ❌             |
-| recallDataset              | ✅           | ❌             |
-| deleteDatasetBackupVersion | ✅           | ❌             |
+| copyDataset                | ✅           | ✅             |
+| migrateDataset             | ✅           | ❌ (no setup)  |
+| recallDataset              | ✅           | ❌ (no setup)  |
+| deleteDatasetBackupVersion | ✅           | ❌ (no setup)  |
 
 ## [FilesAPI](files/ZosmfFilesAPI.kt) functions
 

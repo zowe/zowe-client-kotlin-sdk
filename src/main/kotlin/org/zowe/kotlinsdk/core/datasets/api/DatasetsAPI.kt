@@ -78,10 +78,10 @@ interface DatasetsAPI : API {
 
   /**
    * Copy dataset
-   * @param params [CopyDatasetRequest] instance to get parameters for the request from
-   * @return [CopyDatasetResponse] instance with the request result
+   * @param params [CopyToDatasetRequest] instance to get parameters for the request from
+   * @return [CopyToDatasetResponse] instance with the request result
    */
-  suspend fun copyDataset(params: CopyDatasetRequest): CopyDatasetResponse
+  suspend fun copyToDataset(params: CopyToDatasetRequest): CopyToDatasetResponse
 
   /**
    * Migrates dataset
