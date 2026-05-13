@@ -22,6 +22,10 @@ import org.zowe.kotlinsdk.zowe.client.sdk.zosjobs.input.CommonJobParams
 import org.zowe.kotlinsdk.zowe.client.sdk.zosjobs.input.GetJobParams
 import retrofit2.Response
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("org.zowe.kotlinsdk.core.jes.api.JesAPI")
+)
 /**
  * Class to handle obtaining of z/OS batch job information
  */
@@ -36,6 +40,10 @@ class GetJobs(
 
   var response: Response<*>? = null
 
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("org.zowe.kotlinsdk.core.jes.api.JesAPI.listJobs")
+  )
   /**
    * Get jobs (defaults to the user ID of the session as owner).
    *
@@ -46,6 +54,10 @@ class GetJobs(
     return getJobsCommon(GetJobParams())
   }
 
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("org.zowe.kotlinsdk.core.jes.api.JesAPI.listJobs")
+  )
   /**
    * Get jobs that match a job name by prefix. Defaults to job(s) owned by the user ID in the session.
    *
@@ -60,6 +72,10 @@ class GetJobs(
     return getJobsCommon(GetJobParams(prefix = prefix))
   }
 
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("org.zowe.kotlinsdk.core.jes.api.JesAPI.listJobs")
+  )
   /**
    * Get jobs that are owned by a certain user or pattern of users.
    *
@@ -75,6 +91,10 @@ class GetJobs(
     return getJobsCommon(GetJobParams(owner = owner))
   }
 
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("org.zowe.kotlinsdk.core.jes.api.JesAPI.listJobs")
+  )
   /**
    * Get a list of jobs that match an owner and prefix.
    *
@@ -95,6 +115,10 @@ class GetJobs(
     return getJobsCommon(GetJobParams(prefix = prefix, owner = owner))
   }
 
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("org.zowe.kotlinsdk.core.jes.api.JesAPI.getJob")
+  )
   /**
    * Get a single job object from an input job id.
    *
@@ -114,6 +138,10 @@ class GetJobs(
     return jobs[0]
   }
 
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("org.zowe.kotlinsdk.core.jes.api.JesAPI.listJobs")
+  )
   /**
    * Get jobs filtered by owner and prefix.
    *
@@ -143,6 +171,10 @@ class GetJobs(
     return response?.body() as List<Job>? ?: throw Exception("No body returned")
   }
 
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("org.zowe.kotlinsdk.core.jes.api.JesAPI.getJob")
+  )
   /**
    * Get the status value only for a given job name and id.
    *
@@ -156,6 +188,10 @@ class GetJobs(
     return job.status?.value ?: throw Exception("Job status is missing")
   }
 
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("org.zowe.kotlinsdk.core.jes.api.JesAPI.getJob")
+  )
   /**
    * Get the status value for a given job object.
    *
@@ -168,6 +204,10 @@ class GetJobs(
     return result.status?.value ?: throw Exception("Job status is missing")
   }
 
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("org.zowe.kotlinsdk.core.jes.api.JesAPI.getJob")
+  )
   /**
    * Get the status and other details (e.g. owner, return code) for a job.
    *
@@ -180,6 +220,10 @@ class GetJobs(
     return getStatusCommon(CommonJobParams(jobName, jobId))
   }
 
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("org.zowe.kotlinsdk.core.jes.api.JesAPI.getJob")
+  )
   /**
    * Get the status and other details (e.g. owner, return code) for a job
    * Alternate version of the API that accepts a Job object returned by
@@ -195,6 +239,10 @@ class GetJobs(
     return getStatusCommon(CommonJobParams(job.jobName, job.jobId))
   }
 
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("org.zowe.kotlinsdk.core.jes.api.JesAPI.getJob")
+  )
   /**
    * Get the status and other details (e.g. owner, return code) for a job.
    *
