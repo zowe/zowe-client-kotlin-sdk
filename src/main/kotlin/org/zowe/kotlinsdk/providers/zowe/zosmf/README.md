@@ -39,9 +39,10 @@
 
 ## [JesAPI](jes/ZosmfJesAPI.kt) functions
 
-| Method | Implemented | Test coverage |
-|--------|-------------|---------------|
-| getJob | ✅           | ✅             |
+| Method   | Implemented | Test coverage |
+|----------|-------------|---------------|
+| getJob   | ✅           | ✅             |
+| listJobs | ✅           | ✅             |
 
 ## [InfoAPI](info/ZosmfInfoAPI.kt) functions
 

@@ -10,7 +10,14 @@
 
 package org.zowe.kotlinsdk.providers.zowe.openssh.jes
 
+import org.zowe.kotlinsdk.providers.zowe.openssh.jes.definitions.SshJobExecData
+import org.zowe.kotlinsdk.providers.zowe.openssh.jes.definitions.SshJobItem
+import org.zowe.kotlinsdk.providers.zowe.openssh.jes.definitions.SshJobStepData
 import kotlin.random.Random
+
+private val inputStatusQueues = listOf("CONVERSION", "SETUP")
+private val activeStatusQueues = listOf("EXECUTION", "INPUT")
+private val outputStatusQueues = listOf("PRINT", "OUTPUT", "XMITTER", "RECEIVE", "SPIN", "PURGE")
 
 /**
  * Extract the next job value from the provided string of SSH response.
@@ -208,10 +215,16 @@ fun parseStepDataFromJESYSMSG(): String {
   """.trimIndent()
 }
 
-// TODO: doc update
 /**
  * Produce a Rexx script to fetch the job parameters.
  * The script calls ISFEXEC ST and parses JESMSGLG + JESYSMSG for all the needed parameters
+ * @param jobPrefix the job prefix to search jobs by
+ * @param jobId the exact job ID to fetch the job by
+ * @param jobOwner the job owner to search jobs by
+ * @param isFetchExecData the flag to fetch exec-data for jobs if true
+ * @param isFetchStepData the flag to fetch step-data for jobs if true
+ * @param maxJobsCount the max amount of jobs to be returned by the script
+ * @return the merged Rexx script to search for jobs with
  */
 fun produceIsfexecStRexxScript(
   jobPrefix: String,
@@ -314,7 +327,13 @@ fun produceIsfexecStRexxScript(
     """.trimIndent()
 }
 
-// TODO: doc
+/**
+ * Produce a multi-line .sh script to run using SSH
+ * @param cmdName the command name to save a temporary .sh file, that will indicate the command to run by the script
+ * @param scriptProducer the Rexx script producer to save as content of the .rexx file
+ * @return a list of SSH commands that will create a .rexx file
+ *         in /tmp folder on the USS side with the Rexx script inside
+ */
 fun produceRexxScriptRunFile(cmdName: String, scriptProducer: () -> String): String {
   val scriptPath = "/tmp/zowe_${cmdName}_${System.currentTimeMillis()}_${Random.nextInt(10000)}.rexx"
   return """
@@ -336,4 +355,61 @@ REXX_EOF
     # Run the script
     $scriptPath
   """.trimIndent()
+}
+
+/**
+ * Get the job status by the queue the job is placed in
+ * @param queue the queue (from ISFEXEC ST) name the job is currently in
+ * @return the [SshJobItem.SshJobStatus] or null if the queue is "UNKNOWN"
+ */
+private fun getJobStatusFromQueue(queue: String): SshJobItem.SshJobStatus? {
+  val indepQueue = queue.replace(" (JES3)", "")
+  return when {
+    inputStatusQueues.contains(indepQueue) -> SshJobItem.SshJobStatus.INPUT
+    activeStatusQueues.contains(indepQueue) -> SshJobItem.SshJobStatus.ACTIVE
+    outputStatusQueues.contains(indepQueue) -> SshJobItem.SshJobStatus.OUTPUT
+    else -> null // UNKNOWN and unparsed queue
+  }
+}
+
+/**
+ * Parse a single job block from the SSH output into an [SshJobItem].
+ * Extracts all job fields using the =|||= delimited format.
+ * @param jobOutputParts the raw text of one job block
+ * @return the constructed [SshJobItem]
+ */
+fun parseSingleJob(jobOutputParts: String): SshJobItem {
+  val jobId = extractJobValue(jobOutputParts, "Job ID")
+  val jobName = extractJobValue(jobOutputParts, "Job name")
+  val jobOwner = extractJobValue(jobOutputParts, "Job owner")
+  val subsystem = extractJobValue(jobOutputParts, "Job subsystem")
+  val jobQueue = extractJobValue(jobOutputParts, "Job queue")
+  val jobStatus = getJobStatusFromQueue(jobQueue)
+  val jobTypeStr = extractJobValue(jobOutputParts, "Job type")
+  val jobType = SshJobItem.SshJobType.valueOf(jobTypeStr)
+  val jobClass = if (jobType == SshJobItem.SshJobType.STC || jobType == SshJobItem.SshJobType.TSU) jobTypeStr
+    else extractJobValue(jobOutputParts, "Job class")
+  val jobRc = extractJobValue(jobOutputParts, "Job RC").ifEmpty { null }
+  val phaseNum = extractJobValue(jobOutputParts, "Job phase \\(num\\)").toInt()
+  val phaseName = extractJobValue(jobOutputParts, "Job phase name")
+  val stepData = SshJobStepData.parseJobStepData(jobOutputParts)
+  val execData = SshJobExecData(jobOutputParts)
+  return SshJobItem(
+    jobId,
+    jobName,
+    jobOwner,
+    subsystem,
+    jobStatus,
+    jobType,
+    jobClass,
+    jobRc,
+    phaseNum,
+    phaseName,
+    stepData,
+    execData.execSystem,
+    execData.execMember,
+    execData.execSubmitted,
+    execData.execStarted,
+    execData.execEnded
+  )
 }

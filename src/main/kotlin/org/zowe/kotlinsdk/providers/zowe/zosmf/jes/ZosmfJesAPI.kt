@@ -36,7 +36,10 @@ class ZosmfJesAPI(private val requestRunner: HttpRequestRunner) : JesAPI {
     return requestRunner.runRequest(params) as ZosmfGetJobResponse
   }
 
-  // TODO: doc
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=interface-list-jobs-owner-prefix-job-id">List the jobs for an owner, prefix, or job ID</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=interface-list-jobs-owner-prefix-job-id#ListJobsForOwner__title__6">List the jobs for an owner, prefix, or job ID: Expected Response</a>
+   */
   @AvailableSince(ZVersion.ZOS_2_1)
   override suspend fun listJobs(params: ListJobsRequest): ZosmfListJobsResponse {
     return requestRunner.runRequest(params) as ZosmfListJobsResponse

@@ -14,8 +14,8 @@ import org.zowe.kotlinsdk.core.StatusType
 import org.zowe.kotlinsdk.providers.zowe.SshCmdResponse
 import org.zowe.kotlinsdk.providers.zowe.SshStatus
 
-// TODO: doc
-class SshGetJobStatus(
+/** An SSH response status, produced from a Rexx script call */
+class SshRexxScriptStatus(
   sshCmdResponse: SshCmdResponse = SshCmdResponse(),
 ) : SshStatus(sshCmdResponse) {
   override val type: StatusType

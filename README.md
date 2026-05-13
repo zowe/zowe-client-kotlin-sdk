@@ -117,11 +117,9 @@ To customize the request triggering and response handling:
 ...
 // Import DataAPI and API wrapper
 import org.zowe.kotlinsdk.DataAPI
-<<<
 import org.zowe.kotlinsdk.buildApi
---- or ---
+// or
 import org.zowe.kotlinsdk.buildApiWithBytesConverter
->>>
 ...
 ```
 

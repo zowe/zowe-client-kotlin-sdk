@@ -16,10 +16,24 @@ import org.zowe.kotlinsdk.core.connectivity.SshConnection
 import org.zowe.kotlinsdk.core.jes.api.messaging.ListJobsRequest
 import org.zowe.kotlinsdk.providers.zowe.SshCmdResponse
 import org.zowe.kotlinsdk.providers.zowe.SshRequest
+import org.zowe.kotlinsdk.providers.zowe.openssh.jes.definitions.SshJobExecData
+import org.zowe.kotlinsdk.providers.zowe.openssh.jes.definitions.SshJobStepData
 import org.zowe.kotlinsdk.providers.zowe.openssh.jes.produceIsfexecStRexxScript
 import org.zowe.kotlinsdk.providers.zowe.openssh.jes.produceRexxScriptRunFile
 
-// TODO: doc
+// TODO: search for jobs by wildcarded ID
+/**
+ * NOTE: functionality is tested for JES2 only.
+ *       In theory, it should work with JES3 as well, if not - reach out to us with the examples.
+ *       The exec-data and step-data functionality is designed to work with JES2 only
+ * @property jobPrefix the job name prefix to search for
+ * @property jobId the job IDs to search for
+ * @property jobOwner the jobs owner to search for jobs by
+ * @property maxJobsToReturn the max number of job entries to return
+ * @property isFetchStepData the parameter to fetch and parse [SshJobStepData] if true.
+ *                           NOTE: the step-data is fetched correctly only for the jobs that are in the OUTPUT state
+ * @property isFetchExecData the parameter to fetch and parse [SshJobExecData] if true.
+ */
 class SshListJobsRequest(
   override val connection: SshConnection,
   @property:AvailableSince(ZVersion.ZOS_2_2) override val jobPrefix: String,

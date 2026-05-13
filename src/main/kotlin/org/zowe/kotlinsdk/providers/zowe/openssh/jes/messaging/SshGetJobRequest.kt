@@ -25,7 +25,7 @@ import org.zowe.kotlinsdk.providers.zowe.openssh.jes.produceRexxScriptRunFile
  * Get job SSH request. Gets the job by the job name and job ID.
  * NOTE: functionality is tested for JES2 only.
  *       In theory, it should work with JES3 as well, if not - reach out to us with the examples.
-  *      The exec-data and step-data functionality is designed to work with JES2 only
+ *       The exec-data and step-data functionality is designed to work with JES2 only
  * @property jobName the job name to search for
  * @property jobId the job ID to search for
  * @property isFetchStepData the parameter to fetch and parse [SshJobStepData] if true.

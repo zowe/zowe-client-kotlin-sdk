@@ -113,7 +113,7 @@ class SshListJobsTestSpec : ShouldSpec({
           listJobsResponse.jobs[0].type shouldBe SshJobItem.SshJobType.TSU
           listJobsResponse.jobs[1].name shouldBe jobName
           listJobsResponse.jobs[1].id shouldBe "TESTJI2"
-          listJobsResponse.jobs[1].owner shouldBe "TESTJI1"
+          listJobsResponse.jobs[1].owner shouldBe "TESTJO1"
           listJobsResponse.jobs[1].returnCode shouldBe "ABEND S522"
           listJobsResponse.jobs[1].type shouldBe SshJobItem.SshJobType.TSU
           listJobsResponse.jobs[2].name shouldBe jobName
