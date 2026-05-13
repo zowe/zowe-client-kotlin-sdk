@@ -15,7 +15,7 @@ import org.zowe.kotlinsdk.core.datasets.data.FromEntity
 
 /**
  * Represents a basic copy to a data set or member request
- * @property fromEntity the entity to copy to a data set or member
+ * @property fromEntity the entity to copy to a data set or member from
  * @property toDsName name of the new data set or the target data set name if member is being copied
  * @property toMemberName the new name of the data set member to copy to (if member is being copied).
  *                        Null if the data set itself to be copied
