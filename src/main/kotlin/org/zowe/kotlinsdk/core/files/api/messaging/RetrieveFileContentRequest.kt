@@ -15,12 +15,15 @@
 
 package org.zowe.kotlinsdk.core.files.api.messaging
 
-import org.zowe.kotlinsdk.core.Request
+import org.zowe.kotlinsdk.core.ChanneledRequest
+import org.zowe.kotlinsdk.core.DataType
 
 /**
  * Represents basic request to retrieve file contents
  * @property filePath the file path to retrieve a content by
+ * @property dataType the data type to fetch (text or binary)
  */
-interface RetrieveFileContentRequest : Request {
+interface RetrieveFileContentRequest : ChanneledRequest {
   val filePath: String
+  val dataType: DataType
 }

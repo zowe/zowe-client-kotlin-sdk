@@ -15,7 +15,7 @@
 
 package org.zowe.kotlinsdk.core.files.api.messaging
 
-import org.zowe.kotlinsdk.core.Response
+import org.zowe.kotlinsdk.core.ChanneledResponse
 
 /** Represents basic response for [RetrieveFileContentRequest] */
-interface RetrieveFileContentResponse : Response
+interface RetrieveFileContentResponse : ChanneledResponse

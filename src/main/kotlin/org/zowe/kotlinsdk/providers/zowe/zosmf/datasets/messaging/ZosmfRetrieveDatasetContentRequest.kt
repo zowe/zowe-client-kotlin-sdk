@@ -19,6 +19,7 @@ import io.ktor.http.contentLength
 import io.ktor.http.isSuccess
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
+import org.zowe.kotlinsdk.core.ChanneledRequest
 import org.zowe.kotlinsdk.core.DataType
 import org.zowe.kotlinsdk.core.datasets.api.messaging.RetrieveDatasetContentRequest
 import org.zowe.kotlinsdk.core.connectivity.HttpConnection
@@ -45,7 +46,7 @@ class ZosmfRetrieveDatasetContentRequest(
   @property:AvailableSince(ZVersion.ZOS_2_1) val research: String? = null,
   @property:AvailableSince(ZVersion.ZOS_2_1) val insensitive: Boolean? = null,
   @property:AvailableSince(ZVersion.ZOS_2_1) val maxReturnSize: Int? = null,
-  @property:AvailableSince(ZVersion.ZOS_2_1) override val channelSize: Int = RetrieveDatasetContentRequest.DEFAULT_CHANNEL_SIZE,
+  @property:AvailableSince(ZVersion.ZOS_2_1) override val channelSize: Int = ChanneledRequest.DEFAULT_CHANNEL_SIZE,
   override val headers: ZosmfRetrieveDatasetContentRequestHeaders = ZosmfRetrieveDatasetContentRequestHeaders()
 ) : ZosmfHttpRequest, RetrieveDatasetContentRequest {
 
@@ -97,7 +98,7 @@ class ZosmfRetrieveDatasetContentRequest(
           } else {
             val httpStatus = HttpStatusCode(
               500,
-              "'Content-Length' header is not returned for binary read request"
+              "'Content-Length' header is not returned for a binary read request"
             )
             ZosmfRetrieveDatasetContentResponse(ZosmfStatus(httpStatus), dataType)
           }
