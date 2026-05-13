@@ -10,23 +10,16 @@
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.jes.messaging
 
-import org.zowe.kotlinsdk.core.Response
 import org.zowe.kotlinsdk.core.Status
 import org.zowe.kotlinsdk.core.jes.api.messaging.ListJobsResponse
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpResponse
 import org.zowe.kotlinsdk.providers.zowe.zosmf.jes.definitions.ZosmfJobItem
 
-// TODO: implement
-// TODO: doc
+/**
+ * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-jobs-owner-prefix-job-id">List jobs by owner, prefix, or job ID</a>
+ * @property jobs the actual response of the listJobs request, wrapped in this class for consistency
+ */
 class ZosmfListJobsResponse(
   override val status: Status,
-  override val jobs: List<ZosmfJobItem>,
-) : ZosmfHttpResponse(), ListJobsResponse {
-  override suspend fun produceResponseObject(clientResponse: Any): Response {
-    TODO("Not yet implemented")
-  }
-
-  override suspend fun execRequest(payload: Any): Response {
-    TODO("Not yet implemented")
-  }
-}
+  override val jobs: List<ZosmfJobItem>
+) : ZosmfHttpResponse(), ListJobsResponse

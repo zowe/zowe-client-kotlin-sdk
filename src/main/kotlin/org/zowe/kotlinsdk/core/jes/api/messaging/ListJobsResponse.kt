@@ -10,13 +10,13 @@
 
 package org.zowe.kotlinsdk.core.jes.api.messaging
 
-import org.zowe.kotlinsdk.core.Request
+import org.zowe.kotlinsdk.core.Response
 import org.zowe.kotlinsdk.core.jes.data.JobItem
 
 /**
  * Represents a basic response of the list jobs request
- * @param jobs the list of [JobItem] returned by a client
+ * @property jobs the list of [JobItem] returned by a client
  */
-interface ListJobsResponse : Request {
+interface ListJobsResponse : Response {
   val jobs: List<JobItem>
 }

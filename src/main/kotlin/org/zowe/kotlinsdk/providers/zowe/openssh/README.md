@@ -28,4 +28,4 @@
 | Method   | Implemented | Test coverage |
 |----------|-------------|---------------|
 | getJob   | ✅           | ✅             |
-| listJobs | ❌           | ❌             |
+| listJobs | ✅           | ✅             |
