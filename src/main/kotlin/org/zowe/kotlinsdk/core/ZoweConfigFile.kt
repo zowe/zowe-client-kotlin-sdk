@@ -10,15 +10,12 @@
 
 package org.zowe.kotlinsdk.core
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.json.*
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileNotFoundException
 import java.nio.file.Paths
 import kotlin.io.path.pathString
-import com.fasterxml.jackson.module.kotlin.readValue
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 const val GLOBAL_CONFIG_NAME = "zowe"
 const val BASE_PROFILE = "base"
@@ -47,11 +44,27 @@ data class ZoweProfile(
 
 /** zowe.config.json in JSONC format, parsed to a Kotlin class */
 data class ZoweConfigJsonc(
-  @field:JsonProperty("\$schema")
   val schema: String? = null,
   var profiles: Map<String, Any>? = null,
   val defaults: Map<String, String>? = null
-)
+) {
+  fun toJsonElement(): JsonElement = buildJsonObject {
+    schema?.let { put($$"$schema", it) }
+    profiles?.let { put("profiles", it.toJsonElement()) }
+    defaults?.let { put("defaults", JsonObject(it.mapValues { (_, v) -> JsonPrimitive(v) })) }
+  }
+
+  companion object {
+    fun fromJsonText(text: String): ZoweConfigJsonc {
+      val obj = jsoncJson.parseToJsonElement(text).jsonObject
+      return ZoweConfigJsonc(
+        schema = obj[$$"$schema"]?.jsonPrimitive?.contentOrNull,
+        profiles = obj["profiles"]?.toAny() as? Map<String, Any>,
+        defaults = obj["defaults"]?.jsonObject?.mapValues { (_, v) -> v.jsonPrimitive.content }
+      )
+    }
+  }
+}
 
 /**
  * Class used to represent a single config file.
@@ -59,7 +72,7 @@ data class ZoweConfigJsonc(
  *    1. Type ("User Config" or "Team Config")
  *       -------
  *       User Configs override Team Configs.
- *       User Configs are used to have personalised config details
+ *       User Configs are used to have personalized config details
  *       that the user don't want to have in the Team Config.
  *    2. Directory in which the file is located.
  *    3. Name (excluding .config.json or .config.user.json)
@@ -387,8 +400,7 @@ data class ZoweConfigFile(
         return
       }
 
-    val configJsonc: ZoweConfigJsonc = File(nonNullFilePath).inputStream()
-      .use { input -> jsoncMapper.readValue(input, ZoweConfigJsonc::class.java) }
+    val configJsonc: ZoweConfigJsonc = ZoweConfigJsonc.fromJsonText(File(nonNullFilePath).readText(Charsets.UTF_8))
 
     profiles = configJsonc.profiles ?: emptyMap()
     schemaPath = configJsonc.schema
@@ -422,7 +434,7 @@ data class ZoweConfigFile(
       return listOf()
     }
 
-    val schemaJson: Map<String, Any> = jsoncMapper.readValue(schemaJsonAsText)
+    val schemaJson = jsoncJson.parseToJsonElement(schemaJsonAsText).toAny() as? Map<String, Any> ?: return listOf()
     var profileProps: Map<String, Any> = mapOf()
 
     try {
@@ -539,7 +551,7 @@ data class ZoweConfigFile(
     val propertyName = jsonPath.split(".").last()
     val profileName = getProfileNameFromPath(jsonPath)
 
-    // Сheck if the property is already secure
+    // Check if the property is already secure
     val isPropertySecure = isSecure(profileName, propertyName)
     val isSecure = shouldBeSecure ?: isPropertySecure
 
@@ -567,8 +579,8 @@ data class ZoweConfigFile(
 
   /**
    * Set a profile in the config file
-   * @param profilePath еhe path of the profile to be set. eg: profiles.zosmf
-   * @param profileData еhe data to be set for the profile
+   * @param profilePath the path of the profile to be set. eg: profiles.zosmf
+   * @param profileData the data to be set for the profile
    */
   @Suppress("UNCHECKED_CAST")
   fun setProfile(profilePath: String, profileData: Map<String, Any>) {
@@ -613,17 +625,16 @@ data class ZoweConfigFile(
       return
     }
 
-    val newProfilesJsonAsString = Json.encodeToString(nonNullProfiles)
-    val newProfiles = Json.decodeFromString<MutableMap<String, Any>>(newProfilesJsonAsString)
+    val newProfiles = nonNullProfiles.toJsonElement().toAny() as MutableMap<String, Any>
     val secureProps = extractSecureProperties(newProfiles)
 
     ZoweCredentialManager.secureProps[nonNullFilePath] = secureProps
 
     jsonc?.profiles = newProfiles
 
-    File(nonNullFilePath).bufferedWriter()
-      .use { writer -> jsoncMapper.writeValue(writer, jsonc)
-     }
+    val nonNullJsonc = jsonc ?: throw Exception("Unable to find config JSON file")
+    val jsonText = jsoncJson.encodeToString(JsonElement.serializer(), nonNullJsonc.toJsonElement())
+    File(nonNullFilePath).writeText(jsonText)
 
     if (updateSecureProps) {
       ZoweCredentialManager.saveSecureProps()

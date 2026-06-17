@@ -13,6 +13,7 @@ package org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging
 import net.schmizz.sshj.SSHClient
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
+import org.zowe.kotlinsdk.core.ChanneledRequest
 import org.zowe.kotlinsdk.core.DataType
 import org.zowe.kotlinsdk.core.datasets.api.messaging.RetrieveDatasetContentRequest
 import org.zowe.kotlinsdk.providers.zowe.SshChannel
@@ -34,7 +35,7 @@ class SshRetrieveDatasetContentRequest(
   override val connection: SshConnection,
   @property:AvailableSince(ZVersion.ZOS_2_2) override val dsName: String,
   @property:AvailableSince(ZVersion.ZOS_2_2) override val dataType: DataType,
-  @property:AvailableSince(ZVersion.ZOS_2_2) override val channelSize: Int = RetrieveDatasetContentRequest.DEFAULT_CHANNEL_SIZE,
+  @property:AvailableSince(ZVersion.ZOS_2_2) override val channelSize: Int = ChanneledRequest.DEFAULT_CHANNEL_SIZE,
   @property:AvailableSince(ZVersion.ZOS_2_2) val conversionTableOrYes: String? = null,
 ) : SshRequest, RetrieveDatasetContentRequest {
   private val dataTypeArg = when (dataType) {

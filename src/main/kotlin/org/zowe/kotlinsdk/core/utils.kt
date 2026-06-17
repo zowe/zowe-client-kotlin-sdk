@@ -10,19 +10,42 @@
 
 package org.zowe.kotlinsdk.core
 
-import com.fasterxml.jackson.core.json.JsonReadFeature
-import com.fasterxml.jackson.databind.json.JsonMapper
-import com.networknt.schema.JsonSchemaFactory
-import com.networknt.schema.SpecVersion
-import com.networknt.schema.ValidationMessage
+import io.github.optimumcode.json.schema.JsonSchema
+import io.github.optimumcode.json.schema.SchemaType
+import kotlinx.serialization.json.*
 import java.io.File
 import java.net.URI
 
-val jsoncMapper: JsonMapper by lazy {
-  JsonMapper.builder()
-    .enable(JsonReadFeature.ALLOW_JAVA_COMMENTS)
-    .enable(JsonReadFeature.ALLOW_YAML_COMMENTS)
-    .build()
+val jsoncJson: Json by lazy {
+  Json {
+    allowComments = true
+    allowTrailingComma = true
+    ignoreUnknownKeys = true
+    isLenient = true
+  }
+}
+
+fun JsonElement.toAny(): Any? = when (this) {
+  is JsonNull -> null
+  is JsonObject -> entries.associate { (k, v) -> k to v.toAny() }.toMutableMap()
+  is JsonArray -> map { it.toAny() }.toMutableList()
+  is JsonPrimitive -> when {
+    isString -> content
+    booleanOrNull != null -> boolean
+    longOrNull != null -> long
+    doubleOrNull != null -> double
+    else -> content
+  }
+}
+
+fun Any?.toJsonElement(): JsonElement = when (this) {
+  null -> JsonNull
+  is Map<*, *> -> JsonObject(entries.associate { (k, v) -> k.toString() to v.toJsonElement() })
+  is List<*> -> JsonArray(map { it.toJsonElement() })
+  is String -> JsonPrimitive(this)
+  is Boolean -> JsonPrimitive(this)
+  is Number -> JsonPrimitive(this)
+  else -> JsonPrimitive(toString())
 }
 
 /**
@@ -97,24 +120,23 @@ fun retrieveSchemaJsonAsText(pathSchemaJson: String, location: String): String {
  * Based on https://github.com/zowe/zowe-client-python-sdk/blob/main/src/core/zowe/core_for_zowe_sdk/validators.py
  */
 fun validateConfigJson(pathConfigJson: Any, pathSchemaJson: String, cwd: String) {
-  // Load schema JSON as text
   val schemaJsonAsText = retrieveSchemaJsonAsText(pathSchemaJson, cwd)
 
-  // Load config JSON
   val configJsonText = when (pathConfigJson) {
     is String -> File(pathConfigJson).readText(Charsets.UTF_8)
-    is ZoweConfigJsonc -> jsoncMapper.writeValueAsString(pathConfigJson)
+    is ZoweConfigJsonc -> jsoncJson.encodeToString(JsonElement.serializer(), pathConfigJson.toJsonElement())
     else -> throw IllegalArgumentException("pathConfigJson must be String or ZoweConfigJsonc")
   }
 
-  // Validate using json-schema-validator
-  val schemaFactory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7)
-  val schemaJson = schemaFactory.getSchema(schemaJsonAsText)
-  val jsonNode = jsoncMapper.readTree(configJsonText)
-  val errors: Set<ValidationMessage> = schemaJson.validate(jsonNode)
+  val schema = JsonSchema.fromDefinition(schemaJsonAsText, defaultType = SchemaType.DRAFT_7)
+  val configElement = jsoncJson.parseToJsonElement(configJsonText)
+  val errors = mutableListOf<String>()
+  schema.validate(configElement) { error ->
+    errors.add(error.message)
+  }
 
   if (errors.isNotEmpty()) {
-    val errorMessages = errors.joinToString("\n") { it.message }
+    val errorMessages = errors.joinToString("\n")
     throw JsonValidationException("Schema validation failed:\n$errorMessages")
   }
 }

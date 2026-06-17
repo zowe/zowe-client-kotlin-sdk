@@ -20,9 +20,9 @@ import org.zowe.kotlinsdk.core.StatusType
 import org.zowe.kotlinsdk.core.WrapperType
 import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
 import org.zowe.kotlinsdk.core.datasets.api.messaging.WriteToDatasetRequest
-import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.mockHttpConnection
-import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.zosmfMockResponseDispatcher
-import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.zoweAPIProvider
+import io.kotest.provided.ProjectConfig.mockHttpConnection
+import io.kotest.provided.ProjectConfig.zosmfMockResponseDispatcher
+import io.kotest.provided.ProjectConfig.zoweAPIProvider
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging.ZosmfWriteToDatasetRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging.ZosmfWriteToDatasetResponse
 

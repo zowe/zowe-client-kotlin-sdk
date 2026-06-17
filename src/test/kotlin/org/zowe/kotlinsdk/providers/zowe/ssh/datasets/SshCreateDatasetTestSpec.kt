@@ -17,10 +17,10 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import org.zowe.kotlinsdk.core.StatusType
 import org.zowe.kotlinsdk.core.WrapperType
-import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.sshMockResponseDispatcher
+import io.kotest.provided.ProjectConfig.sshMockResponseDispatcher
 import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
-import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.mockSshConnection
-import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.zoweAPIProvider
+import io.kotest.provided.ProjectConfig.mockSshConnection
+import io.kotest.provided.ProjectConfig.zoweAPIProvider
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.definitions.SshDatasetItem
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshCreateDatasetRequest
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.SshCreateDatasetResponse

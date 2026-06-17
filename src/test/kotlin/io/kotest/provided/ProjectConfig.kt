@@ -8,7 +8,7 @@
  * Copyright Contributors to the Zowe Project.
  */
 
-package org.zowe.kotlinsdk.providers.zowe
+package io.kotest.provided
 
 import io.kotest.core.config.AbstractProjectConfig
 import io.ktor.client.HttpClient
@@ -33,6 +33,9 @@ import org.apache.sshd.server.command.CommandFactory
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider
 import org.zowe.kotlinsdk.core.connectivity.SshConnection
 import org.zowe.kotlinsdk.core.connectivity.ZoweConnectionManager
+import org.zowe.kotlinsdk.providers.zowe.HttpRequestRunner
+import org.zowe.kotlinsdk.providers.zowe.SshRequestRunner
+import org.zowe.kotlinsdk.providers.zowe.ZoweAPIProvider
 import org.zowe.kotlinsdk.providers.zowe.ssh.SshMockResponseDispatcher
 import org.zowe.kotlinsdk.providers.zowe.zosmf.HttpMockResponseDispatcher
 import java.io.InputStream
@@ -40,7 +43,7 @@ import java.io.OutputStream
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
-object KotestZoweProjectConfig : AbstractProjectConfig() {
+object ProjectConfig : AbstractProjectConfig() {
   const val MOCK_SERVER_HOST = "127.0.0.1"
   const val MOCK_SSH_SERVER_PORT = 49022
   const val MOCK_ZOSMF_SERVER_PORT = 49443
@@ -152,7 +155,7 @@ object KotestZoweProjectConfig : AbstractProjectConfig() {
       .build()
 
     zosmfClient = HttpClient(CIO) {
-      install(ContentNegotiation.Plugin) {
+      install(ContentNegotiation) {
         json(
           Json {
             ignoreUnknownKeys = true

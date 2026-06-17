@@ -20,10 +20,10 @@ import org.zowe.kotlinsdk.core.DataType
 import org.zowe.kotlinsdk.core.StatusType
 import org.zowe.kotlinsdk.core.WrapperType
 import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
-import org.zowe.kotlinsdk.core.datasets.api.messaging.RetrieveDatasetContentRequest
-import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.mockHttpConnection
-import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.zosmfMockResponseDispatcher
-import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.zoweAPIProvider
+import org.zowe.kotlinsdk.core.ChanneledRequest
+import io.kotest.provided.ProjectConfig.mockHttpConnection
+import io.kotest.provided.ProjectConfig.zosmfMockResponseDispatcher
+import io.kotest.provided.ProjectConfig.zoweAPIProvider
 import org.zowe.kotlinsdk.providers.zowe.zosmf.XIBMDataType
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging.ZosmfRetrieveDatasetContentRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging.ZosmfRetrieveDatasetContentRequestHeaders
@@ -184,7 +184,7 @@ class ZosmfRetrieveDatasetContentTestSpec : ShouldSpec({
           MockResponse()
             .setChunkedBody(
               bodyToReturn,
-              RetrieveDatasetContentRequest.DEFAULT_CHANNEL_SIZE
+              ChanneledRequest.DEFAULT_CHANNEL_SIZE
             )
             .addHeader("Content-Type", "application/octet-stream")
             .addHeader("Content-Length", bodyToReturn.length)
@@ -201,7 +201,7 @@ class ZosmfRetrieveDatasetContentTestSpec : ShouldSpec({
         as? ZosmfRetrieveDatasetContentResponse
         ?: fail("Should be instance of ${ZosmfRetrieveDatasetContentResponse::class.java.name}")
 
-      val readChunks = retrieveDatasetContentResponse.readAsIs() as List<ByteArray>
+      val readChunks = retrieveDatasetContentResponse.readAsIs()
       assertSoftly {
         retrieveDatasetContentResponse.status.type shouldBe StatusType.SUCCESS
         retrieveDatasetContentResponse.fetchedDataType shouldBe DataType.BINARY

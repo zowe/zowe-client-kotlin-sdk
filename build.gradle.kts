@@ -14,8 +14,7 @@
  */
 
 import net.researchgate.release.GitAdapter
-import org.jetbrains.dokka.gradle.DokkaTask
-import org.jetbrains.kotlin.config.LanguageVersion
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.time.LocalDate
 import java.time.ZoneId
@@ -40,8 +39,6 @@ plugins {
   alias(libs.plugins.kover)
 }
 
-apply(plugin = "java")
-apply(plugin = "kotlin")
 apply(from = "gradle/sonar.gradle")
 
 group = properties("group").get()
@@ -77,22 +74,20 @@ base {
 }
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_17
-  targetCompatibility = JavaVersion.VERSION_17
+  sourceCompatibility = JavaVersion.VERSION_21
+  targetCompatibility = JavaVersion.VERSION_21
   withSourcesJar()
   withJavadocJar()
 }
 
 dependencies {
   api(libs.slf4j.api)
+  api(libs.json.schema.validator)
   implementation(libs.retrofit2)
   implementation(libs.retrofit2.converter.gson)
   implementation(libs.retrofit2.converter.scalars)
   // TODO: remove and use kotlinx.serialization.json since K2
   implementation(libs.gson)
-  // TODO: remove and use kotlinx.serialization.json since K2
-  implementation(libs.jackson.core.databind)
-  implementation(libs.jackson.module.kotlin)
   // TODO: delete keytar lib after refactoring of interaction with Zowe Config
   implementation(libs.java.keytar)
   implementation(libs.snakeyaml)
@@ -101,8 +96,8 @@ dependencies {
   implementation(libs.ktor.client.content.negotiation)
   implementation(libs.ktor.serialization.kotlinx.json)
   implementation(libs.kotlinx.serialization.json)
+  implementation(libs.kotlin.reflect)
   implementation(libs.sshj)
-  implementation(libs.json.schema.validator)
   implementation(libs.dotenv)
   // New way of testing
   testImplementation(libs.kotest.assertions.core)
@@ -157,15 +152,25 @@ kover {
   }
 }
 
+dokka {
+  pluginsConfiguration {
+    html {
+      footerMessage.set("(c) 2026 Zowe Community")
+      templatesDir.set(file("dokka/templates"))
+      customAssets.from(file("dokka/assets/zowe-icon.svg"), file("dokka/assets/zowe-icon.png"))
+      customStyleSheets.from(file("dokka/assets/logo-styles.css"))
+    }
+  }
+}
+
 tasks {
   wrapper {
     gradleVersion = properties("gradleVersion").get()
   }
 
   withType<KotlinCompile> {
-    kotlinOptions {
-      jvmTarget = JavaVersion.VERSION_17.toString()
-      languageVersion = LanguageVersion.LATEST_STABLE.versionString
+    compilerOptions {
+      jvmTarget.set(JvmTarget.JVM_21)
     }
   }
 
@@ -256,6 +261,32 @@ tasks {
     dependsOn("buildNativeSecrets")
   }
 
+  register("writeTestResults") {
+    mustRunAfter("test")
+    doLast {
+      val testResultsDir = file("build/test-results/test")
+      if (testResultsDir.exists()) {
+        val dbf = javax.xml.parsers.DocumentBuilderFactory.newInstance()
+        val db = dbf.newDocumentBuilder()
+        var tests = 0; var failures = 0; var errors = 0; var skipped = 0
+        testResultsDir.listFiles()?.filter { it.extension == "xml" }?.forEach {
+          val root = db.parse(it).documentElement
+          tests += root.getAttribute("tests").toIntOrNull() ?: 0
+          failures += root.getAttribute("failures").toIntOrNull() ?: 0
+          errors += root.getAttribute("errors").toIntOrNull() ?: 0
+          skipped += root.getAttribute("skipped").toIntOrNull() ?: 0
+        }
+        val totalFailed = failures + errors
+        val passed = tests - totalFailed - skipped
+        val resultType = if (totalFailed > 0) "FAILURE" else "SUCCESS"
+        val output =
+          "Results: $resultType ($tests tests, $passed passed, " +
+            "$totalFailed failed, $skipped skipped)"
+        file("build/reports/tests/$resultType.txt").writeText(output)
+      }
+    }
+  }
+
   test {
     useJUnitPlatform()
 
@@ -267,18 +298,7 @@ tasks {
     finalizedBy("jacocoTestReport")
     finalizedBy("koverHtmlReport")
     finalizedBy("koverXmlReport")
-
-    afterSuite(
-      KotlinClosure2<TestDescriptor, TestResult, Unit>({ desc, result ->
-        if (desc.parent == null) { // will match the outermost suite
-          val output =
-            "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} passed, " +
-              "${result.failedTestCount} failed, ${result.skippedTestCount} skipped)"
-          val fileName = "./build/reports/tests/${result.resultType}.txt"
-          File(fileName).writeText(output)
-        }
-      })
-    )
+    finalizedBy("writeTestResults")
   }
 
   jacocoTestReport {
@@ -304,21 +324,6 @@ tasks {
     testLogging {
       events("passed", "skipped", "failed")
     }
-  }
-
-  withType<DokkaTask> {
-    val dokkaBaseConfiguration = """
-        {
-          "footerMessage": "(c) 2024 Zowe Community",
-          "templatesDir": "${file("dokka/templates").absolutePath.replace('\\', '/')}",
-          "customAssets": ["${file("dokka/assets/zowe-icon.svg").absolutePath.replace('\\', '/')}", "${file("dokka/assets/zowe-icon.png").absolutePath.replace('\\', '/')}"],
-          "customStyleSheets": ["${file("dokka/assets/logo-styles.css").absolutePath.replace('\\', '/')}"]
-        }
-    """.trimIndent()
-    pluginsMapConfiguration.set(
-      // fully qualified plugin name to json configuration
-      mapOf("org.jetbrains.dokka.base.DokkaBase" to dokkaBaseConfiguration)
-    )
   }
 
   register("publishAllVersions") {

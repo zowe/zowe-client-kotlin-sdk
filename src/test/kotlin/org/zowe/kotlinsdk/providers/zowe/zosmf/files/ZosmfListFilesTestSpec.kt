@@ -22,14 +22,15 @@ import org.zowe.kotlinsdk.core.WrapperType
 import org.zowe.kotlinsdk.core.files.api.FilesAPI
 import org.zowe.kotlinsdk.core.files.api.messaging.ListFilesRequest
 import org.zowe.kotlinsdk.core.files.data.FileItem
-import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig
-import org.zowe.kotlinsdk.providers.zowe.KotestZoweProjectConfig.zosmfMockResponseDispatcher
+import io.kotest.provided.ProjectConfig
+import io.kotest.provided.ProjectConfig.zosmfMockResponseDispatcher
+import io.kotest.provided.ProjectConfig.zoweAPIProvider
 import org.zowe.kotlinsdk.providers.zowe.zosmf.files.definitions.ZosmfSymlinkMode
 import org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging.ZosmfListFilesRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging.ZosmfListFilesResponse
 
 class ZosmfListFilesTestSpec : ShouldSpec({
-  val filesApi = KotestZoweProjectConfig.zoweAPIProvider.getApi(WrapperType.ZOSMF, FilesAPI::class.java)
+  val filesApi = zoweAPIProvider.getApi(WrapperType.ZOSMF, FilesAPI::class.java)
 
   afterSpec {
     zosmfMockResponseDispatcher.clearResolvers()
@@ -39,7 +40,7 @@ class ZosmfListFilesTestSpec : ShouldSpec({
     should("listFiles return the correct list of files") {
       val filesFilter = "/test"
 
-      KotestZoweProjectConfig.zosmfMockResponseDispatcher.injectResolver(
+      zosmfMockResponseDispatcher.injectResolver(
         "mock:listFiles_success",
         { it.requestLine.contains("/zosmf/restfiles/fs?path=${filesFilter.encodeURLParameter()}") },
         {
@@ -98,7 +99,7 @@ class ZosmfListFilesTestSpec : ShouldSpec({
       )
 
       val listFilesRequest: ListFilesRequest = ZosmfListFilesRequest(
-        KotestZoweProjectConfig.mockHttpConnection,
+        ProjectConfig.mockHttpConnection,
         filter = filesFilter,
         depth = 0,
         followSymlinks = ZosmfSymlinkMode.REPORT
@@ -118,7 +119,7 @@ class ZosmfListFilesTestSpec : ShouldSpec({
     should("listFiles return a 404 HTTP error when the path is not found") {
       val filesFilter = "/fail_test"
 
-      KotestZoweProjectConfig.zosmfMockResponseDispatcher.injectResolver(
+      zosmfMockResponseDispatcher.injectResolver(
         "mock:listFiles_error_not_found",
         { it.requestLine.contains("/zosmf/restfiles/fs?path=${filesFilter.encodeURLParameter()}") },
         {
@@ -138,7 +139,7 @@ class ZosmfListFilesTestSpec : ShouldSpec({
       )
 
       val listFilesRequest = ZosmfListFilesRequest(
-        KotestZoweProjectConfig.mockHttpConnection,
+        ProjectConfig.mockHttpConnection,
         filter = filesFilter,
         depth = 0,
         followSymlinks = ZosmfSymlinkMode.REPORT

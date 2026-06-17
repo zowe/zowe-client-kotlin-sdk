@@ -82,7 +82,7 @@ class ZoweConnectionManager(val zoweProfileManager: ZoweProfileManager) {
     val profile = zoweProfileManager.load(profileName, shouldOverrideWithEnv = shouldOverrideWithEnv)
     return produceHttpConnection(
       profile["host"] as? String?,
-      profile["port"] as? Int?,
+      (profile["port"] as? Long?)?.toInt(),
       profile["rejectUnauthorized"] as? Boolean?,
       profile["user"] as? String?,
       profile["password"] as? String?,

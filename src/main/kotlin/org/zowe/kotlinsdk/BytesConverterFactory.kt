@@ -14,7 +14,9 @@
 
 package org.zowe.kotlinsdk
 
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -42,9 +44,7 @@ class BytesConverterFactory : Converter.Factory() {
     retrofit: Retrofit
   ): Converter<*, RequestBody>? {
     if (getRawType(type) !== ByteArray::class.java) return null
-
-//    return Converter<ByteArray, RequestBody> { RequestBody.create(MediaType.get("application/octet-stream"), it) }
-    throw Exception()
+    return Converter<ByteArray, RequestBody> { it.toRequestBody("application/octet-stream".toMediaType()) }
   }
 
   companion object Factory {

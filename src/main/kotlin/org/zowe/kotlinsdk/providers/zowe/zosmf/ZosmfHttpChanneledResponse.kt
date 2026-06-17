@@ -11,6 +11,7 @@
 package org.zowe.kotlinsdk.providers.zowe.zosmf
 
 import io.ktor.utils.io.ByteReadChannel
+import io.ktor.utils.io.readAvailable
 import kotlinx.coroutines.runBlocking
 import org.zowe.kotlinsdk.core.ChanneledRequest
 import org.zowe.kotlinsdk.core.ChanneledResponse
