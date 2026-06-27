@@ -8,13 +8,27 @@
  * Copyright Contributors to the Zowe Project.
  */
 
-package org.zowe.kotlinsdk.core
+package org.zowe.kotlinsdk.providers.zowe.config
 
 import io.github.optimumcode.json.schema.JsonSchema
 import io.github.optimumcode.json.schema.SchemaType
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.boolean
+import kotlinx.serialization.json.booleanOrNull
+import kotlinx.serialization.json.double
+import kotlinx.serialization.json.doubleOrNull
+import kotlinx.serialization.json.long
+import kotlinx.serialization.json.longOrNull
 import java.io.File
 import java.net.URI
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.map
 
 val jsoncJson: Json by lazy {
   Json {
@@ -132,7 +146,7 @@ fun validateConfigJson(pathConfigJson: Any, pathSchemaJson: String, cwd: String)
   val configElement = jsoncJson.parseToJsonElement(configJsonText)
   val errors = mutableListOf<String>()
   schema.validate(configElement) { error ->
-    errors.add(error.message)
+    errors.add("${error.objectPath} | ${error.schemaPath} | ${error.message}")
   }
 
   if (errors.isNotEmpty()) {

@@ -31,7 +31,7 @@ import kotlin.text.contains
 import kotlin.text.trim
 
 class SshRetrieveDatasetContentTestSpec : ShouldSpec({
-  val datasetsApi = zoweAPIProvider.getApi(WrapperType.SSH_NATIVE, DatasetsAPI::class.java)
+  val datasetsApi = zoweAPIProvider.getApi(WrapperType.OPEN_SSH, DatasetsAPI::class.java)
 
   afterSpec {
     sshMockResponseDispatcher.clearResolvers()

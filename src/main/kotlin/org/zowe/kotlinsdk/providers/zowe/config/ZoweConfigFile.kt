@@ -8,13 +8,15 @@
  * Copyright Contributors to the Zowe Project.
  */
 
-package org.zowe.kotlinsdk.core
+package org.zowe.kotlinsdk.providers.zowe.config
 
 import kotlinx.serialization.json.*
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileNotFoundException
 import java.nio.file.Paths
+import kotlin.collections.get
+import kotlin.collections.iterator
 import kotlin.io.path.pathString
 
 const val GLOBAL_CONFIG_NAME = "zowe"
@@ -30,17 +32,6 @@ enum class ConfigType {
   TEAM_CONFIG,
   MERGED_CONFIG
 }
-
-/**
- * Zowe profile datatype is used by ZoweConfigFile to return a Zowe profile data along with metadata,
- * such as the profile [name] and [missingSecureProps]
- * Based on https://github.com/zowe/zowe-client-python-sdk/blob/main/src/core/zowe/core_for_zowe_sdk/config_file.py
- */
-data class ZoweProfile(
-  val data: Map<String, Any> = mapOf(),
-  val name: String = "",
-  val missingSecureProps: List<String> = listOf()
-)
 
 /** zowe.config.json in JSONC format, parsed to a Kotlin class */
 data class ZoweConfigJsonc(
@@ -90,7 +81,7 @@ data class ZoweConfigFile(
   private var _profiles: Map<String, Any>? = null,
   private var _defaults: Map<String, String>? = null,
   private var _schemaPath: String? = null,
-  private var _secureProps: Map<String, Any>? = null,
+  private var _secureProps: Map<String, String>? = null,
   private var _jsonc: ZoweConfigJsonc? = null,
   private val missingSecureProps: MutableList<String> = mutableListOf()
 ) {
@@ -140,7 +131,7 @@ data class ZoweConfigFile(
       _schemaPath = value
     }
 
-  var secureProps: Map<String, Any>?
+  var secureProps: Map<String, String>?
     get() = _secureProps
     private set(value) {
       _secureProps = value
@@ -196,7 +187,7 @@ data class ZoweConfigFile(
   /** Inject secure properties that have been loaded from the vault into the profiles object */
   @Suppress("UNCHECKED_CAST")
   private fun loadSecureProperties() {
-    secureProps = (ZoweCredentialManager.secureProps[filePath ?: ""] as? Map<String, Any>) ?: mapOf()
+    secureProps = ZoweCredentialManager.secureProps[filePath ?: ""] ?: mapOf()
     for ((key, value) in secureProps ?: mapOf()) {
       val segments = key.split(".")
         .filterIndexed { index, _ -> index % 2 == 1 }
@@ -310,8 +301,8 @@ data class ZoweConfigFile(
    * @return a map of secure properties keyed by JSON path in the vault
    */
   @Suppress("UNCHECKED_CAST")
-  private fun extractSecureProperties(profilesObj: Map<String, Any>, jsonPath: String = "profiles"): Map<String, Any> {
-    val secureProps = mutableMapOf<String, Any>()
+  private fun extractSecureProperties(profilesObj: Map<String, Any>, jsonPath: String = "profiles"): MutableMap<String, String> {
+    val secureProps = mutableMapOf<String, String>()
 
     for ((key, value) in profilesObj) {
       val valueMap = value as? MutableMap<String, Any> ?: continue
@@ -320,7 +311,7 @@ data class ZoweConfigFile(
 
       for (propertyName in secureList) {
         properties.remove(propertyName)?.let {
-          secureProps["$jsonPath.$key.properties.$propertyName"] = it
+          secureProps["$jsonPath.$key.properties.$propertyName"] = it.toString()
         }
       }
 
@@ -445,18 +436,18 @@ data class ZoweConfigFile(
       val allOf = pattern["allOf"] as? List<*> ?: return emptyList()
 
       for (props in allOf) {
-          val propsMap = props as? Map<String, Any> ?: continue
-          var thenMap = propsMap["then"] as? Map<String, Any> ?: continue
+        val propsMap = props as? Map<String, Any> ?: continue
+        var thenMap = propsMap["then"] as? Map<String, Any> ?: continue
 
-          // Navigate through nested "properties"
-          while (thenMap.containsKey("properties")) {
-              val nextProps = thenMap["properties"] as? Map<String, Any> ?: break
-              thenMap = nextProps
-              profileProps = nextProps
-          }
+        // Navigate through nested "properties"
+        while (thenMap.containsKey("properties")) {
+          val nextProps = thenMap["properties"] as? Map<String, Any> ?: break
+          thenMap = nextProps
+          profileProps = nextProps
+        }
       }
     } catch (_: Exception) {
-        return listOf()
+      return listOf()
     }
 
     return if (profileProps.isNotEmpty()) listOf(profileProps) else listOf()
@@ -485,6 +476,39 @@ data class ZoweConfigFile(
   }
 
   /**
+   * Get the full name and type of all profiles in the config.
+   * Names are dot-separated paths, e.g. "lpar1.zosmf", "lpar2.inner.base".
+   * @param shouldValidateSchema true if validation is preferred
+   * @return list of pairs where first is the full profile name and second is the profile type (null if not specified)
+   */
+  fun getProfilesNameAndType(shouldValidateSchema: Boolean = true): List<Pair<String, String?>> {
+    if (profiles == null) {
+      initFromFile(shouldValidateSchema)
+    }
+    return collectProfilesNameAndType(profiles ?: emptyMap(), prefix = "")
+  }
+
+  private fun collectProfilesNameAndType(
+    profilesMap: Map<String, Any>,
+    prefix: String
+  ): List<Pair<String, String?>> {
+    val result = mutableListOf<Pair<String, String?>>()
+    for ((name, data) in profilesMap) {
+      @Suppress("UNCHECKED_CAST")
+      val profileData = data as? Map<String, Any> ?: continue
+      val fullName = if (prefix.isEmpty()) name else "$prefix.$name"
+      val type = profileData["type"] as? String
+      result.add(fullName to type)
+      @Suppress("UNCHECKED_CAST")
+      val nested = profileData["profiles"] as? Map<String, Any>
+      if (nested != null) {
+        result.addAll(collectProfilesNameAndType(nested, fullName))
+      }
+    }
+    return result
+  }
+
+  /**
    * Find a profile at a specified location from within a set of nested profiles
    * @param path the location to look for the profile (separated by dots)
    * @param profiles a dict of nested profiles
@@ -499,21 +523,19 @@ data class ZoweConfigFile(
         if (!suppressConfigFileWarnings) {
           logger.warn("Invalid profile passed when schema validation is off")
         }
-      } else {
-        if (segments[0] == profileName) {
-          return if (segments.size == 1) {
-            profileData as Map<String, Any> // Ensured to be Map<String, Any>
+      } else if (segments[0] == profileName) {
+        return if (segments.size == 1) {
+          profileData as Map<String, Any> // Ensured to be Map<String, Any>
+        } else {
+          val nestedProfiles = profileData["profiles"]
+          if (nestedProfiles is Map<*, *>) {
+            // Recursive call
+            findProfile(
+              segments.subList(1, segments.size).joinToString("."),
+              nestedProfiles as Map<String, Any>
+            )
           } else {
-            val nestedProfiles = profileData["profiles"]
-            if (nestedProfiles is Map<*, *>) {
-              // Recursive call
-              findProfile(
-                segments.subList(1, segments.size).joinToString("."),
-                nestedProfiles as Map<String, Any>
-              )
-            } else {
-              null
-            }
+            null
           }
         }
       }

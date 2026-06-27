@@ -15,5 +15,5 @@ package org.zowe.kotlinsdk.core
  * depending on which the appropriate request/response implementations are used
  */
 enum class WrapperType {
-  ZOSMF, SSH_NATIVE
+  ZOSMF, OPEN_SSH
 }

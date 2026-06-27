@@ -8,9 +8,8 @@
  * Copyright Contributors to the Zowe Project.
  */
 
-package org.zowe.kotlinsdk.core
+package org.zowe.kotlinsdk.providers.zowe.config
 
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -41,7 +40,7 @@ class SecureProfileLoadException(
 open class ZoweCredentialManager {
   companion object {
     private val logger = LoggerFactory.getLogger(ZoweCredentialManager::class.java)
-    var secureProps: MutableMap<String, Any> = mutableMapOf()
+    var secureProps: MutableMap<String, MutableMap<String, String>> = mutableMapOf()
 
     /** Load [secureProps] stored for the given config file */
     fun loadSecureProps() {
@@ -69,8 +68,67 @@ open class ZoweCredentialManager {
           configSecretValues.jsonObject
             .toMap()
             .mapValues { (_, propValueAsJson) -> propValueAsJson.jsonPrimitive.content }
+            .toMutableMap()
         }
         .toMutableMap()
+    }
+
+    /**
+     * Converts a dot-separated profile path and field name to the secure props key.
+     * E.g. `toSecurePropsKey("lpar1.zosmf", "password")` → `"profiles.lpar1.profiles.zosmf.properties.password"`
+     */
+    fun toSecurePropsKey(profilePath: String, fieldName: String): String {
+      val segments = profilePath.split(".")
+      return "profiles." + segments.joinToString(".profiles.") + ".properties.$fieldName"
+    }
+
+    /**
+     * Reads a single secure field value for the given [profilePath] and [fieldName]
+     * from the OS secure store.
+     * Calls [loadSecureProps] before reading to ensure the latest values are loaded
+     */
+    fun getSecureField(configFilePath: String, profilePath: String, fieldName: String): String? {
+      loadSecureProps()
+      try {
+        val propsForConfig = secureProps[configFilePath] ?: return null
+        return propsForConfig[toSecurePropsKey(profilePath, fieldName)]
+      } finally {
+        secureProps.clear()
+      }
+    }
+
+    /**
+     * Saves a single secure field value for the given [profilePath] and [fieldName]
+     * to the OS secure store.
+     * Calls [loadSecureProps] before writing and [saveSecureProps] after to persist changes
+     */
+    fun setSecureField(configFilePath: String, profilePath: String, fieldName: String, value: String) {
+      loadSecureProps()
+      try {
+        val propsForConfig = secureProps.getOrPut(configFilePath) { mutableMapOf() }
+        propsForConfig[toSecurePropsKey(profilePath, fieldName)] = value
+        saveSecureProps()
+      } finally {
+        secureProps.clear()
+      }
+    }
+
+    /**
+     * Removes secure field values for the given [profilePath] and [fields]
+     * from the OS secure store.
+     * Calls [loadSecureProps] before and [saveSecureProps] after to persist changes
+     */
+    fun removeSecureFields(configFilePath: String, profilePath: String, fields: List<String>) {
+      loadSecureProps()
+      try {
+        val propsForConfig = secureProps[configFilePath] ?: return
+        for (field in fields) {
+          propsForConfig.remove(toSecurePropsKey(profilePath, field))
+        }
+        saveSecureProps()
+      } finally {
+        secureProps.clear()
+      }
     }
 
     /** Set [secureProps] for the given config file */

@@ -46,7 +46,7 @@ class ZosDsn(
    */
   @Deprecated(
     "Scheduled for removal since v1.0.0",
-    ReplaceWith("GetDatasetInfoOperation", "org.zowe.kotlinsdk.impl.restfiles")
+    ReplaceWith("DatasetsAPI.getDatasetInfo(params)", "org.zowe.kotlinsdk.core.datasets.api")
   )
   fun getDatasetInfo(dataSetName: String): Dataset {
     val emptyDataSet = Dataset(dataSetName)
@@ -80,7 +80,7 @@ class ZosDsn(
    */
   @Deprecated(
     "Scheduled for removal since v1.0.0",
-    ReplaceWith("DeleteDatasetOperation", "org.zowe.kotlinsdk.impl.restfiles")
+    ReplaceWith("DatasetsAPI.deleteDataset(params)", "org.zowe.kotlinsdk.core.datasets.api")
   )
   fun deleteDsn(dataSetName: String): Response<*> {
     val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
@@ -104,7 +104,7 @@ class ZosDsn(
    */
   @Deprecated(
     "Scheduled for removal since v1.0.0",
-    ReplaceWith("DeleteDatasetMemberOperation", "org.zowe.kotlinsdk.impl.restfiles")
+    ReplaceWith("DatasetsAPI.deleteDataset(params)", "org.zowe.kotlinsdk.core.datasets.api")
   )
   fun deleteDsn(dataSetName: String, member: String): Response<*> {
     val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"

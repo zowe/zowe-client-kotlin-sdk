@@ -16,7 +16,7 @@ package org.zowe.kotlinsdk.zowe.config
 
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("ZoweConnectionManager", "org.zowe.kotlinsdk.core.connectivity.ZoweConnectionManager")
+  ReplaceWith("ZoweConnectionManager", "org.zowe.kotlinsdk.providers.zowe.config.ZoweConnectionManager")
 )
 data class ZoweConnection(
   var host: String?,

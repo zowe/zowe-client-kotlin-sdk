@@ -47,7 +47,7 @@ class ZoweAPIProvider(
         )
       } ?: mapOf()
     ),
-    WrapperType.SSH_NATIVE to (requestRunners
+    WrapperType.OPEN_SSH to (requestRunners
       .find { it.protocol == SupportedProtocol.SSH }
       ?.let {
         it as SshRequestRunner

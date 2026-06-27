@@ -8,11 +8,12 @@
  * Copyright Contributors to the Zowe Project.
  */
 
-package org.zowe.kotlinsdk.core
+package org.zowe.kotlinsdk.providers.zowe.config
 
 import io.github.cdimascio.dotenv.dotenv
 import org.slf4j.LoggerFactory
 import java.io.FileNotFoundException
+import kotlin.collections.iterator
 
 /**
  * Class used to manage profiles. ZoweProfile Manager contains the logic to merge the different properties of profiles
@@ -177,6 +178,7 @@ class ZoweProfileManager(
     return result
   }
 
+  // TODO: load default profile when the specified profile name does not appear at the top of the list?
   /**
    * Load connection details from a team config profile.
    * We will load properties from config files in the following order, from highest to lowest priority:
@@ -270,7 +272,7 @@ class ZoweProfileManager(
       }
 
     if (profileType != BASE_PROFILE) {
-      profileProps = load(profileType=BASE_PROFILE, shouldCheckMissingProps=false) + profileProps
+      profileProps = load(profileType= BASE_PROFILE, shouldCheckMissingProps=false) + profileProps
     }
 
     if (shouldCheckMissingProps) {
@@ -315,9 +317,9 @@ class ZoweProfileManager(
 
       while (parts.isNotEmpty()) {
         val currentName = parts.joinToString(".")
-        val profile = layer.findProfile(currentName, layer.profiles ?: mapOf())
+        val fullProfilePathToProfile = layer.findProfile(currentName, layer.profiles ?: mapOf())
 
-        if (profile != null && currentName.length > longestMatch.length) {
+        if (fullProfilePathToProfile != null && currentName.length > longestMatch.length) {
           highestLayer = layer
           longestMatch = currentName
         } else {

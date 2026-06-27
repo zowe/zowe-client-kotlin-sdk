@@ -27,7 +27,7 @@ import org.zowe.kotlinsdk.providers.zowe.ssh.SshMockCommandResponse
 import kotlin.text.contains
 
 class SshGetJobTestSpec : ShouldSpec({
-  val jesApi = zoweAPIProvider.getApi(WrapperType.SSH_NATIVE, JesAPI::class.java)
+  val jesApi = zoweAPIProvider.getApi(WrapperType.OPEN_SSH, JesAPI::class.java)
 
   afterSpec {
     sshMockResponseDispatcher.clearResolvers()

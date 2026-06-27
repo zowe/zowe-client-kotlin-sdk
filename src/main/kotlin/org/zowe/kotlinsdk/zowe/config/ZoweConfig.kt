@@ -31,7 +31,7 @@ import java.util.*
  */
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("ZoweConfigFile()", "org.zowe.kotlinsdk.core.ZoweConfigFile")
+  ReplaceWith("ZoweConfigFile()", "org.zowe.kotlinsdk.providers.zowe.config.ZoweConfigFile")
 )
 data class ZoweConfig(
   @Expose
@@ -631,7 +631,7 @@ data class ZoweConfig(
 
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("ZoweProfile()", "org.zowe.kotlinsdk.core.ZoweConfigFile")
+  ReplaceWith("ZoweProfile()", "org.zowe.kotlinsdk.providers.zowe.config.ZoweConfigFile")
 )
 data class ZoweConfigProfile(
   var name: String,

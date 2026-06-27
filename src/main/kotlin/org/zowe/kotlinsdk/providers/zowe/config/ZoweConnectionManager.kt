@@ -8,10 +8,12 @@
  * Copyright Contributors to the Zowe Project.
  */
 
-package org.zowe.kotlinsdk.core.connectivity
+package org.zowe.kotlinsdk.providers.zowe.config
 
 import io.github.cdimascio.dotenv.dotenv
-import org.zowe.kotlinsdk.core.ZoweProfileManager
+import org.zowe.kotlinsdk.core.connectivity.HttpConnection
+import org.zowe.kotlinsdk.core.connectivity.TokenHttpConnection
+import org.zowe.kotlinsdk.core.connectivity.UserPassHttpConnection
 
 /**
  * All-purpose connection manager. Provides a simplified mechanism of creating connections both directly or using
@@ -31,17 +33,17 @@ class ZoweConnectionManager(val zoweProfileManager: ZoweProfileManager) {
     }
 
     /**
-     * Produce an [HttpConnection] from the provided parameters. If the parameters are not set, will try to resolve
+     * Produce an [org.zowe.kotlinsdk.core.connectivity.HttpConnection] from the provided parameters. If the parameters are not set, will try to resolve
      * them from an environment. It is mandatory to provide either username, or token. If the token is provided, it is
      * used as a main way to connect to the machine. If the token is not provided, but the username is, it expects
-     * the password to be provided as well, otherwise it fails to create the [HttpConnection] object
+     * the password to be provided as well, otherwise it fails to create the [org.zowe.kotlinsdk.core.connectivity.HttpConnection] object
      * @param host the host address to create a connection to
      * @param port the port of the machine to create a connection to
      * @param rejectUnauthorized to reject unauthorized access to the machine (to disallow self-signed certs)
      * @param user the username to connect to the host with
      * @param password the password to connect to the host with
      * @param token the token to connect to the host with
-     * @return [HttpConnection] compatible object, basing on the parameters available
+     * @return [org.zowe.kotlinsdk.core.connectivity.HttpConnection] compatible object, basing on the parameters available
      */
     fun produceHttpConnection(
       host: String? = null,
@@ -64,7 +66,13 @@ class ZoweConnectionManager(val zoweProfileManager: ZoweProfileManager) {
       } else if (resolvedUser != null) {
         val passwordOrToken = resolvedPassword
           ?: throw Exception("'password' must be provided with 'user' to create an HTTP connection")
-        UserPassHttpConnection(resolvedHost, resolvedPort, resolvedRejectUnauthorized, user = resolvedUser, password = passwordOrToken)
+        UserPassHttpConnection(
+          resolvedHost,
+          resolvedPort,
+          resolvedRejectUnauthorized,
+          user = resolvedUser,
+          password = passwordOrToken
+        )
       } else {
         throw Exception("At least 'user' or 'token' must be provided to create an HTTP connection")
       }

@@ -22,7 +22,7 @@ package org.zowe.kotlinsdk.zowe.client.sdk.core
  */
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("Connection", "org.zowe.kotlinsdk.core")
+  ReplaceWith("Connection", "org.zowe.kotlinsdk.core.connectivity")
 )
 data class ZOSConnection(
   /**

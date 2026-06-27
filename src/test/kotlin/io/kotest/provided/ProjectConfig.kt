@@ -32,7 +32,7 @@ import org.apache.sshd.server.command.Command
 import org.apache.sshd.server.command.CommandFactory
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider
 import org.zowe.kotlinsdk.core.connectivity.SshConnection
-import org.zowe.kotlinsdk.core.connectivity.ZoweConnectionManager
+import org.zowe.kotlinsdk.providers.zowe.config.ZoweConnectionManager
 import org.zowe.kotlinsdk.providers.zowe.HttpRequestRunner
 import org.zowe.kotlinsdk.providers.zowe.SshRequestRunner
 import org.zowe.kotlinsdk.providers.zowe.ZoweAPIProvider
