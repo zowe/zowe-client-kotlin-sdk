@@ -21,7 +21,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMMigrated
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMObtainENQ
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-write-data-zos-data-set-member#PutWriteDataSet__title__4">Write data to a z/OS data set or member: Custom headers</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-write-data-zos-data-set-member#PutWriteDataSet__title__4">Write data to a z/OS data set or member: Custom headers</a>
  * @property contentType content type (if TEXT, then "text/plain; charset=UTF-8" header is used)
  * @property ifMatch If-Match standard header
  * @property xIBMDataType X-IBM-Data-Type custom header
@@ -32,6 +32,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMObtainEN
  * @property xIBMDsNameEncoding X-IBM-Dsname-Encoding custom header
  */
 class ZosmfWriteToDatasetRequestHeaders(
+  // TODO: process Content-Type header more universally (together with X-IBM-Data-Type)
   @property:AvailableSince(ZVersion.ZOS_2_1) val contentType: WriteToDatasetRequest.ContentType = WriteToDatasetRequest.ContentType.TEXT,
   @property:AvailableSince(ZVersion.ZOS_2_1) val contentEncoding: String = "UTF-8",
   @property:AvailableSince(ZVersion.ZOS_2_1) val ifMatch: String? = null,

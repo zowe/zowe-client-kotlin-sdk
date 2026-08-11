@@ -6,17 +6,13 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-retrieve-contents-zos-data-set-member#GetReadDataSet__title__4">Retrieve the contents of a z/OS data set or member: Custom headers</a>
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-retrieve-contents-zos-unix-file#ReadUnixFile__title__3">Retrieve the contents of a z/OS UNIX file: Standard headers</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-retrieve-contents-zos-data-set-member#GetReadDataSet__title__4">Retrieve the contents of a z/OS data set or member: Custom headers</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-retrieve-contents-zos-unix-file#ReadUnixFile__title__3">Retrieve the contents of a z/OS UNIX file: Standard headers</a>
  */
 data class XIBMRecordRange(private val format: Format, private val sss: Int, private val nnn: Int) {
   enum class Format {

@@ -15,7 +15,7 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.AvailableUntil
 import org.zowe.kotlinsdk.annotations.ZVersion
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=zdsfri-json-document-specifications-zos-data-set-file-rest-interface-requests#RESTFILES_JSONDocumentSpecifications__ErrorReportDocumentContents_4RESTfile__title__1">Error report document</a> */
+/** @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=zdsfri-json-document-specifications-zos-data-set-file-rest-interface-requests#RESTFILES_JSONDocumentSpecifications__ErrorReportDocumentContents_4RESTfile__title__1">Error report document</a> */
 @Serializable
 data class ZosmfErrorReport(
   @property:AvailableSince(ZVersion.ZOS_2_1) val category: Int,

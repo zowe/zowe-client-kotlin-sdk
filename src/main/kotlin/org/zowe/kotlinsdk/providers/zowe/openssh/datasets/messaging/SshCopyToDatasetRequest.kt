@@ -23,8 +23,8 @@ import org.zowe.kotlinsdk.providers.zowe.SshRequest
 /**
  * Uses a combination of "tsocmd LISTDS" and "cp" commands. "LISTDS" is used to check whether the data set
  * or the data set member exists, "cp" - to write the content
- * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=descriptions-cp-copy-file">cp - Copy a file</a>
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-listds-command">LISTDS command</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=descriptions-cp-copy-file">cp - Copy a file</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=subcommands-listds-command">LISTDS command</a>
  * @property dsName the data set or data set + member name to write the content to
  * @property content the content to write
  * @property contentType the content type to write

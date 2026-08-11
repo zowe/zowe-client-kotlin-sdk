@@ -85,7 +85,7 @@ class SshDatasetItem(
    * SSH-compatible record format.
    * The format consists of separate conflicting RECFM parts.
    * They are separated basing on the ALLOC TSO command supported RECFM operand options
-   * @see <"https://www.ibm.com/docs/en/zos/3.1.0?topic=command-allocate-operands">ALLOCATE command operands: RECFM</a>
+   * @see <"https://www.ibm.com/docs/en/zos/latest?topic=command-allocate-operands">ALLOCATE command operands: RECFM</a>
    * @property recFmLength a record length format. Supported: F - fixed, V - varying, U - unknown, VSAM - for VSAM data sets
    * @property recFmBlocking a record blocking format. Supported: B - blocked, S - spanned
    * @property recFmControlChar a record control variable. Supported: A - ASCII control character, M - machine code control characters

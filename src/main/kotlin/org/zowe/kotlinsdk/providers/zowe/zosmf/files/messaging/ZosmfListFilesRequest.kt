@@ -19,7 +19,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.files.definitions.ZosmfSymlinkMode
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-files-directories-unix-file-path">List the files and directories of a UNIX file path</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-list-files-directories-unix-file-path">List the files and directories of a UNIX file path</a>
  * @property filter the path query param
  * @property depth the depth query param
  * @property limit the limit query param

@@ -20,8 +20,8 @@ import org.zowe.kotlinsdk.providers.zowe.SshRequest
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-listds-command">LISTDS command</a>
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=command-listds-operands">LISTDS command operands</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=subcommands-listds-command">LISTDS command</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=command-listds-operands">LISTDS command operands</a>
  * @property mask data_set operand
  * @property attributesLevel level of attributes to be returned ([AttributesLevel.FULL] by default)
  * @property catalogName CATALOG operand

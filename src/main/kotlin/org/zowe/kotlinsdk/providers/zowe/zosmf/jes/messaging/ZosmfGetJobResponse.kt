@@ -16,7 +16,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpResponse
 import org.zowe.kotlinsdk.providers.zowe.zosmf.jes.definitions.ZosmfJobItem
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-obtain-status-job#izuhpinfo_api_getjobstatus__title__6">Obtain the status of a job: Expected response</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-obtain-status-job#izuhpinfo_api_getjobstatus__title__6">Obtain the status of a job: Expected response</a>
  * @property job the actual response of the getJob request, wrapped in this class for a consistency
  */
 class ZosmfGetJobResponse(

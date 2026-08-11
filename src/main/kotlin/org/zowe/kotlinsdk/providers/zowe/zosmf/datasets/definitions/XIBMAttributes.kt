@@ -13,8 +13,8 @@ package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions
 import org.zowe.kotlinsdk.core.datasets.AttributesLevel
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-zos-data-sets-system#ListDataSets__title__5">List the z/OS data sets on a system: X-IBM-Attributes</a>
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-members-zos-data-set#ListDataSetMembers__title__3">List the members of a z/OS data set: Custom headers</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-list-zos-data-sets-system#ListDataSets__title__5">List the z/OS data sets on a system: X-IBM-Attributes</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-list-members-zos-data-set#ListDataSetMembers__title__3">List the members of a z/OS data set: Custom headers</a>
  * @property attributesLevel data set level of attributes to return
  * @property isMemberList if true, the request is considered as the "return member names only" request,
  *                        if false, the attributes level is applied to the data set entries

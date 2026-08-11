@@ -20,14 +20,14 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging.*
 
 /**
  * Implementation of Files API for z/OSMF REST API to work with USS files and folders
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=services-zos-data-set-file-rest-interface">z/OS data set and file REST interface</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=services-zos-data-set-file-rest-interface">z/OS data set and file REST interface</a>
  */
 @ZoweInternalAPI
 class ZosmfFilesAPI(private val requestRunner: HttpRequestRunner) : FilesAPI {
 
   /**
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-files-directories-unix-file-path">List the files and directories of a UNIX file path</a>
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-files-directories-unix-file-path#ListUNIXfiles__title__9">List the files and directories of a UNIX file path: Expected response</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-list-files-directories-unix-file-path">List the files and directories of a UNIX file path</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-list-files-directories-unix-file-path#ListUNIXfiles__title__9">List the files and directories of a UNIX file path: Expected response</a>
    */
   @AvailableSince(ZVersion.ZOS_2_1)
   override suspend fun listFiles(params: ListFilesRequest): ZosmfListFilesResponse {
@@ -35,8 +35,8 @@ class ZosmfFilesAPI(private val requestRunner: HttpRequestRunner) : FilesAPI {
   }
 
   /**
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=interface-retrieve-contents-zos-unix-file">Retrieve the contents of a z/OS UNIX file</a>
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=interface-retrieve-contents-zos-unix-file#ReadUnixFile__title__8">Retrieve the contents of a z/OS UNIX file: Expected response</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-retrieve-contents-zos-unix-file">Retrieve the contents of a z/OS UNIX file</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-retrieve-contents-zos-unix-file#ReadUnixFile__title__8">Retrieve the contents of a z/OS UNIX file: Expected response</a>
    */
   @AvailableSince(ZVersion.ZOS_2_1)
   override suspend fun retrieveFileContent(params: RetrieveFileContentRequest): ZosmfRetrieveFileContentResponse {

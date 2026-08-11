@@ -19,7 +19,7 @@ import org.zowe.kotlinsdk.core.files.data.FileItem
 import org.zowe.kotlinsdk.core.files.data.FileItem.FileType
 import org.zowe.kotlinsdk.core.files.data.FilePermissions
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-files-directories-unix-file-path#ListUNIXfiles__title__11">List the files and directories of a UNIX file path: Example response</a> */
+/** @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-list-files-directories-unix-file-path#ListUNIXfiles__title__11">List the files and directories of a UNIX file path: Example response</a> */
 @Serializable
 class ZosmfFileItem(
   /** name response param */

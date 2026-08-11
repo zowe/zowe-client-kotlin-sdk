@@ -28,8 +28,8 @@ import org.zowe.kotlinsdk.providers.zowe.SshRequest
  * @property dataType the data type to retrieve the content as
  * @property channelSize the channel size to read data in portions from SSH channel
  * @property conversionTableOrYes the conversion table path or "YES" string (refer to the parameter description for more info)
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=tc-oput-copy-mvs-data-set-member-into-zos-unix-file">OPUT - Copy an MVS data set member into a z/OS UNIX file</a>
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=tc-oput-copy-mvs-data-set-member-into-zos-unix-file#tsooput__title__4">OPUT - Copy an MVS data set member into a z/OS UNIX file: Parameters</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=tc-oput-copy-mvs-data-set-member-into-zos-unix-file">OPUT - Copy an MVS data set member into a z/OS UNIX file</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=tc-oput-copy-mvs-data-set-member-into-zos-unix-file#tsooput__title__4">OPUT - Copy an MVS data set member into a z/OS UNIX file: Parameters</a>
  */
 class SshRetrieveDatasetContentRequest(
   override val connection: SshConnection,

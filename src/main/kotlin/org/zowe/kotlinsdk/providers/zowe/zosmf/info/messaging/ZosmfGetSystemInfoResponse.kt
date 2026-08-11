@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.info.messaging
@@ -23,7 +19,7 @@ import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.info.api.messaging.GetSystemInfoResponse
 import org.zowe.kotlinsdk.providers.zowe.HttpResponse
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=service-retrieve-zosmf-information#GETMethodRetrieveZOSMFConfiguration__title__8">Retrieve z/OSMF information: Expected response</a> */
+/** @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=service-retrieve-zosmf-information#GETMethodRetrieveZOSMFConfiguration__title__8">Retrieve z/OSMF information: Expected response</a> */
 @Serializable
 class ZosmfGetSystemInfoResponse(
   @Transient

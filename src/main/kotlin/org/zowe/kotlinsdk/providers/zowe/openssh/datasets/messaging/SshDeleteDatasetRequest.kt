@@ -19,8 +19,8 @@ import org.zowe.kotlinsdk.providers.zowe.SshRequest
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-delete-command">DELETE command</a>
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=command-delete-operands">DELETE command operands</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=subcommands-delete-command">DELETE command</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=command-delete-operands">DELETE command operands</a>
  * @property dsName data set or data set + member to delete
  */
 class SshDeleteDatasetRequest(

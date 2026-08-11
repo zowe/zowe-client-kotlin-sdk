@@ -16,7 +16,7 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=zjri-json-document-specifications-zos-jobs-rest-interface-requests#JSONDocumentSpecifications__JobStepDataDocumentContents__title__1">JSON document specifications for z/OS jobs REST interface requests: Job step data document</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=zjri-json-document-specifications-zos-jobs-rest-interface-requests#JSONDocumentSpecifications__JobStepDataDocumentContents__title__1">JSON document specifications for z/OS jobs REST interface requests: Job step data document</a>
  * @property isActive active response param
  * @property smfId smfid response param
  * @property stepNumber step-number response param

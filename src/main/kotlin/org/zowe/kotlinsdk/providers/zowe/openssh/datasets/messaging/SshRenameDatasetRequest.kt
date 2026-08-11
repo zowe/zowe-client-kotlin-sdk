@@ -19,8 +19,8 @@ import org.zowe.kotlinsdk.providers.zowe.SshRequest
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=subcommands-rename-command">RENAME command</a>
- * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=command-rename-operands">RENAME command operands</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=subcommands-rename-command">RENAME command</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=command-rename-operands">RENAME command operands</a>
  * @property dsName data set or data set + member to rename
  * @property newDsName a new data set name to rename to
  * @property newMemName a new member name to rename the member to (if provided)

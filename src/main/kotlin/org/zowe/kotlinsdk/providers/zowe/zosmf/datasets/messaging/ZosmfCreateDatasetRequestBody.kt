@@ -18,7 +18,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.ZosmfDataset
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.ZosmfDatasetType
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-create-sequential-partitioned-data-set#CreateDataSet__title__2">Create a sequential or partitioned data set: Request Body</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-create-sequential-partitioned-data-set#CreateDataSet__title__2">Create a sequential or partitioned data set: Request Body</a>
  * @property volumeSerial volume serial
  * @property deviceType device type
  * @property datasetOrganization data set organization

@@ -19,7 +19,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfErrorReport
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfStatus
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-data-set-member-utilities">z/OS data set and member utilities: 'rename' request</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-data-set-member-utilities">z/OS data set and member utilities: 'rename' request</a>
  * @property dsName to-dataset-name path param
  * @property memberName member-name path param
  * @property body the request body to rename dataset

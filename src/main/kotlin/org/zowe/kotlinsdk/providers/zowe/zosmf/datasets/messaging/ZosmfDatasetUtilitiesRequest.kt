@@ -13,7 +13,7 @@ package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging
 import io.ktor.http.HttpMethod
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpRequest
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-data-set-member-utilities">z/OS data set and member utilities</a> */
+/** @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-data-set-member-utilities">z/OS data set and member utilities</a> */
 abstract class ZosmfDatasetUtilitiesRequest(
   override val headers: ZosmfDatasetUtilitiesRequestHeaders
 ) : ZosmfHttpRequest {

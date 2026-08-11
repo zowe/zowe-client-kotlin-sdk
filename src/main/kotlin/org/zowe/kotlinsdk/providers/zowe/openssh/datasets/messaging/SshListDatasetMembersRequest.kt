@@ -22,7 +22,7 @@ import org.zowe.kotlinsdk.providers.zowe.SshResponse
 /**
  * List data set members SSH request.
  * Is performed through TSO LISTDS with MEMBERS operand
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-listds-command">LISTDS command</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=subcommands-listds-command">LISTDS command</a>
  * @property dsName data set name to list members of
  */
 class SshListDatasetMembersRequest(

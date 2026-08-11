@@ -19,7 +19,7 @@ import org.zowe.kotlinsdk.core.connectivity.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpRequest
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-zos-data-sets-system">List the z/OS datasets on a system</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-list-zos-data-sets-system">List the z/OS datasets on a system</a>
  * @property mask the dslevel query params
  * @property volumeSerial the volser query param
  * @property start the start query param

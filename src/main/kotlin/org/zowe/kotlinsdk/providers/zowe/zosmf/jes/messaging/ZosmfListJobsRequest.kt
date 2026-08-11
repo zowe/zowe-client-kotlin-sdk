@@ -24,7 +24,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfStatus
 import org.zowe.kotlinsdk.providers.zowe.zosmf.jes.definitions.ZosmfJobItem
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=interface-list-jobs-owner-prefix-job-id">List jobs by owner, prefix, or job ID</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-list-jobs-owner-prefix-job-id">List jobs by owner, prefix, or job ID</a>
  * @property jobPrefix the prefix query param (used when jobId is empty)
  * @property jobId the job ID query param (mutually exclusive with prefix + owner)
  * @property jobOwner the owner query param (used when job ID is empty)

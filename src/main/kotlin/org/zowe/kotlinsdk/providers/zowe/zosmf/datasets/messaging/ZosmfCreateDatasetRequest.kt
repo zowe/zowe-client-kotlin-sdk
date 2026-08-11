@@ -21,7 +21,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfStatus
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-create-sequential-partitioned-data-set">Create a sequential or partitioned data set</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-create-sequential-partitioned-data-set">Create a sequential or partitioned data set</a>
  * @property dsName the dataset-name path param
  * @property body the request body to create a sequential or partitioned dataset
  */

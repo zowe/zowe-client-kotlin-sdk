@@ -19,7 +19,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfDsAndFilesCommonRequestHeade
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfTargetSystemRequestHeaders
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-retrieve-contents-zos-data-set-member#ReadUnixFile__title__3">Retrieve the contents of a z/OS UNIX file: Standard and Custom headers</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-retrieve-contents-zos-data-set-member#ReadUnixFile__title__3">Retrieve the contents of a z/OS UNIX file: Standard and Custom headers</a>
  * @property ifNoneMatch If-None-Match standard header
  * @property range Range standard header
  * @property xIBMRecordRange X-IBM-Record-Range standard header

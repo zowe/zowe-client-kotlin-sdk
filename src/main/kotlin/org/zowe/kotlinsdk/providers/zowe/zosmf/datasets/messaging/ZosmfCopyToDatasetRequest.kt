@@ -20,7 +20,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfErrorReport
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfStatus
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-data-set-member-utilities">z/OS data set and member utilities: 'copy' request</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-data-set-member-utilities">z/OS data set and member utilities: 'copy' request</a>
  * @property fromEntity [ZosmfCopyToDatasetRequestBody.FromFile] or [ZosmfCopyToDatasetRequestBody.FromDataset]
  * @property toDsName to-dataset-name path param
  * @property toMemberName member-name path param

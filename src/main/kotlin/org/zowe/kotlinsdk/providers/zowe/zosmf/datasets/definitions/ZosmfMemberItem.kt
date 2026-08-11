@@ -24,8 +24,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=zdsfri-json-document-specifications-zos-data-set-file-rest-interface-requests#RESTFILES_JSONDocumentSpecifications__pdskeyPairs">JSON document specifications for z/OS data set and file REST interface requests: PDS/PDSE member list with attributes document (RECFM=F or V)</a>
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=zdsfri-json-document-specifications-zos-data-set-file-rest-interface-requests#RESTFILES_JSONDocumentSpecifications__pdsUkeypairs">JSON document specifications for z/OS data set and file REST interface requests: PDS/PDSE member list with attributes document (RECFM=U)</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=zdsfri-json-document-specifications-zos-data-set-file-rest-interface-requests#RESTFILES_JSONDocumentSpecifications__pdskeyPairs">JSON document specifications for z/OS data set and file REST interface requests: PDS/PDSE member list with attributes document (RECFM=F or V)</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=zdsfri-json-document-specifications-zos-data-set-file-rest-interface-requests#RESTFILES_JSONDocumentSpecifications__pdsUkeypairs">JSON document specifications for z/OS data set and file REST interface requests: PDS/PDSE member list with attributes document (RECFM=U)</a>
  * @property memberName the member response param
  * @property versionNumber the vers response param
  * @property modificationLevel the mod response param

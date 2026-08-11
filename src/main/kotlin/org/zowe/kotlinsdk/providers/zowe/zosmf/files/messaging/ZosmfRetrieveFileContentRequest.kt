@@ -28,7 +28,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfStatus
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=interface-retrieve-contents-zos-unix-file">Retrieve the contents of a z/OS UNIX file</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-retrieve-contents-zos-unix-file">Retrieve the contents of a z/OS UNIX file</a>
  * @property filePath filepath-name path param
  * @property search search optional query param
  * @property research research optional query param

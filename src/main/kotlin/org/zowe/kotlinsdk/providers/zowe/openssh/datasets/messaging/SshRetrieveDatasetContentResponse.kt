@@ -23,8 +23,8 @@ import org.zowe.kotlinsdk.providers.zowe.SshResponse
 import org.zowe.kotlinsdk.providers.zowe.SshStatus
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=tc-oput-copy-mvs-data-set-member-into-zos-unix-file">OPUT - Copy an MVS data set member into a z/OS UNIX file</a>
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=tc-oput-copy-mvs-data-set-member-into-zos-unix-file#tsooput__title__6">OPUT - Copy an MVS data set member into a z/OS UNIX file: Return codes</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=tc-oput-copy-mvs-data-set-member-into-zos-unix-file">OPUT - Copy an MVS data set member into a z/OS UNIX file</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=tc-oput-copy-mvs-data-set-member-into-zos-unix-file#tsooput__title__6">OPUT - Copy an MVS data set member into a z/OS UNIX file: Return codes</a>
  */
 class SshRetrieveDatasetContentResponse(
   sshCmdResponse: SshCmdResponse,

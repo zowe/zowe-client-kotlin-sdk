@@ -17,7 +17,7 @@ import org.zowe.kotlinsdk.core.info.api.messaging.GetSystemInfoRequest
 import org.zowe.kotlinsdk.core.connectivity.HttpConnection
 import org.zowe.kotlinsdk.providers.zowe.HttpRequest
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=service-retrieve-zosmf-information">Retrieve z/OSMF information</a> */
+/** @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=service-retrieve-zosmf-information">Retrieve z/OSMF information</a> */
 class ZosmfGetSystemInfoRequest(override val connection: HttpConnection) : HttpRequest, GetSystemInfoRequest {
 
   override val method = HttpMethod.Get

@@ -16,7 +16,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpResponse
 import org.zowe.kotlinsdk.providers.zowe.zosmf.jes.definitions.ZosmfJobItem
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=interface-list-jobs-owner-prefix-job-id">List jobs by owner, prefix, or job ID</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-list-jobs-owner-prefix-job-id">List jobs by owner, prefix, or job ID</a>
  * @property jobs the actual response of the listJobs request, wrapped in this class for consistency
  */
 class ZosmfListJobsResponse(

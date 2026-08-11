@@ -17,7 +17,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfDsAndFilesCommonRequestHeade
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfTargetSystemRequestHeaders
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-delete-sequential-partitioned-data-set#DeleteDataSet__title__4">Delete a sequential and partitioned data set: Custom headers</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-delete-sequential-partitioned-data-set#DeleteDataSet__title__4">Delete a sequential and partitioned data set: Custom headers</a>
  * @property xIBMDsNameEncoding X-IBM-Dsname-Encoding custom header
  */
 class ZosmfDeleteDatasetRequestHeaders(

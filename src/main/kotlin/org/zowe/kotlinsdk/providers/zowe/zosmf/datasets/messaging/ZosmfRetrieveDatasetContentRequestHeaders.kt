@@ -21,7 +21,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMMigrated
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMObtainENQ
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-retrieve-contents-zos-data-set-member#GetReadDataSet__title__3">Retrieve the contents of a z/OS data set or member: Standard and Custom headers</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-retrieve-contents-zos-data-set-member#GetReadDataSet__title__3">Retrieve the contents of a z/OS data set or member: Standard and Custom headers</a>
  * @property ifNoneMatch If-None-Match standard header
  * @property xIBMDataType X-IBM-Data-Type custom header
  * @property xIBMReturnEtag X-IBM-Return-Etag custom header

@@ -19,7 +19,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpResponse
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.ZosmfMemberItem
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-members-zos-data-set">List the members of a z/OS data set</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-list-members-zos-data-set">List the members of a z/OS data set</a>
  * @property memberItems the items response param
  * @property returnedRows the returnedRows response param
  * @property totalRows the totalRows response param

@@ -19,14 +19,14 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMMigrated
 import kotlin.collections.plus
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-data-set-member-utilities#IZUHPINFO_API_PutDataSetMemberUtilities__title__5">z/OS data set and member utilities: Custom headers</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-data-set-member-utilities#IZUHPINFO_API_PutDataSetMemberUtilities__title__5">z/OS data set and member utilities: Custom headers</a>
  * @property xIBMMigratedRecall X-IBM-Migrated-Recall custom header
  */
 class ZosmfDatasetUtilitiesRequestHeaders(
   @property:AvailableSince(ZVersion.ZOS_2_1) val xIBMMigratedRecall: XIBMMigratedRecall? = null,
   // ZosmfUtilitiesRequestHeaders
-  @property:AvailableSince(ZVersion.ZOS_2_1) override val charsetName: String? = "UTF-8",
-  @property:AvailableSince(ZVersion.ZOS_2_1) override val xIBMBPXKAutoCvt: XIBMBPXKAutoCvt? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) charsetName: String? = "UTF-8",
+  @property:AvailableSince(ZVersion.ZOS_2_1) xIBMBPXKAutoCvt: XIBMBPXKAutoCvt? = null,
   // ZosmfDsAndFilesCommonRequestHeaders
   @property:AvailableOnly(ZVersion.ZOS_2_4) override val sessionLimitWait: Int? = null,
   @property:AvailableSince(ZVersion.ZOS_2_1) override val asyncThreshold: Int? = null,
@@ -38,7 +38,19 @@ class ZosmfDatasetUtilitiesRequestHeaders(
   @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystem: String? = null,
   @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystemUser: String? = null,
   @property:AvailableSince(ZVersion.ZOS_2_4) override val targetSystemPassword: String? = null,
-) : ZosmfUtilitiesRequestHeaders {
+) : ZosmfUtilitiesRequestHeaders(
+  charsetName,
+  xIBMBPXKAutoCvt,
+  sessionLimitWait,
+  asyncThreshold,
+  responseTimeout,
+  requestAcctnum,
+  requestProc,
+  requestRegion,
+  targetSystem,
+  targetSystemUser,
+  targetSystemPassword
+) {
   override fun getHeadersMap(): Map<String, String?> {
     return mapOf(
       "X-IBM-Migrated-Recall" to xIBMMigratedRecall?.toString(),

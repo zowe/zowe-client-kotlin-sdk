@@ -21,8 +21,8 @@ import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.definitions.SshDataset
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.definitions.SshDatasetType
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-allocate-command">ALLOCATE command</a>
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=command-allocate-operands">ALLOCATE command operands</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=subcommands-allocate-command">ALLOCATE command</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=command-allocate-operands">ALLOCATE command operands</a>
  * @property dsName data set name to allocate
  * @property volumeSerial volume serial to allocate the data set on (optional)
  * @property deviceType device type (optional, 3390 by default)

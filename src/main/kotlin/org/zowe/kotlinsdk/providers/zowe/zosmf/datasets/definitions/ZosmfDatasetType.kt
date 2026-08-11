@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions
@@ -17,7 +13,7 @@ package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=statement-dsntype-parameter">DSNTYPE parameter</a> */
+/** @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=statement-dsntype-parameter">DSNTYPE parameter</a> */
 @Serializable
 enum class ZosmfDatasetType {
   @SerialName("LIBRARY") LIBRARY,

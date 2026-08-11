@@ -26,7 +26,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfStatus
 import org.zowe.kotlinsdk.providers.zowe.zosmf.jes.definitions.ZosmfJobItem
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-obtain-status-job">Obtain the status of a job</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-obtain-status-job">Obtain the status of a job</a>
  * @property jobName the jobname path param
  * @property jobId the jobid path param
  * @property jobCorellator the correlator path param

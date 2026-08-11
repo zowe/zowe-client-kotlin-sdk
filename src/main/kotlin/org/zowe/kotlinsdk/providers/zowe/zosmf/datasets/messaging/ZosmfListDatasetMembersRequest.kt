@@ -19,7 +19,7 @@ import org.zowe.kotlinsdk.core.datasets.AttributesLevel
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpRequest
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-members-zos-data-set">List the members of a z/OS data set</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-list-members-zos-data-set">List the members of a z/OS data set</a>
  * @property connection the [HttpConnection] to work with
  * @property dsName dataset-name path param
  * @property start start query param

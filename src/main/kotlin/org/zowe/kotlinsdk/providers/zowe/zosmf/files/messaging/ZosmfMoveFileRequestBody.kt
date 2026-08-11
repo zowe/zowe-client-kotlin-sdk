@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
@@ -19,17 +15,20 @@ import kotlinx.serialization.Serializable
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-unix-file-utilities#IZUHPINFO_API_PutUnixFileUtilities__title__3">z/OS UNIX file utilities: Request body</a> */
+/**
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities#IZUHPINFO_API_PutUnixFileUtilities__title__3">z/OS UNIX file utilities: Request body</a>
+ * @property from the file or directory to be moved
+ * @property overwrite TODO: doc
+ * @property request indicates the function move
+ */
 @Serializable
 data class ZosmfMoveFileRequestBody(
-  /** The file or directory to be moved */
   @SerialName("from")
-  @AvailableSince(ZVersion.ZOS_2_1) val from: String,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val from: String,
 
   @SerialName("overwrite")
-  @AvailableSince(ZVersion.ZOS_2_1) val overwrite: Boolean? = null
+  @property:AvailableSince(ZVersion.ZOS_2_1) val overwrite: Boolean? = null
 ) {
-  /** Indicates the function move */
   @SerialName("request")
   @AvailableSince(ZVersion.ZOS_2_1) val request = "move"
 }

@@ -17,8 +17,8 @@ import org.zowe.kotlinsdk.providers.zowe.SshResponse
 import org.zowe.kotlinsdk.providers.zowe.SshStatus
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=descriptions-cp-copy-file#cp__title__18">cp - Copy a file. Exit values</a>
- * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=descriptions-cp-copy-file#cp__cpmessagesection__title__1">cp - Copy a file. Messages</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=descriptions-cp-copy-file#cp__title__18">cp - Copy a file. Exit values</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=descriptions-cp-copy-file#cp__cpmessagesection__title__1">cp - Copy a file. Messages</a>
  */
 class SshCopyToDatasetResponse(sshCmdResponse: SshCmdResponse) : SshResponse, CopyToDatasetResponse {
   override var status: Status = SshStatus(sshCmdResponse)

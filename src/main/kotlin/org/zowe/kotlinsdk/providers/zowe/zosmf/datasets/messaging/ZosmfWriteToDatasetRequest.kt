@@ -20,7 +20,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfErrorReport
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpRequest
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=interface-write-data-zos-data-set-member">Write data to a z/OS data set or member</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-write-data-zos-data-set-member">Write data to a z/OS data set or member</a>
  * @property dsName dataset-name path param
  * @property content content to write to the dataset
  * @property contentType the content type to write (TEXT by default)

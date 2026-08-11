@@ -16,7 +16,7 @@ import org.zowe.kotlinsdk.providers.zowe.SshCmdResponse
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
 import org.zowe.kotlinsdk.providers.zowe.SshStatus
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=command-allocate-return-codes">ALLOCATE command return codes  </a> */
+/** @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=command-allocate-return-codes">ALLOCATE command return codes  </a> */
 class SshCreateDatasetResponse(sshCmdResponse: SshCmdResponse) : SshResponse, CreateDatasetResponse {
   override var status: Status = SshStatus(sshCmdResponse)
 }

@@ -17,7 +17,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfDsAndFilesCommonRequestHeade
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfTargetSystemRequestHeaders
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-files-directories-unix-file-path#ListUNIXfiles__title__3">List the files and directories of a UNIX file path: Custom headers</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-list-files-directories-unix-file-path#ListUNIXfiles__title__3">List the files and directories of a UNIX file path: Custom headers</a>
  * @property maxItems X-IBM-Max-Items custom header
  * @property lstat X-IBM-Lstat custom header
  */

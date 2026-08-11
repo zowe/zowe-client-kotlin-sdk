@@ -20,7 +20,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfTargetSystemRequestHeaders
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMAttributes
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-zos-data-sets-system#ListDataSets__title__3">List the z/OS data sets on a system: Custom headers</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-list-zos-data-sets-system#ListDataSets__title__3">List the z/OS data sets on a system: Custom headers</a>
  * @property maxItems X-IBM-Max-Items custom header
  * @property attributesLevel level of attributes to be returned ([AttributesLevel.FULL] by default)
  * @property returnTotalRows additional parameter for X-IBM-Attributes. If true - it is set to "$attributes,total"

@@ -15,7 +15,7 @@ import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.providers.zowe.HttpRequestHeaders
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=services-zos-data-set-file-rest-interface#izuhpinfo_api_restfiles__title__5">z/OS data set and file REST interface: Common HTTP Request Headers</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=services-zos-data-set-file-rest-interface#izuhpinfo_api_restfiles__title__5">z/OS data set and file REST interface: Common HTTP Request Headers</a>
  * X-IBM-Target-System + user and password custom headers specification
  */
 interface ZosmfTargetSystemRequestHeaders : HttpRequestHeaders {

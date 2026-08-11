@@ -20,14 +20,14 @@ import org.zowe.kotlinsdk.providers.zowe.ZoweInternalAPI
 
 /**
  * Implementation of Info API for z/OSMF REST API to work with system information retrieval service
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=services-zosmf-information-retrieval-service">z/OSMF information retrieval service</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=services-zosmf-information-retrieval-service">z/OSMF information retrieval service</a>
  */
 @ZoweInternalAPI
 class ZosmfInfoAPI(private val requestRunner: HttpRequestRunner) : InfoAPI {
 
   /**
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=service-retrieve-zosmf-information">Retrieve z/OSMF information</a>
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=service-retrieve-zosmf-information#GETMethodRetrieveZOSMFConfiguration__title__8">Retrieve z/OSMF information: Expected Response</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=service-retrieve-zosmf-information">Retrieve z/OSMF information</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=service-retrieve-zosmf-information#GETMethodRetrieveZOSMFConfiguration__title__8">Retrieve z/OSMF information: Expected Response</a>
    */
   @AvailableSince(ZVersion.ZOS_2_1)
   override suspend fun getSystemInfo(params: GetSystemInfoRequest): GetSystemInfoResponse {

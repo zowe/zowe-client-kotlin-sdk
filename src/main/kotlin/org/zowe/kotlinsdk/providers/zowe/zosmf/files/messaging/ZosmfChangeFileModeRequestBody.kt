@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
@@ -20,22 +16,24 @@ import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.providers.zowe.zosmf.files.definitions.ZosmfFileMode
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-unix-file-utilities#IZUHPINFO_API_PutUnixFileUtilities__title__3">z/OS UNIX file utilities: Request body</a> */
+/**
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities#IZUHPINFO_API_PutUnixFileUtilities__title__3">z/OS UNIX file utilities: Request body</a>
+ * @property mode the mode value, which is specified as the POSIX symbolic form or octal value (as a JSON string)
+ * @property links this applies a mode change to the file or directory pointed to by any encountered links
+ * @property recursive when 'true', the file mode bits of the directory and all files in the file hierarchy below it are changed (chmod -R)
+ * @property request indicates the "chmod" function
+ */
 @Serializable
 data class ZosmfChangeFileModeRequestBody(
-  /** The mode value, which is specified as the POSIX symbolic form or octal value (as a JSON string) */
   @SerialName("mode")
-  @AvailableSince(ZVersion.ZOS_2_1) val mode: ZosmfFileMode,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val mode: ZosmfFileMode,
 
-  /** This applies a mode change to the file or directory pointed to by any encountered links */
   @SerialName("links")
-  @AvailableSince(ZVersion.ZOS_2_1) val links: Links? = null,
+  @property:AvailableSince(ZVersion.ZOS_2_1) val links: Links? = null,
 
-  /** When 'true', the file mode bits of the directory and all files in the file hierarchy below it are changed (chmod -R) */
   @SerialName("recursive")
-  @AvailableSince(ZVersion.ZOS_2_1) val recursive: Boolean? = null
+  @property:AvailableSince(ZVersion.ZOS_2_1) val recursive: Boolean? = null
 ) {
-  /** Indicates the function chmod */
   @SerialName("request")
   @AvailableSince(ZVersion.ZOS_2_1) val request = "chmod"
 

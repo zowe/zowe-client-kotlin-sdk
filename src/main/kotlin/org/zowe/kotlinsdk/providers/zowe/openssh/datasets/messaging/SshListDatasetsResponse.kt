@@ -55,7 +55,7 @@ class SshListDatasetsResponse(
   }
 
   /**
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=types-format-1-format-8-dscbs">Format-1 DSCB</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=types-format-1-format-8-dscbs">Format-1 DSCB</a>
    * Not all parameters are specified or utilized due to redundancy.
    * Extents are grouped as a DS1EXT map, that consists of the 4-byte lower and upper limits
    */
@@ -185,7 +185,7 @@ class SshListDatasetsResponse(
   }
 
   /**
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=types-format-3-dscb">Format-3 DSCB</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=types-format-3-dscb">Format-3 DSCB</a>
    * Not all parameters are specified or utilized due to redundancy
    */
   object F3 {

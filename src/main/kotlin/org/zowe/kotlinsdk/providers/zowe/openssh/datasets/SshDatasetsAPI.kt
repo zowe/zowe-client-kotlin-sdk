@@ -20,13 +20,13 @@ import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.messaging.*
 
 /**
  * Implementation of Datasets API for SSH to work with datasets and members
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=reference-tsoe-commands-subcommands">TSO/E commands and subcommands</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=reference-tsoe-commands-subcommands">TSO/E commands and subcommands</a>
  */
 @ZoweInternalAPI
 class SshDatasetsAPI(private val requestRunner: SshRequestRunner) : DatasetsAPI {
   /**
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-listds-command">LISTDS command</a>
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=lce-example-1-3">LISTDS command: Example 1</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=subcommands-listds-command">LISTDS command</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=lce-example-1-3">LISTDS command: Example 1</a>
    */
   @AvailableSince(ZVersion.ZOS_2_2)
   override suspend fun listDatasets(params: ListDatasetsRequest): SshListDatasetsResponse {
@@ -43,13 +43,13 @@ class SshDatasetsAPI(private val requestRunner: SshRequestRunner) : DatasetsAPI 
     return requestRunner.runRequest(params) as SshGetDatasetInfoResponse
   }
 
-  /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-listds-command">LISTDS command</a> */
+  /** @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=subcommands-listds-command">LISTDS command</a> */
   @AvailableSince(ZVersion.ZOS_2_2)
   override suspend fun listDatasetMembers(params: ListDatasetMembersRequest): SshListDatasetMembersResponse {
     return requestRunner.runRequest(params) as SshListDatasetMembersResponse
   }
 
-  /** @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=descriptions-cp-copy-file">cp - Copy a file</a> */
+  /** @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=descriptions-cp-copy-file">cp - Copy a file</a> */
   @AvailableSince(ZVersion.ZOS_2_2)
   override suspend fun retrieveDatasetContent(params: RetrieveDatasetContentRequest): SshRetrieveDatasetContentResponse {
     return requestRunner.runRequest(params) as SshRetrieveDatasetContentResponse
@@ -58,16 +58,16 @@ class SshDatasetsAPI(private val requestRunner: SshRequestRunner) : DatasetsAPI 
   /**
    * Uses a combination of "tsocmd LISTDS" and "cp" commands. "LISTDS" is used to check whether the data set
    * or the data set member exists, "cp" - to write the content
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=descriptions-cp-copy-file">cp - Copy a file</a>
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-listds-command">LISTDS command</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=descriptions-cp-copy-file">cp - Copy a file</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=subcommands-listds-command">LISTDS command</a>
    */
   override suspend fun writeToDataset(params: WriteToDatasetRequest): SshWriteToDatasetResponse {
     return requestRunner.runRequest(params) as SshWriteToDatasetResponse
   }
 
   /**
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-allocate-command">ALLOCATE command</a>
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=ace-example-6-allocate-new-sequential-data-set-space-allocated-in-tracks">Example 6: Allocate a new sequential data set with space allocated in tracks</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=subcommands-allocate-command">ALLOCATE command</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=ace-example-6-allocate-new-sequential-data-set-space-allocated-in-tracks">Example 6: Allocate a new sequential data set with space allocated in tracks</a>
    */
   @AvailableSince(ZVersion.ZOS_2_2)
   override suspend fun createDataset(params: CreateDatasetRequest): SshCreateDatasetResponse {
@@ -75,8 +75,8 @@ class SshDatasetsAPI(private val requestRunner: SshRequestRunner) : DatasetsAPI 
   }
 
   /**
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-delete-command">DELETE command</a>
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=dce-example">DELETE command: Example</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=subcommands-delete-command">DELETE command</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=dce-example">DELETE command: Example</a>
    */
   @AvailableSince(ZVersion.ZOS_2_2)
   override suspend fun deleteDataset(params: DeleteDatasetRequest): SshDeleteDatasetResponse {
@@ -84,8 +84,8 @@ class SshDatasetsAPI(private val requestRunner: SshRequestRunner) : DatasetsAPI 
   }
 
   /**
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=subcommands-rename-command">RENAME command</a>
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=command-rename-operands">RENAME command operands</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=subcommands-rename-command">RENAME command</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=command-rename-operands">RENAME command operands</a>
    */
   @AvailableSince(ZVersion.ZOS_2_2)
   override suspend fun renameDataset(params: RenameDatasetRequest): SshRenameDatasetResponse {
@@ -95,8 +95,8 @@ class SshDatasetsAPI(private val requestRunner: SshRequestRunner) : DatasetsAPI 
   /**
    * Uses a combination of "tsocmd LISTDS" and "cp" commands. "LISTDS" is used to check whether the data set
    * or the data set member exists, "cp" - to copy to the data set
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=descriptions-cp-copy-file">cp - Copy a file</a>
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=subcommands-listds-command">LISTDS command</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=descriptions-cp-copy-file">cp - Copy a file</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=subcommands-listds-command">LISTDS command</a>
    */
   @AvailableSince(ZVersion.ZOS_2_2)
   override suspend fun copyToDataset(params: CopyToDatasetRequest): SshCopyToDatasetResponse {

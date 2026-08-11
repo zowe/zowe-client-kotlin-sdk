@@ -18,7 +18,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfDsAndFilesCommonRequestHeade
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfTargetSystemRequestHeaders
 import kotlin.collections.plus
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-create-sequential-partitioned-data-set#CreateDataSet__title__4">Create a sequential or partitioned data set: Standard and Custom headers</a> */
+/** @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-create-sequential-partitioned-data-set#CreateDataSet__title__4">Create a sequential or partitioned data set: Standard and Custom headers</a> */
 class ZosmfCreateDatasetRequestHeaders(
   // ZosmfDsAndFilesCommonRequestHeaders
   @property:AvailableOnly(ZVersion.ZOS_2_4) override val sessionLimitWait: Int? = null,

@@ -21,7 +21,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMAttribut
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions.XIBMMigratedRecall
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-members-zos-data-set#ListDataSetMembers__title__3">List the members of a z/OS data set: Custom headers</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-list-members-zos-data-set#ListDataSetMembers__title__3">List the members of a z/OS data set: Custom headers</a>
  * @property maxItems X-IBM-Max-Items custom header
  * @property attributesLevel level of attributes to be returned ([AttributesLevel.FULL] by default)
  * @property returnTotalRows additional parameter for X-IBM-Attributes. If true - it is set to "$attributes,total"

@@ -15,7 +15,7 @@ import org.zowe.kotlinsdk.core.datasets.api.messaging.DeleteDatasetResponse
 import org.zowe.kotlinsdk.providers.zowe.SshCmdResponse
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=command-delete-return-codes">DELETE command return codes</a> */
+/** @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=command-delete-return-codes">DELETE command return codes</a> */
 class SshDeleteDatasetResponse(sshCmdResponse: SshCmdResponse) : SshResponse, DeleteDatasetResponse {
   override var status: Status = SshDeleteDatasetStatus(sshCmdResponse)
 }

@@ -18,7 +18,7 @@ import org.zowe.kotlinsdk.core.datasets.data.DatasetItem
 
 // TODO: rework respectively according to SshDatasetItem
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=zdsfri-json-document-specifications-zos-data-set-file-rest-interface-requests#RESTFILES_JSONDocumentSpecifications__itemkeypairsattributebase">JSON document specifications for z/OS data set and file REST interface requests: Data set list with attributes document</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=zdsfri-json-document-specifications-zos-data-set-file-rest-interface-requests#RESTFILES_JSONDocumentSpecifications__itemkeypairsattributebase">JSON document specifications for z/OS data set and file REST interface requests: Data set list with attributes document</a>
  * @property datasetName dsname response param
  * @property zosmfBlockSize blksz response param
  * @property catalogName catnm response param
@@ -114,7 +114,7 @@ class ZosmfDatasetItem(
     }
   }
 
-  /** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=set-dsorg-recfm-lrecl-blksize-operands">DSORG, RECFM, LRECL, and BLKSIZE operands</a> */
+  /** @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=set-dsorg-recfm-lrecl-blksize-operands">DSORG, RECFM, LRECL, and BLKSIZE operands</a> */
   @Serializable
   enum class ZosmfDatasetOrganization {
     @SerialName("PO") PO,
@@ -142,8 +142,8 @@ class ZosmfDatasetItem(
   }
 
   /**
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=statement-recfm-parameter">RECFM parameter</a>
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=set-dsorg-recfm-lrecl-blksize-operands">DSORG, RECFM, LRECL, and BLKSIZE operands</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=statement-recfm-parameter">RECFM parameter</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=set-dsorg-recfm-lrecl-blksize-operands">DSORG, RECFM, LRECL, and BLKSIZE operands</a>
    */
   @Serializable
   enum class ZosmfRecordFormat {

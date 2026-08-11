@@ -20,8 +20,8 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfErrorReport
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpRequest
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-delete-sequential-partitioned-data-set">Delete a sequential and partitioned dataset</a>
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-delete-partitioned-data-set-member">Delete a partitioned dataset member</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-delete-sequential-partitioned-data-set">Delete a sequential and partitioned dataset</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-delete-partitioned-data-set-member">Delete a partitioned dataset member</a>
  * @property dsName the dataset-name path param
  * @property volume the volume path param
  * @property memberName the member-name path param

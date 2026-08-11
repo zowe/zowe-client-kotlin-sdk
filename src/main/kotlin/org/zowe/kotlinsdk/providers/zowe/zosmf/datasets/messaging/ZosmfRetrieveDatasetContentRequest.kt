@@ -28,7 +28,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfStatus
 
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-retrieve-contents-zos-data-set-member">Retrieve the contents of a z/OS data set or member</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-retrieve-contents-zos-data-set-member">Retrieve the contents of a z/OS data set or member</a>
  * @property dsName the dataset-name path param
  * @property memberName the member-name path param
  * @property volser the volser path param

@@ -20,7 +20,7 @@ import org.zowe.kotlinsdk.core.StatusType
 import org.zowe.kotlinsdk.core.files.api.messaging.RetrieveFileContentResponse
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpChanneledResponse
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-retrieve-contents-zos-unix-file">Retrieve the contents of a z/OS UNIX file</a> */
+/** @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-retrieve-contents-zos-unix-file">Retrieve the contents of a z/OS UNIX file</a> */
 class ZosmfRetrieveFileContentResponse(
   override val status: Status,
   requestDataType: DataType,

@@ -22,14 +22,14 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.jes.messaging.ZosmfListJobsRespon
 
 /**
  * Implementation of Jes API for z/OSMF REST API to work with JES jobs
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=services-zos-jobs-rest-interface">z/OS jobs REST interface</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=services-zos-jobs-rest-interface">z/OS jobs REST interface</a>
  */
 @ZoweInternalAPI
 class ZosmfJesAPI(private val requestRunner: HttpRequestRunner) : JesAPI {
 
   /**
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-obtain-status-job">Obtain the status of a job</a>
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-obtain-status-job#izuhpinfo_api_getjobstatus__title__6">Obtain the status of a job: Expected Response</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-obtain-status-job">Obtain the status of a job</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-obtain-status-job#izuhpinfo_api_getjobstatus__title__6">Obtain the status of a job: Expected Response</a>
    */
   @AvailableSince(ZVersion.ZOS_2_1)
   override suspend fun getJob(params: GetJobRequest): ZosmfGetJobResponse {
@@ -37,8 +37,8 @@ class ZosmfJesAPI(private val requestRunner: HttpRequestRunner) : JesAPI {
   }
 
   /**
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=interface-list-jobs-owner-prefix-job-id">List the jobs for an owner, prefix, or job ID</a>
-   * @see <a href="https://www.ibm.com/docs/en/zos/3.2.0?topic=interface-list-jobs-owner-prefix-job-id#ListJobsForOwner__title__6">List the jobs for an owner, prefix, or job ID: Expected Response</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-list-jobs-owner-prefix-job-id">List the jobs for an owner, prefix, or job ID</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-list-jobs-owner-prefix-job-id#ListJobsForOwner__title__6">List the jobs for an owner, prefix, or job ID: Expected Response</a>
    */
   @AvailableSince(ZVersion.ZOS_2_1)
   override suspend fun listJobs(params: ListJobsRequest): ZosmfListJobsResponse {

@@ -14,5 +14,5 @@ import org.zowe.kotlinsdk.core.Status
 import org.zowe.kotlinsdk.core.datasets.api.messaging.RenameDatasetResponse
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpResponse
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-data-set-member-utilities#IZUHPINFO_API_PutDataSetMemberUtilities__title__10">z/OS data set and member utilities: Expected response</a> */
+/** @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-data-set-member-utilities#IZUHPINFO_API_PutDataSetMemberUtilities__title__10">z/OS data set and member utilities: Expected response</a> */
 class ZosmfRenameDatasetResponse(override var status: Status) : ZosmfHttpResponse(), RenameDatasetResponse

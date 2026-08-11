@@ -20,7 +20,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfStatus
 
 // TODO: unit tests when possible
 /**
- * @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-data-set-member-utilities">z/OS data set and member utilities: 'hrecall' request</a>
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-data-set-member-utilities">z/OS data set and member utilities: 'hrecall' request</a>
  * @property dsName to-dataset-name path param
  * @property memberName member-name path param
  */

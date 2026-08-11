@@ -6,10 +6,6 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalenikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.definitions
@@ -17,7 +13,7 @@ package org.zowe.kotlinsdk.providers.zowe.zosmf.files.definitions
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-list-files-directories-unix-file-path#ListUNIXfiles__table_treetraversal">List the files and directories of a UNIX file path: Tree traversal parameters</a> */
+/** @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-list-files-directories-unix-file-path#ListUNIXfiles__table_treetraversal">List the files and directories of a UNIX file path: Tree traversal parameters</a> */
 @Serializable
 enum class ZosmfSymlinkMode {
   @SerialName("follow") FOLLOW,
