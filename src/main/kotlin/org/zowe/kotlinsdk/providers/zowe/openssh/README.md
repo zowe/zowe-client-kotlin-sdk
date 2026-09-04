@@ -12,7 +12,7 @@
 | createDataset              | ✅          | ✅            |
 | deleteDataset              | ✅          | ✅            |
 | renameDataset              | ✅          | ✅            |
-| copyDataset                | ❌          | ❌            |
+| copyToDataset              | ✅          | ✅            |
 | migrateDataset             | ❌          | ❌            |
 | recallDataset              | ❌          | ❌            |
 | deleteDatasetBackupVersion | ❌          | ❌            |

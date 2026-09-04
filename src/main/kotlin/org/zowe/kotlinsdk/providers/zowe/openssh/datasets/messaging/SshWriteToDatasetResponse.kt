@@ -14,12 +14,12 @@ import org.zowe.kotlinsdk.core.Status
 import org.zowe.kotlinsdk.core.datasets.api.messaging.WriteToDatasetResponse
 import org.zowe.kotlinsdk.providers.zowe.SshCmdResponse
 import org.zowe.kotlinsdk.providers.zowe.SshResponse
-import org.zowe.kotlinsdk.providers.zowe.SshStatus
+import org.zowe.kotlinsdk.providers.zowe.openssh.SshCpStatus
 
 /**
  * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=descriptions-cp-copy-file#cp__title__18">cp - Copy a file. Exit values</a>
  * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=descriptions-cp-copy-file#cp__cpmessagesection__title__1">cp - Copy a file. Messages</a>
  */
 class SshWriteToDatasetResponse(sshCmdResponse: SshCmdResponse) : SshResponse, WriteToDatasetResponse {
-  override var status: Status = SshStatus(sshCmdResponse)
+  override var status: Status = SshCpStatus(sshCmdResponse)
 }

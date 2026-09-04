@@ -22,7 +22,7 @@ import org.zowe.kotlinsdk.providers.zowe.SshRequest
 
 /**
  * Uses a combination of "tsocmd LISTDS" and "cp" commands. "LISTDS" is used to check whether the data set
- * or the data set member exists, "cp" - to write the content
+ * to write the content to exists, "cp" - to write the content
  * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=descriptions-cp-copy-file">cp - Copy a file</a>
  * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=subcommands-listds-command">LISTDS command</a>
  * @property dsName the data set or data set + member name to write the content to
@@ -44,30 +44,33 @@ class SshWriteToDatasetRequest(
   override var sshCommand = "cp $contentTypeStr '/dev/fd0' \"//'$dsName'\""
   override val multilineContent: ByteArray = content
 
+  /** The name of the data set itself, without the member part, if the one is provided in the [dsName] */
+  private val dsNameWithoutMember = dsName.substringBefore("(")
+
   override suspend fun produceResponseObject(clientResponse: Any): SshWriteToDatasetResponse {
     return SshWriteToDatasetResponse(clientResponse as SshCmdResponse)
   }
 
   /**
-   * Executes "LISTDS" for data sets to check if the data set exists first,
+   * Executes "LISTDS" to check if the data set exists first,
    * then executes "cp" command to write the provided [content].
-   * Executes "cp" straightaway for a data set member to write the provided [content]
+   * The check is always performed against the data set name itself, without the member part:
+   * a member is created by the write if it does not exist yet, but the data set to hold it must already be there
    * @param client the [SSHClient] to execute the commands with
    * @return [SshWriteToDatasetResponse] object when the commands are executed
    */
   override suspend fun execSshRequest(client: SSHClient): SshWriteToDatasetResponse {
-    if (!dsName.contains("(") || !dsName.contains(")")) {
-      val listDatasetsRequest = SshListDatasetsRequest(connection, dsName, attributesLevel = AttributesLevel.NAME)
-      val listDatasetsResponse = listDatasetsRequest.execSshRequest(client) as SshListDatasetsResponse
-      if (listDatasetsResponse.status.type != StatusType.SUCCESS) {
-        return produceResponseObject(
-          SshCmdResponse(
-            1,
-            output = "ERROR OCCURRED DURING SEARCH FOR THE DATA SET OR MEMBER TO WRITE THE CONTENT TO." +
-              "\nDETAILS OF THE \"LIST\" OPERATION:\n${listDatasetsResponse.status.text}"
-          )
+    val listDatasetsRequest =
+      SshListDatasetsRequest(connection, dsNameWithoutMember, attributesLevel = AttributesLevel.NAME)
+    val listDatasetsResponse = listDatasetsRequest.execSshRequest(client) as SshListDatasetsResponse
+    if (listDatasetsResponse.status.type != StatusType.SUCCESS) {
+      return produceResponseObject(
+        SshCmdResponse(
+          1,
+          output = "ERROR OCCURRED DURING SEARCH FOR THE DATA SET OR MEMBER TO WRITE THE CONTENT TO." +
+            "\nDETAILS OF THE \"LIST\" OPERATION:\n${listDatasetsResponse.status.text}"
         )
-      }
+      )
     }
 
     val clientResponse = performSshPlainRequest(client)

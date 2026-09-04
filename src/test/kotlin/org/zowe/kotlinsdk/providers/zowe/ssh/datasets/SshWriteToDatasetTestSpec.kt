@@ -15,6 +15,7 @@ import io.kotest.assertions.fail
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
 import org.zowe.kotlinsdk.core.StatusType
 import org.zowe.kotlinsdk.core.WrapperType
 import io.kotest.provided.ProjectConfig.sshMockResponseDispatcher
@@ -144,7 +145,12 @@ class SshWriteToDatasetTestSpec : ShouldSpec({
           && it.contains("LISTDS")
           && it.contains(dsName)
         },
-        handler = { _, _ -> throw Exception("LISTDS must not be called on members") }
+        handler = { command, _ ->
+          // The existence of the data set itself is to be checked, not the existence of the member
+          assertSoftly { command shouldNotContain memName }
+          val output = listOf(dsName.padEnd(44), "").joinToString("\n")
+          SshMockCommandResponse(output)
+        }
       )
 
       val writeToDatasetRequest = SshWriteToDatasetRequest(mockSshConnection, "$dsName($memName)", testContent)
@@ -197,6 +203,97 @@ class SshWriteToDatasetTestSpec : ShouldSpec({
         assertSoftly {
           writeToDatasetResponse.status.type shouldBe StatusType.ERROR
           writeToDatasetResponse.status.text shouldContain "ERROR OCCURRED DURING SEARCH FOR THE DATA SET OR MEMBER"
+        }
+      }
+    }
+
+    should("writeToDataset fail because the data set to write the member to is not found") {
+      val dsName = "TEST.WTDS6"
+      val memName = "TESTMEM2"
+      val testContent = "Hello World!".toByteArray()
+
+      sshMockResponseDispatcher.injectResolver(
+        "ssh:writeToDataset_member_fail_not_found",
+        resolver = {
+          it.trim().startsWith("cp -T '/dev/fd0'")
+          && it.contains(dsName)
+        },
+        handler = { _, _ ->
+          throw Exception("Write should not happen because the data set to hold the member must not be found")
+        }
+      )
+      sshMockResponseDispatcher.injectResolver(
+        "ssh:writeToDataset_member_fail_not_found_listDatasets_$dsName",
+        resolver = {
+          it.trim().startsWith("tsocmd")
+          && it.contains("LISTDS")
+          && it.contains(dsName)
+        },
+        handler = { _, _ ->
+          val output = listOf(
+            "IKJ58518I  UNABLE TO COMPLETE PROCESSING FOR ENTRY '$dsName'  +",
+            "IKJ58518I LOCATE ERROR CODE   08",
+            "",
+          ).joinToString("\n")
+          SshMockCommandResponse(output, exitCode = 8)
+        }
+      )
+
+      val writeToDatasetRequest = SshWriteToDatasetRequest(mockSshConnection, "$dsName($memName)", testContent)
+      val writeToDatasetResponse = datasetsApi.writeToDataset(writeToDatasetRequest)
+
+      if (writeToDatasetResponse !is SshWriteToDatasetResponse) {
+        fail("Should be instance of ${SshWriteToDatasetResponse::class.java.name}")
+      } else {
+        assertSoftly {
+          writeToDatasetResponse.status.type shouldBe StatusType.ERROR
+          writeToDatasetResponse.status.text shouldContain "ERROR OCCURRED DURING SEARCH FOR THE DATA SET OR MEMBER"
+        }
+      }
+    }
+
+    should("writeToDataset report a warning when the records are truncated during the write") {
+      val dsName = "TEST.WTDS7"
+      val testContent = "A record that is longer than the LRECL of the data set to write it to".toByteArray()
+
+      sshMockResponseDispatcher.injectResolver(
+        "ssh:writeToDataset_truncation_warning",
+        resolver = {
+          it.trim().startsWith("cp -T '/dev/fd0'")
+          && it.contains(dsName)
+        },
+        handler = { _, inputStream ->
+          inputStream.readBytes()
+          val stderr = listOf(
+            "cp: FSUM6260 write error on file \"//'$dsName'\": " +
+              "EDC5003I Truncation of a record occurred during an I/O operation.",
+            ""
+          ).joinToString("\n")
+          SshMockCommandResponse(output = "", error = stderr, exitCode = 1)
+        }
+      )
+      sshMockResponseDispatcher.injectResolver(
+        "ssh:writeToDataset_truncation_warning_listDatasets_$dsName",
+        resolver = {
+          it.trim().startsWith("tsocmd")
+          && it.contains("LISTDS")
+          && it.contains(dsName)
+        },
+        handler = { _, _ ->
+          val output = listOf(dsName.padEnd(44), "").joinToString("\n")
+          SshMockCommandResponse(output)
+        }
+      )
+
+      val writeToDatasetRequest = SshWriteToDatasetRequest(mockSshConnection, dsName, testContent)
+      val writeToDatasetResponse = datasetsApi.writeToDataset(writeToDatasetRequest)
+
+      if (writeToDatasetResponse !is SshWriteToDatasetResponse) {
+        fail("Should be instance of ${SshWriteToDatasetResponse::class.java.name}")
+      } else {
+        assertSoftly {
+          writeToDatasetResponse.status.type shouldBe StatusType.WARNING
+          writeToDatasetResponse.status.text shouldContain "EDC5003I Truncation of a record occurred"
         }
       }
     }
