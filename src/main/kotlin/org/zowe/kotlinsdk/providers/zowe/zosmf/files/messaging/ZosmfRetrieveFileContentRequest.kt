@@ -25,6 +25,7 @@ import org.zowe.kotlinsdk.core.connectivity.HttpConnection
 import org.zowe.kotlinsdk.core.files.api.messaging.RetrieveFileContentRequest
 import org.zowe.kotlinsdk.providers.zowe.zosmf.XIBMDataType
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpRequest
+import org.zowe.kotlinsdk.providers.zowe.zosmf.produceUssPathPart
 import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfStatus
 
 /**
@@ -50,7 +51,7 @@ class ZosmfRetrieveFileContentRequest(
 
   override val method = HttpMethod.Get
 
-  override val path = "/zosmf/restfiles/fs/$filePath"
+  override val path = "/zosmf/restfiles/fs/${produceUssPathPart(filePath)}"
 
   override val parameters = mutableMapOf(
     "search" to search,

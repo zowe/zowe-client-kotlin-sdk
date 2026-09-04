@@ -19,9 +19,10 @@
 
 ## [FilesAPI](files/SshFilesAPI.kt) functions
 
-| Method    | Implemented | Test coverage |
-|-----------|-------------|---------------|
-| listFiles | ✅          | ✅            |
+| Method              | Implemented | Test coverage |
+|---------------------|-------------|---------------|
+| listFiles           | ✅          | ✅            |
+| retrieveFileContent | ✅          | ✅            |
 
 ## [JesAPI](jes/SshJesAPI.kt) functions
 

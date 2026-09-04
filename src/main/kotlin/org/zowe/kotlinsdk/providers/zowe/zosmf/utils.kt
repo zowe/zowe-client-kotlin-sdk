@@ -13,6 +13,21 @@
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf
 
+import io.ktor.http.encodeURLPath
+
+/**
+ * Produce the USS path part of a z/OSMF REST API URL.
+ * The path is appended to the "/zosmf/restfiles/fs" base path as is, so the leading slash
+ * of an absolute USS path is removed to avoid the doubled slash in the resulting URL.
+ * All the characters that are not allowed in a URL path (a space in a file name, e.g.) are encoded,
+ * the path separators are kept as is
+ * @param ussPath the USS file or directory path to process
+ * @return the encoded path part, ready to be appended to the base path
+ */
+fun produceUssPathPart(ussPath: String): String {
+  return ussPath.trimStart('/').encodeURLPath()
+}
+
 // TODO: doc
 // TODO: rework
 //fun getUnsafeKTorHttpClient(): HttpClient {

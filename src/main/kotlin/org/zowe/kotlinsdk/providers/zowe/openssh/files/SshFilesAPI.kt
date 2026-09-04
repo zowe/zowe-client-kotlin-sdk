@@ -17,6 +17,7 @@ import org.zowe.kotlinsdk.core.files.api.messaging.*
 import org.zowe.kotlinsdk.providers.zowe.SshRequestRunner
 import org.zowe.kotlinsdk.providers.zowe.ZoweInternalAPI
 import org.zowe.kotlinsdk.providers.zowe.openssh.files.messaging.SshListFilesResponse
+import org.zowe.kotlinsdk.providers.zowe.openssh.files.messaging.SshRetrieveFileContentResponse
 
 /**
  * Implementation of Files API for SSH to work with USS files and directories
@@ -36,8 +37,15 @@ class SshFilesAPI(private val requestRunner: SshRequestRunner) : FilesAPI {
     return requestRunner.runRequest(params) as SshListFilesResponse
   }
 
-  override suspend fun retrieveFileContent(params: RetrieveFileContentRequest): RetrieveFileContentResponse {
-    TODO("Not yet implemented")
+  /**
+   * Retrieve the USS file content, copying it to the standard output of the "cp" command
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=descriptions-cp-copy-files">cp — Copy files</a>
+   * @param params [RetrieveFileContentRequest] instance to get parameters for the request from
+   * @return [SshRetrieveFileContentResponse] instance with the request handling result
+   */
+  @AvailableSince(ZVersion.ZOS_2_2)
+  override suspend fun retrieveFileContent(params: RetrieveFileContentRequest): SshRetrieveFileContentResponse {
+    return requestRunner.runRequest(params) as SshRetrieveFileContentResponse
   }
 
   override suspend fun writeToFile(params: WriteToFileRequest): WriteToFileResponse {
