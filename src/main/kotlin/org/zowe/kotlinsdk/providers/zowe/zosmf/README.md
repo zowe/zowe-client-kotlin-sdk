@@ -23,7 +23,7 @@
 |--------------------------|-------------|---------------|
 | listFiles                | ✅          | ✅            |
 | retrieveFileContent      | ✅          | ✅            |
-| writeToFile              | ✅          | ❌            |
+| writeToFile              | ✅          | ✅            |
 | createFile               | ✅          | ❌            |
 | deleteFile               | ✅          | ❌            |
 | copyFile                 | ✅          | ❌            |

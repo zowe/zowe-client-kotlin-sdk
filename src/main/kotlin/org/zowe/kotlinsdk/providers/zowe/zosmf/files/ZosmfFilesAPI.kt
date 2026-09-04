@@ -43,8 +43,13 @@ class ZosmfFilesAPI(private val requestRunner: HttpRequestRunner) : FilesAPI {
     return requestRunner.runRequest(params) as ZosmfRetrieveFileContentResponse
   }
 
-  override suspend fun writeToFile(params: WriteToFileRequest): WriteToFileResponse {
-    TODO("Not yet implemented")
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-write-data-zos-unix-file">Write data to a z/OS UNIX file</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-write-data-zos-unix-file#PutWriteUnixFile__title__8">Write data to a z/OS UNIX file: Expected response</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_1)
+  override suspend fun writeToFile(params: WriteToFileRequest): ZosmfWriteToFileResponse {
+    return requestRunner.runRequest(params) as ZosmfWriteToFileResponse
   }
 
   override suspend fun createFile(params: CreateFileRequest): CreateFileResponse {
