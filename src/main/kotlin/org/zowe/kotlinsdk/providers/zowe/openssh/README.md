@@ -24,6 +24,7 @@
 | listFiles           | ✅          | ✅            |
 | retrieveFileContent | ✅          | ✅            |
 | writeToFile         | ✅          | ✅            |
+| createFile          | ✅          | ✅            |
 
 ## [JesAPI](jes/SshJesAPI.kt) functions
 

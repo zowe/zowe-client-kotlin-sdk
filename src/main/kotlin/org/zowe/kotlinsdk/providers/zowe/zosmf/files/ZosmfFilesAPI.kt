@@ -52,8 +52,13 @@ class ZosmfFilesAPI(private val requestRunner: HttpRequestRunner) : FilesAPI {
     return requestRunner.runRequest(params) as ZosmfWriteToFileResponse
   }
 
-  override suspend fun createFile(params: CreateFileRequest): CreateFileResponse {
-    TODO("Not yet implemented")
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-create-unix-file-directory">Create a UNIX file or directory</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-create-unix-file-directory#CreateUnixFile__getlist_datasets__title__1">Create a UNIX file or directory: Expected response</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_1)
+  override suspend fun createFile(params: CreateFileRequest): ZosmfCreateFileResponse {
+    return requestRunner.runRequest(params) as ZosmfCreateFileResponse
   }
 
   override suspend fun deleteFile(params: DeleteFileRequest): DeleteFileResponse {

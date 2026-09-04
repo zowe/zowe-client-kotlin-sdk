@@ -24,7 +24,7 @@
 | listFiles                | ✅          | ✅            |
 | retrieveFileContent      | ✅          | ✅            |
 | writeToFile              | ✅          | ✅            |
-| createFile               | ✅          | ❌            |
+| createFile               | ✅          | ✅            |
 | deleteFile               | ✅          | ❌            |
 | copyFile                 | ✅          | ❌            |
 | moveFile                 | ✅          | ❌            |

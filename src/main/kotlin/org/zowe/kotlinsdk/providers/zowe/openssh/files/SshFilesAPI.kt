@@ -16,6 +16,7 @@ import org.zowe.kotlinsdk.core.files.api.FilesAPI
 import org.zowe.kotlinsdk.core.files.api.messaging.*
 import org.zowe.kotlinsdk.providers.zowe.SshRequestRunner
 import org.zowe.kotlinsdk.providers.zowe.ZoweInternalAPI
+import org.zowe.kotlinsdk.providers.zowe.openssh.files.messaging.SshCreateFileResponse
 import org.zowe.kotlinsdk.providers.zowe.openssh.files.messaging.SshListFilesResponse
 import org.zowe.kotlinsdk.providers.zowe.openssh.files.messaging.SshRetrieveFileContentResponse
 import org.zowe.kotlinsdk.providers.zowe.openssh.files.messaging.SshWriteToFileResponse
@@ -60,8 +61,16 @@ class SshFilesAPI(private val requestRunner: SshRequestRunner) : FilesAPI {
     return requestRunner.runRequest(params) as SshWriteToFileResponse
   }
 
-  override suspend fun createFile(params: CreateFileRequest): CreateFileResponse {
-    TODO("Not yet implemented")
+  /**
+   * Create the USS file or directory, running the "touch" or the "mkdir" command respectively
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=descriptions-mkdir-make-directory">mkdir — Make a directory</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=descriptions-touch-change-file-access-modification-times">touch — Change the file access and modification times</a>
+   * @param params [CreateFileRequest] instance to get parameters for the request from
+   * @return [SshCreateFileResponse] instance with the request handling result
+   */
+  @AvailableSince(ZVersion.ZOS_2_2)
+  override suspend fun createFile(params: CreateFileRequest): SshCreateFileResponse {
+    return requestRunner.runRequest(params) as SshCreateFileResponse
   }
 
   override suspend fun deleteFile(params: DeleteFileRequest): DeleteFileResponse {
