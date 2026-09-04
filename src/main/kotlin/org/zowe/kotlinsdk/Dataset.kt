@@ -19,7 +19,7 @@ import com.google.gson.annotations.SerializedName
 
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("DatasetInfo", "org.zowe.kotlinsdk.impl.restfiles")
+  ReplaceWith("ZosmfDatasetItem", "org.zowe.kotlinsdk.providers.zowe.datasets.definitions")
 )
 data class Dataset(
   @SerializedName("dsname")
@@ -124,7 +124,7 @@ data class Dataset(
 
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("DatasetInfo.SpaceUnits", "org.zowe.kotlinsdk.impl.restfiles")
+  ReplaceWith("ZosmfDatasetItem.ZosmfSpaceUnits", "org.zowe.kotlinsdk.providers.zowe.datasets.definitions")
 )
 enum class SpaceUnits {
   @SerializedName("TRACKS")
@@ -146,17 +146,14 @@ enum class SpaceUnits {
   MEGABYTES
 }
 
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("DatasetInfo.HasBooleanValue", "org.zowe.kotlinsdk.impl.restfiles")
-)
+@Deprecated("Scheduled for removal since v1.0.0")
 interface HasBooleanValue {
   val value: Boolean
 }
 
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("DatasetInfo.MultipleVolumes", "org.zowe.kotlinsdk.impl.restfiles")
+  ReplaceWith("ZosmfDatasetItem.ZosmfIsMultipleVolumes", "org.zowe.kotlinsdk.providers.zowe.datasets.definitions")
 )
 enum class MultipleVolumes(override val value: Boolean) : HasBooleanValue {
   @SerializedName("Y")
@@ -168,7 +165,7 @@ enum class MultipleVolumes(override val value: Boolean) : HasBooleanValue {
 
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("DatasetInfo.HasMigrated", "org.zowe.kotlinsdk.impl.restfiles")
+  ReplaceWith("ZosmfDatasetItem.ZosmfIsMigrated", "org.zowe.kotlinsdk.providers.zowe.datasets.definitions")
 )
 enum class HasMigrated(override val value: Boolean) : HasBooleanValue {
   @SerializedName("YES")

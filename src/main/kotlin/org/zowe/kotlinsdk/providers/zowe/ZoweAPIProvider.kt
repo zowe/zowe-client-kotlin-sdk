@@ -19,6 +19,7 @@ import org.zowe.kotlinsdk.core.files.api.FilesAPI
 import org.zowe.kotlinsdk.core.info.api.InfoAPI
 import org.zowe.kotlinsdk.core.jes.api.JesAPI
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.SshDatasetsAPI
+import org.zowe.kotlinsdk.providers.zowe.openssh.files.SshFilesAPI
 import org.zowe.kotlinsdk.providers.zowe.openssh.jes.SshJesAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.ZosmfDatasetsAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.files.ZosmfFilesAPI
@@ -53,6 +54,7 @@ class ZoweAPIProvider(
         it as SshRequestRunner
         mapOf(
           DatasetsAPI::class.java to SshDatasetsAPI(it),
+          FilesAPI::class.java to SshFilesAPI(it),
           JesAPI::class.java to SshJesAPI(it)
         )
       }

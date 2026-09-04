@@ -257,7 +257,7 @@ class SshRetrieveDatasetContentTestSpec : ShouldSpec({
       if (retrieveDatasetContentResponse !is SshRetrieveDatasetContentResponse) {
         fail("Should be instance of ${SshRetrieveDatasetContentResponse::class.java.name}")
       } else {
-        val readChunks = retrieveDatasetContentResponse.readAsIs() as List<ByteArray>
+        val readChunks = retrieveDatasetContentResponse.readAsIs()
         val resultingString = readChunks
           .fold("") { acc, nextChunk -> acc + nextChunk.toString(Charsets.UTF_8) }
         assertSoftly {

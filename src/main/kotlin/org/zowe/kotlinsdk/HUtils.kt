@@ -19,7 +19,7 @@ import com.google.gson.annotations.SerializedName
 
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("HRecallBody", "org.zowe.kotlinsdk.core.restfiles")
+  ReplaceWith("ZosmfRecallDatasetRequestBody", "org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging")
 )
 data class HRecall(
   @SerializedName("request")
@@ -34,7 +34,7 @@ data class HRecall(
 
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("HMigrateBody", "org.zowe.kotlinsdk.core.restfiles")
+  ReplaceWith("ZosmfMigrateDatasetRequestBody", "org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging")
 )
 data class HMigrate(
   @SerializedName("request")
@@ -48,7 +48,7 @@ data class HMigrate(
 
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("HDeleteBody", "org.zowe.kotlinsdk.core.restfiles")
+  ReplaceWith("ZosmfDeleteDatasetBackupVersionRequestBody", "org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging")
 )
 data class HDelete(
   @SerializedName("request")

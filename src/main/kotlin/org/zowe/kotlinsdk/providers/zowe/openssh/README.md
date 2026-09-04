@@ -4,28 +4,28 @@
 
 | Method                     | Implemented | Test coverage |
 |----------------------------|-------------|---------------|
-| listDatasets               | ✅           | ✅             |
-| getDatasetInfo             | ✅           | ✅             |
-| listDatasetMembers         | ✅           | ✅             |
-| retrieveDatasetContent     | ✅           | ✅             |
-| writeToDataset             | ✅           | ✅             |
-| createDataset              | ✅           | ✅             |
-| deleteDataset              | ✅           | ✅             |
-| renameDataset              | ✅           | ✅             |
-| copyDataset                | ❌           | ❌             |
-| migrateDataset             | ❌           | ❌             |
-| recallDataset              | ❌           | ❌             |
-| deleteDatasetBackupVersion | ❌           | ❌             |
+| listDatasets               | ✅          | ✅            |
+| getDatasetInfo             | ✅          | ✅            |
+| listDatasetMembers         | ✅          | ✅            |
+| retrieveDatasetContent     | ✅          | ✅            |
+| writeToDataset             | ✅          | ✅            |
+| createDataset              | ✅          | ✅            |
+| deleteDataset              | ✅          | ✅            |
+| renameDataset              | ✅          | ✅            |
+| copyDataset                | ❌          | ❌            |
+| migrateDataset             | ❌          | ❌            |
+| recallDataset              | ❌          | ❌            |
+| deleteDatasetBackupVersion | ❌          | ❌            |
 
 ## [FilesAPI](files/SshFilesAPI.kt) functions
 
 | Method    | Implemented | Test coverage |
 |-----------|-------------|---------------|
-| listFiles | ❌           | ❌             |
+| listFiles | ✅          | ✅            |
 
 ## [JesAPI](jes/SshJesAPI.kt) functions
 
 | Method   | Implemented | Test coverage |
 |----------|-------------|---------------|
-| getJob   | ✅           | ✅             |
-| listJobs | ✅           | ✅             |
+| getJob   | ✅          | ✅            |
+| listJobs | ✅          | ✅            |

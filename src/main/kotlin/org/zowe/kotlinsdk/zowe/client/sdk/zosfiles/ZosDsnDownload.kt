@@ -31,7 +31,7 @@ import java.io.InputStream
  */
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("RetrieveDatasetContent", "org.zowe.kotlinsdk.impl.restfiles")
+  ReplaceWith("DatasetsAPI", "org.zowe.kotlinsdk.core.datasets.api")
 )
 class ZosDsnDownload (
   var connection: ZOSConnection,
@@ -53,6 +53,10 @@ class ZosDsnDownload (
    * @return a content stream
    * @throws Exception error processing request
    */
+  @Deprecated(
+    "Scheduled for removal since v1.0.0",
+    ReplaceWith("DatasetsAPI.retrieveDatasetContent(params)", "org.zowe.kotlinsdk.core.datasets.api")
+  )
   fun downloadDsn(datasetName: String, params: DownloadParams): InputStream {
     val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
     val dataApi = buildApi<DataAPI>(url, httpClient)

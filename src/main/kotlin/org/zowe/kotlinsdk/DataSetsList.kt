@@ -17,6 +17,10 @@ package org.zowe.kotlinsdk
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("ZosmfListDatasetsResponse", "org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging")
+)
 data class DataSetsList(
   @SerializedName("items")
   @Expose

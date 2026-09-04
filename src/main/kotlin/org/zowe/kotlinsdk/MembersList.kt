@@ -19,7 +19,7 @@ import com.google.gson.annotations.SerializedName
 
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("ListDatasetMembersResponse", "org.zowe.kotlinsdk.impl.restfiles")
+  ReplaceWith("ZosmfListDatasetMembersResponse", "org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging")
 )
 data class MembersList(
 

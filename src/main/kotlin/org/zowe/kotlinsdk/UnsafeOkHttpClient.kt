@@ -24,6 +24,7 @@ import javax.net.ssl.SSLSession
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
+@Deprecated("Scheduled for removal since v1.0.0. Decide on the respective changes to prevent security issues")
 object UnsafeOkHttpClient {
   // Create a trust manager that does not validate certificate chains
   val unsafeOkHttpClient: OkHttpClient

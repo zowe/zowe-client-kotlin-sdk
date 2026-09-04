@@ -21,7 +21,7 @@ import org.zowe.kotlinsdk.annotations.ZVersion
 
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("CreateDatasetBody", "org.zowe.kotlinsdk.core.restfiles")
+  ReplaceWith("ZosmfCreateDatasetRequestBody", "org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging")
 )
 data class CreateDataset(
   @SerializedName("volser")
@@ -90,7 +90,10 @@ data class CreateDataset(
 
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("AllocationUnit", "org.zowe.kotlinsdk.core.restfiles")
+  ReplaceWith(
+    "ZosmfCreateDatasetRequestBody.ZosmfAllocationUnit",
+    "org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging"
+  )
 )
 enum class AllocationUnit(private val type : String) {
   @SerializedName("TRK")
@@ -107,7 +110,10 @@ enum class AllocationUnit(private val type : String) {
 
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("DatasetOrganization", "org.zowe.kotlinsdk.core.restfiles")
+  ReplaceWith(
+    "ZosmfDatasetItem.ZosmfDatasetOrganization",
+    "org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions"
+  )
 )
 enum class DatasetOrganization(private val type: String) {
   @SerializedName("PO")
@@ -129,7 +135,10 @@ enum class DatasetOrganization(private val type: String) {
 
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("DsType", "org.zowe.kotlinsdk.core.restfiles")
+  ReplaceWith(
+    "ZosmfDatasetType",
+    "org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions"
+  )
 )
 enum class DsnameType {
   @SerializedName("LIBRARY")
@@ -150,7 +159,10 @@ enum class DsnameType {
 
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("RecordFormat", "org.zowe.kotlinsdk.core.restfiles")
+  ReplaceWith(
+    "ZosmfDatasetItem.ZosmfRecordFormat",
+    "org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.definitions"
+  )
 )
 enum class RecordFormat(private val type: String) {
   @SerializedName("F")

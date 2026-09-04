@@ -21,7 +21,7 @@ import org.zowe.kotlinsdk.SymlinkMode
  */
 @Deprecated(
     "Scheduled for removal since v1.0.0",
-    ReplaceWith("USSListParams", "org.zowe.kotlinsdk.impl.restfiles")
+    ReplaceWith("ZosmfListFilesRequest", "org.zowe.kotlinsdk.providers.zowe.files.messaging")
 )
 class UssListParams(
 

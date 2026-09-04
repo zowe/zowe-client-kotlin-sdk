@@ -25,7 +25,7 @@ import org.zowe.kotlinsdk.annotations.ZVersion
 
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("InfoResponse", "org.zowe.kotlinsdk.impl.info")
+  ReplaceWith("GetSystemInfoResponse", "org.zowe.kotlinsdk.core.info")
 )
 data class InfoResponse (
   @SerializedName("zos_version")

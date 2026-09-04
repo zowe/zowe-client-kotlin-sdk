@@ -19,6 +19,7 @@ import org.zowe.kotlinsdk.annotations.ZVersion
 import retrofit2.Call
 import retrofit2.http.*
 
+// TODO: deprecate
 interface TsoApi {
 
   /**

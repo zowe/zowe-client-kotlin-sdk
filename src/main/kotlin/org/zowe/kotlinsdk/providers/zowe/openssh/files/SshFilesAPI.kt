@@ -10,15 +10,30 @@
 
 package org.zowe.kotlinsdk.providers.zowe.openssh.files
 
+import org.zowe.kotlinsdk.annotations.AvailableSince
+import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.files.api.FilesAPI
 import org.zowe.kotlinsdk.core.files.api.messaging.*
 import org.zowe.kotlinsdk.providers.zowe.SshRequestRunner
 import org.zowe.kotlinsdk.providers.zowe.ZoweInternalAPI
+import org.zowe.kotlinsdk.providers.zowe.openssh.files.messaging.SshListFilesResponse
 
+/**
+ * Implementation of Files API for SSH to work with USS files and directories
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=guide-zos-unix-system-services-command-reference">z/OS UNIX System Services command reference</a>
+ */
 @ZoweInternalAPI
 class SshFilesAPI(private val requestRunner: SshRequestRunner) : FilesAPI {
-  override suspend fun listFiles(params: ListFilesRequest): ListFilesResponse {
-    TODO("Not yet implemented")
+
+  /**
+   * List the USS files and directories by the provided path, running the "ls -l" command
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=descriptions-ls-list-file-directory-names-attributes">ls — List file and directory names and attributes</a>
+   * @param params [ListFilesRequest] instance to get parameters for the request from
+   * @return [SshListFilesResponse] instance with the request handling result
+   */
+  @AvailableSince(ZVersion.ZOS_2_2)
+  override suspend fun listFiles(params: ListFilesRequest): SshListFilesResponse {
+    return requestRunner.runRequest(params) as SshListFilesResponse
   }
 
   override suspend fun retrieveFileContent(params: RetrieveFileContentRequest): RetrieveFileContentResponse {

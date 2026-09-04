@@ -21,19 +21,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("gson", "org.zowe.kotlinsdk.core")
-)
+@Deprecated("Scheduled for removal since v1.0.0")
 val gson: Gson = GsonBuilder()
   .setLenient()
   .disableHtmlEscaping()
   .create()
 
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("buildApi(baseUrl, httpClient)", "org.zowe.kotlinsdk.core")
-)
+@Deprecated("Scheduled for removal since v1.0.0")
 inline fun <reified API> buildApi(baseUrl: String, httpClient: OkHttpClient): API {
   val retrofit = Retrofit.Builder()
     .baseUrl(baseUrl)
@@ -44,10 +38,7 @@ inline fun <reified API> buildApi(baseUrl: String, httpClient: OkHttpClient): AP
   return retrofit.create(API::class.java)
 }
 
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("buildApi(baseUrl, httpClient)", "org.zowe.kotlinsdk.core")
-)
+@Deprecated("Scheduled for removal since v1.0.0")
 fun <API> buildApi(baseUrl: String, httpClient: OkHttpClient, apiClass: Class<out API>): API {
   val retrofit = Retrofit.Builder()
     .baseUrl(baseUrl)
@@ -58,10 +49,7 @@ fun <API> buildApi(baseUrl: String, httpClient: OkHttpClient, apiClass: Class<ou
   return retrofit.create(apiClass)
 }
 
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("buildApi(baseUrl, httpClient, ConverterFactory.BYTES)", "org.zowe.kotlinsdk.core")
-)
+@Deprecated("Scheduled for removal since v1.0.0")
 inline fun <reified Api> buildApiWithBytesConverter(baseUrl: String, httpClient: OkHttpClient): Api {
   val retrofit = Retrofit.Builder()
     .baseUrl(baseUrl)
@@ -71,10 +59,7 @@ inline fun <reified Api> buildApiWithBytesConverter(baseUrl: String, httpClient:
   return retrofit.create(Api::class.java)
 }
 
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("buildApi(baseUrl, httpClient, ConverterFactory.BYTES)", "org.zowe.kotlinsdk.core")
-)
+@Deprecated("Scheduled for removal since v1.0.0")
 fun <API> buildApiWithBytesConverter(baseUrl: String, httpClient: OkHttpClient, apiClass: Class<out API>): API {
   val retrofit = Retrofit.Builder()
     .baseUrl(baseUrl)

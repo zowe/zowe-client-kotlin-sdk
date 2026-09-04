@@ -17,6 +17,10 @@ package org.zowe.kotlinsdk
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("ZosmfFileItem", "org.zowe.kotlinsdk.providers.zowe.zosmf.files.definitions")
+)
 data class UssFilesList(
   @SerializedName("items")
   @Expose

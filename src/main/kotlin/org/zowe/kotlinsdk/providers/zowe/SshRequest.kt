@@ -35,8 +35,8 @@ interface SshRequest : Request {
       .startSession()
       .use { session ->
         val cmd = session.exec(sshCommand)
-        if (multilineContent != null) {
-          cmd.outputStream.write(multilineContent)
+        multilineContent?.let { nonNullMultilineContent ->
+          cmd.outputStream.write(nonNullMultilineContent)
           cmd.outputStream.close()
         }
 

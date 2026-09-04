@@ -24,7 +24,10 @@ import retrofit2.Response
 /**
  * ZosDsn class that provides CRUD operations on Datasets
  */
-@Deprecated("Scheduled for removal since v1.0.0")
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("DatasetsAPI", "org.zowe.kotlinsdk.core.datasets.api")
+)
 class ZosDsn(
   var connection: ZOSConnection,
   var httpClient: OkHttpClient = UnsafeOkHttpClient.unsafeOkHttpClient
@@ -129,7 +132,7 @@ class ZosDsn(
    */
   @Deprecated(
     "Scheduled for removal since v1.0.0",
-    ReplaceWith("WriteToDatasetOperation", "org.zowe.kotlinsdk.impl.restfiles")
+    ReplaceWith("DatasetsAPI.writeToDataset(params)", "org.zowe.kotlinsdk.core.datasets.api")
   )
   fun writeDsn(dataSetName: String, content: ByteArray): Response<*> {
     val baseUrl = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
@@ -156,7 +159,7 @@ class ZosDsn(
    */
   @Deprecated(
     "Scheduled for removal since v1.0.0",
-    ReplaceWith("WriteToDatasetMemberOperation", "org.zowe.kotlinsdk.impl.restfiles")
+    ReplaceWith("DatasetsAPI.writeToDataset(params)", "org.zowe.kotlinsdk.core.datasets.api")
   )
   fun writeDsn(dataSetName: String, member: String, content: ByteArray): Response<*> {
     val baseUrl = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
@@ -182,7 +185,7 @@ class ZosDsn(
    */
   @Deprecated(
     "Scheduled for removal since v1.0.0",
-    ReplaceWith("CreateDatasetOperation", "org.zowe.kotlinsdk.impl.restfiles")
+    ReplaceWith("DatasetsAPI.createDataset(params)", "org.zowe.kotlinsdk.core.datasets.api")
   )
   fun createDsn(dataSetName: String, params: CreateDataset): Response<*> {
     val url = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"

@@ -27,7 +27,10 @@ import retrofit2.Response
  * @property conenction [ZOSConnection] object connection information
  * @property httpClient okHttpClient
  */
-@Deprecated("Scheduled for removal since v1.0.0")
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("DatasetsAPI", "org.zowe.kotlinsdk.core.datasets.api")
+)
 class ZosDsnList(
   var connection: ZOSConnection,
   var httpClient: OkHttpClient = UnsafeOkHttpClient.unsafeOkHttpClient
@@ -49,7 +52,7 @@ class ZosDsnList(
    */
   @Deprecated(
     "Scheduled for removal since v1.0.0",
-    ReplaceWith("org.zowe.kotlinsdk.restfiles.ListDatasetsOperation")
+    ReplaceWith("DatasetsAPI.listDatasets(params)", "org.zowe.kotlinsdk.core.datasets.api")
   )
   fun listDsn(datasetName: String, listParams: ListParams): DataSetsList {
     val baseUrl = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"
@@ -78,7 +81,7 @@ class ZosDsnList(
    */
   @Deprecated(
     "Scheduled for removal since v1.0.0",
-    ReplaceWith("org.zowe.kotlinsdk.restfiles.ListDatasetMembersOperation")
+    ReplaceWith("DatasetsAPI.listDatasetMembers(params)", "org.zowe.kotlinsdk.core.datasets.api")
   )
   fun listDsnMembers(datasetName: String, listParams: ListParams): MembersList {
     val baseUrl = "${connection.protocol}://${connection.host}:${connection.zosmfPort}"

@@ -18,6 +18,10 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("ZosmfCreateFileRequestBody", "org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging")
+)
 data class CreateUssFile(
 
   @SerializedName("type")
@@ -30,6 +34,10 @@ data class CreateUssFile(
   var mode: FileMode
 )
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("ZosmfFileModeValue", "org.zowe.kotlinsdk.providers.zowe.zosmf.files.definitions")
+)
 enum class FileModeValue(val mode: Int) {
   NONE(0),
   EXECUTE(1),
@@ -41,6 +49,10 @@ enum class FileModeValue(val mode: Int) {
   READ_WRITE_EXECUTE(7)
 }
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("ZosmfFileModeValue", "org.zowe.kotlinsdk.providers.zowe.zosmf.files.definitions")
+)
 class FileMode(
   var owner: Int,
   var group: Int = 0,
@@ -71,6 +83,10 @@ class FileMode(
 
 interface ToStringSerializable
 
+@Deprecated(
+  "Scheduled for removal since v1.0.0",
+  ReplaceWith("ZosmfCreateFileRequestBody.ZosmfFileType", "org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging")
+)
 enum class FileType(private val type: String) {
   @SerializedName("dir")
   DIR("dir"),

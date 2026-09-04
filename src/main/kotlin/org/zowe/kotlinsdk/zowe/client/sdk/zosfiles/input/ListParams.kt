@@ -21,7 +21,7 @@ import org.zowe.kotlinsdk.XIBMAttr
  */
 @Deprecated(
   "Scheduled for removal since v1.0.0",
-  ReplaceWith("ZOSListParams", "org.zowe.kotlinsdk.impl.restfiles")
+  ReplaceWith("ZosmfListDatasetsRequest", "org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging")
 )
 class ListParams(
 

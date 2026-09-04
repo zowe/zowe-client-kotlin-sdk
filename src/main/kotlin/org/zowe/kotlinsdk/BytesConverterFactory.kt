@@ -22,10 +22,7 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import java.lang.reflect.Type
 
-@Deprecated(
-  "Scheduled for removal since v1.0.0",
-  ReplaceWith("BytesConverterFactory", "org.zowe.kotlinsdk.core")
-)
+// TODO: deprecate
 class BytesConverterFactory : Converter.Factory() {
   override fun responseBodyConverter(
     type: Type,

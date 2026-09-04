@@ -22,7 +22,7 @@ import org.zowe.kotlinsdk.annotations.ZVersion
  */
 data class XIBMDataType(
   val type: Type,
-  @AvailableSince(ZVersion.ZOS_2_4) val encoding: CodePage? = null
+  @property:AvailableSince(ZVersion.ZOS_2_4) val encoding: CodePage? = null
 ) {
   enum class Type(val value: String) {
     TEXT("text"),

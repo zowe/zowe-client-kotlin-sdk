@@ -40,3 +40,16 @@
 ## [InfoAPI](info/api/InfoAPI.kt) functions
 
 - getSystemInfo
+
+## [TsoAPI](tso/api/TsoAPI.kt) functions
+
+- startTso
+- endTso
+- startApplication
+- issueCommand
+- getCommandResult
+- sendToTso
+- receiveFromTso
+- sendToApplication
+- receiveFromApplication
+- pingTso

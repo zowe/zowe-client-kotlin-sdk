@@ -19,6 +19,7 @@ import org.zowe.kotlinsdk.annotations.ZVersion
 import retrofit2.Call
 import retrofit2.http.*
 
+// TODO: deprecate
 interface JESApi {
 
   @AvailableSince(ZVersion.ZOS_2_1)
@@ -258,6 +259,7 @@ interface JESApi {
   ): Call<CancelJobPurgeOutRequest>
 }
 
+@Deprecated("Scheduled for removal since v1.0.0")
 enum class UseStepData(val value: String) {
   ENABLE("Y"),
   DISABLE("N");
@@ -268,6 +270,7 @@ enum class UseStepData(val value: String) {
   }
 }
 
+// TODO: deprecate
 enum class ContentType(val value: String) {
   TEXT_PLAIN("text/plain"),
   APP_STREAM("application/octet_stream"),
@@ -278,6 +281,7 @@ enum class ContentType(val value: String) {
   }
 }
 
+// TODO: deprecate
 enum class Intrdr_Recfm(val value: String) {
   F("F"),
   V("V");
@@ -287,6 +291,7 @@ enum class Intrdr_Recfm(val value: String) {
   }
 }
 
+// TODO: deprecate
 enum class Intrdr_Mode(val value: String) {
   TEXT("TEXT"),
   RECORD("RECORD"),
@@ -297,6 +302,7 @@ enum class Intrdr_Mode(val value: String) {
   }
 }
 
+@Deprecated("Scheduled for removal since v1.0.0")
 enum class ExecData(val value: String) {
   YES("Y"),
   NO("N");
@@ -307,6 +313,7 @@ enum class ExecData(val value: String) {
   }
 }
 
+// TODO: deprecate
 enum class ActiveStatus(val value:String) {
   ACTIVE("active"),
   DISABLE("disable");
@@ -317,6 +324,7 @@ enum class ActiveStatus(val value:String) {
   }
 }
 
+// TODO: deprecate
 enum class BinaryMode(val value: String) {
   BINARY("binary"),
   RECORD("record"),
@@ -327,6 +335,7 @@ enum class BinaryMode(val value: String) {
   }
 }
 
+// TODO: deprecate
 enum class ProcessMethod(val value: String) {
   ASYNCHRONOUS("1.0"),
   SYNCHRONOUS("2.0");
@@ -336,6 +345,7 @@ enum class ProcessMethod(val value: String) {
   }
 }
 
+// TODO: deprecate
 class RecordRange private constructor(var start: Int? = null, var end: Int? = null){
   companion object Factory{
     fun withBounds(start: Int, end: Int): RecordRange {
