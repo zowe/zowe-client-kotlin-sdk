@@ -19,12 +19,23 @@
 
 ## [FilesAPI](files/SshFilesAPI.kt) functions
 
-| Method              | Implemented | Test coverage |
-|---------------------|-------------|---------------|
-| listFiles           | ✅          | ✅            |
-| retrieveFileContent | ✅          | ✅            |
-| writeToFile         | ✅          | ✅            |
-| createFile          | ✅          | ✅            |
+| Method                   | Implemented | Test coverage |
+|--------------------------|-------------|---------------|
+| listFiles                | ✅          | ✅            |
+| retrieveFileContent      | ✅          | ✅            |
+| writeToFile              | ✅          | ✅            |
+| createFile               | ✅          | ✅            |
+| deleteFile               | ✅          | ✅            |
+| copyFile                 | ✅          | ✅            |
+| moveFile                 | ✅          | ✅            |
+| changeFileMode           | ✅          | ✅            |
+| changeFileOwner          | ✅          | ✅            |
+| changeFileTag            | ✅          | ✅            |
+| fileExtAttributesUtility | ✅          | ✅            |
+| getFileACL               | ✅          | ✅            |
+| setFileACL               | ✅          | ✅            |
+| linkFile                 | ✅          | ✅            |
+| unlinkFile               | ✅          | ✅            |
 
 ## [JesAPI](jes/SshJesAPI.kt) functions
 

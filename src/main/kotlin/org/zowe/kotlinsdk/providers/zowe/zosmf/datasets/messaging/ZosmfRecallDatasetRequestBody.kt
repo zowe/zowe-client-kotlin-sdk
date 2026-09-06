@@ -10,6 +10,7 @@
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging
 
+import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.zowe.kotlinsdk.annotations.AvailableSince
@@ -23,6 +24,7 @@ import org.zowe.kotlinsdk.annotations.ZVersion
 @Serializable
 data class ZosmfRecallDatasetRequestBody(
   @SerialName("request")
+  @EncodeDefault
   @property:AvailableSince(ZVersion.ZOS_2_1) val request: String = "hrecall",
 
   @SerialName("wait")

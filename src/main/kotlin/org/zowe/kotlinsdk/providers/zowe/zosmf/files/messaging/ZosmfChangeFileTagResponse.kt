@@ -6,29 +6,23 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Copyright Contributors to the Zowe Project.
- *
- * Contributors:
- *   Zowe Community
- *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
 
-import io.ktor.http.HttpStatusCode
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
+import org.zowe.kotlinsdk.core.Status
 import org.zowe.kotlinsdk.core.files.api.messaging.ChangeFileTagResponse
-import org.zowe.kotlinsdk.providers.zowe.HttpResponse
+import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpResponse
 
-/** @see <a href="https://www.ibm.com/docs/en/zos/3.1.0?topic=interface-zos-unix-file-utilities#IZUHPINFO_API_PutUnixFileUtilities__title__7">z/OS UNIX file utilities: Expected response</a> */
-@Serializable
+/**
+ * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities#IZUHPINFO_API_PutUnixFileUtilities__title__7">z/OS UNIX file utilities: Expected response</a>
+ * @property currentTagInfo current tag info (if "action: list" is specified in the request)
+ */
 class ZosmfChangeFileTagResponse(
-  @Transient
-  override var status: HttpStatusCode = HttpStatusCode.OK,
-
-  @SerialName("stdout")
-  @AvailableSince(ZVersion.ZOS_2_1) val stdout: List<String>
-) : ChangeFileTagResponse, HttpResponse
+  override var status: Status,
+  @property:AvailableSince(ZVersion.ZOS_2_1) private val stdout: List<String>?
+) : ZosmfHttpResponse(), ChangeFileTagResponse {
+  val currentTagInfo: String? = stdout?.firstOrNull()
+}

@@ -10,6 +10,7 @@
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
 
+import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.zowe.kotlinsdk.annotations.AvailableSince
@@ -20,5 +21,6 @@ import org.zowe.kotlinsdk.annotations.ZVersion
 class ZosmfUnlinkFileRequestBody {
   /** Indicates the function unlink */
   @SerialName("request")
+  @EncodeDefault
   @AvailableSince(ZVersion.ZOS_2_1) val request = "unlink"
 }

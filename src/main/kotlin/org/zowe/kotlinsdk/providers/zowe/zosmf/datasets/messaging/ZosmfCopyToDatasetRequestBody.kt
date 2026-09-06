@@ -10,6 +10,7 @@
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.messaging
 
+import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.zowe.kotlinsdk.annotations.AvailableSince
@@ -40,6 +41,7 @@ data class ZosmfCopyToDatasetRequestBody(
   @property:AvailableSince(ZVersion.ZOS_2_1) val replace: Boolean?
 ) {
   @SerialName("request")
+  @EncodeDefault
   @property:AvailableSince(ZVersion.ZOS_2_1) val request: String = "copy"
 
   @Serializable

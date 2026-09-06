@@ -10,6 +10,7 @@
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
 
+import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.zowe.kotlinsdk.annotations.AvailableSince
@@ -30,5 +31,6 @@ data class ZosmfMoveFileRequestBody(
   @property:AvailableSince(ZVersion.ZOS_2_1) val overwrite: Boolean? = null
 ) {
   @SerialName("request")
+  @EncodeDefault
   @AvailableSince(ZVersion.ZOS_2_1) val request = "move"
 }

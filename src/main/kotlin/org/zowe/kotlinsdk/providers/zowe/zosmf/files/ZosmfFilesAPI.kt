@@ -61,48 +61,103 @@ class ZosmfFilesAPI(private val requestRunner: HttpRequestRunner) : FilesAPI {
     return requestRunner.runRequest(params) as ZosmfCreateFileResponse
   }
 
-  override suspend fun deleteFile(params: DeleteFileRequest): DeleteFileResponse {
-    TODO("Not yet implemented")
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-delete-unix-file-directory">Delete a UNIX file or directory</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-delete-unix-file-directory#DeleteUnixFile__getlist_datasets__title__1">Delete a UNIX file or directory: Expected response</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_1)
+  override suspend fun deleteFile(params: DeleteFileRequest): ZosmfDeleteFileResponse {
+    return requestRunner.runRequest(params) as ZosmfDeleteFileResponse
   }
 
-  override suspend fun copyFile(params: CopyFileRequest): CopyFileResponse {
-    TODO("Not yet implemented")
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities">z/OS UNIX file utilities</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities#IZUHPINFO_API_PutUnixFileUtilities__title__7">z/OS UNIX file utilities: Expected response</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_1)
+  override suspend fun copyFile(params: CopyFileRequest): ZosmfCopyFileResponse {
+    return requestRunner.runRequest(params) as ZosmfCopyFileResponse
   }
 
-  override suspend fun moveFile(params: MoveFileRequest): MoveFileResponse {
-    TODO("Not yet implemented")
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities">z/OS UNIX file utilities</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities#IZUHPINFO_API_PutUnixFileUtilities__title__7">z/OS UNIX file utilities: Expected response</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_1)
+  override suspend fun moveFile(params: MoveFileRequest): ZosmfMoveFileResponse {
+    return requestRunner.runRequest(params) as ZosmfMoveFileResponse
   }
 
-  override suspend fun changeFileMode(params: ChangeFileModeRequest): ChangeFileModeResponse {
-    TODO("Not yet implemented")
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities">z/OS UNIX file utilities</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities#IZUHPINFO_API_PutUnixFileUtilities__title__7">z/OS UNIX file utilities: Expected response</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_1)
+  override suspend fun changeFileMode(params: ChangeFileModeRequest): ZosmfChangeFileModeResponse {
+    return requestRunner.runRequest(params) as ZosmfChangeFileModeResponse
   }
 
-  override suspend fun changeFileOwner(params: ChangeFileOwnerRequest): ChangeFileOwnerResponse {
-    TODO("Not yet implemented")
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities">z/OS UNIX file utilities</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities#IZUHPINFO_API_PutUnixFileUtilities__title__7">z/OS UNIX file utilities: Expected response</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_1)
+  override suspend fun changeFileOwner(params: ChangeFileOwnerRequest): ZosmfChangeFileOwnerResponse {
+    return requestRunner.runRequest(params) as ZosmfChangeFileOwnerResponse
   }
 
-  override suspend fun changeFileTag(params: ChangeFileTagRequest): ChangeFileTagResponse {
-    TODO("Not yet implemented")
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities">z/OS UNIX file utilities</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities#IZUHPINFO_API_PutUnixFileUtilities__title__7">z/OS UNIX file utilities: Expected response</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_1)
+  override suspend fun changeFileTag(params: ChangeFileTagRequest): ZosmfChangeFileTagResponse {
+    return requestRunner.runRequest(params) as ZosmfChangeFileTagResponse
   }
 
-  override suspend fun fileExtAttributesUtility(params: FileExtAttributesUtilityRequest): FileExtAttributesUtilityResponse {
-    TODO("Not yet implemented")
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities">z/OS UNIX file utilities</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities#IZUHPINFO_API_PutUnixFileUtilities__title__7">z/OS UNIX file utilities: Expected response</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_1)
+  override suspend fun fileExtAttributesUtility(params: FileExtAttributesUtilityRequest): ZosmfFileExtAttributesUtilityResponse {
+    return requestRunner.runRequest(params) as ZosmfFileExtAttributesUtilityResponse
   }
 
-  override suspend fun getFileACL(params: GetFileACLRequest): GetFileACLResponse {
-    TODO("Not yet implemented")
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities">z/OS UNIX file utilities</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities#IZUHPINFO_API_PutUnixFileUtilities__title__7">z/OS UNIX file utilities: Expected response</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_1)
+  override suspend fun getFileACL(params: GetFileACLRequest): ZosmfGetFileACLResponse {
+    return requestRunner.runRequest(params) as ZosmfGetFileACLResponse
   }
 
-  override suspend fun setFileACL(params: SetFileACLRequest): SetFileACLResponse {
-    TODO("Not yet implemented")
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities">z/OS UNIX file utilities</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities#IZUHPINFO_API_PutUnixFileUtilities__title__7">z/OS UNIX file utilities: Expected response</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_1)
+  override suspend fun setFileACL(params: SetFileACLRequest): ZosmfSetFileACLResponse {
+    return requestRunner.runRequest(params) as ZosmfSetFileACLResponse
   }
 
-  override suspend fun linkFile(params: LinkFileRequest): LinkFileResponse {
-    TODO("Not yet implemented")
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities">z/OS UNIX file utilities</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities#IZUHPINFO_API_PutUnixFileUtilities__title__7">z/OS UNIX file utilities: Expected response</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_1)
+  override suspend fun linkFile(params: LinkFileRequest): ZosmfLinkFileResponse {
+    return requestRunner.runRequest(params) as ZosmfLinkFileResponse
   }
 
-  override suspend fun unlinkFile(params: UnlinkFileRequest): UnlinkFileResponse {
-    TODO("Not yet implemented")
+  /**
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities">z/OS UNIX file utilities</a>
+   * @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-zos-unix-file-utilities#IZUHPINFO_API_PutUnixFileUtilities__title__7">z/OS UNIX file utilities: Expected response</a>
+   */
+  @AvailableSince(ZVersion.ZOS_2_1)
+  override suspend fun unlinkFile(params: UnlinkFileRequest): ZosmfUnlinkFileResponse {
+    return requestRunner.runRequest(params) as ZosmfUnlinkFileResponse
   }
 
 }

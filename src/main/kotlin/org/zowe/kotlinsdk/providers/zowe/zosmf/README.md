@@ -25,17 +25,17 @@
 | retrieveFileContent      | ✅          | ✅            |
 | writeToFile              | ✅          | ✅            |
 | createFile               | ✅          | ✅            |
-| deleteFile               | ✅          | ❌            |
-| copyFile                 | ✅          | ❌            |
-| moveFile                 | ✅          | ❌            |
-| changeFileMode           | ✅          | ❌            |
-| changeFileOwner          | ✅          | ❌            |
-| changeFileTag            | ✅          | ❌            |
-| fileExtAttributesUtility | ✅          | ❌            |
-| getFileACL               | ✅          | ❌            |
-| setFileACL               | ✅          | ❌            |
-| linkFile                 | ✅          | ❌            |
-| unlinkFile               | ✅          | ❌            |
+| deleteFile               | ✅          | ✅            |
+| copyFile                 | ✅          | ✅            |
+| moveFile                 | ✅          | ✅            |
+| changeFileMode           | ✅          | ✅            |
+| changeFileOwner          | ✅          | ✅            |
+| changeFileTag            | ✅          | ✅            |
+| fileExtAttributesUtility | ✅          | ✅            |
+| getFileACL               | ✅          | ✅            |
+| setFileACL               | ✅          | ✅            |
+| linkFile                 | ✅          | ✅            |
+| unlinkFile               | ✅          | ✅            |
 
 ## [JesAPI](jes/ZosmfJesAPI.kt) functions
 

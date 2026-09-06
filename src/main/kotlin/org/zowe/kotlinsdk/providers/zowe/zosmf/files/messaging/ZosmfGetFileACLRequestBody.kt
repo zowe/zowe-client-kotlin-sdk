@@ -10,6 +10,7 @@
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.files.messaging
 
+import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.zowe.kotlinsdk.annotations.AvailableSince
@@ -53,6 +54,7 @@ data class ZosmfGetFileACLRequestBody(
 ) {
   /** Indicates the function getfacl */
   @SerialName("request")
+  @EncodeDefault
   @AvailableSince(ZVersion.ZOS_2_1) val request = "getfacl"
 
   @Serializable

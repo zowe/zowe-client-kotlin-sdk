@@ -15,6 +15,10 @@ import kotlinx.serialization.Serializable
 
 /** @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=interface-delete-unix-file-directory#DeleteUnixFile__title__4">Delete a UNIX file or directory: Custom headers</a> */
 @Serializable
-enum class XIBMOption {
-  @SerialName("recursive") RECURSIVE
+enum class XIBMOption(private val type: String) {
+  @SerialName("recursive") RECURSIVE("recursive");
+
+  override fun toString(): String {
+    return this.type
+  }
 }

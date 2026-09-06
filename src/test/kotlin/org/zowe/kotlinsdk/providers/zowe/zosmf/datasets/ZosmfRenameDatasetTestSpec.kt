@@ -14,6 +14,7 @@ import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.fail
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import okhttp3.mockwebserver.MockResponse
 import org.zowe.kotlinsdk.core.StatusType
 import org.zowe.kotlinsdk.core.WrapperType
@@ -36,11 +37,15 @@ class ZosmfRenameDatasetTestSpec : ShouldSpec({
     should("renameDataset successfully rename a data set") {
       val oldDsName = "RDTEST1"
       val newDsName = "NDTEST1"
+      var recordedBody: String? = null
 
       zosmfMockResponseDispatcher.injectResolver(
         "renameDataset_success",
         { it.requestLine.contains("/zosmf/restfiles/ds/$newDsName") },
-        { MockResponse() }
+        {
+          recordedBody = it.body.readUtf8()
+          MockResponse()
+        }
       )
 
       val renameDatasetRequestBody = ZosmfRenameDatasetRequestBody(
@@ -57,6 +62,8 @@ class ZosmfRenameDatasetTestSpec : ShouldSpec({
 
       assertSoftly {
         renameDatasetResponse.status.type shouldBe StatusType.SUCCESS
+        recordedBody shouldContain "\"request\": \"rename\""
+        recordedBody shouldContain "\"from-dataset\""
       }
     }
 

@@ -40,7 +40,11 @@ open class ZosmfUtilitiesRequestHeaders(
 ) : ZosmfDsAndFilesCommonRequestHeaders, ZosmfTargetSystemRequestHeaders {
   override fun getHeadersMap(): Map<String, String?> {
     return mapOf(
-      "Content-Type" to ContentType.Application.Json.withCharset(Charset.forName(charsetName)).toString(),
+      "Content-Type" to (
+        charsetName
+          ?.let { ContentType.Application.Json.withCharset(Charset.forName(it)).toString() }
+          ?: ContentType.Application.Json.toString()
+        ),
       "X-IBM-BPXK-AUTOCVT" to xIBMBPXKAutoCvt?.toString(),
     ) +
       super<ZosmfDsAndFilesCommonRequestHeaders>.getHeadersMap() +

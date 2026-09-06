@@ -37,11 +37,15 @@ class ZosmfCopyToDatasetTestSpec : ShouldSpec({
     should("copyToDataset successfully copies a PS data set to a new PS data set") {
       val fromDsName = "CFDTEST1"
       val toDsName = "CTDTEST1"
+      var recordedBody: String? = null
 
       zosmfMockResponseDispatcher.injectResolver(
         "copyToDataset_ps_to_ps_success",
         { it.requestLine.contains("/zosmf/restfiles/ds/$toDsName") },
-        { MockResponse().setResponseCode(200) }
+        {
+          recordedBody = it.body.readUtf8()
+          MockResponse().setResponseCode(200)
+        }
       )
 
       val copyToDatasetRequest = ZosmfCopyToDatasetRequest(
@@ -53,7 +57,11 @@ class ZosmfCopyToDatasetTestSpec : ShouldSpec({
         as? ZosmfCopyToDatasetResponse
         ?: fail("Should be instance of ${ZosmfCopyToDatasetResponse::class.java.name}")
 
-      assertSoftly { copyToDatasetResponse.status.type shouldBe StatusType.SUCCESS }
+      assertSoftly {
+        copyToDatasetResponse.status.type shouldBe StatusType.SUCCESS
+        recordedBody shouldContain "\"request\": \"copy\""
+        recordedBody shouldContain "\"from-dataset\""
+      }
     }
 
     should("copyToDataset successfully copies a PS data set on a specified volume to an existing PS data set on a specified volume") {
