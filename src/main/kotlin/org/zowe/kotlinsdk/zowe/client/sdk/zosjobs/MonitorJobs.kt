@@ -10,12 +10,13 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.zowe.client.sdk.zosjobs
 
+import org.zowe.kotlinsdk.ZosmfOkHttpClient
 import org.zowe.kotlinsdk.Job
-import org.zowe.kotlinsdk.UnsafeOkHttpClient
 import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
 import org.zowe.kotlinsdk.zowe.client.sdk.zosjobs.input.GetJobParams
 import org.zowe.kotlinsdk.zowe.client.sdk.zosjobs.input.MonitorJobWaitForParams
@@ -24,7 +25,7 @@ import okhttp3.OkHttpClient
 
 class MonitorJobs(
   val connection: ZOSConnection,
-  var httpClient: OkHttpClient = UnsafeOkHttpClient.unsafeOkHttpClient
+  var httpClient: OkHttpClient = ZosmfOkHttpClient.getOkHttpClient(connection)
 ) {
 
   private val DEFAULT_LINE_LIMIT: Int = 1000
