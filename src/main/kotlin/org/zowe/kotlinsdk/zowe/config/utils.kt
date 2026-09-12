@@ -10,6 +10,7 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.zowe.config
@@ -59,7 +60,7 @@ fun parseConfigYaml (inputStream: InputStream): ZoweConnection {
     loaded["port"] as Int?,
     loaded["user"] as String?,
     loaded["password"] as String?,
-    loaded["rejectUnauthorized"] as Boolean? ?: false,
+    loaded["rejectUnauthorized"] as Boolean? ?: true,
     loaded["protocol"] as String? ?: "http",
     loaded["basePath"] as String? ?: "/",
     loaded["encoding"] as Int? ?: 1047,

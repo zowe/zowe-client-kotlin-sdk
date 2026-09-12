@@ -10,6 +10,7 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.zowe.client.sdk.zosuss
@@ -24,7 +25,7 @@ import java.io.InputStream
 
 class ZosUssFileDownload (
     var connection: ZOSConnection,
-    var httpClient: OkHttpClient = UnsafeOkHttpClient.unsafeOkHttpClient
+    var httpClient: OkHttpClient = ZosmfOkHttpClient.getOkHttpClient(connection)
 ) {
     init {
         connection.checkConnection()
