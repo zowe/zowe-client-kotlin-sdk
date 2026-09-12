@@ -124,6 +124,8 @@ changelog {
 tasks {
   wrapper {
     gradleVersion = properties("gradleVersion").get()
+    // Makes the wrapper verify the downloaded Gradle distribution against the checksum published by Gradle
+    distributionSha256Sum = properties("gradleDistributionSha256Sum").get()
   }
 
   withType<KotlinCompile> {
