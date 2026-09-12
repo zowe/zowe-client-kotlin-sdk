@@ -17,6 +17,7 @@ package org.zowe.kotlinsdk.zowe
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.*
+import org.zowe.kotlinsdk.exceptions.EmptyZoweConfigFileException
 import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
 import org.zowe.kotlinsdk.zowe.config.*
 import java.net.InetSocketAddress
@@ -66,6 +67,11 @@ class ZoweConfigParsingTest: ZoweConfigTestBase() {
     val zoweConfig = parseConfigJson(streamConfigJson)
     zoweConfig.extractSecureProperties(TEST_ZOWE_CONFIG_PATH, keytarWrapper)
     checkZoweConfig(zoweConfig)
+  }
+
+  @Test
+  fun testParsingEmptyJsonString() {
+    Assertions.assertThrows(EmptyZoweConfigFileException::class.java){ parseConfigJson("") }
   }
 
   @Test
@@ -147,13 +153,26 @@ class ZoweConfigParsingTest: ZoweConfigTestBase() {
     Assertions.assertEquals(zoweConfig.encoding, 1037)
     zoweConfig.responseTimeout = 300
     Assertions.assertEquals(zoweConfig.responseTimeout, 300)
+    Assertions.assertEquals(zoweConfig.user, "zosmfUser")
+    zoweConfig.user = null
+    Assertions.assertEquals(zoweConfig.user, "")
+    zoweConfig.user = "zUser"
+    Assertions.assertEquals(zoweConfig.user, "zUser")
+    Assertions.assertEquals(zoweConfig.password, "zosmfPassword")
+    zoweConfig.password = null
+    Assertions.assertEquals(zoweConfig.password, "")
+    zoweConfig.password = "zPassword"
+    Assertions.assertEquals(zoweConfig.password, "zPassword")
     zoweConfig.restoreProfile()
     Assertions.assertEquals(fullProfileName(zoweConfig.zosmfProfile), "lpar1.zosmf")
     Assertions.assertEquals(zoweConfig.sshProfile?.name, "ssh")
     Assertions.assertEquals(zoweConfig.tsoProfile?.name, "tso")
     Assertions.assertNull(zoweConfig.profile(null))
     Assertions.assertNull(zoweConfig.profile("."))
-    Assertions.assertNull(zoweConfig.profile("non.existent.profile"))
+    zoweConfig.setProfile("lpar1.section1.section2.emptyZosmfProfile")
+    Assertions.assertEquals(zoweConfig.user, "testUser")
+    zoweConfig.user = "zUser1"
+    Assertions.assertEquals(zoweConfig.user, "zUser1")
     zoweConfig.extractSecureProperties("/wrong/zowe/config/path", keytarWrapper)
   }
 
@@ -164,8 +183,8 @@ class ZoweConfigParsingTest: ZoweConfigTestBase() {
       ZOSConnection(
         "example.host2",
         "443",
-        "testUser",
-        "testPassword",
+        "zosmfUser",
+        "zosmfPassword",
         profileName = "lpar1.section1.testParametersProfile",
         rejectUnauthorized = false,
         basePath = "/api",
@@ -173,12 +192,10 @@ class ZoweConfigParsingTest: ZoweConfigTestBase() {
       )
     )
     allZosConn.add(ZOSConnection("example.host1", "10443", "testUser", "testPassword", profileName = "lpar1.zosmf"))
-    Assertions.assertArrayEquals(zoweConfig.getListOfZosmfConections().toTypedArray(), allZosConn.toTypedArray())
+    Assertions.assertArrayEquals(zoweConfig.getListOfZosmfConnections().toTypedArray(), allZosConn.toTypedArray())
   }
 
   fun checkToZosConnection(zoweConfig: ZoweConfig) {
-    zoweConfig.user = null
-    Assertions.assertThrows(IllegalStateException::class.java) { zoweConfig.toZosConnection() }
     zoweConfig.user = "user"
     zoweConfig.host = ""
     Assertions.assertThrows(IllegalStateException::class.java) { zoweConfig.toZosConnection() }

@@ -11,7 +11,7 @@ jobs:
     timeout-minutes: 40
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.ZOWE_ROBOT_TOKEN }}
@@ -32,7 +32,7 @@ jobs:
           echo "$FILENAME"
 
       - name: Publish built lib to artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: ${{ steps.artifact.outputs.filename }}
           path: ./build/libs/*
@@ -41,22 +41,23 @@ jobs:
         run: ./gradlew test
 
       - name: Publish tests result to artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: tests-report-${{ steps.artifact.outputs.filename }}
           path: ${{ github.workspace }}/build/reports/*
 
       - name: Publish results to SonarCloud
         run: >
-          ./gradlew --info sonar -Dresults="build/reports/tests/test,build/test-results"
-          -Psonar.host.url=$SONAR_HOST_URL -Dsonar.token=$SONAR_TOKEN
-          -Partifactory_user=$ARTIFACTORY_USERNAME -Partifactory_password=$ARTIFACTORY_PASSWORD
+          ./gradlew --info sonar
+          -Dorg.gradle.jvmargs="-XX:MaxMetaspaceSize=512m"
+          -Dresults="build/reports/tests/test,build/test-results"
+          -Psonar.host.url=$SONAR_HOST_URL
+          -Dsonar.token=$SONAR_TOKEN
+          -Dsonar.organization=zowe
           -Dsonar.coverage.jacoco.xmlReportPaths="build/reports/jacoco.xml"
+          -Dsonar.projectKey=zowe_zowe-client-kotlin-sdk
         env:
-          ARTIFACTORY_USE RNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
-          ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: ./.github/actions/teardown

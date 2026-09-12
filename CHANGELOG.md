@@ -4,6 +4,20 @@ All notable changes to the Zowe Client Kotlin SDK will be documented in this fil
 
 ## [Unreleased]
 
+## [0.5.2] (2025-09-24)
+
+### Bugfixes
+
+* Bugfix: Fixed zowe.config.json for not yet defined credentials ([c60dd736](https://github.com/zowe/zowe-client-kotlin-sdk/commit/c60dd736))
+
+## [0.5.1] (2024-11-15)
+
+### Bugfixes
+
+* Bugfix: Fixed work with encrypted/plaintext credentials in the zowe config ([3f1e48fb](https://github.com/zowe/zowe-client-kotlin-sdk/commit/3f1e48fb))
+
+## [0.5.0] (2024-09-23)
+
 ### Features
 
 * Feature: Added BYTES, KILOBYTES and MEGABYTES to Dataset class ([7f0d087a](https://github.com/zowe/zowe-client-kotlin-sdk/commit/7f0d087a))
@@ -28,3 +42,8 @@ All notable changes to the Zowe Client Kotlin SDK will be documented in this fil
 ### Bugfixes
 
 * Bugfix: GitHub issue #9: Error Creating Connection ([bbc16d72](https://github.com/zowe/zowe-client-kotlin-sdk/commit/bbc16d72))
+
+[0.5.2]: https://github.com/zowe/zowe-client-kotlin-sdk/compare/0.5.1...0.5.2
+[0.5.1]: https://github.com/zowe/zowe-client-kotlin-sdk/compare/0.5.0...0.5.1
+[0.5.0]: https://github.com/zowe/zowe-client-kotlin-sdk/compare/0.4.0...0.5.0
+[0.4.0]: https://github.com/zowe/zowe-client-kotlin-sdk/commits/0.4.0

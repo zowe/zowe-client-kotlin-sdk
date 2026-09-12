@@ -17,6 +17,7 @@ package org.zowe.kotlinsdk.zowe.config
 import com.google.gson.Gson
 import com.starxg.keytar.Keytar
 import org.yaml.snakeyaml.Yaml
+import org.zowe.kotlinsdk.exceptions.EmptyZoweConfigFileException
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.nio.charset.Charset
@@ -87,9 +88,10 @@ private fun formProfiles (profiles: Map<String, ZoweConfigProfile>?) {
  * Parses JSON string to [ZoweConfig] object model.
  * @param configString JSON string with zowe config.
  * @return [ZoweConfig] object model.
+ * @throws [com.google.gson.JsonSyntaxException] and [org.zowe.kotlinsdk.exceptions.EmptyZoweConfigFileException]
  */
 fun parseConfigJson(configString: String): ZoweConfig {
-  val zoweConfig = Gson().fromJson(configString, ZoweConfig::class.java)
+  val zoweConfig = Gson().fromJson(configString, ZoweConfig::class.java) ?: throw EmptyZoweConfigFileException()
   zoweConfig.zosmfProfile = zoweConfig.profile(zoweConfig.defaults["zosmf"])
   formProfiles(zoweConfig.profiles)
   return zoweConfig
@@ -99,6 +101,7 @@ fun parseConfigJson(configString: String): ZoweConfig {
  * Reads input stream and parse it to ZoweConfig object model.
  * @param inputStream - stream with json string of zowe config.
  * @return ZoweConfig object model.
+ * @throws [com.google.gson.JsonSyntaxException] and [org.zowe.kotlinsdk.exceptions.EmptyZoweConfigFileException]
  */
 fun parseConfigJson (inputStream: InputStream): ZoweConfig = parseConfigJson(String(inputStream.readBytes()))
 
