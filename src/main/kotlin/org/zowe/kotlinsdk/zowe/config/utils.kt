@@ -44,6 +44,14 @@ private fun warnIfNotEncrypted(protocol: String, host: String?) {
   }
 }
 
+/**
+ * Renders a secret value for diagnostic output. The value itself is never returned, only the information
+ * whether it is set at all, so that a credential can not leak through a toString of a containing object.
+ * @param value the secret value to render
+ * @return "null" if there is no value and a fixed mask otherwise
+ */
+internal fun redactSecret(value: Any?): String = if (value == null) "null" else "***"
+
 // TODO: doc
 fun String.encodeToBase64(charset: Charset = Charsets.UTF_8): String
     = Base64.getEncoder().encodeToString(this.toByteArray(charset))
