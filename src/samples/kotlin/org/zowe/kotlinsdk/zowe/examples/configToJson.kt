@@ -10,12 +10,20 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.zowe.examples
 
 import org.zowe.kotlinsdk.zowe.config.*
 
+/**
+ * Shows how to read a "zowe.config.json" file and serialize it back to JSON.
+ *
+ * The example is run against the credential free "zowe.config.json" of this source set. Mind that the produced
+ * JSON of a real configuration contains the credentials of the profiles as they are stored in the file, so it
+ * belongs to a file with the appropriate permissions and never to a console or a log.
+ */
 fun main() {
   val inputStream = object {}.javaClass.classLoader.getResourceAsStream("zowe.config.json")
   if (inputStream != null) {

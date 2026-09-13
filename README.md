@@ -198,9 +198,17 @@ val result = ZosDsn(zosConnection).createDsn("<dsn>", <CreateDataset cls instanc
 
 This package provides the functionality to work with **[Zowe Team Config v2](https://docs.zowe.org/stable/user-guide/cli-using-using-team-profiles/)**. The **[ZoweConfig](./src/main/kotlin/org/zowe/kotlinsdk/zowe/config/ZoweConfig.kt)** class provides the functions to parse and manipulate the **zowe.config.json** file. See the **[org.zowe.kotlinsdk.zowe.examples](#orgzowekotlinsdkzoweexamples)** package for examples.
 
-### [org.zowe.kotlinsdk.zowe.examples](./src/main/kotlin/org/zowe/kotlinsdk/zowe/examples/)
+### [org.zowe.kotlinsdk.zowe.examples](./src/samples/kotlin/org/zowe/kotlinsdk/zowe/examples/)
 
 This package provides the examples of how to work with **[Zowe Team Config v2](https://docs.zowe.org/stable/user-guide/cli-using-using-team-profiles/)** in Kotlin.
+
+The examples live in the **samples** source set, so they are not a part of the published artifact. To run one of them:
+
+```shell
+./gradlew runSample -PsampleClass=org.zowe.kotlinsdk.zowe.examples.LoadConfigYamlKt
+```
+
+The examples never print the password or the value of the authorization header, and neither should the code that is written after their example: the "Basic" header value is nothing more than a Base64 encoding of the credentials.
 
 ## Contributing
 
