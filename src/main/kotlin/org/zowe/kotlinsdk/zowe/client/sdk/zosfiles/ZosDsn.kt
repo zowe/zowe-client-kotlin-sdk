@@ -10,6 +10,7 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.zowe.client.sdk.zosfiles
@@ -26,7 +27,7 @@ import retrofit2.Response
  */
 class ZosDsn(
   var connection: ZOSConnection,
-  var httpClient: OkHttpClient = UnsafeOkHttpClient.unsafeOkHttpClient
+  var httpClient: OkHttpClient = ZosmfOkHttpClient.getOkHttpClient(connection)
 ) {
 
   init {

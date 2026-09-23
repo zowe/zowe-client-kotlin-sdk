@@ -68,6 +68,11 @@ data class ZOSConnection(
       throw IllegalStateException("Connection data not setup properly")
     }
   }
+
+  /**
+   * Renders the connection for diagnostic purposes. The password is never included: the value is deliberately
+   * redacted so that logging, exception reporting or debugging a connection cannot leak the z/OS credentials.
+   */
   override fun toString() =
-    "ZOSConnection{host='$host', zosmfPort='$zosmfPort', user='$user', password='$password', rejectUnauthorized='$rejectUnauthorized', profileName='$profileName'}"
+    "ZOSConnection{host='$host', zosmfPort='$zosmfPort', user='$user', password='***', rejectUnauthorized='$rejectUnauthorized', profileName='$profileName'}"
 }

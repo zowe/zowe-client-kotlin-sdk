@@ -10,6 +10,7 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.zowe.config
@@ -21,8 +22,17 @@ data class ZoweConnection(
   var user: String?,
   var password: String?,
   var rejectUnauthorized: Boolean = true,
-  var protocol: String = "http",
+  var protocol: String = "https",
   var basePath: String = "/",
   var encoding: Int? = 1047,
   var responseTimeout: Int = 600
-)
+) {
+  /**
+   * Renders the connection for diagnostic purposes. Overrides the data class generated implementation to keep
+   * the password out of any diagnostic output: only the fact that it is set or not is reported.
+   */
+  override fun toString() =
+    "ZoweConnection(host=$host, port=$port, user=$user, password=${redactSecret(password)}, " +
+        "rejectUnauthorized=$rejectUnauthorized, protocol=$protocol, basePath=$basePath, " +
+        "encoding=$encoding, responseTimeout=$responseTimeout)"
+}

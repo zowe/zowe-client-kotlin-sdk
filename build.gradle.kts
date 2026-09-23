@@ -124,6 +124,8 @@ changelog {
 tasks {
   wrapper {
     gradleVersion = properties("gradleVersion").get()
+    // Makes the wrapper verify the downloaded Gradle distribution against the checksum published by Gradle
+    distributionSha256Sum = properties("gradleDistributionSha256Sum").get()
   }
 
   withType<KotlinCompile> {
@@ -188,6 +190,39 @@ tasks {
   }
 }
 
+//-----------Samples configuration start
+// The example programs are kept in a separate source set, so that they are compiled and kept up to date,
+// but are not a part of the published artifact: they are not an SDK API, and running them is a developer
+// activity that involves real connection data
+sourceSets {
+  create("samples") {
+    // "src/samples/kotlin" and "src/samples/resources" are taken from the convention of the source set
+    compileClasspath += main.get().output
+    runtimeClasspath += main.get().output
+  }
+}
+
+configurations.named("samplesImplementation") {
+  extendsFrom(configurations.implementation.get())
+}
+configurations.named("samplesRuntimeOnly") {
+  extendsFrom(configurations.runtimeOnly.get())
+}
+
+// Keeps the examples compiling together with the SDK without shipping them
+tasks.named("check") {
+  dependsOn("samplesClasses")
+}
+
+// Runs one of the example programs, e.g. ./gradlew runSample -PsampleClass=org.zowe.kotlinsdk.zowe.examples.LoadConfigYamlKt
+tasks.register<JavaExec>("runSample") {
+  group = "Zowe Samples"
+  description = "Run an example program from the samples source set"
+  classpath = sourceSets.getByName("samples").runtimeClasspath
+  mainClass.set(providers.gradleProperty("sampleClass").orElse("org.zowe.kotlinsdk.zowe.examples.LoadConfigYamlKt"))
+}
+//-----------Samples configuration end
+
 //-----------Integration tests configuration start
 sourceSets {
   create("intTest") {
@@ -202,13 +237,11 @@ sourceSets {
   }
 }
 
-configurations {
-  named("intTestImplementation") {
-    extendsFrom(configurations.getByName("testImplementation"))
-  }
-  named("intTestRuntimeOnly") {
-    extendsFrom(configurations.getByName("testRuntimeOnly"))
-  }
+configurations.named("intTestImplementation") {
+  extendsFrom(configurations.getByName("testImplementation"))
+}
+configurations.named("intTestRuntimeOnly") {
+  extendsFrom(configurations.getByName("testRuntimeOnly"))
 }
 //-----------Integration tests configuration end
 

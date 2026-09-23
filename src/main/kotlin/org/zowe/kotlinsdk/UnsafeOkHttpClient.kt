@@ -10,63 +10,26 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk
 
 import okhttp3.OkHttpClient
-import java.lang.Exception
-import javax.net.ssl.TrustManager
-import javax.net.ssl.X509TrustManager
-import kotlin.Throws
-import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.HostnameVerifier
-import javax.net.ssl.SSLSession
-import java.lang.RuntimeException
-import java.security.SecureRandom
-import java.security.cert.CertificateException
-import java.security.cert.X509Certificate
-import java.time.Duration
 
+/**
+ * Provides an [OkHttpClient] that accepts any TLS certificate chain and any host name.
+ *
+ * Using it makes the connection vulnerable to machine-in-the-middle attacks: the credentials sent with every
+ * request can be harvested and the transferred data (JCL, datasets, console and TSO commands) can be tampered with.
+ * Use [ZosmfOkHttpClient.getOkHttpClient] instead: it validates certificates by default and only falls back to
+ * this client when [org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection.rejectUnauthorized] is explicitly `false`.
+ */
+@Deprecated(
+  "Disables TLS certificate and host name validation. Use ZosmfOkHttpClient.getOkHttpClient(connection) instead.",
+  ReplaceWith("ZosmfOkHttpClient.secureOkHttpClient", "org.zowe.kotlinsdk.ZosmfOkHttpClient")
+)
 object UnsafeOkHttpClient {
-  // Create a trust manager that does not validate certificate chains
   val unsafeOkHttpClient: OkHttpClient
-
-  // Install the all-trusting trust manager
-
-    // Create an ssl socket factory with our all-trusting manager
-    get() = try {
-      // Create a trust manager that does not validate certificate chains
-      val trustAllCerts = arrayOf<TrustManager>(
-        object : X509TrustManager {
-          @Throws(CertificateException::class)
-          override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
-          }
-
-          @Throws(CertificateException::class)
-          override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
-          }
-
-          override fun getAcceptedIssuers(): Array<X509Certificate> {
-            return arrayOf()
-          }
-        }
-      )
-
-      // Install the all-trusting trust manager
-      val sslContext = SSLContext.getInstance("TLSv1.2")
-      sslContext.init(null, trustAllCerts, SecureRandom())
-
-      // Create an ssl socket factory with our all-trusting manager
-      val sslSocketFactory = sslContext.socketFactory
-      val builder = OkHttpClient.Builder()
-        .readTimeout(Duration.ofMinutes(1))
-        .connectTimeout(Duration.ofMinutes(1))
-      builder.sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
-      builder.hostnameVerifier { hostname: String?, session: SSLSession? -> true }
-      builder.build()
-    } catch (e: Exception) {
-      throw RuntimeException(e)
-    }
+    get() = ZosmfOkHttpClient.insecureOkHttpClient
 }

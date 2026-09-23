@@ -10,12 +10,13 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.zowe.client.sdk.zostso
 
+import org.zowe.kotlinsdk.ZosmfOkHttpClient
 import org.zowe.kotlinsdk.TsoResponse
-import org.zowe.kotlinsdk.UnsafeOkHttpClient
 import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
 import org.zowe.kotlinsdk.zowe.client.sdk.zostso.input.StartTsoParams
 import okhttp3.OkHttpClient
@@ -26,7 +27,7 @@ import retrofit2.Response
  */
 class IssueTso(
   var connection: ZOSConnection,
-  var httpClient: OkHttpClient = UnsafeOkHttpClient.unsafeOkHttpClient
+  var httpClient: OkHttpClient = ZosmfOkHttpClient.getOkHttpClient(connection)
 ) {
 
   init {

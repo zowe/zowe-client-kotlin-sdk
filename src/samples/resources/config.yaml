@@ -2,5 +2,5 @@ host: host.example
 port: 10443
 user: exampleUser
 password: examplePassword
-rejectUnauthorized: false
+rejectUnauthorized: true
 protocol: https

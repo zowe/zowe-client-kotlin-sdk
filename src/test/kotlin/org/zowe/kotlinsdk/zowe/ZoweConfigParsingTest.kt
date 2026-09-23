@@ -10,6 +10,7 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.zowe
@@ -89,6 +90,20 @@ class ZoweConfigParsingTest: ZoweConfigTestBase() {
   }
 
   @Test
+  fun testParsingMinimalYamlUsesSecureDefaults() {
+    val zoweConnection = parseConfigYaml(
+      """
+      host: host.example
+      port: 10443
+      user: exampleUser
+      password: examplePassword
+      """.trimIndent()
+    )
+    Assertions.assertEquals("https", zoweConnection.protocol)
+    Assertions.assertEquals(true, zoweConnection.rejectUnauthorized)
+  }
+
+  @Test
   fun testParsingYamlStream() {
     val zoweConnection = parseConfigYaml(streamConfigYaml)
     checkZoweConnection(zoweConnection)
@@ -114,13 +129,13 @@ class ZoweConfigParsingTest: ZoweConfigTestBase() {
   fun checkZoweConfig(zoweConfig: ZoweConfig) {
     Assertions.assertEquals(zoweConfig.user, TEST_USER)
     Assertions.assertEquals(zoweConfig.password, TEST_PASSWORD)
-    Assertions.assertEquals(zoweConfig.host, "example.host1")
-    Assertions.assertEquals(zoweConfig.rejectUnauthorized, true)
-    Assertions.assertEquals(zoweConfig.port, 10443)
-    Assertions.assertEquals(zoweConfig.protocol, "https")
-    Assertions.assertEquals(zoweConfig.basePath, "/")
-    Assertions.assertEquals(zoweConfig.encoding, 1047)
-    Assertions.assertEquals(zoweConfig.responseTimeout, 600)
+    Assertions.assertEquals("example.host1", zoweConfig.host)
+    Assertions.assertEquals(true, zoweConfig.rejectUnauthorized)
+    Assertions.assertEquals(10443, zoweConfig.port)
+    Assertions.assertEquals("https", zoweConfig.protocol)
+    Assertions.assertEquals("/", zoweConfig.basePath)
+    Assertions.assertEquals(1047, zoweConfig.encoding)
+    Assertions.assertEquals(600, zoweConfig.responseTimeout)
     Assertions.assertEquals(zoweConfig.toJson(), stringConfigJson)
     val newZoweConfig = ZoweConfig("./zowe.schema.json",zoweConfig.profiles,zoweConfig.defaults)
     Assertions.assertEquals(newZoweConfig.toJson(), stringConfigJson)
@@ -130,7 +145,7 @@ class ZoweConfigParsingTest: ZoweConfigTestBase() {
     var v: ZoweConfigProfile? = prof
     val currProfile = mutableListOf<String>()
     while (v != null) {
-      currProfile.add(v.name.toString())
+      currProfile.add(v.name)
       v = v.parentProfile
     }
     currProfile.reverse()
@@ -138,41 +153,41 @@ class ZoweConfigParsingTest: ZoweConfigTestBase() {
   }
 
   fun checkZosmfProfile(zoweConfig: ZoweConfig) {
-    Assertions.assertEquals(fullProfileName(zoweConfig.zosmfProfile), "lpar1.zosmf")
+    Assertions.assertEquals("lpar1.zosmf", fullProfileName(zoweConfig.zosmfProfile))
     zoweConfig.setProfile("lpar1.section1.testParametersProfile")
-    Assertions.assertEquals(fullProfileName(zoweConfig.zosmfProfile), "lpar1.section1.testParametersProfile")
+    Assertions.assertEquals("lpar1.section1.testParametersProfile", fullProfileName(zoweConfig.zosmfProfile))
     zoweConfig.rejectUnauthorized = null
-    Assertions.assertEquals(zoweConfig.rejectUnauthorized, true)
+    Assertions.assertEquals(true, zoweConfig.rejectUnauthorized)
     zoweConfig.rejectUnauthorized = true
-    Assertions.assertEquals(zoweConfig.rejectUnauthorized, true)
+    Assertions.assertEquals(true, zoweConfig.rejectUnauthorized)
     zoweConfig.protocol = "http"
-    Assertions.assertEquals(zoweConfig.protocol, "http")
+    Assertions.assertEquals("http", zoweConfig.protocol)
     zoweConfig.basePath = "/"
-    Assertions.assertEquals(zoweConfig.basePath, "/")
+    Assertions.assertEquals("/", zoweConfig.basePath)
     zoweConfig.encoding = 1037
-    Assertions.assertEquals(zoweConfig.encoding, 1037)
+    Assertions.assertEquals(1037, zoweConfig.encoding)
     zoweConfig.responseTimeout = 300
-    Assertions.assertEquals(zoweConfig.responseTimeout, 300)
-    Assertions.assertEquals(zoweConfig.user, "zosmfUser")
+    Assertions.assertEquals(300, zoweConfig.responseTimeout)
+    Assertions.assertEquals("zosmfUser", zoweConfig.user)
     zoweConfig.user = null
-    Assertions.assertEquals(zoweConfig.user, "")
+    Assertions.assertEquals("", zoweConfig.user)
     zoweConfig.user = "zUser"
-    Assertions.assertEquals(zoweConfig.user, "zUser")
-    Assertions.assertEquals(zoweConfig.password, "zosmfPassword")
+    Assertions.assertEquals("zUser", zoweConfig.user)
+    Assertions.assertEquals("zosmfPassword", zoweConfig.password)
     zoweConfig.password = null
-    Assertions.assertEquals(zoweConfig.password, "")
+    Assertions.assertEquals("", zoweConfig.password)
     zoweConfig.password = "zPassword"
-    Assertions.assertEquals(zoweConfig.password, "zPassword")
+    Assertions.assertEquals("zPassword", zoweConfig.password)
     zoweConfig.restoreProfile()
-    Assertions.assertEquals(fullProfileName(zoweConfig.zosmfProfile), "lpar1.zosmf")
-    Assertions.assertEquals(zoweConfig.sshProfile?.name, "ssh")
-    Assertions.assertEquals(zoweConfig.tsoProfile?.name, "tso")
+    Assertions.assertEquals("lpar1.zosmf", fullProfileName(zoweConfig.zosmfProfile))
+    Assertions.assertEquals("ssh", zoweConfig.sshProfile?.name)
+    Assertions.assertEquals("tso", zoweConfig.tsoProfile?.name)
     Assertions.assertNull(zoweConfig.profile(null))
     Assertions.assertNull(zoweConfig.profile("."))
     zoweConfig.setProfile("lpar1.section1.section2.emptyZosmfProfile")
-    Assertions.assertEquals(zoweConfig.user, "testUser")
+    Assertions.assertEquals("testUser", zoweConfig.user)
     zoweConfig.user = "zUser1"
-    Assertions.assertEquals(zoweConfig.user, "zUser1")
+    Assertions.assertEquals("zUser1", zoweConfig.user)
     zoweConfig.extractSecureProperties("/wrong/zowe/config/path", keytarWrapper)
   }
 
@@ -209,14 +224,14 @@ class ZoweConfigParsingTest: ZoweConfigTestBase() {
   }
 
   fun checkZoweConnection(zoweConnection: ZoweConnection) {
-    Assertions.assertEquals(zoweConnection.user, "exampleUser")
-    Assertions.assertEquals(zoweConnection.password, "examplePassword")
-    Assertions.assertEquals(zoweConnection.host, "host.example")
-    Assertions.assertEquals(zoweConnection.rejectUnauthorized, false)
-    Assertions.assertEquals(zoweConnection.port, 10443)
-    Assertions.assertEquals(zoweConnection.protocol, "https")
-    Assertions.assertEquals(zoweConnection.basePath, "/")
-    Assertions.assertEquals(zoweConnection.encoding, 1047)
-    Assertions.assertEquals(zoweConnection.responseTimeout, 600)
+    Assertions.assertEquals("exampleUser", zoweConnection.user)
+    Assertions.assertEquals("examplePassword", zoweConnection.password)
+    Assertions.assertEquals("host.example", zoweConnection.host)
+    Assertions.assertEquals(false, zoweConnection.rejectUnauthorized)
+    Assertions.assertEquals(10443, zoweConnection.port)
+    Assertions.assertEquals("https", zoweConnection.protocol)
+    Assertions.assertEquals("/", zoweConnection.basePath)
+    Assertions.assertEquals(1047, zoweConnection.encoding)
+    Assertions.assertEquals(600, zoweConnection.responseTimeout)
   }
 }
