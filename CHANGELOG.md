@@ -4,6 +4,22 @@ All notable changes to the Zowe Client Kotlin SDK will be documented in this fil
 
 ## [Unreleased]
 
+### Features
+
+* Feature: Gradle is updated from 8.7 to 8.14.5 ([0ac6d86d](https://github.com/zowe/zowe-client-kotlin-sdk/commit/0ac6d86d))
+
+### Security
+
+* Security: Gradle wrapper JAR is committed and pinned with "distributionSha256Sum" instead of being fetched from the mutable "master" branch ([0ac6d86d](https://github.com/zowe/zowe-client-kotlin-sdk/commit/0ac6d86d))
+* Security: Example programs are moved to a separate "samples" source set, excluded from the published artifact, and do not print the credentials ([45994412](https://github.com/zowe/zowe-client-kotlin-sdk/commit/45994412))
+* Security: z/OS password is not rendered anymore by "toString" of "ZOSConnection", "ZoweConnection" and "ZoweConfigProfile" ([720fbdc8](https://github.com/zowe/zowe-client-kotlin-sdk/commit/720fbdc8))
+* Security: TLS certificate and host name validation is enabled by default. "UnsafeOkHttpClient" is deprecated ([34a9e590](https://github.com/zowe/zowe-client-kotlin-sdk/commit/34a9e590))
+* Security: "gradle/verification-metadata.xml" is added, so that Gradle verifies the SHA-256 checksum of every resolved dependency ([89edb135](https://github.com/zowe/zowe-client-kotlin-sdk/commit/89edb135))
+
+### Bugfixes
+
+* Bugfix: "rejectUnauthorized" defaults to true and "protocol" defaults to "https" when they are absent in the parsed YAML config ([722f7bd0](https://github.com/zowe/zowe-client-kotlin-sdk/commit/722f7bd0))
+
 ## [0.5.2] (2025-09-24)
 
 ### Bugfixes
