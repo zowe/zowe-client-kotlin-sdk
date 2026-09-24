@@ -23,8 +23,34 @@ import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.nio.charset.Charset
 import java.util.*
+import java.util.logging.Logger
 
 const val WINDOWS_MAX_PASSWORD_LENGTH = 2560
+
+private val log = Logger.getLogger("org.zowe.kotlinsdk.zowe.config")
+
+/**
+ * Warns that the Basic authorization header is about to be built for a connection that is not TLS protected,
+ * which means the credentials will be sent in a form anybody on the network path is able to decode.
+ * @param protocol protocol of the connection the credentials are encoded for
+ * @param host host of the connection the credentials are encoded for
+ */
+private fun warnIfNotEncrypted(protocol: String, host: String?) {
+  if (!protocol.equals("https", ignoreCase = true)) {
+    log.warning(
+      "Basic authorization credentials are going to be sent to $protocol://$host over an unencrypted connection. " +
+          "Anybody on the network path is able to read them. Use the \"https\" protocol instead."
+    )
+  }
+}
+
+/**
+ * Renders a secret value for diagnostic output. The value itself is never returned, only the information
+ * whether it is set at all, so that a credential can not leak through a toString of a containing object.
+ * @param value the secret value to render
+ * @return "null" if there is no value and a fixed mask otherwise
+ */
+internal fun redactSecret(value: Any?): String = if (value == null) "null" else "***"
 
 // TODO: doc
 fun String.encodeToBase64(charset: Charset = Charsets.UTF_8): String
@@ -42,6 +68,7 @@ fun ZoweConnection.getAuthEncoding (): String {
   if (port == null || host?.isEmpty() != false || password?.isEmpty() != false || user?.isEmpty() != false) {
     throw IllegalStateException("Connection data not setup properly")
   }
+  warnIfNotEncrypted(protocol, host)
   return "$user:$password".encodeToBase64()
 }
 
@@ -51,6 +78,7 @@ fun ZoweConfig.getAuthEncoding (): String {
   if (host?.isEmpty() != false || port == null || user?.isEmpty() != false || password?.isEmpty() != false) {
     throw IllegalStateException("Connection data not setup properly")
   }
+  warnIfNotEncrypted(protocol, host)
   return "$user:$password".encodeToBase64()
 }
 
@@ -63,8 +91,8 @@ fun parseConfigYaml (inputStream: InputStream): ZoweConnection {
     loaded["port"] as Int?,
     loaded["user"] as String?,
     loaded["password"] as String?,
-    loaded["rejectUnauthorized"] as Boolean? ?: false,
-    loaded["protocol"] as String? ?: "http",
+    loaded["rejectUnauthorized"] as Boolean? ?: true,
+    loaded["protocol"] as String? ?: "https",
     loaded["basePath"] as String? ?: "/",
     loaded["encoding"] as Int? ?: 1047,
     loaded["responseTimeout"] as Int? ?: 600

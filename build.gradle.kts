@@ -166,6 +166,8 @@ dokka {
 tasks {
   wrapper {
     gradleVersion = properties("gradleVersion").get()
+    // Makes the wrapper verify the downloaded Gradle distribution against the checksum published by Gradle
+    distributionSha256Sum = properties("gradleDistributionSha256Sum").get()
   }
 
   withType<KotlinCompile> {
@@ -354,13 +356,11 @@ sourceSets {
   }
 }
 
-configurations {
-  named("intTestImplementation") {
-    extendsFrom(configurations.getByName("testImplementation"))
-  }
-  named("intTestRuntimeOnly") {
-    extendsFrom(configurations.getByName("testRuntimeOnly"))
-  }
+configurations.named("intTestImplementation") {
+  extendsFrom(configurations.getByName("testImplementation"))
+}
+configurations.named("intTestRuntimeOnly") {
+  extendsFrom(configurations.getByName("testRuntimeOnly"))
 }
 //-----------Integration tests configuration end
 

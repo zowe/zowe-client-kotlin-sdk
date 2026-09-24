@@ -644,4 +644,26 @@ data class ZoweConfigProfile(
   @Expose
   val profiles: Map<String, ZoweConfigProfile>?,
   var parentProfile: ZoweConfigProfile?
-)
+) {
+  /**
+   * Renders the profile for diagnostic purposes. Overrides the data class generated implementation, as the
+   * properties map holds the credentials of the profile, which must not reach logs or crash reports. The values
+   * of the properties listed as "secure" and of the well known credential properties are redacted, and the
+   * parent profile is rendered by name only to not repeat its properties.
+   */
+  override fun toString(): String {
+    val redactedProperties = properties?.mapValues { (key, value) ->
+      if (secure?.contains(key) == true || key.lowercase() in SECRET_PROPERTIES) redactSecret(value) else value
+    }
+    return "ZoweConfigProfile(name=$name, type=$type, properties=$redactedProperties, secure=$secure, " +
+        "profiles=$profiles, parentProfile=${parentProfile?.name})"
+  }
+
+  companion object {
+    /**
+     * Names of the profile properties that hold a credential and are therefore never rendered,
+     * even when they are not listed as "secure" in the configuration.
+     */
+    private val SECRET_PROPERTIES = setOf("password", "securepassword", "tokenvalue", "securetokenvalue", "passphrase", "certkeypassphrase")
+  }
+}

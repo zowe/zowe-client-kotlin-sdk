@@ -10,19 +10,20 @@
  * Contributors:
  *   IBA Group
  *   Zowe Community
+ *   Uladzislau Kalesnikau
  */
 
 package org.zowe.kotlinsdk.zowe.client.sdk.zosfiles
 
-import okhttp3.Credentials
-import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
+import org.zowe.kotlinsdk.ZosmfOkHttpClient
 import org.zowe.kotlinsdk.DataAPI
-import org.zowe.kotlinsdk.UnsafeOkHttpClient
 import org.zowe.kotlinsdk.buildApi
 import org.zowe.kotlinsdk.validateResponse
 import org.zowe.kotlinsdk.zowe.client.sdk.core.ZOSConnection
 import org.zowe.kotlinsdk.zowe.client.sdk.zosfiles.input.DownloadParams
+import okhttp3.Credentials
+import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import retrofit2.Response
 import java.io.InputStream
 
@@ -35,7 +36,7 @@ import java.io.InputStream
 )
 class ZosDsnDownload (
   var connection: ZOSConnection,
-  var httpClient: OkHttpClient = UnsafeOkHttpClient.unsafeOkHttpClient
+  var httpClient: OkHttpClient = ZosmfOkHttpClient.getOkHttpClient(connection)
 ) {
 
   init {

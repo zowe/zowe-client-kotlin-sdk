@@ -28,6 +28,7 @@ runs:
           ~/.gradle/wrapper
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
 
-    - name: Bootstrap gradlew
-      run: ./gradle/bootstrap/bootstrap_gradlew.sh
-      shell: bash
+    # Checks gradle-wrapper.jar against the checksums of the official Gradle releases,
+    # so that a tampered wrapper JAR can never be executed by the build
+    - name: Validate Gradle wrapper
+      uses: gradle/actions/wrapper-validation@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3

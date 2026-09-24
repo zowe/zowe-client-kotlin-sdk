@@ -194,12 +194,6 @@ val result = ZosDsn(zosConnection).createDsn("<dsn>", <CreateDataset cls instanc
 
 ### [org.zowe.kotlinsdk.zowe.config](./src/main/kotlin/org/zowe/kotlinsdk/zowe/config/)
 
-This package provides the functionality to work with **[Zowe Team Config v2](https://docs.zowe.org/stable/user-guide/cli-using-using-team-profiles/)**. The **[ZoweConfig](./src/main/kotlin/org/zowe/kotlinsdk/zowe/config/ZoweConfig.kt)** class provides the functions to parse and manipulate the **zowe.config.json** file. See the **[org.zowe.kotlinsdk.zowe.examples](#orgzowekotlinsdkzoweexamples)** package for examples.
-
-### [org.zowe.kotlinsdk.zowe.examples](./src/main/kotlin/org/zowe/kotlinsdk/zowe/examples/)
-
-This package provides the examples of how to work with **[Zowe Team Config v2](https://docs.zowe.org/stable/user-guide/cli-using-using-team-profiles/)** in Kotlin.
-
 ## Contributing
 
 For the general contributing rules, refer to [CONTRIBUTING.md](https://github.com/zowe/zowe-explorer-intellij/blob/main/CONTRIBUTING.md) under **Zowe Explorer plug-in for IntelliJ IDEA repo**
