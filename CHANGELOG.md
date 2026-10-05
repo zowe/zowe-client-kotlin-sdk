@@ -2,7 +2,7 @@
 
 All notable changes to the Zowe Client Kotlin SDK will be documented in this file.
 
-## [Unreleased]
+## [0.6.0] (2026-10-05)
 
 ### Features
 
@@ -59,6 +59,7 @@ All notable changes to the Zowe Client Kotlin SDK will be documented in this fil
 
 * Bugfix: GitHub issue #9: Error Creating Connection ([bbc16d72](https://github.com/zowe/zowe-client-kotlin-sdk/commit/bbc16d72))
 
+[0.6.0]: https://github.com/zowe/zowe-client-kotlin-sdk/compare/0.5.2...0.6.0
 [0.5.2]: https://github.com/zowe/zowe-client-kotlin-sdk/compare/0.5.1...0.5.2
 [0.5.1]: https://github.com/zowe/zowe-client-kotlin-sdk/compare/0.5.0...0.5.1
 [0.5.0]: https://github.com/zowe/zowe-client-kotlin-sdk/compare/0.4.0...0.5.0
