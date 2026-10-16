@@ -10,21 +10,16 @@
 
 package org.zowe.kotlinsdk.providers.zowe.zosmf.info.messaging
 
-import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import org.zowe.kotlinsdk.annotations.AvailableSince
 import org.zowe.kotlinsdk.annotations.ZVersion
 import org.zowe.kotlinsdk.core.info.api.messaging.GetSystemInfoResponse
-import org.zowe.kotlinsdk.providers.zowe.HttpResponse
+import org.zowe.kotlinsdk.providers.zowe.zosmf.ZosmfHttpResponse
 
 /** @see <a href="https://www.ibm.com/docs/en/zos/latest?topic=service-retrieve-zosmf-information#GETMethodRetrieveZOSMFConfiguration__title__8">Retrieve z/OSMF information: Expected response</a> */
 @Serializable
 class ZosmfGetSystemInfoResponse(
-  @Transient
-  override var status: HttpStatusCode = HttpStatusCode.OK,
-
   /** zosmf_saf_realm response param */
   @SerialName("zosmf_saf_realm")
   @AvailableSince(ZVersion.ZOS_2_1) val zosmfSafRealm: String? = null,
@@ -56,7 +51,7 @@ class ZosmfGetSystemInfoResponse(
   /** zosmf_hostname response param */
   @SerialName("zosmf_hostname")
   @AvailableSince(ZVersion.ZOS_2_1) val zosmfHostname: String? = null
-) : HttpResponse, GetSystemInfoResponse {
+) : ZosmfHttpResponse(), GetSystemInfoResponse {
 
   @Serializable
   data class ZosmfPlugin(
