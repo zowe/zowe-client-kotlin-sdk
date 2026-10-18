@@ -50,4 +50,20 @@
 |---------------|--------------|---------------|
 | getSystemInfo | ✅           | ❌            |
 
+## [WorkflowsAPI](workflows/ZosmfWorkflowsAPI.kt) functions
+
+| Method                        | Implemented | Test coverage |
+|-------------------------------|-------------|---------------|
+| createWorkflow                | ✅          | ✅            |
+| getWorkflowProperties         | ✅          | ✅            |
+| listWorkflows                 | ✅          | ✅            |
+| startWorkflow                 | ✅          | ✅            |
+| cancelWorkflow                | ✅          | ✅            |
+| deleteWorkflow                | ✅          | ✅            |
+| getWorkflowDefinition         | ✅          | ✅            |
+| archiveWorkflow               | ✅          | ✅            |
+| listArchivedWorkflows         | ✅          | ✅            |
+| getArchivedWorkflowProperties | ✅          | ✅            |
+| deleteArchivedWorkflow        | ✅          | ✅            |
+
 ## [TsoAPI](tso/ZosmfTsoAPI.kt) functions

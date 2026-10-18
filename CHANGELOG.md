@@ -7,6 +7,7 @@ All notable changes to the Zowe Client Kotlin SDK will be documented in this fil
 ### Features
 
 * Feature: Gradle is updated from 8.7 to 8.14.5 ([0ac6d86d](https://github.com/zowe/zowe-client-kotlin-sdk/commit/0ac6d86d))
+* Feature: z/OSMF Workflows API is added: create, start, cancel, delete, archive, list and get the properties of workflows and archived workflows, and retrieve workflow definitions
 
 ### Security
 
