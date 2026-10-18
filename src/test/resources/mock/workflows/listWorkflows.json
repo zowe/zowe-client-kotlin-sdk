@@ -1,0 +1,35 @@
+{
+  "workflows": [
+    {
+      "workflowName": "ZOWE_WF_CONFIGURE",
+      "workflowKey": "d043b5f1-adab-48e7-b7c3-d41cd95fa4b0",
+      "workflowDescription": "Configure the Zowe instance",
+      "workflowID": "ZoweConfigure",
+      "workflowVersion": "1.0",
+      "workflowDefinitionFileMD5Value": "a2e4b6c8d0f1e3a5b7c9d1e3f5a7b9c1",
+      "instanceURI": "/zosmf/workflow/rest/1.0/workflows/d043b5f1-adab-48e7-b7c3-d41cd95fa4b0",
+      "owner": "IBMUSER",
+      "vendor": "IBM",
+      "access": "Public",
+      "unknownFutureProperty": "must be ignored"
+    },
+    {
+      "workflowName": "ZOWE_WF_PRIVATE",
+      "workflowKey": "7c2b3a1e-55a0-4f6e-9a7d-0c1e2f3a4b5c",
+      "workflowDescription": "Private workflow",
+      "workflowID": "ZowePrivate",
+      "workflowVersion": "2.1",
+      "workflowDefinitionFileMD5Value": "b3f5c7d9e1f2a4b6c8d0e2f4a6b8c0d2",
+      "instanceURI": "/zosmf/workflow/rest/1.0/workflows/7c2b3a1e-55a0-4f6e-9a7d-0c1e2f3a4b5c",
+      "owner": "ZOWEUSR",
+      "vendor": "Zowe",
+      "access": "Private"
+    },
+    {
+      "workflowName": "ZOWE_WF_FUTURE_ACCESS",
+      "workflowKey": "0f9e8d7c-6b5a-4938-8271-605f4e3d2c1b",
+      "owner": "ZOWEUSR",
+      "access": "SomeFutureAccessType"
+    }
+  ]
+}

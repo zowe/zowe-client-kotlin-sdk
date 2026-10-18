@@ -1,0 +1,22 @@
+{
+  "workflowName": "ZOWE_WF_OLD",
+  "workflowKey": "2535b19e-a8c3-4a52-9d77-e30bb920f912",
+  "workflowDescription": "Configure the Zowe instance",
+  "workflowID": "ZoweConfigure",
+  "workflowVersion": "1.0",
+  "workflowDefinitionFileMD5Value": "a2e4b6c8d0f1e3a5b7c9d1e3f5a7b9c1",
+  "vendor": "IBM",
+  "owner": "IBMUSER",
+  "system": "PLEX1.SYS1",
+  "category": "general",
+  "percentComplete": 100,
+  "isCallable": false,
+  "containsParallelSteps": false,
+  "scope": "none",
+  "statusName": "complete",
+  "deleteCompletedJobs": false,
+  "autoDeleteOnCompletion": false,
+  "access": "Public",
+  "archivedTime": "2026-10-01T12:00:00.000Z",
+  "unknownFutureProperty": "must be ignored"
+}

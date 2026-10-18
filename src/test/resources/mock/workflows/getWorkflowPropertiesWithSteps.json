@@ -1,0 +1,41 @@
+{
+  "workflowName": "ZOWE_WF_CONFIGURE",
+  "workflowKey": "d043b5f1-adab-48e7-b7c3-d41cd95fa4b0",
+  "owner": "IBMUSER",
+  "statusName": "in-progress",
+  "steps": [
+    {
+      "name": "parent",
+      "title": "Parent step",
+      "stepNumber": "1",
+      "state": "In Progress",
+      "optional": false,
+      "prereqStep": [],
+      "steps": [
+        {
+          "name": "child1",
+          "title": "Allocate data sets",
+          "stepNumber": "1.1",
+          "state": "Complete (Override)",
+          "owner": "IBMUSER",
+          "autoEnable": true,
+          "isRestStep": false,
+          "submitAs": "JCL",
+          "returnCode": "0000",
+          "weight": 3,
+          "variable-references": [
+            { "name": "hlq", "scope": "instance" }
+          ],
+          "unknownFutureProperty": "must be ignored"
+        },
+        {
+          "name": "child2",
+          "title": "Run the job",
+          "stepNumber": "1.2",
+          "state": "Some Future State",
+          "prereqStep": ["child1"]
+        }
+      ]
+    }
+  ]
+}

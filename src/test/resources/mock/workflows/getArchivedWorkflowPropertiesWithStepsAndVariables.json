@@ -1,0 +1,10 @@
+{
+  "workflowName": "ZOWE_WF_OLD",
+  "workflowKey": "2535b19e-a8c3-4a52-9d77-e30bb920f912",
+  "steps": [
+    { "name": "step1", "title": "Allocate data sets", "state": "Complete" }
+  ],
+  "variables": [
+    { "name": "hlq", "scope": "instance", "type": "string", "value": "IBMUSER.ZOWE", "visibility": "public" }
+  ]
+}
