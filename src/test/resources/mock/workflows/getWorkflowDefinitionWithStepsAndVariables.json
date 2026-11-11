@@ -1,0 +1,69 @@
+{
+  "workflowDefaultName": "Configure Zowe",
+  "workflowID": "ZoweConfigure",
+  "workflowVersion": "1.0",
+  "steps": [
+    {
+      "name": "step1",
+      "title": "Allocate data sets",
+      "description": "Allocates the data sets for Zowe",
+      "prereqStep": [],
+      "optional": false,
+      "autoEnable": true,
+      "isRestStep": false,
+      "submitAs": "JCL",
+      "skills": "System programmer",
+      "weight": 2,
+      "variable-specifications": [
+        { "name": "hlq", "scope": "instance", "required": true }
+      ],
+      "steps": null,
+      "unknownFutureProperty": "must be ignored"
+    },
+    {
+      "name": "step2",
+      "title": "Call the sub-workflow",
+      "prereqStep": ["step1"],
+      "calledWorkflowID": "ZoweSub",
+      "calledWorkflowVersion": "1.0",
+      "calledWorkflowDefinitionFile": "/u/ibmuser/sub.xml"
+    },
+    {
+      "name": "step3",
+      "title": "Verify",
+      "prereqStep": ["step2"],
+      "steps": [
+        { "name": "step3a", "title": "Verify the data sets", "steps": null },
+        { "name": "step3b", "title": "Verify the started task", "prereqStep": ["step3a"] }
+      ]
+    }
+  ],
+  "variables": [
+    {
+      "name": "hlq",
+      "scope": "instance",
+      "abstract": "High-level qualifier",
+      "category": "General",
+      "default": "IBMUSER",
+      "description": "The HLQ for the data sets",
+      "type": "string",
+      "visibility": "public",
+      "choice": [],
+      "maxLength": 8,
+      "minLength": 1,
+      "regularExpression": "[A-Z]+",
+      "validationType": "DSNAME",
+      "exposeToUser": true,
+      "promptAtCreate": true,
+      "requiredAtCreate": true,
+      "valueMustBeChoice": false
+    },
+    {
+      "name": "mode",
+      "scope": "global",
+      "type": "string",
+      "choice": ["dev", "prod"],
+      "valueMustBeChoice": true
+    }
+  ]
+}

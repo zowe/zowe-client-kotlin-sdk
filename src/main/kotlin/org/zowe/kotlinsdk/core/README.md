@@ -41,6 +41,20 @@
 
 - getSystemInfo
 
+## [WorkflowsAPI](workflows/api/WorkflowsAPI.kt) functions
+
+- createWorkflow
+- getWorkflowProperties
+- listWorkflows
+- startWorkflow
+- cancelWorkflow
+- deleteWorkflow
+- getWorkflowDefinition
+- archiveWorkflow
+- listArchivedWorkflows
+- getArchivedWorkflowProperties
+- deleteArchivedWorkflow
+
 ## [TsoAPI](tso/api/TsoAPI.kt) functions
 
 - startTso

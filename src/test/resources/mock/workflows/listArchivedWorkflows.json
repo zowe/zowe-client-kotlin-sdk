@@ -1,0 +1,15 @@
+{
+  "archivedWorkflows": [
+    {
+      "workflowName": "ZOWE_WF_OLD",
+      "workflowKey": "2535b19e-a8c3-4a52-9d77-e30bb920f912",
+      "archivedInstanceURI": "/zosmf/workflow/rest/1.0/archivedworkflows/2535b19e-a8c3-4a52-9d77-e30bb920f912",
+      "unknownFutureProperty": "must be ignored"
+    },
+    {
+      "workflowName": "ZOWE_WF_OLDER",
+      "workflowKey": "9f8e7d6c-5b4a-4321-8fed-cba987654321",
+      "archivedInstanceURI": "/zosmf/workflow/rest/1.0/archivedworkflows/9f8e7d6c-5b4a-4321-8fed-cba987654321"
+    }
+  ]
+}

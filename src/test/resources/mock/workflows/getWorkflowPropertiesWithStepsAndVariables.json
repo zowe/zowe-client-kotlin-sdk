@@ -1,0 +1,17 @@
+{
+  "workflowName": "ZOWE_WF_CONFIGURE",
+  "workflowKey": "d043b5f1-adab-48e7-b7c3-d41cd95fa4b0",
+  "owner": "IBMUSER",
+  "steps": [
+    {
+      "name": "step1",
+      "title": "Allocate data sets",
+      "stepNumber": "1",
+      "state": "Ready"
+    }
+  ],
+  "variables": [
+    { "name": "hlq", "scope": "instance", "type": "string", "value": "IBMUSER.ZOWE", "visibility": "public" },
+    { "name": "port", "scope": "global", "type": "number", "value": "7554", "visibility": "private" }
+  ]
+}

@@ -18,6 +18,7 @@ import org.zowe.kotlinsdk.core.datasets.api.DatasetsAPI
 import org.zowe.kotlinsdk.core.files.api.FilesAPI
 import org.zowe.kotlinsdk.core.info.api.InfoAPI
 import org.zowe.kotlinsdk.core.jes.api.JesAPI
+import org.zowe.kotlinsdk.core.workflows.api.WorkflowsAPI
 import org.zowe.kotlinsdk.providers.zowe.openssh.datasets.SshDatasetsAPI
 import org.zowe.kotlinsdk.providers.zowe.openssh.files.SshFilesAPI
 import org.zowe.kotlinsdk.providers.zowe.openssh.jes.SshJesAPI
@@ -25,6 +26,7 @@ import org.zowe.kotlinsdk.providers.zowe.zosmf.datasets.ZosmfDatasetsAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.files.ZosmfFilesAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.info.ZosmfInfoAPI
 import org.zowe.kotlinsdk.providers.zowe.zosmf.jes.ZosmfJesAPI
+import org.zowe.kotlinsdk.providers.zowe.zosmf.workflows.ZosmfWorkflowsAPI
 
 // TODO: doc
 /**
@@ -44,7 +46,8 @@ class ZoweAPIProvider(
           DatasetsAPI::class.java to ZosmfDatasetsAPI(it),
           FilesAPI::class.java to ZosmfFilesAPI(it),
           JesAPI::class.java to ZosmfJesAPI(it),
-          InfoAPI::class.java to ZosmfInfoAPI(it)
+          InfoAPI::class.java to ZosmfInfoAPI(it),
+          WorkflowsAPI::class.java to ZosmfWorkflowsAPI(it)
         )
       } ?: mapOf()
     ),
